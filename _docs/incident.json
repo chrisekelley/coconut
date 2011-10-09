@@ -1,0 +1,363 @@
+{
+   "_id": "incident",
+   "formBuilder": "FormDesignerAlpha",
+   "label": "Incident Description",
+   "flow": {
+       "id": 300,
+       "name": "auto",
+       "flowOrder": 1
+   },
+   "form_elements": [
+       {
+           "label": "BEGIN TABLE ",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "display",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "null",
+           "size": "null",
+           "rows": "null",
+           "cols": "2",
+           "identifier": "beginTableIdentifier",
+           "inputType": "display-tbl-begin"
+       },
+       {
+           "label": "Date Incident Reported",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "dateTime",
+           "visible": "true",
+           "closeRow": "true",
+           "colspan": "2",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "dateReported",
+           "inputType": "emptyDate"
+       },
+       {
+           "label": "Title",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "string",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "2",
+           "size": "60",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "title",
+           "inputType": "text"
+       },
+       {
+           "label": "Description",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "string",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "description",
+           "inputType": "textarea"
+       },
+       {
+           "label": "Sub-county",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "int",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "subcounty",
+           "inputType": "selectFDA",
+           "enumerations": [
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Kayunga",
+                   "labelItextID": "Kayunga",
+                   "defaultValue": "1"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "SubB",
+                   "labelItextID": "SubB",
+                   "defaultValue": "2"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "SubC",
+                   "labelItextID": "SubC",
+                   "defaultValue": "3"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "SubD",
+                   "labelItextID": "SubD",
+                   "defaultValue": "4"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "SubE",
+                   "labelItextID": "SubE",
+                   "defaultValue": "5"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "SubF",
+                   "labelItextID": "SubF",
+                   "defaultValue": "6"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "SubG",
+                   "labelItextID": "SubG",
+                   "defaultValue": "7"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "SubH",
+                   "labelItextID": "SubH",
+                   "defaultValue": "8"
+               }
+           ]
+       },
+       {
+           "label": "Parish",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "int",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "parish",
+           "inputType": "selectFDA",
+           "enumerations": [
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Parish1",
+                   "labelItextID": "Parish1",
+                   "defaultValue": "1"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "ParishB",
+                   "labelItextID": "ParishB",
+                   "defaultValue": "2"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "ParishC",
+                   "labelItextID": "ParishC",
+                   "defaultValue": "3"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "ParishD",
+                   "labelItextID": "ParishD",
+                   "defaultValue": "4"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "ParishE",
+                   "labelItextID": "ParishE",
+                   "defaultValue": "5"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "ParishF",
+                   "labelItextID": "ParishF",
+                   "defaultValue": "6"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "ParishG",
+                   "labelItextID": "ParishG",
+                   "defaultValue": "7"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "ParishH",
+                   "labelItextID": "ParishH",
+                   "defaultValue": "8"
+               }
+           ]
+       },
+       {
+           "label": "Priority",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "int",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "priority",
+           "inputType": "selectFDA",
+           "enumerations": [
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Low",
+                   "labelItextID": "Low",
+                   "defaultValue": "1"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Medium",
+                   "labelItextID": "Medium",
+                   "defaultValue": "2"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "High",
+                   "labelItextID": "High",
+                   "defaultValue": "3"
+               }
+
+           ]
+       },
+       {
+           "label": "Resolved?",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "boolean",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "resolved",
+           "inputType": "checkbox"
+       },
+       {
+           "label": "Comments",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "string",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "comment",
+           "inputType": "textarea"
+       },
+       {
+           "label": "Save",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "display",
+           "visible": "true",
+           "closeRow": "true",
+           "colspan": "3",
+           "width": "770",
+           "height": "30",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "form-save",
+           "inputType": "button"
+       },
+       {
+           "label": "END TABLE",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "display",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "null",
+           "size": "null",
+           "rows": "null",
+           "cols": "null",
+           "identifier": "endTableIdentifier",
+           "inputType": "display-tbl-end"
+       }
+   ],
+   "collection": "form"
+}

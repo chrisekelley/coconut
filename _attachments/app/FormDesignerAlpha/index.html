@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+  <head>
+        <title>Dimagi XForms FormDesigner</title>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <link href="css/smoothness/jquery-ui-1.8.14.custom.css" type="text/css" rel="stylesheet" />
+		<!--<link href="css/redmond/jquery-ui-1.8.14.custom.css" type="text/css" rel="stylesheet" />-->
+		<link href="css/screen.css" rel="stylesheet" type="text/css" media="screen, projection">
+		<link href="css/print.css" rel="stylesheet" type="text/css" media="print">
+		<link href="css/formdesigner.css" rel="stylesheet" type="text/css"/>
+		<link href="css/chosen.css" rel="stylesheet" type="text/css" />
+		<link rel="stylesheet" href="css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+		<script type="text/javascript" src="js/jquery-1.6.1.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-1.8.14.custom.min.js"></script>
+		<script type="text/javascript" src="js/jquery.jstree.js"></script>
+		<script type="text/javascript" src="js/jquery.fancybox-1.3.4.pack.js"></script>
+		<script type="text/javascript" src="js/chosen.jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-ui-timepicker-addon.js"></script>
+		<script type="text/javascript" src="js/ui.js?version=100"></script>
+		<script type="text/javascript" src="js/util.js?version=100"></script>
+		<script type="text/javascript" src="js/model.js?version=100"></script>
+		<script type="text/javascript" src="js/controller.js?version=100"></script>
+		<!--<script type="text/javascript" src="js/xml2json.js"></script>-->
+		<!--<script type="text/javascript" src="js/json2xml.js"></script>-->
+		<script type="text/javascript" src="js/XMLWriter-1.0.0.js"></script>
+
+		<!-- coconut tools -->
+		<script type="text/javascript" src="js-libraries/underscore-min.js"></script>
+		<script type="text/javascript" src="js-libraries/backbone.js"></script>
+		<script type="text/javascript" src="js-libraries/jquery.couch.js"></script>
+		<script type="text/javascript" src="js-libraries/backbone-couchdb.js"></script>
+		<!-- Templating library -->
+		<script type="text/javascript" src="js-libraries/handlebars.js"></script>
+		<!-- These are used to get form contents into a well structured javascript object -->
+		<script type="text/javascript" src="js-libraries/form2object.js"></script>
+		<script type="text/javascript" src="js-libraries/jquery.toObject.js"></script>
+		<!-- String munging library -->
+		<script type="text/javascript" src="js-libraries/inflection.js"></script>
+
+  </head>
+
+  <body>
+
+
+
+
+
+    <div id="formdesigner"></div>
+
+    <script type="text/javascript">
+    $(document).ready(function () {
+           formdesigner.launch({
+            rootElement: "#formdesigner",
+            staticPrefix: "",
+//            form: "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\" xmlns:orx=\"http://openrosa.org/jr/xforms\" xmlns=\"http://www.w3.org/2002/xforms\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:jr=\"http://openrosa.org/javarosa\">\n\t<h:head>\n\t\t<h:title>Awesome Form</h:title>\n\t\t<model>\n\t\t\t<instance>\n\t\t\t\t<data xmlns:jrm=\"http://dev.commcarehq.org/jr/xforms\" xmlns=\"http://openrosa.org/formdesigner/D1465656-8E57-4307-AD3D-CD8F8492782B\" uiVersion=\"1\" version=\"1\" name=\"Awesome Form\">\n\t\t\t\t\t<question1 />\n\t\t\t\t\t<question2 />\n\t\t\t\t\t<question3 />\n\t\t\t\t\t<question4 />\n\t\t\t\t</data>\n\t\t\t</instance>\n\t\t\t<bind nodeset=\"/data/question1\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question2\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question3\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question4\" type=\"xsd:string\" />\n\t\t\t<itext>\n\t\t\t\t<translation lang=\"en\" default=\"\">\n\t\t\t\t\t<text id=\"question1\">\n\t\t\t\t\t\t<value>So what's your name?</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question2\">\n\t\t\t\t\t\t<value>Are you male or female?</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question3\">\n\t\t\t\t\t\t<value>question3</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question4\">\n\t\t\t\t\t\t<value>question4</value>\n\t\t\t\t\t</text>\n\t\t\t\t</translation>\n\t\t\t</itext>\n\t\t</model>\n\t</h:head>\n\t<h:body>\n\t\t<input ref=\"/data/question1\">\n\t\t\t<label ref=\"jr:itext('question1')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question2\">\n\t\t\t<label ref=\"jr:itext('question2')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question3\">\n\t\t\t<label ref=\"jr:itext('question3')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question4\">\n\t\t\t<label ref=\"jr:itext('question4')\" />\n\t\t</input>\n\t</h:body>\n</h:html>",
+            langs: ""
+        });
+       });
+
+
+
+//        formdesigner.launch({
+//rootElement: $("#formdesigner"),
+//staticPrefix: '/static/formdesigner/',
+//iconUrl: '/static/hqwebapp/javascripts/jquery-ui/images/ui-icons_469bdd_256x240.png',
+//saveUrl: '/a/test2/apps/edit_form_attr/3c91244eee459963a5b12db141766806/7942f06c884f80c7f757bdd1a825fa79b302b9d/xform/',
+//form: "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\" xmlns:orx=\"http://openrosa.org/jr/xforms\" xmlns=\"http://www.w3.org/2002/xforms\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:jr=\"http://openrosa.org/javarosa\">\n\t<h:head>\n\t\t<h:title>Awesome Form</h:title>\n\t\t<model>\n\t\t\t<instance>\n\t\t\t\t<data xmlns:jrm=\"http://dev.commcarehq.org/jr/xforms\" xmlns=\"http://openrosa.org/formdesigner/D1465656-8E57-4307-AD3D-CD8F8492782B\" uiVersion=\"1\" version=\"1\" name=\"Awesome Form\">\n\t\t\t\t\t<question1 />\n\t\t\t\t\t<question2 />\n\t\t\t\t\t<question3 />\n\t\t\t\t\t<question4 />\n\t\t\t\t</data>\n\t\t\t</instance>\n\t\t\t<bind nodeset=\"/data/question1\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question2\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question3\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question4\" type=\"xsd:string\" />\n\t\t\t<itext>\n\t\t\t\t<translation lang=\"en\" default=\"\">\n\t\t\t\t\t<text id=\"question1\">\n\t\t\t\t\t\t<value>So what's your name?</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question2\">\n\t\t\t\t\t\t<value>Are you male or female?</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question3\">\n\t\t\t\t\t\t<value>question3</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question4\">\n\t\t\t\t\t\t<value>question4</value>\n\t\t\t\t\t</text>\n\t\t\t\t</translation>\n\t\t\t</itext>\n\t\t</model>\n\t</h:head>\n\t<h:body>\n\t\t<input ref=\"/data/question1\">\n\t\t\t<label ref=\"jr:itext('question1')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question2\">\n\t\t\t<label ref=\"jr:itext('question2')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question3\">\n\t\t\t<label ref=\"jr:itext('question3')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question4\">\n\t\t\t<label ref=\"jr:itext('question4')\" />\n\t\t</input>\n\t</h:body>\n</h:html>",
+//langs: ""
+//});
+    </script>
+
+
+</body>
+
+</html>

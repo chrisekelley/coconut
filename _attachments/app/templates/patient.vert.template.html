@@ -1,0 +1,29 @@
+<div id="pagewidth-vert">
+	 <table class="patient-home-vert" width="100%">
+        <tbody><tr>
+            <td style="vertical-align: top;">
+            	<button id='form-home' class="menu-blue" onClick="window.location.href = '#home'")>Home</button>
+            	<button id='form-client' class="menu-blue" onClick="window.location.href = '#newPatient'">Client</button>
+            	<button id='form-docket' class="menu-blue" onClick="window.location.href = '#arrestDocket/{{_id}}'">Docket</button> 
+            	<button id='form-docket' class="menu-blue" onClick="window.location.href = '#renderForm/{{_id}}/problem'">Problem</button> 
+            	{{#if surname}}
+            	{{surname}}, {{forenames}} {{middle_name}}
+            	{{/if}}
+            </td>
+            	
+         <!--    	<a href="#newPatient">New Client</a></td>
+            <td><a href="/mobilefuton/_design/mobilefuton/index.html">Configuration</a></td> -->
+        </tr>
+    	</tbody>
+	</table>
+        <div id="search-results-body-vert">
+        		<table id="records" width="100%" class="stripeMe">
+			<thead>
+				<tr>
+					<th>Form</th><th>Modified</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+        </div>
+    </div>

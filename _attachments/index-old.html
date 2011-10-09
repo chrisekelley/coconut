@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <script id="form-element-template" type="text/x-handlebars-template">
+      <td>
+        <label for='{{id}}'>{{label}}</label>
+      </td>
+      <td>
+        <input {{#options}}data-{{name}}='{{value}}' {{/options}} name='{{name}}' type='{{type}}' value='{{value}}'></input>
+      </td>
+      <td class='error-message' style='display:none'>
+      </td>
+    </script>
+    <script id="form-template" type="text/x-handlebars-template">
+      <form>
+        <table>
+        </table>
+        <!-- type='button' stops the button from submitting the form on click -->
+        <button type='button' id='form-save'>Save</button>
+      </form>
+    </script>
+  </head>
+  <body>
+  </body>
+  <!-- TODO for deployment - combine & minify all of this -->
+  <script type="text/javascript" src="js-libraries/jquery-1.6.2.min.js"></script>
+  <script type="text/javascript" src="js-libraries/underscore-min.js"></script>
+  <script type="text/javascript" src="js-libraries/backbone-min.js"></script>
+  <script type="text/javascript" src="js-libraries/backbone-couchdb.js"></script>
+  <script type="text/javascript" src="js-libraries/jquery.couch.js"></script>
+  <!-- Templating library -->
+  <script type="text/javascript" src="js-libraries/handlebars.js"></script>
+  <!-- These are used to get form contents into a well structured javascript object -->
+  <script type="text/javascript" src="js-libraries/form2object.js"></script>
+  <script type="text/javascript" src="js-libraries/jquery.toObject.js"></script>
+  <!-- String munging library -->
+  <script type="text/javascript" src="js-libraries/inflection.js"></script>
+  <!-- The app itself - note that if new models/views are added they need to be added here-->
+  <script type="text/javascript" src="app/models/FormElement.js"></script>
+  <script type="text/javascript" src="app/models/Form.js"></script>
+  <script type="text/javascript" src="app/views/FormElementView.js"></script>
+  <script type="text/javascript" src="app/views/FormView.js"></script>
+  <script type="text/javascript" src="app/app.js"></script>
+</html>
+
