@@ -391,10 +391,12 @@ var AppRouter = Backbone.Router.extend({
 			$("#recordView").remove();
 			$("#formRenderingView").remove();
 			$("#designer").remove();
+			$("#maincol").html("");
 			if (! $("#designer").length){
 				var viewDiv = document.createElement("div");
 				viewDiv.setAttribute("id", "designer");
 				$("#views").append(viewDiv);
+				$("#views").width("800px");
 			}
 			formdesigner.launch({
 	            rootElement: "#designer",

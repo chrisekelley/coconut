@@ -592,7 +592,7 @@ div#search-results input[type=text] {
 	vertical-align: top;
 	padding-left: 4px;
 	/*margin-top: 2px;*/
-	font-size: 10pt;
+	font-size: 12pt;
 	overflow: auto;
 	/*border: 1px solid black;*/
 	/*border-top: 1px solid black;
@@ -685,16 +685,32 @@ html>body #sidenavcontainer li a {
 	width: 870px;
 }
 #pagewidth {
-	width: 785px;
+	width: 1280px;
 }
 #pagewidth-vert {
-	width: 480px;
+	width: 320px;
 }
+#views{
+ width:400px; 
+ float:left; 
+ position:relative; 
+  }
 #twocols {
 	width: 660px;
 	float: right;
 	position: relative;
 }
+#rightcol{
+ width:100px; 
+ float:right; 
+ position:relative; 
+ }
+ #maincol{
+ background-color: #FFFFFF;  
+ float: left; 
+  position: relative; 
+ width:520px; 
+ }
 /* *** Float containers fix:
  http://www.csscreator.com/attributes/containedfloat.php *** */
 .clearfix:after {
@@ -1142,3 +1158,9 @@ tr.over td, tr: hover td
 .patientName A:link {text-decoration: none; color: white}
 .patientName A:visited {text-decoration: none; color: white}
 .patientName A:active {text-decoration: none; color: white}
+
+label{
+float: left;
+width: 120px;
+font-weight: bold;
+}

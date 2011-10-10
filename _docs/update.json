@@ -1,0 +1,90 @@
+{
+   "_id": "update",
+   "formBuilder": "FormDesignerAlpha",
+   "label": "Incident Update",
+   "flow": {
+       "id": 300,
+       "name": "auto",
+       "flowOrder": 1
+   },
+   "form_elements": [
+       {
+           "label": "BEGIN TABLE ",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "display",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "null",
+           "size": "null",
+           "rows": "null",
+           "cols": "2",
+           "identifier": "beginTableIdentifier",
+           "inputType": "display-tbl-begin"
+       },
+       {
+           "label": "Comments",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "string",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "comment",
+           "inputType": "text"
+       },
+       {
+           "label": "Save",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "display",
+           "visible": "true",
+           "closeRow": "true",
+           "colspan": "3",
+           "width": "770",
+           "height": "30",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "form-save",
+           "inputType": "button"
+       },
+       {
+           "label": "END TABLE",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "display",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "null",
+           "size": "null",
+           "rows": "null",
+           "cols": "null",
+           "identifier": "endTableIdentifier",
+           "inputType": "display-tbl-end"
+       }
+   ],
+   "collection": "form"
+}

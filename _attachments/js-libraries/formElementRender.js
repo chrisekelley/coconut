@@ -103,7 +103,7 @@ Handlebars.registerHelper("renderWidget", function(context) {
 		} else if (inputType == 'hidden') {
 			html = beginElement + template(this) + endElement;  
 		} else {
-			var labelHtml = "<label for='" + identifier + "'>" + this.label + "</label>: ";
+			var labelHtml = "<label for='" + identifier + "'>" + this.label + "</label>";
 			var errorHtml = " <span class='error-message' style='display:none'></span>";
 			html = beginElement + labelHtml + template(this) + errorHtml + endElement; 
 			//console.log("useTemplate: " + useTemplate + " inputType: " + inputType + " closeRow: " + closeRow + " html: "+ html);
@@ -155,11 +155,60 @@ Handlebars.registerHelper('dropdownWidgetValue', function(enumerations, value) {
 	}
 	return out;
 });
+Handlebars.registerHelper('renderPriority', function(value) {
+	var out = "";
+	switch (value){
+    case "1":
+    	out = "Low";
+    	break;
+    case "2":
+    	out = "Med.";
+    	break;
+    case "3":
+    	out = "High";
+    	break;
+	}
+	return out;
+});
+Handlebars.registerHelper('renderDepartment', function(value) {
+	var out = "";
+	switch (value){
+	case "1":
+		out = "Admin";
+		break;
+	case "2":
+		out = "Fin.";
+		break;
+	case "3":
+		out = "Educ.";
+		break;
+	case "4":
+		out = "Health";
+		break;
+	case "5":
+		out = "Works";
+		break;
+	case "6":
+		out = "Council.";
+		break;
+	}
+	return out;
+});
+
 Handlebars.registerHelper('dateFormat', function(item) {
 	var out = "";
 	var d1 = new Date(item);
 	//out = d1.toString('yyyy-MM-dd hh:mm');
-	out = $.format.date(d1, "yyyy-MM-dd hh:mm:ss");
+	//out = $.format.date(d1, "yyyy-MM-dd hh:mm:ss");
+	out = $.format.date(d1, "dd-MM hh:mm");
+	return out;
+});
+Handlebars.registerHelper('dateFormatDate', function(item) {
+	var out = "";
+	var d1 = new Date(item);
+	//out = d1.toString('yyyy-MM-dd hh:mm');
+	//out = $.format.date(d1, "yyyy-MM-dd hh:mm:ss");
+	out = $.format.date(d1, "dd/MM");
 	return out;
 });
 Handlebars.registerHelper('substring', function(identifier, from) {

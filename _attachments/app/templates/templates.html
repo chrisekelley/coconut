@@ -11,7 +11,7 @@
     <td><a href="#edit/{{_id}}">{{formId}}</a></td><td>{{#dateFormat lastModified}}{{/dateFormat}}</td>
 </script>
 <script id="search-template" type="text/x-handlebars-template">
-    <td><a href="#incidentRecords/{{_id}}">{{title}}</a></td><td>{{assignedId}}</td><td>{{dateReported}}</td><td>{{#dateFormat lastModified}}{{/dateFormat}}</td>
+    <td><a href="#incidentRecords/{{_id}}" title="ID: {{assignedId}}">{{phone}}</a></td><td>{{#renderPriority priority}}{{/renderPriority}}</td><td>{{#renderDepartment department}}{{/renderDepartment}}</td><td>{{#dateFormatDate lastModified}}{{/dateFormatDate}}</td>
 </script>
 <script id="recordValue" type="text/x-handlebars-template">
     {{value}}

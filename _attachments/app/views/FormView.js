@@ -43,22 +43,25 @@ var FormView = Backbone.View.extend({
 		var flow = this.options.currentForm.get("flow");
 		var flowId = flow.id;
 		var formId = this.options.currentForm.get("_id");
+		var assignedId = this.options.currentForm.get("assignedId");
 		this.formElements = new FormElements(this.options.currentForm.get("form_elements"), { view: this });
 		var parentIdWidget = {"label": "parentIdWidget","value":this.parentId,"identifier": "parentId","inputType": "hidden"};
 		var flowIdWidget = {"label": "flowIdWidget","value": flowId,"identifier": "flowId","inputType": "hidden"};
 		var formIdWidget = {"label": "formIdWidget","value": formId,"identifier": "formId","inputType": "hidden"};
+		var assignedIdWidget = {"label": "assignedIdWidget","value": assignedId,"identifier": "assignedId","inputType": "hidden"};
 		this.formElements.add(parentIdWidget,{at: 0});
 		this.formElements.add(flowIdWidget,{at: 1});
 		this.formElements.add(formIdWidget,{at: 2});
+		this.formElements.add(assignedIdWidget,{at: 3});
 		var _id = this.model.get("_id");
 		if (_id != null) {
 			var idWidget = {"label": "idWidget","value":_id,"identifier": "_id","inputType": "hidden"};
-			this.formElements.add(idWidget,{at: 3});
+			this.formElements.add(idWidget,{at: 4});
 		}
 		var _rev = this.model.get("_rev");
 		if (_rev != null) {
 			var revWidget = {"label": "revWidget","value":_rev,"identifier": "_rev","inputType": "hidden"};
-			this.formElements.add(revWidget,{at: 4});
+			this.formElements.add(revWidget,{at: 5});
 		}
 		this.formElements.each(this.addOne);
 		return this;
@@ -71,14 +74,18 @@ var FormView = Backbone.View.extend({
   formElements: null,
   addOne: function(formElement){
 //	console.log("add one:" + JSON.stringify(formElement));
-	this.currentRow ++;
-	 //console.log("currentRow: " + this.currentRow);
-	var inputType = formElement.get("inputType");
-	var closeRow = formElement.get("closeRow");
-	var identifier = formElement.get("identifier");
-	var tblCols = formElement.get("cols");
-	var size = formElement.get("size");
-	this.value = this.model.get(identifier);
+	  var inputType = formElement.get("inputType");
+	  var datatype = formElement.get("datatype");
+	  var closeRow = formElement.get("closeRow");
+	  var identifier = formElement.get("identifier");
+	  var tblCols = formElement.get("cols");
+	  var size = formElement.get("size");
+	  this.value = this.model.get(identifier);
+	  // don't count the hidden widgets at the beginning of the form.
+	  if ((inputType !== "hidden") && (datatype !== "display")) {
+		  this.currentRow ++;  
+	  }
+	  //console.log("currentRow: " + this.currentRow + " identifier: " + identifier);
 	if (this.value != null) {
 		//console.log("value for " + identifier + ": " + this.value);
 		formElement.set({"value": this.value});
@@ -97,8 +104,8 @@ var FormView = Backbone.View.extend({
 		}
 		if (inputType == 'button') {
 			closeRow = "true";
-			formElement.set({"width":"450"});
-			formElement.set({"colspan":"2"});
+//			formElement.set({"width":"450"});
+//			formElement.set({"colspan":"2"});
 		} else if (inputType == 'text') {
 			if (size > 25) {
 				//console.log("Size: " + size);
@@ -110,9 +117,9 @@ var FormView = Backbone.View.extend({
 			}
 		} else if (inputType == 'textarea') {
 				closeRow = "true";
-				formElement.set({"colspan":"2"});
-				formElement.set({"rows":"4"});
-				formElement.set({"cols":"60"});
+//				formElement.set({"colspan":"2"});
+//				formElement.set({"rows":"4"});
+//				formElement.set({"cols":"60"});
 		} else {
 			formElement.set({"colspan":"1"});
 		}
@@ -231,6 +238,10 @@ var FormView = Backbone.View.extend({
 			  var record = new Record(formData);
 			  record.collection = "patient-records";
 			  record.urlRoot = "patient-records";
+			  if (formData.assignedId != null) {
+				  var assignedId = parseInt(formData.assignedId);
+				  formData.assignedId = assignedId;
+			  }
 			  console.log("record: " + JSON.stringify(record));
 			  record.save({},{
 				  success: function(model, resp){

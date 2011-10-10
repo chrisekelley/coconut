@@ -45,30 +45,36 @@ window.RecordView = Backbone.View.extend({
   formElements: null,
   addOne: function(formElement){
 //		console.log("add one:" + JSON.stringify(formElement));
-		 this.currentRow ++;
-		 //console.log("currentRow: " + this.currentRow);
-		var inputType = formElement.get("inputType");
+		 var inputType = formElement.get("inputType");
+		 var datatype = formElement.get("datatype");
 		var closeRow = formElement.get("closeRow");
 		var identifier = formElement.get("identifier");
 		var tblCols = formElement.get("cols");
 		var size = formElement.get("size");
 		this.value = this.model.get(identifier);
+		 // don't count the hidden widgets at the beginning of the form.
+		  if ((inputType !== "hidden") && (datatype !== "display")) {
+			  this.currentRow ++;  
+		  }
+		  //console.log("currentRow: " + this.currentRow + " identifier: " + identifier);
 		if (this.value != null) {
 			//console.log("value for " + identifier + ": " + this.value);
 			formElement.set({"value": this.value});
 		}
 		if (this.orientation === "vert") {
 			tblCols = 2;
-			if (this.currentRow % 2) {
-				closeRow = "false";
-			} else {
-				closeRow = "true";
-				//console.log("Setting closeRow to true; currentRow: " + this.currentRow);
+			if (closeRow === "false") {
+				if (this.currentRow % 2) {
+					closeRow = "false";
+				} else {
+					closeRow = "true";
+					//console.log("Setting closeRow to true for " + identifier + " ; currentRow: " + this.currentRow);
+				}
 			}
 			if (inputType == 'button') {
 				closeRow = "true";
-				formElement.set({"width":"450"});
-				formElement.set({"colspan":"2"});
+//				formElement.set({"width":"450"});
+//				formElement.set({"colspan":"2"});
 			} else if (inputType == 'text') {
 				if (size > 25) {
 					//console.log("Size: " + size);
@@ -127,6 +133,7 @@ window.RecordView = Backbone.View.extend({
 			$(currentTableName).append("<tr id=\"row" + identifier + "\"></tr>");
 			currentParentName = "#row" + identifier;
 			currentParent = $(currentParentName);
+			this.currentRow = 0;	//reset currentRow.
 			//console.log("CloseRow currentParentName: " + currentParentName);
 		}
 		 //console.log("Element: " + identifier + " currentParentName: " + currentParentName);

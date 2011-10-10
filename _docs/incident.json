@@ -1,7 +1,7 @@
 {
    "_id": "incident",
    "formBuilder": "FormDesignerAlpha",
-   "label": "Incident Description",
+   "label": "Incident Report",
    "flow": {
        "id": 300,
        "name": "auto",
@@ -28,7 +28,7 @@
            "inputType": "display-tbl-begin"
        },
        {
-           "label": "Date Incident Reported",
+           "label": "Phone",
            "value": "",
            "options": [
                {
@@ -36,18 +36,18 @@
                    "value": "true"
                }
            ],
-           "datatype": "dateTime",
+           "datatype": "string",
            "visible": "true",
            "closeRow": "true",
            "colspan": "2",
-           "size": "0",
+           "size": "25",
            "rows": "0",
            "cols": "0",
-           "identifier": "dateReported",
-           "inputType": "emptyDate"
+           "identifier": "phone",
+           "inputType": "text"
        },
        {
-           "label": "Title",
+           "label": "SMS Message",
            "value": "",
            "options": [
                {
@@ -59,28 +59,9 @@
            "visible": "true",
            "closeRow": "false",
            "colspan": "2",
-           "size": "60",
-           "rows": "0",
-           "cols": "0",
-           "identifier": "title",
-           "inputType": "text"
-       },
-       {
-           "label": "Description",
-           "value": "",
-           "options": [
-               {
-                   "name": "optional",
-                   "value": "true"
-               }
-           ],
-           "datatype": "string",
-           "visible": "true",
-           "closeRow": "false",
-           "colspan": "1",
            "size": "0",
-           "rows": "0",
-           "cols": "0",
+           "rows": "6",
+           "cols": "45",
            "identifier": "description",
            "inputType": "textarea"
        },
@@ -95,8 +76,8 @@
            ],
            "datatype": "int",
            "visible": "true",
-           "closeRow": "false",
-           "colspan": "1",
+           "closeRow": "true",
+           "colspan": "2",
            "size": "0",
            "rows": "0",
            "cols": "0",
@@ -172,8 +153,8 @@
            ],
            "datatype": "int",
            "visible": "true",
-           "closeRow": "false",
-           "colspan": "1",
+           "closeRow": "true",
+           "colspan": "2",
            "size": "0",
            "rows": "0",
            "cols": "0",
@@ -249,8 +230,8 @@
            ],
            "datatype": "int",
            "visible": "true",
-           "closeRow": "false",
-           "colspan": "1",
+           "closeRow": "true",
+           "colspan": "2",
            "size": "0",
            "rows": "0",
            "cols": "0",
@@ -282,6 +263,69 @@
            ]
        },
        {
+           "label": "Department",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "int",
+           "visible": "true",
+           "closeRow": "true",
+           "colspan": "2",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "department",
+           "inputType": "selectFDA",
+           "enumerations": [
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Administration",
+                   "labelItextID": "Administration",
+                   "defaultValue": "1"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Finance",
+                   "labelItextID": "Finance",
+                   "defaultValue": "2"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Education",
+                   "labelItextID": "Education",
+                   "defaultValue": "3"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Health",
+                   "labelItextID": "Health",
+                   "defaultValue": "4"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Works",
+                   "labelItextID": "Works",
+                   "defaultValue": "5"
+               },
+               {
+                   "name": "Item",
+                   "tagName": "item",
+                   "label": "Council",
+                   "labelItextID": "Council",
+                   "defaultValue": "6"
+               }
+           ]
+       },
+       {
            "label": "Resolved?",
            "value": "",
            "options": [
@@ -292,8 +336,8 @@
            ],
            "datatype": "boolean",
            "visible": "true",
-           "closeRow": "false",
-           "colspan": "1",
+           "closeRow": "true",
+           "colspan": "2",
            "size": "0",
            "rows": "0",
            "cols": "0",
@@ -314,8 +358,8 @@
            "closeRow": "false",
            "colspan": "1",
            "size": "0",
-           "rows": "0",
-           "cols": "0",
+           "rows": "6",
+           "cols": "45",
            "identifier": "comment",
            "inputType": "textarea"
        },
@@ -331,8 +375,8 @@
            "datatype": "display",
            "visible": "true",
            "closeRow": "true",
-           "colspan": "3",
-           "width": "770",
+           "colspan": "2",
+           "width": "320",
            "height": "30",
            "rows": "0",
            "cols": "0",

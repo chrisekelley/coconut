@@ -100,7 +100,7 @@ Handlebars.registerHelper("renderValue", function(context) {
 		  } else if (inputType == 'hidden') {
 			  html = beginElement + template(this) + endElement;  
 		  } else {
-			  var labelHtml = "<label for='" + identifier + "'>" + this.label + "</label>: ";
+			  var labelHtml = "<label for='" + identifier + "'>" + this.label + "</label>";
 			  var errorHtml = " <span class='error-message' style='display:none'></span>";
 			  html = beginElement + labelHtml + template(this) + errorHtml + endElement; 
 			  //console.log("useTemplate: " + useTemplate + " inputType: " + inputType + " closeRow: " + closeRow + " html: "+ html);
