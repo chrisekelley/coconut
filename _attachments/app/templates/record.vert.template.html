@@ -14,6 +14,11 @@
 <div id="form-container-vert">
 	 <h1><a href="#edit/{{recordId}}">{{label}}</a>&nbsp;&nbsp;&nbsp;&nbsp; ID: {{assignedId}}</h1>
 <form id="theForm">
-<div id="formElements"></div>
+<div id="formElements">
+<p class="dateHeader">
+Created: {{#dateFormatdMY created}}{{/dateFormatdMY}}<br/>
+Modified: {{#dateFormatdMY lastModified}}{{/dateFormatdMY}}
+</p>
+</div>
 </form>
 </div>

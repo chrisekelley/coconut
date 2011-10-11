@@ -203,7 +203,7 @@ var FormView = Backbone.View.extend({
 								  var doc_del_count = resp["doc_del_count"];
 								  var assignedId = doc_count + doc_del_count;
 								  console.log("assignedId: " + assignedId);
-								  formData.assignedId = assignedId;
+								  formData.assignedId = assignedId.toString();
 								  console.log("FORMY.Incidents.create(formData);" + JSON.stringify(formData));
 								  FORMY.Incidents.create(formData,{
 									  success: function(model, resp){
@@ -238,11 +238,11 @@ var FormView = Backbone.View.extend({
 			  var record = new Record(formData);
 			  record.collection = "patient-records";
 			  record.urlRoot = "patient-records";
-			  if (formData.assignedId != null) {
-				  var assignedId = parseInt(formData.assignedId);
-				  formData.assignedId = assignedId;
-			  }
-			  console.log("record: " + JSON.stringify(record));
+//			  if (formData.assignedId != null) {
+//				  var assignedId = parseInt(formData.assignedId);
+//				  console.log("formData.assignedId: " + formData.assignedId + " assignedId: " + assignedId);
+//				  record.assignedId = assignedId;
+//			  }
 			  record.save({},{
 				  success: function(model, resp){
 					  console.log("Updated the record.");
@@ -291,10 +291,10 @@ function inspectModelAndGo(newRecord) {
 		
 		if (formId === "incident") {
 			queryId =  identifier;
-			console.log("identifier is queryId: " + queryId + "for formId: " + formId);					
+			//console.log("identifier is queryId: " + queryId + " for formId: " + formId);					
 		 } else {
 			queryId = parentId;
-			console.log("parentId is queryId: " + queryId + "for formId: " + formId);
+			//console.log("parentId is queryId: " + queryId + " for formId: " + formId);
 		 }
 		FORMY.router.navigate('patientRecords/' + queryId, true);
 		//FORMY.router.navigate('patientRecords/' + queryId);

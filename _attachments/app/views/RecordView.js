@@ -21,13 +21,16 @@ window.RecordView = Backbone.View.extend({
 		var flow = this.options.currentForm.get("flow");
 		var flowId = flow.id;
 		var formId = this.options.currentForm.get("_id");
+		var created = this.options.model.created;
 		this.formElements = new FormElements(this.options.currentForm.get("form_elements"), { view: this });
 		var patientIdWidget = {"label": "patientIdWidget","value":this.patientId,"identifier": "patientId","inputType": "hidden"};
 		var flowIdWidget = {"label": "flowIdWidget","value": flowId,"identifier": "flowId","inputType": "hidden"};
 		var formIdWidget = {"label": "formIdWidget","value": formId,"identifier": "formId","inputType": "hidden"};
+		//var createdWidget = {"label": "createdWidget","value": created,"identifier": "created","inputType": "text"};
 		this.formElements.add(patientIdWidget,{at: 0});
 		this.formElements.add(flowIdWidget,{at: 1});
 		this.formElements.add(formIdWidget,{at: 2}); 
+		//this.formElements.add(createdWidget,{at: 2}); 
 		//thisHtml = this.template(this.model.toJSON());
 		thisHtml = this.template(this.form.toJSON());
 		$(this.el).html(thisHtml);

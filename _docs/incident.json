@@ -143,7 +143,7 @@
            ]
        },
        {
-           "label": "Parish",
+           "label": "Village",
            "value": "",
            "options": [
                {
@@ -158,63 +158,63 @@
            "size": "0",
            "rows": "0",
            "cols": "0",
-           "identifier": "parish",
+           "identifier": "village",
            "inputType": "selectFDA",
            "enumerations": [
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "Parish1",
-                   "labelItextID": "Parish1",
+                   "label": "Mansa A",
+                   "labelItextID": "Mansa A",
                    "defaultValue": "1"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "ParishB",
-                   "labelItextID": "ParishB",
+                   "label": "VillageB",
+                   "labelItextID": "VillageB",
                    "defaultValue": "2"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "ParishC",
-                   "labelItextID": "ParishC",
+                   "label": "VillageC",
+                   "labelItextID": "VillageC",
                    "defaultValue": "3"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "ParishD",
-                   "labelItextID": "ParishD",
+                   "label": "VillageD",
+                   "labelItextID": "VillageD",
                    "defaultValue": "4"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "ParishE",
-                   "labelItextID": "ParishE",
+                   "label": "VillageE",
+                   "labelItextID": "VillageE",
                    "defaultValue": "5"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "ParishF",
-                   "labelItextID": "ParishF",
+                   "label": "VillageF",
+                   "labelItextID": "VillageF",
                    "defaultValue": "6"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "ParishG",
-                   "labelItextID": "ParishG",
+                   "label": "VillageG",
+                   "labelItextID": "VillageG",
                    "defaultValue": "7"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "ParishH",
-                   "labelItextID": "ParishH",
+                   "label": "VillageH",
+                   "labelItextID": "VillageH",
                    "defaultValue": "8"
                }
            ]

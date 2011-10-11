@@ -211,6 +211,14 @@ Handlebars.registerHelper('dateFormatDate', function(item) {
 	out = $.format.date(d1, "dd/MM");
 	return out;
 });
+Handlebars.registerHelper('dateFormatdMY', function(item) {
+	var out = "";
+	var d1 = new Date(item);
+	//out = d1.toString('yyyy-MM-dd hh:mm');
+	//out = $.format.date(d1, "yyyy-MM-dd hh:mm:ss");
+	out = $.format.date(d1, "dd/MM/yyyy");
+	return out;
+});
 Handlebars.registerHelper('substring', function(identifier, from) {
 	return identifier.substring(from);
 });

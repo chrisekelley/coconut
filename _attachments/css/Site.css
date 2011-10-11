@@ -691,12 +691,12 @@ html>body #sidenavcontainer li a {
 	width: 320px;
 }
 #views{
- width:400px; 
+ width:320px; 
  float:left; 
  position:relative; 
   }
 #twocols {
-	width: 660px;
+	width: 960px;
 	float: right;
 	position: relative;
 }
@@ -1163,4 +1163,8 @@ label{
 float: left;
 width: 120px;
 font-weight: bold;
+}
+
+.dateHeader {
+	font-size: 10pt;
 }
