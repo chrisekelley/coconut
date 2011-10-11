@@ -399,7 +399,7 @@ var AppRouter = Backbone.Router.extend({
 				var viewDiv = document.createElement("div");
 				viewDiv.setAttribute("id", "designer");
 				$("#views").append(viewDiv);
-				$("#views").width("800px");
+				$("#views").width("1000px");
 			}
 			formdesigner.launch({
 	            rootElement: "#designer",
@@ -428,14 +428,14 @@ var AppRouter = Backbone.Router.extend({
         		return Math.floor(Math.random() * (to - from + 1) + from);
         	};
 
-        while (ct < 99) {
+        while (ct < 499) {
         	ct++;
             var subcounty=randomFromTo(1,8).toString();
             var village=randomFromTo(1,8).toString();
             var priority=randomFromTo(1,3).toString();
             var department=randomFromTo(1,6).toString();
             var resolved=randomFromTo(0,1).toString();
-            var month=randomFromTo(1,9);
+            var month=randomFromTo(1,10);
             var day=randomFromTo(1,31);
             switch (month) {
             case 10:
@@ -468,11 +468,11 @@ var AppRouter = Backbone.Router.extend({
 //            	return length;
 //            }
             var monthStr = month.toString();
-            if (month.length < 2) {
+            if (monthStr.length < 2) {
             	monthStr = "0" + month;
             }
             var dayStr = day.toString();
-            if (day.length < 2) {
+            if (dayStr.length < 2) {
             	dayStr = "0" + day;
             }
 

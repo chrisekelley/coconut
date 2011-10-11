@@ -9,10 +9,26 @@
   		<div id="wrapper" class="clearfix">
   			<div id="twocols"> 
 				<div id="maincol">
-					<img src="/coconut/_design/coconut/_list/chartline/byResolved?group_level=2"/>
-					<h1>Resolved Cases Per Month</h1>
+					<div id="chart">
+							<table style="font-size:16px; text-align: center">
+								<tr>
+									<td id="chartimg" onclick="refreshChart('chartimg', '<img src=/coconut/_design/coconut/_list/chartline/byResolved?group_level=2 />')">
+										<img src="/coconut/_design/coconut/_list/chartline/byResolved?group_level=2"/>
+										</td>
+								</tr>
+								<tr>
+									<td style="font-size: 16px; text-align: center">Resolved Cases Per Month</td>
+								</tr>
+							</table>
 					</div>
-				<div id="rightcol"><img src="images/applications-system.png" alt="Configure" align="right"  onClick="window.location.href = '/mobilefuton/_design/mobilefuton/index.html'"/></div>
+				</div>
+				<div id="rightcol">
+					<table cellpadding="0" cellspacing="0">
+						<tr><td><img src="images/applications-system.png" alt="Configure" align="right"  onClick="window.location.href = '/mobilefuton/_design/mobilefuton/index.html'"/></td></tr>
+						<tr><td><a href="#design"><img src="images/accessories-text-editor.png" alt="Design" align="right" /></a></td></tr>
+						<tr><td><a href="#populate"><img src="images/system-users.png" alt="Populate" align="right" /></a></td></tr>
+					</table>
+				</div>
 			</div> 
 	  		<div id="views">
 		  		<div id="formRenderingView"></div>
@@ -87,5 +103,6 @@
 	<script type="text/javascript" src="app/views/IncidentView.js"></script>
 	<script type="text/javascript" src="app/views/RecordView.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
+	<script type="text/javascript" src="app/coconut-utils.js"></script>
 </html>
 

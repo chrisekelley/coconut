@@ -44,15 +44,18 @@ var FormView = Backbone.View.extend({
 		var flowId = flow.id;
 		var formId = this.options.currentForm.get("_id");
 		var assignedId = this.options.currentForm.get("assignedId");
+		var created = this.options.currentForm.get("createdWidget");
 		this.formElements = new FormElements(this.options.currentForm.get("form_elements"), { view: this });
 		var parentIdWidget = {"label": "parentIdWidget","value":this.parentId,"identifier": "parentId","inputType": "hidden"};
 		var flowIdWidget = {"label": "flowIdWidget","value": flowId,"identifier": "flowId","inputType": "hidden"};
 		var formIdWidget = {"label": "formIdWidget","value": formId,"identifier": "formId","inputType": "hidden"};
 		var assignedIdWidget = {"label": "assignedIdWidget","value": assignedId,"identifier": "assignedId","inputType": "hidden"};
+		var createdWidget = {"label": "createdWidget","value": created,"identifier": "created","inputType": "hidden"};
 		this.formElements.add(parentIdWidget,{at: 0});
 		this.formElements.add(flowIdWidget,{at: 1});
 		this.formElements.add(formIdWidget,{at: 2});
 		this.formElements.add(assignedIdWidget,{at: 3});
+		this.formElements.add(createdWidget,{at: 4});
 		var _id = this.model.get("_id");
 		if (_id != null) {
 			var idWidget = {"label": "idWidget","value":_id,"identifier": "_id","inputType": "hidden"};

@@ -677,13 +677,12 @@ html>body #sidenavcontainer li a {
 	color: #fff;
 	text-decoration: none;
 }
-#maincol {
-	background-color: #FFFFFF;
+/*#maincol {
 	float: left;
 	display: inline;
 	position: relative;
 	width: 870px;
-}
+}*/
 #pagewidth {
 	width: 1280px;
 }
@@ -699,14 +698,16 @@ html>body #sidenavcontainer li a {
 	width: 960px;
 	float: right;
 	position: relative;
+	background: #6EA8E4;
 }
 #rightcol{
  width:100px; 
  float:right; 
  position:relative; 
+ width: 34px;
  }
  #maincol{
- background-color: #FFFFFF;  
+ /*background-color: #FFFFFF;  */
  float: left; 
   position: relative; 
  width:520px; 
@@ -1167,4 +1168,8 @@ font-weight: bold;
 
 .dateHeader {
 	font-size: 10pt;
+}
+
+#chart {
+	padding-left: 20px;
 }

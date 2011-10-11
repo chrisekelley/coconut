@@ -14,7 +14,7 @@ function(head, req) {
 		return '<rect x="'+x+'" y="'+y+'" width="'+width+'" height="'+height+'" style="fill:'+fill+'; stroke:'+color+'"/>\n';
 	}
 	function text(x,y, text) {
-		return '<text x="'+x+'" y="'+y+'" font-size="11" font-family="sans-serif">'+text+'</text>\n';
+		return '<text x="'+x+'" y="'+y+'" font-size="16px" font-family="Tahoma, Verdana, Arial, sans-serif" style="stroke:white; fill:white">'+text+'</text>\n';
 	}
 	
 	// import query parameters
@@ -25,19 +25,15 @@ function(head, req) {
 	// find max and min values
 	// collect values and labels
 	var y_max = null;
+	// To start with 0, set y_min = 0 
 	var y_min = 0;
+	//var y_min = null;
 	var values = [];
 	var labels = [];
-	// To start with 0, set count = 0 and comment out if (y_min=null
 	var count = 0;
-	// To start with 0, also uncomment this line
-	//values[0] = 0;
+	values[0] = 0;
 	while(row = getRow()) {		
 //		var value = Math.ceil(row.value.tot/row.value.count);
-//		if (y_max==null || value>y_max) { y_max=value; }
-//		if (y_min==null || value<y_min) { y_min=value; }
-//		values[count] = value;
-//		labels[count] = row.key.join('-');
 		var value = row.value;
 		if (y_max==null || value>y_max) { y_max=value; }
 		//if (y_min==null || value<y_min) { y_min=value; }
@@ -46,26 +42,31 @@ function(head, req) {
 		count++;
 	}
 	// free space surrounding the actual chart
-	var pad = Math.round(y_size/12);
+	//  pad = 31
+	var pad = Math.round(y_size/16);
 	
 	// calculate scaling factors
 	var in_width = x_size-(2*pad);
+	
+	//  in_height = 500-(2*31) = 438
 	var in_height = y_size-(2*pad);
 	var in_x_scale = in_width/count;
+	//  in_y_scale = 438/(34-0) = 12.882352941176471 - check the min and max values from the query.
 	var in_y_scale = in_height/(y_max-y_min);
-	
-	
-	
+
 	send('<?xml version="1.0"?>');
+	//send('<!-- in_y_scale: ' + in_y_scale + " -->");
 	send(svg(x_size, y_size));
 	
 	// background box	
-	send(rect(1,1, x_size, y_size, '#C6F1C7', '#C6F1C7'));
+	//send(rect(1,1, x_size, y_size, '#6EA8E4', '#6EA8E4'));
+	send(rect(1,1, x_size, y_size, 'black', 'black'));
 	
 	// chart container box
-	send(rect(pad,pad, x_size-(2*pad), y_size-(2*pad), 'black','white'));
+	send(rect(pad,pad, x_size-(2*pad), y_size-(2*pad), 'black','#FCF3D7'));
 
 	// draw labels and grid
+	// y_base = 500 - 31 = 469
 	var y_base = y_size - pad;
 	var lastx = 0;
 	var lasty = 0;
@@ -76,7 +77,9 @@ function(head, req) {
 			send(text(x+3, y_base + (pad/2), labels[i]));
 			lastx = x;
 		}	
+		//  y = Math.round(469 - ( (20-0) * 12.88)) = 211.4
 		var y = Math.round(y_base - ( (values[i]-y_min) * in_y_scale));
+		send('<!-- i: ' + i + " values[i]: " + values[i] + '; lasty: ' + lasty + '; y: ' + y +  '; lasty-y: ' + (lasty-y) + "; lasty-y > 15: " + (lasty-y > 15) + " -->");
 		if (i==0 || lasty-y > 15) {
 			send(line(5, y, pad+in_width, y,'gray'));
 			send(text(5, y-2, values[i]));
