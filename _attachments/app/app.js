@@ -498,4 +498,10 @@ var AppRouter = Backbone.Router.extend({
 	// Start Backbone history a necessary step for bookmarkable URL's
 	Backbone.history.start();
 	FORMY.Incidents = new IncidentsList();
+	
+	// charts
+	rendercharts();
+	bulletChart();		
+			
+	    //}
 //}, 100);

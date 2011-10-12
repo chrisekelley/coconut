@@ -9,15 +9,22 @@
   		<div id="wrapper" class="clearfix">
   			<div id="twocols"> 
 				<div id="maincol">
-					<div id="chart">
+					<div id="charts">
+							<!-- <img src="/coconut/_design/coconut/_list/chartline/byResolved?group_level=2"/> -->
 							<table style="font-size:16px; text-align: center">
 								<tr>
-									<td id="chartimg" onclick="refreshChart('chartimg', '<img src=/coconut/_design/coconut/_list/chartline/byResolved?group_level=2 />')">
-										<img src="/coconut/_design/coconut/_list/chartline/byResolved?group_level=2"/>
-										</td>
+									<td style="font-size: 16px; text-align: center">Resolved Cases Per Month</td>
+									<td style="font-size: 16px; text-align: center">Total Cases Per Month</td>
 								</tr>
 								<tr>
-									<td style="font-size: 16px; text-align: center">Resolved Cases Per Month</td>
+									<td id="chart1" style="text-align: left"></td>
+									<td id="chart2" style="text-align: left"></td>
+								</tr>
+								<tr>
+									<td style="font-size: 16px; text-align: center">Cases Per Department</td>
+								</tr>
+								<tr>
+									<td id="chart3" colspan="2" style="text-align: left"></td>
 								</tr>
 							</table>
 					</div>
@@ -60,6 +67,8 @@
 	<script type="text/javascript" src="js-libraries/formElementRender.js"></script>
 	<script type="text/javascript" src="js-libraries/recordElementRender.js"></script>
 	<script type="text/javascript" src="js-libraries/jquery.dateFormat-1.0.js"></script>
+	<script type="text/javascript" src="js-libraries/d3.js"></script>
+	<script type="text/javascript" src="js-libraries/d3.chart.js"></script>
 	
 	<!-- formDesigner -->
 	
@@ -102,6 +111,7 @@
 	<script type="text/javascript" src="app/models/IncidentRecordList.js"></script>
 	<script type="text/javascript" src="app/views/IncidentView.js"></script>
 	<script type="text/javascript" src="app/views/RecordView.js"></script>
+	<script type="text/javascript" src="app/coco-charts.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
 	<script type="text/javascript" src="app/coconut-utils.js"></script>
 </html>

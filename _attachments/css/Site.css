@@ -698,7 +698,7 @@ html>body #sidenavcontainer li a {
 	width: 960px;
 	float: right;
 	position: relative;
-	background: #6EA8E4;
+	/*background: #6EA8E4;*/
 }
 #rightcol{
  width:100px; 
@@ -1170,6 +1170,40 @@ font-weight: bold;
 	font-size: 10pt;
 }
 
-#chart {
+#chart1 {
 	padding-left: 20px;
+	background-color: white;
 }
+
+ .chart div {
+  font: 10px sans-serif;
+   background-color: steelblue;
+   text-align: right;
+   padding: 3px;
+   margin: 1px;
+   color: white;
+ }
+ 
+ 
+.chart rect {
+  stroke: white;
+  fill: steelblue;
+}
+
+.chart text.bar {
+  fill: white;
+}
+
+// http://mbostock.github.com/d3/ex/population.css
+.bullet { font: 10px sans-serif; }
+.bullet .marker { stroke: #000; stroke-width: 2px; }
+.bullet .tick line { stroke: #666; stroke-width: .5px; }
+.bullet .range.s0 { fill: #eee; }
+.bullet .range.s1 { fill: #ddd; }
+.bullet .range.s2 { fill: #ccc; }
+.bullet .measure.s0 { fill: lightsteelblue; }
+.bullet .measure.s1 { fill: steelblue; }
+.bullet .title { font-size: 14px; font-weight: bold; }
+.bullet .subtitle { fill: #999; }
+
+
