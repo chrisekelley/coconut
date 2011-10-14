@@ -78,6 +78,9 @@ var AppRouter = Backbone.Router.extend({
         },
         home: function () {
         	//console.log("home route.");
+        	if ($("#charts").length <= 0){
+        		window.location.href = '/coconut/_design/coconut/index.html';
+        		}
         	$("#homePageView").remove();
 			$("#recordView").remove();
 			$("#formRenderingView").remove();
@@ -107,6 +110,9 @@ var AppRouter = Backbone.Router.extend({
         },
         search: function (searchTerm) {
         	console.log("search route.");
+        	if ($("#charts").length <= 0){
+        		window.location.href = '/coconut/_design/coconut/index.html';
+        		}
         	$("#homePageView").remove();
 			$("#recordView").remove();
 			$("#formRenderingView").remove();
@@ -423,7 +429,7 @@ var AppRouter = Backbone.Router.extend({
         	db = $.couch.db(Backbone.couch_connector.config.db_name);
             var testdoc = null;
             ct = 0;
-            opts = { success : function(){ }, error : function(){ alert("could no create a test doc"); }};    
+            opts = { success : function(){ }, error : function(){ console.log("could not populate"); }};    
             function randomFromTo(from, to){
         		return Math.floor(Math.random() * (to - from + 1) + from);
         	};
