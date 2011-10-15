@@ -277,7 +277,7 @@
 				'.jstree > ul > li { margin-left:0px; } ' + 
 				'.jstree-rtl > ul > li { margin-right:0px; } ' + 
 				'.jstree ins { display:inline-block; text-decoration:none; width:18px; height:18px; margin:0 0 0 0; padding:0; } ' + 
-				'.jstree a { display:inline-block; line-height:16px; height:16px; color:black; white-space:nowrap; text-decoration:none; padding:1px 2px; margin:0; } ' + 
+				'.jstree a { display:inline-block; line-height:16px; height:24px; font-size:100%; color:black; white-space:nowrap; text-decoration:none; padding:1px 2px; margin:0; } ' + 
 				'.jstree a:focus { outline: none; } ' + 
 				'.jstree a > ins { height:16px; width:16px; } ' + 
 				'.jstree a > .jstree-icon { margin-right:3px; } ' + 

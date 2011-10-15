@@ -218,6 +218,18 @@ formdesigner.ui = (function () {
             });
 
         })();
+        (function c_home() {
+        	var homebut = $(
+        			'<button id="fd-home-button" class="toolbarButton questionButton">'+
+        			'Home' +
+        	'</button>');
+        	toolbar.append(homebut);
+        	
+        	homebut.button().click(function () {
+        		FORMY.router.navigate('home', true);
+        	});
+        	
+        })();
 
     }
     that.buttons = buttons;
