@@ -506,8 +506,46 @@ var AppRouter = Backbone.Router.extend({
 	FORMY.Incidents = new IncidentsList();
 	
 	// charts
+	var departmentReport = new Object({date:null,education:null,health: null,finance:null});
+	var reportDate = new Date();
+	var reportYear = reportDate.getFullYear();
+	var reportMonth = reportDate.getMonth() + 1;
+	console.log("Generating report for: " + reportMonth + "/" + reportYear);
+	$.couch.db(Backbone.couch_connector.config.db_name).view("coconut/byDepartmentEducation", {
+		'reduce':true,
+		'group_level':2,
+		success: function(countData) {
+
+			//var element = $("#chartimg");
+			var values = [];
+			var labels = [];
+			var indices = [];
+			var months = [];
+			
+			//var counts = [];
+			for (i in countData.rows) {
+				console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
+				//values.push(data.rows[i].value.resolved);
+				labels.push(countData.rows[i].key.join('-'));
+				var year = parseInt(countData.rows[i].key[0], 10);
+				var month = parseInt(countData.rows[i].key[1], 10);
+				if ((year === reportYear) && (month === reportMonth)) {
+					values.push(countData.rows[i].value);
+				} 
+				months.push(month);
+				indices.push(i);
+			}
+			console.log("labels: " + JSON.stringify(labels));
+			console.log("values: " + JSON.stringify(values));
+			console.log("months: " + JSON.stringify(months));
+			console.log("indices: " + JSON.stringify(indices));
+			
+			bulletChart(values);		
+
+		}
+	}
+	);
 	rendercharts();
-	bulletChart();		
 			
 	    //}
 //}, 100);

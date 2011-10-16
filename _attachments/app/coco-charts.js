@@ -187,35 +187,14 @@ function rendercharts() {
 				}
 			}
 			);
-}		
+}	
 
-function bulletChart() {
-	$.couch.db(Backbone.couch_connector.config.db_name).view("coconut/byDepartmentEducation", {
-		'reduce':true,
-		'group_level':2,
-		success: function(countData) {
+//FORMY.reports.departments = departmentReport;
 
-			//var element = $("#chartimg");
-			var values = [];
-			var labels = [];
-			var indices = [];
-			var months = [];
-			//var counts = [];
-			for (i in countData.rows) {
-				console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
-				values.push(countData.rows[i].value);
-				//values.push(data.rows[i].value.resolved);
-				labels.push(countData.rows[i].key.join('-'));
-				var month = parseInt(countData.rows[i].key[1], 10);
-				months.push(month);
-				indices.push(i);
-			}
-			console.log("labels: " + JSON.stringify(labels));
-			console.log("values: " + JSON.stringify(values));
-			console.log("months: " + JSON.stringify(months));
-			console.log("indices: " + JSON.stringify(indices));
+function bulletChart(values) {
 
 
+			console.log("values: " + values);
 			var w = 960,
 			h = 50,
 			m = [5, 40, 20, 120]; // top right bottom left
@@ -225,6 +204,18 @@ function bulletChart() {
 			.height(h - m[0] - m[2]);
 
 			d3.json("app/bullets.json", function(data) {
+
+				for (i in data) {
+					var item = data[i];
+					console.log("item: " + JSON.stringify(item));
+
+					if (item.title === "Education") {
+						console.log("*** item ***: "+ JSON.stringify(item));
+						item["measures"] = values;
+					}
+					
+				}
+				console.log("data: " + JSON.stringify(data));
 
 				var vis = d3.select("#chart3").selectAll("svg")
 				.data(data)
@@ -269,12 +260,6 @@ function bulletChart() {
 					return Math.max(0, d + k * (Math.random() - .5));
 				};
 			}
-
-
-
-		}
-	}
-	);
 }
 			
 			// http://mbostock.github.com/d3/ex/population.html
