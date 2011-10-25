@@ -51,7 +51,7 @@ var HomeView = Backbone.View.extend({
 		FORMY.router.navigate('search/' + searchTerm, true);
 	},
 	orientation: "horiz",
-	reportCollection:null,
+	//reportEducationInstance:null,
 	render: function() {
 //		$("#formRenderingView").remove();
 //		$("#recordView").remove();
@@ -73,46 +73,31 @@ var HomeView = Backbone.View.extend({
 			//this.template =  loadTemplate("home.template.html");
 		}
 		
-		$.when(this.options.reportCollection.deferred)
-		   .then(function(countData){
-		      console.log( 'I fire once BOTH ajax requests have completed!' );
-
-				var departmentReport = new Object({date:null,education:null,health: null,finance:null});
-				var reportDate = new Date();
-				var reportYear = reportDate.getFullYear();
-		    	var reportMonth = reportDate.getMonth() + 1;	
-		    	
-				console.log("Generating report for: " + reportDate);
-				
-				var values = [];
-				var labels = [];
-				var indices = [];
-				var months = [];
-				
-				//var counts = [];
-				for (i in countData.rows) {
-					console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
-					//values.push(data.rows[i].value.resolved);
-					labels.push(countData.rows[i].key.join('-'));
-					var year = parseInt(countData.rows[i].key[0], 10);
-					var month = parseInt(countData.rows[i].key[1], 10);
-					if ((year === reportYear) && (month === reportMonth)) {
-						values.push(countData.rows[i].value);
-					} 
-					months.push(month);
-					indices.push(i);
-				}
-				console.log("labels: " + JSON.stringify(labels));
-				console.log("values: " + JSON.stringify(values));
-				console.log("months: " + JSON.stringify(months));
-				console.log("indices: " + JSON.stringify(indices));
-				//bulletChart(values);	
-				departmentReport.education = values;
-
-				bulletChart(departmentReport.education);
-		    	rendercharts();
-		      
-		      
+		$.when(this.options.reportEducationInstance.deferred, this.options.reportHealthInstance.deferred, this.options.reportWorksInstance.deferred)
+		//$.when(this.options.reportEducationInstance.deferred)
+		   .then(function(countData, countData2, worksData){
+			   console.log( 'I fire once all ajax requests have completed!' );
+			   console.log( 'deferred countData:' + JSON.stringify(countData[0].rows));
+			   console.log( 'deferred countData2:' + JSON.stringify(countData2));
+			   console.log( 'deferred works:' + JSON.stringify(works));
+			   //console.log("FORMY.departmentReportRaw.education from HomeView: " + JSON.stringify(FORMY.departmentReportRaw.education));
+			   //console.log("FORMY.departmentReportRaw.health from HomeView: " + JSON.stringify(FORMY.departmentReportRaw.health));
+			   //countData = FORMY.departmentReportRaw.education;
+			   var departmentReport = new Object({date:null,education:null,health: null,works:null});
+			   var reportDate = new Date();
+			   console.log("Generating report for: " + reportDate);
+			   
+			   var education = parseData(reportDate, countData[0]);	
+			   departmentReport.education = education;
+			   var health = parseData(reportDate, countData2[0]);	
+			   departmentReport.health = health;
+			   var works = parseData(reportDate, worksData[0]);	
+			   departmentReport.works = works;
+			   console.log( 'departmentReport.education:' + JSON.stringify(departmentReport.education));
+			   console.log( 'departmentReport.health:' + JSON.stringify(departmentReport.health));
+			   console.log( 'departmentReport.works:' + JSON.stringify(departmentReport.works));
+			   bulletChart(departmentReport);
+			   rendercharts();
 		   })
 		   .fail(function(){
 		      console.log( 'I fire if one or more requests failed.' );
@@ -162,3 +147,31 @@ var SearchListItemView = Backbone.View.extend({
 		return this;
 	}
 });
+
+function parseData(reportDate, data) {
+	var reportYear = reportDate.getFullYear();
+	var reportMonth = reportDate.getMonth() + 1;	
+	var values = [];
+	var labels = [];
+	var indices = [];
+	var months = [];
+
+	//var counts = [];
+	for (i in data.rows) {
+		console.log(data.rows[i].key.join('-') + ": " + "data.rows[i].value: " + JSON.stringify(data.rows[i].value));
+		//values.push(data.rows[i].value.resolved);
+		labels.push(data.rows[i].key.join('-'));
+		var year = parseInt(data.rows[i].key[0], 10);
+		var month = parseInt(data.rows[i].key[1], 10);
+		if ((year === reportYear) && (month === reportMonth)) {
+			values.push(data.rows[i].value);
+		} 
+		months.push(month);
+		indices.push(i);
+	}
+	console.log("labels: " + JSON.stringify(labels));
+	console.log("values: " + JSON.stringify(values));
+	console.log("months: " + JSON.stringify(months));
+	console.log("indices: " + JSON.stringify(indices));
+	return values;
+}

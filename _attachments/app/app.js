@@ -97,7 +97,48 @@ var AppRouter = Backbone.Router.extend({
 //			report.db["keys"] = null;
 //			report.db["view"] = ["byDepartmentEducation"];
 			// Initialize the Collection
-			var reportCollectionInstance = new ReportCollection();
+			FORMY.departmentReportRaw = new Object({date:null,education:null,health: null,finance:null});
+			var reportEducationInstance = new ReportCollection();
+			reportEducationInstance.db["view"] = ["byDepartmentEducation?reduce=true&group_level=2"];
+			reportEducationInstance.deferred = reportEducationInstance.fetch({
+				success : function(response1){
+					FORMY.departmentReportRaw.education = reportEducationInstance;
+					console.log("FORMY.departmentReportRaw.education from app Home: " + JSON.stringify(FORMY.departmentReportRaw.education));
+					console.log("reportEducationInstance count: " + FORMY.departmentReportRaw.education.length);
+					//console.log("reportEducationInstance from app Home: " + JSON.stringify(reportEducationInstance.deferred));
+				},
+				error : function(){
+					console.log("Error loading Report: " + arguments); 
+				}
+			});
+			
+			var reportHealthInstance = new ReportCollection();
+			reportHealthInstance.db["view"] = ["byDepartmentHealth?reduce=true&group_level=2"];
+			reportHealthInstance.deferred = reportHealthInstance.fetch({
+				success : function(response2){
+					FORMY.departmentReportRaw.health = reportHealthInstance;
+					console.log("FORMY.departmentReportRaw.health from app Home: " + JSON.stringify(FORMY.departmentReportRaw.health));
+					console.log("reportHealthInstance count: " + FORMY.departmentReportRaw.health.length);
+					console.log("reportHealthInstance from app Home: " + JSON.stringify(reportHealthInstance.deferred));
+				},
+				error : function(){
+					console.log("Error loading Report: " + arguments); 
+				}
+			});
+			
+			var reportWorksInstance = new ReportCollection();
+			reportWorksInstance.db["view"] = ["byDepartmentWorks?reduce=true&group_level=2"];
+			reportWorksInstance.deferred = reportWorksInstance.fetch({
+				success : function(response3){
+					//FORMY.departmentReportRaw.works = reportWorksInstance;
+					//console.log("FORMY.departmentReportRaw.works from app Home: " + JSON.stringify(FORMY.departmentReportRaw.works));
+					console.log("reportWorksInstance count: " + response3.length);
+					console.log("reportWorksInstance from app Home: " + JSON.stringify(reportWorksInstance.deferred));
+				},
+				error : function(){
+					console.log("Error loading Report: " + arguments); 
+				}
+			});
 
 			
 			var searchResults = new IncidentsList();
@@ -108,7 +149,10 @@ var AppRouter = Backbone.Router.extend({
 					FORMY.Incidents = searchResults;
 					//console.log("render; Incidents count: " + FORMY.Incidents.length);
 					var page = new Page({content: "Default List of Incidents:"});
-					(new HomeView({model: page, el: $("#homePageView"), reportCollection: reportCollectionInstance})).render();
+					(new HomeView(
+							{model: page, el: $("#homePageView"), reportEducationInstance: reportEducationInstance, 
+								reportHealthInstance: reportHealthInstance, reportWorksInstance: reportWorksInstance}
+							)).render();
 					//console.log("starting stripeme.");
 					$(".stripeMe tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
 					$(".stripeMe tr:even").addClass("alt");

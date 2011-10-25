@@ -191,10 +191,10 @@ function rendercharts() {
 
 //FORMY.reports.departments = departmentReport;
 
-function bulletChart(values) {
+function bulletChart(departmentReport) {
 
 
-			console.log("values: " + values);
+			console.log("departmentReport: " + JSON.stringify(departmentReport));
 			var w = 960,
 			h = 50,
 			m = [5, 40, 20, 120]; // top right bottom left
@@ -209,10 +209,19 @@ function bulletChart(values) {
 					var item = data[i];
 					console.log("item: " + JSON.stringify(item));
 
-					if (item.title === "Education") {
+					if (item.title === "Health") {
 						console.log("*** item ***: "+ JSON.stringify(item));
-						item["measures"] = values;
-					}
+						item["measures"] = [departmentReport.health, departmentReport.health];
+						item["markers"] = departmentReport.health;
+					} else if (item.title === "Education") {
+						console.log("*** item ***: "+ JSON.stringify(item));
+						item["measures"] = [departmentReport.education, departmentReport.education];
+						item["markers"] = departmentReport.education;
+					}  else if (item.title === "Works") {
+						console.log("*** item ***: "+ JSON.stringify(item));
+						item["measures"] = [departmentReport.works, departmentReport.works];
+						item["markers"] = departmentReport.works;
+					} 
 					
 				}
 				console.log("data: " + JSON.stringify(data));
