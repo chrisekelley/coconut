@@ -90,23 +90,45 @@ var AppRouter = Backbone.Router.extend({
 				viewDiv.setAttribute("id", "homePageView");
 				$("#views").append(viewDiv);
 			}
-    		var searchResults = new IncidentsList();
-    		searchResults.db["keys"] = null;
-    		searchResults.db["view"] = ["byIncidentSorted?descending=true&limit=15"];
-    		searchResults.fetch({
-    		success : function(){
-    			FORMY.Incidents = searchResults;
-    			//console.log("render; Incidents count: " + FORMY.Incidents.length);
-    			var page = new Page({content: "Default List of Incidents:"});
-            	(new HomeView({model: page, el: $("#homePageView")})).render();
-             	//console.log("starting stripeme.");
-                $(".stripeMe tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
-                $(".stripeMe tr:even").addClass("alt");
-    		},
-    		error : function(){
-    			console.log("Error loading PatientRecordList: " + arguments); 
-    		}
-    		});
+			
+			// charts
+			
+//			var report = new ReportCollection();
+//			report.db["keys"] = null;
+//			report.db["view"] = ["byDepartmentEducation"];
+			// Initialize the Collection
+			var reportCollectionInstance = new ReportCollection();
+
+			
+			var searchResults = new IncidentsList();
+			searchResults.db["keys"] = null;
+			searchResults.db["view"] = ["byIncidentSorted?descending=true&limit=15"];
+			searchResults.fetch({
+				success : function(){
+					FORMY.Incidents = searchResults;
+					//console.log("render; Incidents count: " + FORMY.Incidents.length);
+					var page = new Page({content: "Default List of Incidents:"});
+					(new HomeView({model: page, el: $("#homePageView"), reportCollection: reportCollectionInstance})).render();
+					//console.log("starting stripeme.");
+					$(".stripeMe tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
+					$(".stripeMe tr:even").addClass("alt");
+				},
+				error : function(){
+					console.log("Error loading PatientRecordList: " + arguments); 
+				}
+			});
+    
+	      
+//			$.when( education(reportDate, departmentReport)).done(function(){
+//				console.log( 'I fire once BOTH ajax requests have completed!' + JSON.stringify(departmentReport["education"]));
+//
+//				bulletChart(departmentReport.education);
+//				rendercharts();
+//			})
+//			.fail(function(){
+//				console.log( 'I fire if one or more requests failed.' );
+//			});
+
         },
         search: function (searchTerm) {
         	console.log("search route.");
@@ -505,47 +527,48 @@ var AppRouter = Backbone.Router.extend({
 	Backbone.history.start();
 	FORMY.Incidents = new IncidentsList();
 	
-	// charts
-	var departmentReport = new Object({date:null,education:null,health: null,finance:null});
-	var reportDate = new Date();
-	var reportYear = reportDate.getFullYear();
-	var reportMonth = reportDate.getMonth() + 1;
-	console.log("Generating report for: " + reportMonth + "/" + reportYear);
-	$.couch.db(Backbone.couch_connector.config.db_name).view("coconut/byDepartmentEducation", {
-		'reduce':true,
-		'group_level':2,
-		success: function(countData) {
+	function education (reportDate, departmentReport) {
+    	var reportYear = reportDate.getFullYear();
+    	var reportMonth = reportDate.getMonth() + 1;		
+		var dfd = $.Deferred();
 
-			//var element = $("#chartimg");
-			var values = [];
-			var labels = [];
-			var indices = [];
-			var months = [];
-			
-			//var counts = [];
-			for (i in countData.rows) {
-				console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
-				//values.push(data.rows[i].value.resolved);
-				labels.push(countData.rows[i].key.join('-'));
-				var year = parseInt(countData.rows[i].key[0], 10);
-				var month = parseInt(countData.rows[i].key[1], 10);
-				if ((year === reportYear) && (month === reportMonth)) {
-					values.push(countData.rows[i].value);
-				} 
-				months.push(month);
-				indices.push(i);
+		$.couch.db(Backbone.couch_connector.config.db_name).view("coconut/byDepartmentEducation", {
+			'reduce':true,
+			'group_level':2,
+			success: function(countData) {
+
+				//var element = $("#chartimg");
+				var values = [];
+				var labels = [];
+				var indices = [];
+				var months = [];
+				
+				//var counts = [];
+				for (i in countData.rows) {
+					console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
+					//values.push(data.rows[i].value.resolved);
+					labels.push(countData.rows[i].key.join('-'));
+					var year = parseInt(countData.rows[i].key[0], 10);
+					var month = parseInt(countData.rows[i].key[1], 10);
+					if ((year === reportYear) && (month === reportMonth)) {
+						values.push(countData.rows[i].value);
+					} 
+					months.push(month);
+					indices.push(i);
+				}
+				console.log("labels: " + JSON.stringify(labels));
+				console.log("values: " + JSON.stringify(values));
+				console.log("months: " + JSON.stringify(months));
+				console.log("indices: " + JSON.stringify(indices));
+				//bulletChart(values);	
+				departmentReport.education = values;
+				//return departmentReport;
+				dfd.resolve;
 			}
-			console.log("labels: " + JSON.stringify(labels));
-			console.log("values: " + JSON.stringify(values));
-			console.log("months: " + JSON.stringify(months));
-			console.log("indices: " + JSON.stringify(indices));
-			
-			bulletChart(values);		
-
 		}
-	}
-	);
-	rendercharts();
+		);
+		return dfd.promise();
+	};
 			
 	    //}
 //}, 100);

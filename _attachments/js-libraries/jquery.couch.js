@@ -519,6 +519,7 @@
           );
         },
         view: function(name, options) {
+        	console.log("using jquery.couch.js view: " + name);
           var name = name.split('/');
           var options = options || {};
           var type = "GET";
@@ -529,7 +530,7 @@
             delete options["keys"];
             data = toJSON({ "keys": keys });
           }
-          ajax({
+          return ajax({
               type: type,
               data: data,
               url: this.uri + "_design/" + name[0] +
@@ -633,7 +634,7 @@
     options = $.extend({successStatus: 200}, options);
     ajaxOptions = $.extend(defaultAjaxOpts, ajaxOptions);
     errorMessage = errorMessage || "Unknown error";
-    $.ajax($.extend($.extend({
+    return $.ajax($.extend($.extend({
       type: "GET", dataType: "json", cache : !$.browser.msie,
       beforeSend: function(xhr){
         if(ajaxOptions && ajaxOptions.headers){

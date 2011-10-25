@@ -51,6 +51,7 @@ var HomeView = Backbone.View.extend({
 		FORMY.router.navigate('search/' + searchTerm, true);
 	},
 	orientation: "horiz",
+	reportCollection:null,
 	render: function() {
 //		$("#formRenderingView").remove();
 //		$("#recordView").remove();
@@ -72,16 +73,73 @@ var HomeView = Backbone.View.extend({
 			//this.template =  loadTemplate("home.template.html");
 		}
 		
+		$.when(this.options.reportCollection.deferred)
+		   .then(function(countData){
+		      console.log( 'I fire once BOTH ajax requests have completed!' );
+
+				var departmentReport = new Object({date:null,education:null,health: null,finance:null});
+				var reportDate = new Date();
+				var reportYear = reportDate.getFullYear();
+		    	var reportMonth = reportDate.getMonth() + 1;	
+		    	
+				console.log("Generating report for: " + reportDate);
+				
+				var values = [];
+				var labels = [];
+				var indices = [];
+				var months = [];
+				
+				//var counts = [];
+				for (i in countData.rows) {
+					console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
+					//values.push(data.rows[i].value.resolved);
+					labels.push(countData.rows[i].key.join('-'));
+					var year = parseInt(countData.rows[i].key[0], 10);
+					var month = parseInt(countData.rows[i].key[1], 10);
+					if ((year === reportYear) && (month === reportMonth)) {
+						values.push(countData.rows[i].value);
+					} 
+					months.push(month);
+					indices.push(i);
+				}
+				console.log("labels: " + JSON.stringify(labels));
+				console.log("values: " + JSON.stringify(values));
+				console.log("months: " + JSON.stringify(months));
+				console.log("indices: " + JSON.stringify(indices));
+				//bulletChart(values);	
+				departmentReport.education = values;
+
+				bulletChart(departmentReport.education);
+		    	rendercharts();
+		      
+		      
+		   })
+		   .fail(function(){
+		      console.log( 'I fire if one or more requests failed.' );
+		   });
+		
+//		this.options.reportCollection.deferred.done(function(countData){
+////			var homeViewHtml = this.template(this.model.toJSON());
+////			console.log("rendering HomeView");
+////			//$(this.el).html(homeViewHtml);
+////			$("#homePageView").html(homeViewHtml);
+////			//if(FORMY.Incidents.length > 0){
+////			FORMY.Incidents.each(this.addOne);
+//			
+//
+//			//}
+//			
+//		});
+		
 		var homeViewHtml = this.template(this.model.toJSON());
 		console.log("rendering HomeView");
 		//$(this.el).html(homeViewHtml);
 		$("#homePageView").html(homeViewHtml);
 		//if(FORMY.Incidents.length > 0){
 		FORMY.Incidents.each(this.addOne);
-
-		//}
+		
 		$(".stripeMe tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
-		   $(".stripeMe tr:even").addClass("alt");
+		$(".stripeMe tr:even").addClass("alt");
 		return this;
 	},
 });
