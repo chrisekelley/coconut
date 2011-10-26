@@ -10,15 +10,15 @@ function rendercharts() {
 					var labels = [];
 					var indices = [];
 					for (i in resolvedData.rows) {
-						console.log(resolvedData.rows[i].key.join('-') + ": " + "resolvedData.rows[i].value: " + JSON.stringify(resolvedData.rows[i].value));
+						//console.log(resolvedData.rows[i].key.join('-') + ": " + "resolvedData.rows[i].value: " + JSON.stringify(resolvedData.rows[i].value));
 						values.push(resolvedData.rows[i].value);
 						//values.push(data.rows[i].value.resolved);
 						labels.push(resolvedData.rows[i].key.join('-'));
 						indices.push(i);
 					}
-					console.log("labels: " + JSON.stringify(labels));
-					console.log("values: " + JSON.stringify(values));
-					console.log("indices: " + JSON.stringify(indices));
+//					console.log("labels: " + JSON.stringify(labels));
+//					console.log("values: " + JSON.stringify(values));
+//					console.log("indices: " + JSON.stringify(indices));
 
 					var chart = d3.select("#chart1")
 					.append("svg:svg")
@@ -104,15 +104,15 @@ function rendercharts() {
 					var indices = [];
 					var counts = [];
 					for (i in countData.rows) {
-						console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
+						//console.log(countData.rows[i].key.join('-') + ": " + "countData.rows[i].value: " + JSON.stringify(countData.rows[i].value));
 						values.push(countData.rows[i].value);
 						//values.push(data.rows[i].value.resolved);
 						labels.push(countData.rows[i].key.join('-'));
 						indices.push(i);
 					}
-					console.log("labels: " + JSON.stringify(labels));
-					console.log("values: " + JSON.stringify(counts));
-					console.log("indices: " + JSON.stringify(indices));
+//					console.log("labels: " + JSON.stringify(labels));
+//					console.log("values: " + JSON.stringify(counts));
+//					console.log("indices: " + JSON.stringify(indices));
 					
 					var chart = d3.select("#chart2")
 					.append("svg:svg")
@@ -189,12 +189,9 @@ function rendercharts() {
 			);
 }	
 
-//FORMY.reports.departments = departmentReport;
-
 function bulletChart(departmentReport) {
 
-
-			console.log("departmentReport: " + JSON.stringify(departmentReport));
+			//console.log("departmentReport: " + JSON.stringify(departmentReport));
 			var w = 960,
 			h = 50,
 			m = [5, 40, 20, 120]; // top right bottom left
@@ -207,24 +204,31 @@ function bulletChart(departmentReport) {
 
 				for (i in data) {
 					var item = data[i];
-					console.log("item: " + JSON.stringify(item));
+					//console.log("item: " + JSON.stringify(item));
 
 					if (item.title === "Health") {
-						console.log("*** item ***: "+ JSON.stringify(item));
+						//console.log("*** item ***: "+ JSON.stringify(item));
 						item["measures"] = [departmentReport.health, departmentReport.health];
 						item["markers"] = departmentReport.health;
+						item["subtitle"] = departmentReport.health + " cases";
 					} else if (item.title === "Education") {
-						console.log("*** item ***: "+ JSON.stringify(item));
+						//console.log("*** item ***: "+ JSON.stringify(item));
 						item["measures"] = [departmentReport.education, departmentReport.education];
 						item["markers"] = departmentReport.education;
+						item["subtitle"] = departmentReport.education + " cases";
 					}  else if (item.title === "Works") {
-						console.log("*** item ***: "+ JSON.stringify(item));
+						//console.log("*** item ***: "+ JSON.stringify(item));
 						item["measures"] = [departmentReport.works, departmentReport.works];
 						item["markers"] = departmentReport.works;
-					} 
-					
+						item["subtitle"] = departmentReport.works + " cases";
+					}   else if (item.title === "Other") {
+						//console.log("*** item ***: "+ JSON.stringify(item));
+						item["measures"] = [departmentReport.other, departmentReport.other];
+						item["markers"] = departmentReport.other;
+						item["subtitle"] = departmentReport.other + " cases";
+					}
 				}
-				console.log("data: " + JSON.stringify(data));
+				//console.log("data: " + JSON.stringify(data));
 
 				var vis = d3.select("#chart3").selectAll("svg")
 				.data(data)

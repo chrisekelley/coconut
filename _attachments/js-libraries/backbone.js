@@ -202,7 +202,7 @@
       // Run validation.
       if (!options.silent && this.validate && !this._performValidation(attrs, options)) return false;
 
-      console.log("attrs: " + JSON.stringify(attrs));
+      //console.log("attrs: " + JSON.stringify(attrs));
       // Check for changes of `id`.
       if (this.idAttribute in attrs) this.id = attrs[this.idAttribute];
 
@@ -523,7 +523,7 @@
       var collection = this;
       var success = options.success;
       options.success = function(resp, status, xhr) {
-    	  console.log("resp: " + JSON.stringify(resp));
+    	  //console.log("resp: " + JSON.stringify(resp));
         collection[options.add ? 'add' : 'reset'](collection.parse(resp, xhr), options);
         if (success) success(collection, resp);
       };

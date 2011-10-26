@@ -79,12 +79,12 @@
           var doc, _i, _len, _ref, _temp;
           _temp = [];
           _ref = data.rows;
-          console.log("data: " + JSON.stringify(data));
+          //console.log("data: " + JSON.stringify(data));
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             doc = _ref[_i];
             var value = doc.value;
             if (typeof(value) != 'object') {
-            	console.log("Not object: " + value + " doc.key: " + doc.key);
+            	//console.log("Not object: " + value + " doc.key: " + doc.key);
             	doc["_id"] = doc.key;
             	_temp.push(doc);
             } else {

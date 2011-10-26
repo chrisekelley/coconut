@@ -519,7 +519,6 @@
           );
         },
         view: function(name, options) {
-        	console.log("using jquery.couch.js view: " + name);
           var name = name.split('/');
           var options = options || {};
           var type = "GET";
