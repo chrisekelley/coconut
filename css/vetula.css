@@ -1,0 +1,14 @@
+body {
+      margin-top: 1.0em;
+      font-family: proxima-nova,Helvetica, Arial, FreeSans, san-serif;
+      line-height: 24px;
+    }
+    .download { float: right; }
+h1 { font-size: 2em; color: #f96c5f; margin-bottom: 3px; }
+h1 .small { font-size: 0.4em; }
+h1 a { text-decoration: none }
+.description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+.footer { text-align:center; padding-top:30px; font-style: italic; }
+.container_12 .grid_8 {
+width: 720px;
+}
