@@ -1,0 +1,124 @@
+{
+     "_id": "shopping",
+     "formBuilder": "FormDesignerAlpha",
+     "label": "Shopping",
+     "flow": {
+          "id": 300,
+          "name": "auto",
+          "flowOrder": 1
+     },
+     "form_elements": [
+          {
+               "label": "BEGIN TABLE ",
+               "value": "",
+               "options": [
+                    {
+                         "name": "optional",
+                         "value": "true"
+                    }
+               ],
+               "datatype": "display",
+               "visible": "true",
+               "closeRow": "false",
+               "colspan": "null",
+               "size": "null",
+               "rows": "null",
+               "cols": "2",
+               "identifier": "beginTableIdentifier",
+               "inputType": "display-tbl-begin"
+          },
+          {
+               "label": "Name of Market",
+               "value": "",
+               "options": [
+                    {
+                         "name": "optional",
+                         "value": "true"
+                    }
+               ],
+               "datatype": "string",
+               "visible": "true",
+               "closeRow": "false",
+               "colspan": "1",
+               "size": "0",
+               "rows": "0",
+               "cols": "0",
+               "identifier": "market",
+               "inputType": "text"
+          },
+          {
+               "label": "Types of Fruit",
+               "value": "",
+               "options": [
+                    {
+                         "name": "optional",
+                         "value": "true"
+                    }
+               ],
+               "datatype": "int",
+               "visible": "true",
+               "closeRow": "false",
+               "colspan": "1",
+               "size": "0",
+               "rows": "0",
+               "cols": "0",
+               "identifier": "types_of_fruit",
+               "enumerations": [
+                    {
+                         "name": "Item",
+                         "tagName": "item",
+                         "label": "apples",
+                         "labelItextID": "item4",
+                         "defaultValue": "1"
+                    },
+                    {
+                         "name": "Item",
+                         "tagName": "item",
+                         "label": "bananas",
+                         "labelItextID": "item5",
+                         "defaultValue": "2"
+                    }
+               ],
+               "inputType": "selectFDA"
+          },
+          {
+               "label": "Save",
+               "value": "",
+               "options": [
+                    {
+                         "name": "optional",
+                         "value": "true"
+                    }
+               ],
+               "datatype": "display",
+               "visible": "true",
+               "closeRow": "true",
+               "colspan": "3",
+               "width": "770",
+               "height": "30",
+               "rows": "0",
+               "cols": "0",
+               "identifier": "form-save",
+               "inputType": "button"
+          },
+          {
+               "label": "END TABLE",
+               "value": "",
+               "options": [
+                    {
+                         "name": "optional",
+                         "value": "true"
+                    }
+               ],
+               "datatype": "display",
+               "visible": "true",
+               "closeRow": "false",
+               "colspan": "null",
+               "size": "null",
+               "rows": "null",
+               "cols": "null",
+               "identifier": "endTableIdentifier",
+               "inputType": "display-tbl-end"
+          }
+     ]
+}
