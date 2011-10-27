@@ -20,15 +20,22 @@ h2 {
 	text-align: left;
 }
 header h1 {
-color: #333;
-font-size: 62px;
-float: left;
-height: 65px;
-letter-spacing: -5px;
-margin: 0 0 0 0px;
-padding-top: 12px;
-position: relative;
-text-transform: uppercase;
-width: 266px;
-text-align: left
+	color: #333;
+	font-size: 62px;
+	float: left;
+	height: 65px;
+	letter-spacing: -5px;
+	margin: 0 0 0 0px;
+	padding-top: 12px;
+	position: relative;
+	text-transform: uppercase;
+	width: 266px;
+	text-align: left
+}
+
+.centeredImage {
+	text-align: center;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding: 0px;
 }

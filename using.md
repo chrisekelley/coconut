@@ -6,10 +6,10 @@ category: none
 
 # Using Coconut
 
-<img src="images/coconut_dashboard_med.png"/>
-<br/>
 Coconut is designed to facilitate data entry and monitoring the progress of data entry. 
 The coconut application displays the record listing on the left side of the screen and the charts on the right. 
+<br/>
+<p class="centeredImage"><img src="images/coconut_dashboard_med.png"/></p>
 
 ## Record Listing
 <img src="images/coconut_record_listing.png" align="right"/>
