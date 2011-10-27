@@ -74,9 +74,7 @@ blockquote {
 }
 
 h1, h2, h3, #footer { 
-  font-family: 'Georgia', 'Times New Roman', 'Times', serif;
-  font-weight: bolder;
-  letter-spacing: -1px;
+	font-weight: normal;
 }
 
 .grid_2 {

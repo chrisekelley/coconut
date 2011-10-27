@@ -4,11 +4,30 @@ body {
       line-height: 24px;
     }
     .download { float: right; }
-h1 { font-size: 2em; color: #f96c5f; margin-bottom: 3px; }
+h1 { font-weight: normal; }
 h1 .small { font-size: 0.4em; }
 h1 a { text-decoration: none }
 .description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
 .footer { text-align:center; padding-top:30px; font-style: italic; }
 .container_12 .grid_8 {
-width: 720px;
+width: 820px;
+}
+h1, h2, h3, #footer { 
+	font-weight: normal;
+}
+h2 {
+	text-transform: uppercase;
+	text-align: left;
+}
+header h1 {
+color: #333;
+font-size: 62px;
+float: left;
+height: 65px;
+letter-spacing: -5px;
+margin: 0 0 0 0px;
+padding-top: 12px;
+position: relative;
+text-transform: uppercase;
+width: 266px;
 }
