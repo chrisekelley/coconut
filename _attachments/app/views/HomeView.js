@@ -88,7 +88,7 @@ var HomeView = Backbone.View.extend({
 			   var other = parseData(reportDate, otherData[0]);	
 			   departmentReport.other = other;
 			   bulletChart(departmentReport);
-			   rendercharts();
+			   simpleBarCharts();
 		   })
 		   .fail(function(){
 		      console.log( 'I fire if one or more requests failed.' );

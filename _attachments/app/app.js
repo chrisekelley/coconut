@@ -162,7 +162,7 @@ var AppRouter = Backbone.Router.extend({
 //				console.log( 'I fire once BOTH ajax requests have completed!' + JSON.stringify(departmentReport["education"]));
 //
 //				bulletChart(departmentReport.education);
-//				rendercharts();
+//				simpleBarCharts();
 //			})
 //			.fail(function(){
 //				console.log( 'I fire if one or more requests failed.' );
