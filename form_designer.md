@@ -30,7 +30,7 @@ It will display the JSON for the form and post the data to the CouchDB instance.
 
 <img src="images/coconut_form_designer_save.png"/>
 
-[Generated JSON}(form_example_json.txt) is available.
+[Generated JSON](form_example_json.txt) is available.
 
 Click the Home button at the top right of the screen to return to the home page.
 

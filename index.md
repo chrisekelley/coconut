@@ -31,8 +31,9 @@ The application user interface is described in greater detail in [Using Coconut]
 
 ##Technical details
 
-Coconut features a built-in form designer - big shout out to the Dimagi folks who created [FormDesignerAlpha](https://github.com/dimagi/FormDesignerAlpha). 
- (and here is the [version customized to export to JSON for Coconut](https://github.com/vetula/FormDesignerAlpha). 
+Coconut features a built-in form designer - 
+big shout out to the Dimagi folks who created [FormDesignerAlpha](https://github.com/dimagi/FormDesignerAlpha). 
+Coconut uses a [version customized for JSON form export](https://github.com/vetula/FormDesignerAlpha). 
 The form is saved to the CouchDB and may then be used by your application. 
 View the [Form Designer](form_designer.html) page for more information on creating forms.
 
