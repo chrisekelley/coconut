@@ -29,6 +29,10 @@ Coconut can be run on a computer or installed on a mobile phone or tablet.
 When the application starts, it displays a list of records with button to forms on the left and charts on the right. 
 The application user interface is described in greater detail in [Using Coconut](using.html). 
 
+##May I see it?
+
+Yes, here are some [screencasts](screencasts.html).
+
 ##Technical details
 
 Coconut features a built-in form designer - 
