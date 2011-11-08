@@ -10,21 +10,6 @@ var HomeView = Backbone.View.extend({
 		FORMY.Incidents.bind('all',   this.render, this);
 		FORMY.Incidents.bind('change', this.search, this);
 		FORMY.Incidents.bind('render', this.render, this);
-		
-//		FORMY.reportEducation.bind('all', this.render, this);
-//		FORMY.reportHealth.bind('all', this.render, this);
-//		FORMY.reportWorks.bind('all', this.render, this);
-//		FORMY.reportOther.bind('all', this.render, this);
-//		
-//		FORMY.reportEducation.bind('reset', this.reseted, this);
-//		FORMY.reportHealth.bind('reset', this.reseted, this);
-//		FORMY.reportWorks.bind('reset', this.reseted, this);
-//		FORMY.reportOther.bind('reset', this.reseted, this);
-//		
-//		FORMY.reportEducation.bind('render', this.render, this);
-//		FORMY.reportHealth.bind('render', this.render, this);
-//		FORMY.reportWorks.bind('render', this.render, this);
-//		FORMY.reportOther.bind('render', this.render, this);
 
 		//FORMY.Incidents.fetch();
 		return this;
@@ -89,26 +74,72 @@ var HomeView = Backbone.View.extend({
 			this.template =  loadTemplate("home.vert.template.html");
 			//this.template =  loadTemplate("home.template.html");
 		}
-		FORMY.reportEducation = this.options.reportEducationInstance;
-		FORMY.reportHealth = this.options.reportHealthInstance;
-		FORMY.reportWorks = this.options.reportWorksInstance;
-		FORMY.reportOther = this.options.reportOtherInstance;
 		
-		$.when(this.options.reportEducationInstance.deferred, this.options.reportHealthInstance.deferred, 
-				this.options.reportWorksInstance.deferred, this.options.reportOtherInstance.deferred)
+		// charts
+		// Initialize the Collection
+		//FORMY.departmentReportRaw = new Object({date:null,education:null,health: null,finance:null});
+		console.log("running report queries.");
+		var reportEducationInstance = new ReportCollection();
+		reportEducationInstance.db["view"] = ["byDepartmentEducation?reduce=true&group_level=2"];
+		reportEducationInstance.deferred = reportEducationInstance.fetch({
+			success : function(){
+			},
+			error : function(){
+				console.log("Error loading Report: " + arguments); 
+			}
+		});
+		
+		var reportHealthInstance = new ReportCollection();
+		reportHealthInstance.db["view"] = ["byDepartmentHealth?reduce=true&group_level=2"];
+		reportHealthInstance.deferred = reportHealthInstance.fetch({
+			success : function(){
+			},
+			error : function(){
+				console.log("Error loading Report: " + arguments); 
+			}
+		});
+		
+		var reportWorksInstance = new ReportCollection();
+		reportWorksInstance.db["view"] = ["byDepartmentWorks?reduce=true&group_level=2"];
+		reportWorksInstance.deferred = reportWorksInstance.fetch({
+			success : function(){
+			},
+			error : function(){
+				console.log("Error loading Report: " + arguments); 
+			}
+		});
+		
+		var reportOtherInstance = new ReportCollection();
+		reportOtherInstance.db["view"] = ["byDepartmentOther?reduce=true&group_level=2"];
+		reportOtherInstance.deferred = reportOtherInstance.fetch({
+			success : function(){
+			},
+			error : function(){
+				console.log("Error loading Report: " + arguments); 
+			}
+		});
+		
+		
+		FORMY.reportEducation = reportEducationInstance;
+		FORMY.reportHealth = reportHealthInstance;
+		FORMY.reportWorks = reportWorksInstance;
+		FORMY.reportOther = reportOtherInstance;
+		
+		$.when(reportEducationInstance.deferred, reportHealthInstance.deferred, 
+				reportWorksInstance.deferred, reportOtherInstance.deferred)
 		   .then(function(educationData, healthData, worksData, otherData){
 			   
 			   var departmentReport = new Object({date:null,education:null,health: null,works:null,other:null});
 			   var reportDate = new Date();
 			   //console.log("Generating report for: " + reportDate);
 			   var education = parseData(reportDate, educationData[0]);	
-			   departmentReport.education = education;
-			   var health = parseData(reportDate, healthData[0]);	
-			   departmentReport.health = health;
+			   departmentReport.education = (education > 0)?education:[0];
+			   var health = parseData(reportDate, healthData[0]);
+			   departmentReport.health = (health > 0)?health:[0];
 			   var works = parseData(reportDate, worksData[0]);	
-			   departmentReport.works = works;
+			   departmentReport.works = (works > 0)?works:[0];
 			   var other = parseData(reportDate, otherData[0]);	
-			   departmentReport.other = other;
+			   departmentReport.other = (other > 0)?other:[0];
 			   console.log("running bulletChart. here is the stuff: " + JSON.stringify(departmentReport));
 			   bulletChart(departmentReport);
 			   //simpleBarCharts();

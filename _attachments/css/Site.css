@@ -684,18 +684,18 @@ html>body #sidenavcontainer li a {
 	width: 870px;
 }*/
 #pagewidth {
-	width: 1280px;
+	width: 1024px;
 }
 #pagewidth-vert {
-	width: 320px;
+	width: 370px;
 }
 #views{
- width:320px; 
+ width:370px; 
  float:left; 
  position:relative; 
   }
 #twocols {
-	width: 960px;
+	width: 650px;
 	float: right;
 	position: relative;
 	/*background: #6EA8E4;*/
@@ -704,7 +704,7 @@ html>body #sidenavcontainer li a {
  width:100px; 
  float:right; 
  position:relative; 
- width: 34px;
+ width: 44px;
  }
  #maincol{
  /*background-color: #FFFFFF;  */
@@ -1201,6 +1201,8 @@ font-weight: bold;
 .bullet .range.s0 { fill: #eee; }
 .bullet .range.s1 { fill: #ddd; }
 .bullet .range.s2 { fill: #ccc; }
+.bullet .range.s3 { fill: #bbb; }
+.bullet .range.s4 { fill: #aaa; }
 .bullet .measure.s0 { fill: lightsteelblue; }
 .bullet .measure.s1 { fill: steelblue; }
 .bullet .title { font-size: 14px; font-weight: bold; }

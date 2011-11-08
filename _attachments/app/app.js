@@ -97,49 +97,7 @@ var AppRouter = Backbone.Router.extend({
 //				$("#mailcol").append(viewDiv);
 //			}
 			
-			// charts
-			// Initialize the Collection
-			//FORMY.departmentReportRaw = new Object({date:null,education:null,health: null,finance:null});
-			console.log("running report queries.");
-			var reportEducationInstance = new ReportCollection();
-			reportEducationInstance.db["view"] = ["byDepartmentEducation?reduce=true&group_level=2"];
-			reportEducationInstance.deferred = reportEducationInstance.fetch({
-				success : function(){
-				},
-				error : function(){
-					console.log("Error loading Report: " + arguments); 
-				}
-			});
 			
-			var reportHealthInstance = new ReportCollection();
-			reportHealthInstance.db["view"] = ["byDepartmentHealth?reduce=true&group_level=2"];
-			reportHealthInstance.deferred = reportHealthInstance.fetch({
-				success : function(){
-				},
-				error : function(){
-					console.log("Error loading Report: " + arguments); 
-				}
-			});
-			
-			var reportWorksInstance = new ReportCollection();
-			reportWorksInstance.db["view"] = ["byDepartmentWorks?reduce=true&group_level=2"];
-			reportWorksInstance.deferred = reportWorksInstance.fetch({
-				success : function(){
-				},
-				error : function(){
-					console.log("Error loading Report: " + arguments); 
-				}
-			});
-			
-			var reportOtherInstance = new ReportCollection();
-			reportOtherInstance.db["view"] = ["byDepartmentOther?reduce=true&group_level=2"];
-			reportOtherInstance.deferred = reportOtherInstance.fetch({
-				success : function(){
-				},
-				error : function(){
-					console.log("Error loading Report: " + arguments); 
-				}
-			});
 
 			
 			var searchResults = new IncidentsList();
@@ -151,10 +109,7 @@ var AppRouter = Backbone.Router.extend({
 					//console.log("render; Incidents count: " + FORMY.Incidents.length);
 					var page = new Page({content: "Default List of Incidents:"});
 					(new HomeView(
-							{model: page, el: $("#homePageView"), reportEducationInstance: reportEducationInstance, 
-								reportHealthInstance: reportHealthInstance, reportWorksInstance: reportWorksInstance,
-								reportOtherInstance: reportOtherInstance}
-							)).render();
+							{model: page, el: $("#homePageView")})).render();
 					//console.log("starting stripeme.");
 					$(".stripeMe tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
 					$(".stripeMe tr:even").addClass("alt");
@@ -523,24 +478,9 @@ var AppRouter = Backbone.Router.extend({
             	break;
             }
             
-            //var monthStr=randomFromTo(1,10).toString();
-//            function numlength(number) {
-//            	// http://stackoverflow.com/questions/554521/how-can-i-count-the-digits-in-an-integer-without-a-string-cast/554533#554533
-//            	int length = number.length;
-//            	return length;
-//            }
-            var monthStr = month.toString();
-            if (monthStr.length < 2) {
-            	monthStr = "0" + month;
-            }
-            var dayStr = day.toString();
-            if (dayStr.length < 2) {
-            	dayStr = "0" + day;
-            }
-
-            //var created =  new Date();
-            var created =  "2011-" + monthStr + "-" + dayStr;
+            var created  =  new Date();
             var lastModified =  created;  
+            
             var id =  "test" + ct;  
             testdoc = { _id : id, "flowId": "300","formId": "incident","phone": "0772555"+ ct,"description": "This is a test",
             		"subcounty": subcounty,"village": village,"priority": priority,"department": department,"assignedId": ct.toString(),

@@ -192,7 +192,7 @@ function simpleBarCharts() {
 function bulletChart(departmentReport) {
 
 			//console.log("departmentReport: " + JSON.stringify(departmentReport));
-			var w = 960,
+			var w = 600,
 			h = 50,
 			m = [5, 40, 20, 120]; // top right bottom left
 
@@ -201,7 +201,39 @@ function bulletChart(departmentReport) {
 			.height(h - m[0] - m[2]);
 
 			d3.json("app/bullets.json", function(data) {
-
+				
+				var topRange = 30;
+				var maxValue = 30;
+				var maxRange = 30;
+				
+				if (parseInt(departmentReport.health) > topRange) {
+					maxValue = parseInt(departmentReport.health);
+				}
+				if (parseInt(departmentReport.education) > topRange) {
+					maxValue = parseInt(departmentReport.education);
+				}
+				if (parseInt(departmentReport.works) > topRange) {
+					maxValue = parseInt(departmentReport.works);
+				}
+				if (parseInt(departmentReport.other) > topRange) {
+					maxValue = parseInt(departmentReport.other);
+				}
+				
+				console.log("maxValue: " + maxValue + " parseInt(departmentReport.other):" + parseInt(departmentReport.other));
+				
+				var maxRounded = Math.round(maxValue / 10) * 10;
+				if (maxValue > maxRounded) {
+					maxRange = maxRounded + 10;
+				} else {
+					maxRange = maxRounded;
+				}
+				var range1 = maxRange/5;
+				var range2 = range1 *2;
+				var range3 = range1 *3;
+				var range4 = range1 *4;
+				departmentReport.ranges = [range1,range2,range3, range4, maxRange];
+				console.log("departmentReport.ranges 2: " + JSON.stringify(departmentReport.ranges));
+				
 				for (i in data) {
 					var item = data[i];
 					//console.log("item: " + JSON.stringify(item));
@@ -211,23 +243,30 @@ function bulletChart(departmentReport) {
 						item["measures"] = [departmentReport.health, departmentReport.health];
 						item["markers"] = departmentReport.health;
 						item["subtitle"] = departmentReport.health + " cases";
+						item["ranges"] = departmentReport.ranges;
 					} else if (item.title === "Education") {
 						//console.log("*** item ***: "+ JSON.stringify(item));
 						item["measures"] = [departmentReport.education, departmentReport.education];
 						item["markers"] = departmentReport.education;
 						item["subtitle"] = departmentReport.education + " cases";
+						item["ranges"] = departmentReport.ranges;
 					}  else if (item.title === "Works") {
 						//console.log("*** item ***: "+ JSON.stringify(item));
 						item["measures"] = [departmentReport.works, departmentReport.works];
 						item["markers"] = departmentReport.works;
 						item["subtitle"] = departmentReport.works + " cases";
+						item["ranges"] = departmentReport.ranges;
 					}   else if (item.title === "Other") {
 						//console.log("*** item ***: "+ JSON.stringify(item));
 						item["measures"] = [departmentReport.other, departmentReport.other];
 						item["markers"] = departmentReport.other;
 						item["subtitle"] = departmentReport.other + " cases";
+						item["ranges"] = departmentReport.ranges;
 					}
 				}
+				
+
+
 				//console.log("data: " + JSON.stringify(data));
 				$('#bulletChart').empty();
 				//d3.select("#bulletChart").empty();
@@ -256,24 +295,6 @@ function bulletChart(departmentReport) {
 				.attr("dy", "1em")
 				.text(function(d) { return d.subtitle; });
 
-				chart.duration(1000);
-				window.transition = function() {
-					vis.map(randomize).call(chart);
-				};
+				//chart.duration(1000);
 			});
-
-			function randomize(d) {
-				if (!d.randomizer) d.randomizer = randomizer(d);
-				d.ranges = d.ranges.map(d.randomizer);
-				d.markers = d.markers.map(d.randomizer);
-				d.measures = d.measures.map(d.randomizer);
-				return d;
-			}
-
-			function randomizer(d) {
-				var k = d3.max(d.ranges) * .2;
-				return function(d) {
-					return Math.max(0, d + k * (Math.random() - .5));
-				};
-			}
 }
