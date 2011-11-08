@@ -229,8 +229,11 @@ function bulletChart(departmentReport) {
 					}
 				}
 				//console.log("data: " + JSON.stringify(data));
+				$('#bulletChart').empty();
+				//d3.select("#bulletChart").empty();
+				console.log("d3.select bulletChart: " + d3.select("#bulletChart").html());
 
-				var vis = d3.select("#chart3").selectAll("svg")
+				var vis = d3.select("#bulletChart").selectAll("svg")
 				.data(data)
 				.enter().append("svg:svg")
 				.attr("class", "bullet")
