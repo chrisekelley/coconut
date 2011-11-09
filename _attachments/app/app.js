@@ -37,7 +37,12 @@ var AppRouter = Backbone.Router.extend({
     Coconut.forms.fetch({
       success: function(){
         var form = Coconut.forms.get(id)
-        form_collect_view = new FormCollectView(form)
+        if(typeof form_collect_view == "undefined"){
+          form_collect_view = new FormCollectView(form)
+        }
+        else{
+          form_collect_view.model = form;
+        }
         form_collect_view.render();
       }
     });
@@ -54,7 +59,13 @@ var AppRouter = Backbone.Router.extend({
             }
           })
           .compact().value();
-        result_view = new ResultView(form_id,results)
+        if(typeof result_view == "undefined"){
+          result_view = new ResultView(form_id,results)
+        }
+        else{
+          result_view.form_id = form_id
+          result_view.results = results
+        }
         result_view.render();
       }
     });

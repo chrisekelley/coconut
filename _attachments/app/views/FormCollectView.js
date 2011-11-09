@@ -1,5 +1,11 @@
 var FormCollectView = Backbone.View.extend({
 
+  el: "#content",
+
+  events: {
+    "click #collect button": "save"
+  },
+
   collectTemplate: loadTemplate("form.collect.html"),
 
   // Initialize all of the element templates
@@ -15,7 +21,6 @@ var FormCollectView = Backbone.View.extend({
 	  _.bindAll(this, "render");   
     this.model = model;
     this.templates = this.initializeTemplates();
-    $("button").live("click", this.save);
 	  return this;
   },
 
@@ -40,7 +45,8 @@ var FormCollectView = Backbone.View.extend({
   },
 
   save: function(){
-    result = new Result($("form").toObject());
+    $('#messages').html("Saved...");
+    var result = new Result($("form").toObject());
     result.save();
   } 
 })

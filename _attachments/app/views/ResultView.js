@@ -3,7 +3,7 @@ var ResultView = Backbone.View.extend({
   el: "#content",
 
   events: {
-    "click button": "csv"
+    "click #analyze button": "csv"
   },
 
   template: loadTemplate("results.html"),
