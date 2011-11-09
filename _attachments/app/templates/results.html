@@ -1,0 +1,20 @@
+<h1>{{form_id}}</h1>
+<table class='results tablesorter'>
+  <thead>
+    <tr>
+      {{#each columns}}
+        <th>{{this}}</th>
+      {{/each}}
+    </tr>
+  </thead>
+  <tbody>
+    {{#each results}}
+      <tr>
+        {{#each this}}
+          <td>{{this}}</td>
+        {{/each}}
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+<button>Export as CSV</button>

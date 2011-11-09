@@ -814,15 +814,11 @@ formdesigner.controller = (function () {
     	//var db = $.urlParam('db');
     	var formData = formdesigner.controller.generateJSON();
     	source.val(JSON.stringify(formData, undefined, 5));
-    	//console.log("db: " + db);
-    	console.log("Saving the record using FORMY.forms.create.");
-		  FORMY.forms.create(formData,{
+		  Coconut.forms.create(formData,{
 			  success: function(model, resp){
-				  console.log("added new record to FORMY.forms.");
-				  //inspectModelAndGo(model);
 			  },
 			  error: function() { 
-				  console.log("Error saving: " + arguments); 
+				  throw "Error saving: " + arguments;
 			  }
 		  });
     	

@@ -12,7 +12,7 @@ var FormCollectView = Backbone.View.extend({
   },
 
   initialize: function (model){
-	  _.bindAll(this, "collect");   
+	  _.bindAll(this, "render");   
     this.model = model;
     this.templates = this.initializeTemplates();
     $("button").live("click", this.save);

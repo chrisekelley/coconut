@@ -1,70 +1,60 @@
 <html>
   <head>
   	<title>Coconut</title>
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/Site.css" rel="stylesheet" />	 	
+    <style>
+
+      body {
+        color: black;
+        font-family: Verdana,Arial,sans-serif;
+        font-size: 1.1em;
+      }
+
+      a {
+        color: black;
+      }
+
+      div#menu {
+        margin-bottom: 20px;
+      }
+
+      label{
+        display: block;
+      }
+
+
+      table.results{
+        border-color: #600;
+        border-width: 0 0 1px 1px;
+        border-style: solid;
+      }
+
+      table.results td{
+        border-color: #600;
+        border-width: 1px 1px 0 0;
+        border-style: solid;
+        margin: 0;
+        padding: 4px;
+        background-color: #CCC;
+      }
+      
+    </style>
   </head>
   <body>
-  	<div id="pagewidth">
-  		<div id="wrapper" class="clearfix">
-  			<div id="twocols"> 
-				<div id="maincol">
-					<div id="charts">
-							<!-- <img src="/coconut/_design/coconut/_list/chartline/byResolved?group_level=2"/> -->
-							<table style="font-size:16px; text-align: center">
-								<tr>
-									<td style="font-size: 16px; text-align: center">Resolved Cases Per Month</td>
-									<td style="font-size: 16px; text-align: center">Total Cases Per Month</td>
-								</tr>
-								<tr>
-									<td id="chart1" style="text-align: left"></td>
-									<td id="chart2" style="text-align: left"></td>
-								</tr>
-								<tr>
-									<td style="font-size: 16px; text-align: center">Cases Per Department</td>
-								</tr>
-								<tr>
-									<td id="chart3" colspan="2" style="text-align: left"></td>
-								</tr>
-							</table>
-							<div style="text-align: right;">
-							<table cellpadding="0" cellspacing="0" width="100%">
-							<tr>
-								<td align="right">
-								<img src="images/applications-system.png" alt="Configure" align="right"  onClick="window.location.href = '/mobilefuton/_design/mobilefuton/index.html'"/>
-								<img src="images/system-software-update.png" alt="Refresh" align="right"  onClick="window.location.href = '/coconut/_design/coconut/index.html'"/>
-								<a href="#design"><img src="images/accessories-text-editor.png" alt="Design" align="right" /></a>
-								<a href="#populate"><img src="images/system-users.png" alt="Populate" align="right" /></a>
-								</td>
-							</tr>
-							</table>	
-							</div>
-							
-					</div>
-				</div>
-				
-				<div id="rightcol">
-					
-				</div>
-			</div> 
-	  		<div id="views">
-		  		<div id="formRenderingView"></div>
-		  		<div id="homePageView"></div>
-		  		<div id="recordView"></div>
-		  		<div id="designer"></div>
-  			</div>
-  		</div>  	
-  	</div>
-
+    <div id="menu">
+      <a href='#select'>Select</a>
+      <a href='#design'>Design</a>
+    </div>
+    <div id="content">
+    </div>
   </body>
   <!-- TODO for deployment - combine & minify all of this -->
-<script type="text/javascript" src="js-libraries/jquery-1.6.2.js"></script>
-<script type="text/javascript" src="js-libraries/jquery-ui-1.8.15.custom.min.js"></script>
+  <script type="text/javascript" src="js-libraries/jquery-1.6.2.js"></script>
+  <script type="text/javascript" src="js-libraries/jquery-ui-1.8.15.custom.min.js"></script>
 
- <script type="text/javascript" src="js-libraries/underscore-min.js"></script>
- <script type="text/javascript" src="js-libraries/backbone.js"></script>
- <script type="text/javascript" src="js-libraries/jquery.couch.js"></script>
- <script type="text/javascript" src="js-libraries/backbone-couchdb.js"></script>
+  <script type="text/javascript" src="js-libraries/underscore-min.js"></script>
+  <script type="text/javascript" src="js-libraries/backbone.js"></script>
+  <script type="text/javascript" src="js-libraries/jquery.couch.js"></script>
+  <script type="text/javascript" src="js-libraries/backbone-couchdb.js"></script>
 
 	<!-- Templating library -->
 	<script type="text/javascript" src="js-libraries/handlebars.js"></script>
@@ -74,11 +64,12 @@
 	<!-- String munging library -->
 	<script type="text/javascript" src="js-libraries/inflection.js"></script>
 	<!-- Render Zcore form elements -->
-	<script type="text/javascript" src="js-libraries/formElementRender.js"></script>
-	<script type="text/javascript" src="js-libraries/recordElementRender.js"></script>
 	<script type="text/javascript" src="js-libraries/jquery.dateFormat-1.0.js"></script>
 	<script type="text/javascript" src="js-libraries/d3.js"></script>
 	<script type="text/javascript" src="js-libraries/d3.chart.js"></script>
+	<script type="text/javascript" src="js-libraries/table2CSV.js"></script>
+	<script type="text/javascript" src="js-libraries/jquery.tablesorter.min.js"></script>
+  <link href="css/tablesorter.css" type="text/css" rel="stylesheet" />
 	
 	<!-- formDesigner -->
 	
@@ -105,26 +96,13 @@
 	
 	<!-- The app itself - note that if new models/views are added they need to be added here-->
 	<script type="text/javascript" src="app/config.js"></script>
-	<script type="text/javascript" src="app/models/FormElement.js"></script>
-	<script type="text/javascript" src="app/models/FormElements.js"></script>
 	<script type="text/javascript" src="app/models/Form.js"></script>
 	<script type="text/javascript" src="app/models/FormCollection.js"></script>
-	<script type="text/javascript" src="app/models/Page.js"></script>
-	<script type="text/javascript" src="app/views/FormElementView.js"></script>
-	<script type="text/javascript" src="app/views/RecordElementView.js"></script>
-	<script type="text/javascript" src="app/views/FormView.js"></script>
-	<script type="text/javascript" src="app/views/HomeView.js"></script>
-	<script type="text/javascript" src="app/models/Record.js"></script>
-	<script type="text/javascript" src="app/models/PatientRecordList.js"></script>
-	<script type="text/javascript" src="app/models/Incident.js"></script>
-	<script type="text/javascript" src="app/models/IncidentsList.js"></script>
-	<script type="text/javascript" src="app/models/IncidentRecordList.js"></script>
-	<script type="text/javascript" src="app/views/IncidentView.js"></script>
-	<script type="text/javascript" src="app/views/RecordView.js"></script>
-	<script type="text/javascript" src="app/models/Report.js"></script>
-	<script type="text/javascript" src="app/models/ReportCollection.js"></script>
-	<script type="text/javascript" src="app/coco-charts.js"></script>
+	<script type="text/javascript" src="app/views/FormCollectView.js"></script>
+	<script type="text/javascript" src="app/views/FormSelectView.js"></script>
+	<script type="text/javascript" src="app/models/Result.js"></script>
+	<script type="text/javascript" src="app/models/ResultCollection.js"></script>
+	<script type="text/javascript" src="app/views/ResultView.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
-	<script type="text/javascript" src="app/coconut-utils.js"></script>
 </html>
 

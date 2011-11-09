@@ -1,0 +1,18 @@
+<table>
+  {{#each forms}}
+    {{#with attributes}}
+      <tr>
+        <td>
+          <a href='#collect/{{_id}}'>
+            {{label}}
+          </a>
+        </td>
+        <td>
+          <a href='#analyze/{{_id}}'>
+            Analyze
+          </a>
+        </td>
+      </tr>
+    {{/with}}
+  {{/each}}
+</table>

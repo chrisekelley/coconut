@@ -15,6 +15,9 @@ $.ajax("app/templates/" + filename,{
   success: function(result){
 	  //console.log("result: " + result);
     templateFunction = Handlebars.compile(result);
+  },
+  fail: function(){
+    throw "Could not load: " + filename
   }
 });
     // console.log("templateFunction: " + templateFunction);
