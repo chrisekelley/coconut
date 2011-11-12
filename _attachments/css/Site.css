@@ -1,3 +1,4 @@
+
 html,body {
 	margin: 0;
 	padding: 0;
@@ -11,7 +12,7 @@ to use a different color start by replacing all instances of
 body
 {
     /* background-color: #5c87b2; */
-    font-size: 75%;
+/*     font-size: 75%; */
     /* font-family: Verdana, Tahoma, Arial, "Helvetica Neue", Helvetica, Sans-Serif; */
     font-family: Tahoma,Verdana,Arial,sans-serif;
     /* Do not set the font-size here - it will mess up the datepicker.
@@ -683,16 +684,16 @@ html>body #sidenavcontainer li a {
 	position: relative;
 	width: 870px;
 }*/
-#pagewidth {
-	width: 1024px;
-}
-#pagewidth-vert {
-	width: 370px;
-}
+/* #pagewidth { */
+/* 	width: 1024px; */
+/* } */
+/* #pagewidth-vert { */
+/* 	width: 370px; */
+/* } */
 #views{
- width:370px; 
- float:left; 
- position:relative; 
+/*  width:370px;  */
+/*  float:left;  */
+/*  position:relative;  */
   }
 #twocols {
 	width: 650px;
@@ -701,10 +702,10 @@ html>body #sidenavcontainer li a {
 	/*background: #6EA8E4;*/
 }
 #rightcol{
- width:100px; 
- float:right; 
- position:relative; 
- width: 44px;
+/*  width:100px;  */
+/*  float:right;  */
+/*  position:relative;  */
+/*  width: 44px; */
  }
  #maincol{
  /*background-color: #FFFFFF;  */
@@ -1056,17 +1057,17 @@ button.menu-skinny-blue {
 }*/
 #incidents th {
 	font-size: 16px;
-		/*background: #3E83C9;*/
-		/*background: #FF8040;*/
-		/*background: #6989AB;*/
-		background: #BFA040;
-		color: white;
-		font-weight: bold;
-		padding: 2px 11px;
-		text-align: left;
-		border-right: 1px solid white;
-		line-height: 1.2;
-	}
+	/*background: #3E83C9;*/
+	/*background: #FF8040;*/
+	/*background: #6989AB;*/
+	background: #BFA040;
+	color: white;
+	font-weight: bold;
+	padding: 2px 11px;
+	text-align: left;
+	border-right: 1px solid white;
+	line-height: 1.2;
+}
 
 #incidents td
 {
@@ -1207,5 +1208,4 @@ font-weight: bold;
 .bullet .measure.s1 { fill: steelblue; }
 .bullet .title { font-size: 14px; font-weight: bold; }
 .bullet .subtitle { fill: #999; }
-
 

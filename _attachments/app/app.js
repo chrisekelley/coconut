@@ -65,6 +65,7 @@ var AppRouter = Backbone.Router.extend({
             "destroy/:recordId": 			"destroy",    		// #destroy
             "design": 						"design",    		// #design
             "populate": 					"populate",    		// #populate
+            "config": 						"config",    		// #config
             "*actions": 					"home", 			// matches http://example.com/#anything-here - used to point to defaultRoute
         },
         // The following route is unused.
@@ -78,9 +79,9 @@ var AppRouter = Backbone.Router.extend({
         },
         home: function () {
         	//console.log("home route.");
-        	if ($("#charts").length <= 0){
-        		window.location.href = '/coconut/_design/coconut/index.html';
-        		}
+//        	if ($("#charts").length <= 0){
+//        		window.location.href = '/coconut/_design/coconut/index.html';
+//        		}
 			$("#recordView").remove();
 			$("#formRenderingView").remove();
 			$("#designer").remove();
@@ -96,9 +97,6 @@ var AppRouter = Backbone.Router.extend({
 //				viewDiv.setAttribute("id", "charts");
 //				$("#mailcol").append(viewDiv);
 //			}
-			
-			
-
 			
 			var searchResults = new IncidentsList();
 			searchResults.db["keys"] = null;
@@ -119,11 +117,25 @@ var AppRouter = Backbone.Router.extend({
 				}
 			});
         },
+        config: function () {
+        	console.log("config route.");
+        	$("#recordView").remove();
+        	$("#formRenderingView").remove();
+        	$("#designer").remove();
+        	$("#homePageView").remove(); 
+        	if (! $("#homePageView").length){
+        		var viewDiv = document.createElement("div");
+        		viewDiv.setAttribute("id", "homePageView");
+        		$("#views").append(viewDiv);
+        	}
+        	var page = new Page({content: "Configuration"});
+        	(new ConfigView({model: page, el: $("#homePageView")})).render();
+        },
         search: function (searchTerm) {
         	console.log("search route.");
-        	if ($("#charts").length <= 0){
-        		window.location.href = '/coconut/_design/coconut/index.html';
-        		}
+//        	if ($("#charts").length <= 0){
+//        		window.location.href = '/coconut/_design/coconut/index.html';
+//        		}
         	$("#homePageView").remove();
 			$("#recordView").remove();
 			$("#formRenderingView").remove();
@@ -405,90 +417,75 @@ var AppRouter = Backbone.Router.extend({
         		}
         	});
         },
-        design: function () {
-        	console.log("design route ");
-			$("#homePageView").remove();
-			$("#recordView").remove();
-			$("#formRenderingView").remove();
-			$("#designer").remove();
-			$("#maincol").html("");
-			if (! $("#designer").length){
-				var viewDiv = document.createElement("div");
-				viewDiv.setAttribute("id", "designer");
-				$("#views").append(viewDiv);
-				$("#views").width("1000px");
-			}
-			formdesigner.launch({
-	            rootElement: "#designer",
-	            staticPrefix: "app/FormDesignerAlpha/",
-//	            form: "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\" xmlns:orx=\"http://openrosa.org/jr/xforms\" xmlns=\"http://www.w3.org/2002/xforms\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:jr=\"http://openrosa.org/javarosa\">\n\t<h:head>\n\t\t<h:title>Awesome Form</h:title>\n\t\t<model>\n\t\t\t<instance>\n\t\t\t\t<data xmlns:jrm=\"http://dev.commcarehq.org/jr/xforms\" xmlns=\"http://openrosa.org/formdesigner/D1465656-8E57-4307-AD3D-CD8F8492782B\" uiVersion=\"1\" version=\"1\" name=\"Awesome Form\">\n\t\t\t\t\t<question1 />\n\t\t\t\t\t<question2 />\n\t\t\t\t\t<question3 />\n\t\t\t\t\t<question4 />\n\t\t\t\t</data>\n\t\t\t</instance>\n\t\t\t<bind nodeset=\"/data/question1\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question2\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question3\" type=\"xsd:string\" />\n\t\t\t<bind nodeset=\"/data/question4\" type=\"xsd:string\" />\n\t\t\t<itext>\n\t\t\t\t<translation lang=\"en\" default=\"\">\n\t\t\t\t\t<text id=\"question1\">\n\t\t\t\t\t\t<value>So what's your name?</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question2\">\n\t\t\t\t\t\t<value>Are you male or female?</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question3\">\n\t\t\t\t\t\t<value>question3</value>\n\t\t\t\t\t</text>\n\t\t\t\t\t<text id=\"question4\">\n\t\t\t\t\t\t<value>question4</value>\n\t\t\t\t\t</text>\n\t\t\t\t</translation>\n\t\t\t</itext>\n\t\t</model>\n\t</h:head>\n\t<h:body>\n\t\t<input ref=\"/data/question1\">\n\t\t\t<label ref=\"jr:itext('question1')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question2\">\n\t\t\t<label ref=\"jr:itext('question2')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question3\">\n\t\t\t<label ref=\"jr:itext('question3')\" />\n\t\t</input>\n\t\t<input ref=\"/data/question4\">\n\t\t\t<label ref=\"jr:itext('question4')\" />\n\t\t</input>\n\t</h:body>\n</h:html>",
-	            langs: ""
-	        });
-        },
         populate: function () {
-        	console.log("populate route ");        	
-        	$("#homePageView").remove();
-			$("#recordView").remove();
-			$("#formRenderingView").remove();
-			$("#designer").remove();
-			if (! $("#homePageView").length){
-				var viewDiv = document.createElement("div");
-				viewDiv.setAttribute("id", "homePageView");
-				$("#views").append(viewDiv);
-			}
-        	
-        	db = $.couch.db(Backbone.couch_connector.config.db_name);
-            var testdoc = null;
-            ct = 0;
-            opts = { success : function(){ }, error : function(){ console.log("could not populate"); }};    
-            function randomFromTo(from, to){
-        		return Math.floor(Math.random() * (to - from + 1) + from);
-        	};
+        	console.log("populate route ");  
+        	var answer = confirm("Populate database with test data?");
+        	if (answer) {
+        		$("#homePageView").remove();
+        		$("#recordView").remove();
+        		$("#formRenderingView").remove();
+        		$("#designer").remove();
+        		if (! $("#homePageView").length){
+        			var viewDiv = document.createElement("div");
+        			viewDiv.setAttribute("id", "homePageView");
+        			$("#views").append(viewDiv);
+        		}
 
-        while (ct < 499) {
-        	ct++;
-            var subcounty=randomFromTo(1,8).toString();
-            var village=randomFromTo(1,8).toString();
-            var priority=randomFromTo(1,3).toString();
-            var department=randomFromTo(1,6).toString();
-            var resolved=randomFromTo(0,1).toString();
-            var month=randomFromTo(1,10);
-            var day=randomFromTo(1,31);
-            switch (month) {
-            case 10:
-            	day=randomFromTo(1,11);
-            	break;
-            case 9:
-            	day=randomFromTo(1,30);
-            	break;
-            case 4:
-            	day=randomFromTo(1,30);
-            	break;
-            case 2:
-            	day=randomFromTo(1,27);
-            	break;
-            case 6:
-            	day=randomFromTo(1,30);
-            	break;
-            case 11:
-            	day=randomFromTo(1,30);
-            	break;	
-            default:
-            	day=randomFromTo(1,31);	
-            	break;
-            }
-            
-            var created  =  new Date();
-            var lastModified =  created;  
-            
-            var id =  "test" + ct;  
-            testdoc = { _id : id, "flowId": "300","formId": "incident","phone": "0772555"+ ct,"description": "This is a test",
-            		"subcounty": subcounty,"village": village,"priority": priority,"department": department,"assignedId": ct.toString(),
-            		"resolved":resolved, "created": created,"lastModified": lastModified,"collection": "incident"};
-            console.log("testdoc: " + JSON.stringify(testdoc));
-            db.saveDoc(testdoc, opts);
-          }
-        	FORMY.router.navigate('home', true);
+        		db = $.couch.db(Backbone.couch_connector.config.db_name);
+        		var testdoc = null;
+        		ct = 0;
+        		opts = { success : function(){ }, error : function(){ console.log("could not populate"); }};    
+        		function randomFromTo(from, to){
+        			return Math.floor(Math.random() * (to - from + 1) + from);
+        		};
+
+        		while (ct < 499) {
+        			ct++;
+        			var subcounty=randomFromTo(1,8).toString();
+        			var village=randomFromTo(1,8).toString();
+        			var priority=randomFromTo(1,3).toString();
+        			var department=randomFromTo(1,6).toString();
+        			var resolved=randomFromTo(0,1).toString();
+        			var month=randomFromTo(1,10);
+        			var day=randomFromTo(1,31);
+        			switch (month) {
+        			case 10:
+        				day=randomFromTo(1,11);
+        				break;
+        			case 9:
+        				day=randomFromTo(1,30);
+        				break;
+        			case 4:
+        				day=randomFromTo(1,30);
+        				break;
+        			case 2:
+        				day=randomFromTo(1,27);
+        				break;
+        			case 6:
+        				day=randomFromTo(1,30);
+        				break;
+        			case 11:
+        				day=randomFromTo(1,30);
+        				break;	
+        			default:
+        				day=randomFromTo(1,31);	
+        			break;
+        			}
+
+        			var created  =  new Date();
+        			var lastModified =  created;  
+
+        			var id =  "test" + ct;  
+        			testdoc = { _id : id, "flowId": "300","formId": "incident","phone": "0772555"+ ct,"description": "This is a test",
+        					"subcounty": subcounty,"village": village,"priority": priority,"department": department,"assignedId": ct.toString(),
+        					"resolved":resolved, "created": created,"lastModified": lastModified,"collection": "incident"};
+        			console.log("testdoc: " + JSON.stringify(testdoc));
+        			db.saveDoc(testdoc, opts);
+        		}
+        		FORMY.router.navigate('home', true);
+        	} else {
+        		alert("Data population cancelled.");
+        	}
         },
     });
 
@@ -498,9 +495,5 @@ FORMY.router = new AppRouter();
 // Start Backbone history a necessary step for bookmarkable URL's
 Backbone.history.start();
 FORMY.Incidents = new IncidentsList();
-FORMY.reportEducation = new ReportCollection();
-FORMY.reportHealth = new ReportCollection();
-FORMY.reportWorks = new ReportCollection();
-FORMY.reportOther = new ReportCollection();
 
 

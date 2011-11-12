@@ -1,51 +1,33 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="utf-8" />
   	<title>Coconut</title>
-<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />	
-<link type="text/css" href="css/Site.css" rel="stylesheet" />	 	
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  		<!-- 1140px Grid styles for IE -->
+	<!--[if lte IE 9]><link rel="stylesheet" href="css/ie.css" type="text/css" media="screen" /><![endif]-->
+	
+	<!-- The 1140px Grid - http://cssgrid.net/ -->
+	<link type="text/css" href="css/1140.css" rel="stylesheet" media="screen" />
+	
+	<link type="text/css" href="css/ui-lightness/jquery-ui-1.8.15.custom.css" rel="stylesheet" />	
+	<link type="text/css" href="css/Site.css" rel="stylesheet" />
+	
+	<!--css3-mediaqueries-js - http://code.google.com/p/css3-mediaqueries-js/ - Enables media queries in some unsupported browsers-->
+	<script type="text/javascript" src="js-libraries/css3-mediaqueries.js"></script>
+	
   </head>
   <body>
-  	<div id="pagewidth">
-  		<div id="wrapper" class="clearfix">
-  			<div id="twocols"> 
-				<div id="maincol">
-					<div id="charts">
-							<!-- <img src="/coconut/_design/coconut/_list/chartline/byResolved?group_level=2"/> -->
-							<table style="font-size:16px; text-align: center">
-								<tr>
-									<td style="font-size: 16px; text-align: center">Cases Per Department, Current Month</td>
-								</tr>
-								<tr>
-									<td id="bulletChart" colspan="2" style="text-align: left"></td>
-								</tr>
-							</table>
-					</div>
-				</div>
-				
-				<div id="rightcol">
-				<div style="padding: 2px;">
-							<table style="padding: 2px;">
-							<tr>
-								<td>
-								<img src="images/applications-system.png" alt="Configure"  onClick="window.location.href = '/mobilefuton/_design/mobilefuton/index.html'"/>
-								<img src="images/system-software-update.png" alt="Refresh"  onClick="window.location.href = '/coconut/_design/coconut/index.html'"/>
-								<a href="#design"><img src="images/accessories-text-editor.png" alt="Design" /></a>
-								<a href="#populate"><img src="images/system-users.png" alt="Populate" /></a>
-								</td>
-							</tr>
-							</table>	
-							</div>
-				</div>
-			</div> 
-	  		<div id="views">
+  <div class="container">
+		<div class="row">
+			<div class="twelvecol" id="views">
 		  		<div id="formRenderingView"></div>
 		  		<div id="homePageView"></div>
 		  		<div id="recordView"></div>
 		  		<div id="designer"></div>
   			</div>
-  		</div>  	
-  	</div>
-
+		</div>
+	</div>
   </body>
   <!-- TODO for deployment - combine & minify all of this -->
 <script type="text/javascript" src="js-libraries/jquery-1.7.js"></script>
@@ -67,32 +49,7 @@
 	<script type="text/javascript" src="js-libraries/formElementRender.js"></script>
 	<script type="text/javascript" src="js-libraries/recordElementRender.js"></script>
 	<script type="text/javascript" src="js-libraries/jquery.dateFormat-1.0.js"></script>
-	<script type="text/javascript" src="js-libraries/d3.js"></script>
-	<script type="text/javascript" src="js-libraries/d3.chart.js"></script>
-	
-	<!-- formDesigner -->
-	
-		<link href="app/FormDesignerAlpha/css/smoothness/jquery-ui-1.8.14.custom.css" type="text/css" rel="stylesheet" />
-		<!--<link href="css/redmond/jquery-ui-1.8.14.custom.css" type="text/css" rel="stylesheet" />-->
-		<!-- <link href="app/FormDesignerAlpha/css/screen.css" rel="stylesheet" type="text/css" media="screen, projection">
-		<link href="app/FormDesignerAlpha/css/print.css" rel="stylesheet" type="text/css" media="print"> -->
-		<link href="app/FormDesignerAlpha/css/formdesigner.css" rel="stylesheet" type="text/css"/>
-		<link href="app/FormDesignerAlpha/css/chosen.css" rel="stylesheet" type="text/css" />
-		<link rel="stylesheet" href="app/FormDesignerAlpha/css/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-		<!-- <script type="text/javascript" src="FormDesignerAlpha/js/jquery-1.6.1.js"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/jquery-ui-1.8.14.custom.min.js"></script> -->
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/jquery.jstree.js"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/jquery.fancybox-1.3.4.pack.js"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/chosen.jquery.js"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/jquery-ui-timepicker-addon.js"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/ui.js?version=100"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/util.js?version=100"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/model.js?version=100"></script>
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/controller.js?version=100"></script>
-		<!--<script type="text/javascript" src="app/FormDesignerAlpha/js/xml2json.js"></script>-->
-		<!--<script type="text/javascript" src="app/FormDesignerAlpha/js/json2xml.js"></script>-->
-		<script type="text/javascript" src="app/FormDesignerAlpha/js/XMLWriter-1.0.0.js"></script>
-	
+
 	<!-- The app itself - note that if new models/views are added they need to be added here-->
 	<script type="text/javascript" src="app/config.js"></script>
 	<script type="text/javascript" src="app/models/FormElement.js"></script>
@@ -104,6 +61,7 @@
 	<script type="text/javascript" src="app/views/RecordElementView.js"></script>
 	<script type="text/javascript" src="app/views/FormView.js"></script>
 	<script type="text/javascript" src="app/views/HomeView.js"></script>
+	<script type="text/javascript" src="app/views/ConfigView.js"></script>
 	<script type="text/javascript" src="app/models/Record.js"></script>
 	<script type="text/javascript" src="app/models/PatientRecordList.js"></script>
 	<script type="text/javascript" src="app/models/Incident.js"></script>
@@ -111,9 +69,6 @@
 	<script type="text/javascript" src="app/models/IncidentRecordList.js"></script>
 	<script type="text/javascript" src="app/views/IncidentView.js"></script>
 	<script type="text/javascript" src="app/views/RecordView.js"></script>
-	<script type="text/javascript" src="app/models/Report.js"></script>
-	<script type="text/javascript" src="app/models/ReportCollection.js"></script>
-	<script type="text/javascript" src="app/coco-charts.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
 	<script type="text/javascript" src="app/coconut-utils.js"></script>
 </html>
