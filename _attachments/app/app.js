@@ -439,7 +439,7 @@ var AppRouter = Backbone.Router.extend({
         			return Math.floor(Math.random() * (to - from + 1) + from);
         		};
 
-        		while (ct < 499) {
+        		while (ct < 6) {
         			ct++;
         			var subcounty=randomFromTo(1,8).toString();
         			var village=randomFromTo(1,8).toString();
