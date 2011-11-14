@@ -195,8 +195,9 @@ var FormView = Backbone.View.extend({
 		  console.log("formData: " + JSON.stringify(formData));
 		  var _id = formData._id;
 		  if (_id == null) {
-			  formData.created =  new Date();
-			  formData.lastModified =  formData.created;  
+			  formData.created =  new Date().valueOf();
+			  console.log("formData.created: " + formData.created);
+			  formData.lastModified =  formData.created;
 			  if (formId === "incident") {
 				  var info = $.couch.db(Backbone.couch_connector.config.db_name).info(
 						  {
@@ -236,7 +237,7 @@ var FormView = Backbone.View.extend({
 				  //model.clear;
 			  }
 		  } else {
-			  formData.lastModified =  new Date();
+			  formData.lastModified =  new Date().valueOf();
 			  console.log("Updating the record using record.save");
 			  var record = new Record(formData);
 			  record.collection = "patient-records";

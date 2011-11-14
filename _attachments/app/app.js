@@ -472,8 +472,8 @@ var AppRouter = Backbone.Router.extend({
         			break;
         			}
 
-        			var created  =  new Date();
-        			var lastModified =  created;  
+        			var created  =  new Date().valueOf();
+        			var lastModified =  created;
 
         			var id =  "test" + ct;  
         			testdoc = { _id : id, "flowId": "300","formId": "incident","phone": "0772555"+ ct,"description": "This is a test",
