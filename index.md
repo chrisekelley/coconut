@@ -71,10 +71,10 @@ get the source code on GitHub : <a href="http://github.com/vetula/coconut">vetul
 
 ##Credit
 
-Authors: Chris E. Kelley (chris@vetula.com)
-Mike McKay (mike@vdomck.org)  
+Authors: Chris E. Kelley (ckelley@rti.org), 
+Mike McKay (mmckay@rti.org)  
 
-Contact: Chris E. Kelley (chris@vetula.com)
+Contact: Chris E. Kelley (ckelley@rti.org)
 
   <script type="text/javascript">
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
