@@ -52,21 +52,21 @@ var wrapError = function(onError, model, options) {
 var AppRouter = Backbone.Router.extend({
 
         routes: {
-        	"/":                 			"home",    			// #home
-        	"home":                 		"home",    			// #home
-        	"search/:query":        		"search",    		// #search
-        	"incident":           			"incident",    		// #incident
-        	"arrestDocket/:query":  		"arrestDocket",    	// #arrestDocket
-        	"problem/:query":       		"problem",    		// #arrestDocket
-        	"incidentRecords/:incidentId":	"incidentRecords",  // #incidentRecords
-        	"edit/:recordId":          		"edit",    			// #edit
-        	"record/:recordId":        		"record",    		// #record
-        	"renderForm/:formId/:parentId":	"renderForm",    	// #renderForm
-            "destroy/:recordId": 			"destroy",    		// #destroy
-            "design": 						"design",    		// #design
-            "populate": 					"populate",    		// #populate
-            "config": 						"config",    		// #config
-            "*actions": 					"home", 			// matches http://example.com/#anything-here - used to point to defaultRoute
+        	"/":                 							"home",    			// #home
+        	"home/:startkey":								"home",    			// #home
+        	"search/:query":        						"search",    		// #search
+        	"incident":           							"incident",    		// #incident
+        	"arrestDocket/:query":  						"arrestDocket",    	// #arrestDocket
+        	"problem/:query":       						"problem",    		// #arrestDocket
+        	"incidentRecords/:incidentId":					"incidentRecords",  // #incidentRecords
+        	"edit/:recordId":          						"edit",    			// #edit
+        	"record/:recordId":        						"record",    		// #record
+        	"renderForm/:formId/:parentId":					"renderForm",    	// #renderForm
+            "destroy/:recordId": 							"destroy",    		// #destroy
+            "design": 										"design",    		// #design
+            "populate": 									"populate",    		// #populate
+            "config": 										"config",    		// #config
+            "*actions": 									"home", 			// matches http://example.com/#anything-here - used to point to defaultRoute
         },
         // The following route is unused.
         defaultRoute: function( actions ){
@@ -77,8 +77,8 @@ var AppRouter = Backbone.Router.extend({
         	//page = new Page({});
         	(new HomeView({model: page})).render(); 
         },
-        home: function () {
-        	//console.log("home route.");
+        home: function (startkey, startkey_docid) {
+        	console.log("home route." + startkey);
 //        	if ($("#charts").length <= 0){
 //        		window.location.href = '/coconut/_design/coconut/index.html';
 //        		}
@@ -91,26 +91,48 @@ var AppRouter = Backbone.Router.extend({
 				viewDiv.setAttribute("id", "homePageView");
 				$("#views").append(viewDiv);
 			}
-//			$("#charts").remove();
-//			if (! $("#charts").length){
-//				var viewDiv = document.createElement("div");
-//				viewDiv.setAttribute("id", "charts");
-//				$("#mailcol").append(viewDiv);
-//			}
-			
+			var limit = 16;
 			var searchResults = new IncidentsList();
 			searchResults.db["keys"] = null;
-			searchResults.db["view"] = ["byIncidentSorted?descending=true&limit=15"];
+			//var viewQuery = "byIncidentSorted?descending=true&limit=" + limit + "&startkey=" + startkey + "&startkey_docid=" + startkey_docid;
+			var viewQuery = "byIncidentSorted?descending=true&limit=" + limit + "&startkey=" + "[" + startkey + "]";
+			if (startkey == null || startkey == "" || startkey == "home") {
+				viewQuery = "byIncidentSorted?descending=true&limit=" + limit;
+			}
+			console.log("viewQuery: " + viewQuery)
+			searchResults.db["view"] = [viewQuery];
 			searchResults.fetch({
 				success : function(){
-					FORMY.Incidents = searchResults;
-					//console.log("render; Incidents count: " + FORMY.Incidents.length);
-					var page = new Page({content: "Default List of Incidents:"});
+					console.log("item count: " + searchResults.length);
+					var listLength = searchResults.length;
+					//var querySize = 15
+					if (listLength < limit) {
+						limit = listLength;
+						startkey = null;
+					} else {
+						var next_start_record = searchResults.at(limit-1);
+						if (next_start_record) {
+							startkey_docid = next_start_record.id;
+			    			console.log("next_start_record: " + JSON.stringify(next_start_record));
+			    			console.log("startkey_docid: " + startkey_docid);
+			    			startkey = next_start_record.get("lastModified");
+							FORMY.Incidents = searchResults.remove(next_start_record);
+						}
+					}
+					if (startkey == "") {	//home (/)
+						FORMY.Incidents = searchResults;
+						startkey = 16
+						//console.log("searchResults: " + JSON.stringify(searchResults));
+					}
+					console.log("startkey: " + startkey);
+					var page = new Page({content: "Default List of Incidents:", startkey_docid:startkey_docid, startkey:startkey});
 					(new HomeView(
-							{model: page, el: $("#homePageView")})).render();
+							{model: page, el: $("#homePageView"), startkey_docid:startkey_docid, startkey:startkey})).render();
 					//console.log("starting stripeme.");
 					$(".stripeMe tr").mouseover(function(){$(this).addClass("over");}).mouseout(function(){$(this).removeClass("over");});
 					$(".stripeMe tr:even").addClass("alt");
+					$("#noStripeMe").removeClass("alt");
+					$("#noStripeMe").addClass("noStripeMeHeader");
 				},
 				error : function(){
 					console.log("Error loading PatientRecordList: " + arguments); 
@@ -152,18 +174,17 @@ var AppRouter = Backbone.Router.extend({
     			//searchResults.db["keys"] = {"keys": [8]};
     			//searchResults.db["view"] = ["bySurnameOrId?startkey=\"" + searchTerm + "\"&endkey=\"" + searchTerm + "\u9999\""];
     			//searchResults.db["view"] = ["byId?startkey=\"" + searchTerm + "\"&endkey=\"" + searchTerm + "Z\""];   			
-    			searchResults.db["view"] = ["byId"];   			
+    			searchResults.db["view"] = ["bySearchKeywords"];
     			//searchResults.db["view"] = ["byId?descending=true&limit=15"];   			
     		} else {
     			//console.log("This should reset the collection.");
     			searchResults.db["keys"] = null;
-    			searchResults.db["view"] = ["byIncidentSorted?descending=true&limit=15"];
+    			searchResults.db["view"] = ["byIncidentSorted?descending=true&limit=16"];
     		}
     		searchResults.fetch({
     		success : function(){
-    			//console.log("Records:" + JSON.stringify(patient.Records));
-    			//console.log("Fetching Records for:" + searchTerm);
-    			//console.log("searchResults: " + JSON.stringify(searchResults));
+    			var next_start_record = searchResults.get(15);
+    			console.log("next_start_record: " + JSON.stringify(next_start_record));
     			FORMY.Incidents = searchResults;
     			//console.log("render; Incidents count: " + FORMY.Incidents.length);
     			var page = new Page({content: "Default List of Incidents:"});
@@ -438,8 +459,9 @@ var AppRouter = Backbone.Router.extend({
         		function randomFromTo(from, to){
         			return Math.floor(Math.random() * (to - from + 1) + from);
         		};
+        		var countTestDocs = 20;
 
-        		while (ct < 6) {
+        		while (ct < (countTestDocs+1)) {
         			ct++;
         			var subcounty=randomFromTo(1,8).toString();
         			var village=randomFromTo(1,8).toString();
@@ -475,7 +497,8 @@ var AppRouter = Backbone.Router.extend({
         			var created  =  new Date().valueOf();
         			var lastModified =  created;
 
-        			var id =  "test" + ct;  
+        			//var id =  "test" + ct;  
+        			var id =  "test" + ct + "_" + created;  
         			testdoc = { _id : id, "flowId": "300","formId": "incident","phone": "0772555"+ ct,"description": "This is a test",
         					"subcounty": subcounty,"village": village,"priority": priority,"department": department,"assignedId": ct.toString(),
         					"resolved":resolved, "created": created,"lastModified": lastModified,"collection": "incident"};

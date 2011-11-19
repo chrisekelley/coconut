@@ -207,7 +207,7 @@ Handlebars.registerHelper('dateFormatDate', function(item) {
 	var out = "";
 	var d1 = new Date(item);
 	out = $.format.date(d1, "dd/MM");
-	console.log("item: " + item + " d1: " + d1 + " out: " + out);
+	//console.log("item: " + item + " d1: " + d1 + " out: " + out);
 	return out;
 });
 Handlebars.registerHelper('dateFormatdMY', function(item) {

@@ -1,19 +1,19 @@
 var HomeView = Backbone.View.extend({
 	//el: $("#homePageView"),
 	template: loadTemplate("home.template.html"),
-
 	initialize: function() {
-		_.bindAll(this, 'addOne', 'reseted', 'render', 'search', 'orientation');
+		_.bindAll(this, 'addOne', 'reseted', 'render', 'search', 'orientation', 'nextLink');
 		FORMY.Incidents.bind('add',   this.addOne, this);
 		//FORMY.Incidents.bind('search',   this.search, this);
 		FORMY.Incidents.bind('reset', this.reseted, this);
 		FORMY.Incidents.bind('all',   this.render, this);
 		FORMY.Incidents.bind('change', this.search, this);
 		FORMY.Incidents.bind('render', this.render, this);
-
-		//FORMY.Incidents.fetch();
 		return this;
-	}, 
+	},
+	startkey: null,
+	startkey_docid: null,
+	endkey_docid: null,
 	addOne : function(patient){
 		this.view = new SearchListItemView({model: patient});
 		this.rendered = this.view.render().el;
@@ -25,6 +25,7 @@ var HomeView = Backbone.View.extend({
 		"click #form-client " : "incidentLink",
 		"click #form-config " : "configLink",
 		"click #form-design " : "designLink",
+		"click #nextLink"	  : "nextLink",
 		"orientationEvent " : "orientation",
 	},
 	reseted: function() {
@@ -35,6 +36,15 @@ var HomeView = Backbone.View.extend({
 	remove: function() {
 		console.log("remove the view in homeView");
 		$(this.el).remove();
+	},
+	nextLink: function() {
+		console.log("this.model.toJSON(): " + this.model.get("startkey"));
+		if (this.model.get("startkey") != null) {
+			//FORMY.router.navigate('home/' + this.model.get("startkey") + '/' + this.model.get("startkey_docid"), true);
+			FORMY.router.navigate('home/' + this.model.get("startkey"), true);
+		} else {
+			console.log("nextLink");
+		}
 	},
 	incidentLink: function() {
 		FORMY.router.navigate('incident', true);

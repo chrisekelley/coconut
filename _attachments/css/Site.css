@@ -1195,7 +1195,7 @@ font-weight: bold;
   fill: white;
 }
 
-// http://mbostock.github.com/d3/ex/population.css
+/* http://mbostock.github.com/d3/ex/population.css */
 .bullet { font: 10px sans-serif; }
 .bullet .marker { stroke: #000; stroke-width: 2px; }
 .bullet .tick line { stroke: #666; stroke-width: .5px; }
@@ -1209,3 +1209,17 @@ font-weight: bold;
 .bullet .title { font-size: 14px; font-weight: bold; }
 .bullet .subtitle { fill: #999; }
 
+.tabbar-image {
+	vertical-align:bottom;
+	padding-left: 10px;
+	
+}
+
+#nextLink {
+	color: #034AF3;
+}
+
+.noStripeMeHeader
+{
+	background: #6EA8E4; 
+}

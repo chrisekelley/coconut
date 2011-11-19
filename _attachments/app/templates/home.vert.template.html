@@ -1,39 +1,34 @@
-
- <div id="pagewidth-vert">
-        	<div id="search-results">
-	            <form name="searchForm" id="search-results-form" onsubmit="return false;">
-	                <!-- <input type="hidden" id="first_surname" name="first_surname"/>
-	                <input type="hidden" id="start_row" name="start_row"/> -->
-	                <!-- <table>
-	                    <tbody><tr>
-	                        <td> -->
-	                            <table class="banner-home-vert" width="100%">
-	                                <tbody><tr>
-	                                    <td style="vertical-align: top;"><input type="text" id="search_string" name="search_string" placeholder="Search:Phone/ID" size="15"/>						
-	                                    <button id='form-search' value="Search" class="shiny-red" style="width: 65px;">Search</button>
-	                                    <!-- <td style="vertical-align: top;"> -->
-	                                    	<button id='form-client'class="menu-blue" style="width: 55px;">Incident</button>
-	                                    	<button id='form-config' class="menu-blue" style="width: 40px;">Conf</button>
-	                                    </td>
-	                                 <!--    	<a href="#newPatient">New Client</a></td>
-	                                    <td><a href="/mobilefuton/_design/mobilefuton/index.html">Configuration</a></td> -->
-	                                </tr>
-	                            </tbody></table>
-	                       <!--  </td>
-	                    </tr>
-	                </tbody></table> -->
-	            </form>
-	            <div id="search-results-body-vert">
-		        	<div id="search-results-list">
-		        		<table id="incidents" width="100%" class="stripeMe">
-							<thead>
-								<tr>
-									<th>Phone</th><th>Alert</th><th>Dept.</th><th style="border-right:none;">Date</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-		        	</div>
-	        	</div>
-        	</div>
-    </div>
+<div id="pagewidth-vert">
+	<div id="search-results">
+	    <form name="searchForm" id="search-results-form" onsubmit="return false;">
+	        <table class="banner-home-vert" width="100%">
+	            <tbody>
+	             <tr>
+	                 <td style="vertical-align: top;">
+		                 <input type="text" id="search_string" name="search_string" placeholder="Search:Phone/ID" size="15"/>						
+		                 <button id='form-search' value="Search" class="shiny-red" style="width: 65px;">Search</button>
+		                 <button id='form-client'class="menu-blue" style="width: 55px;">Incident</button>
+		                 <button id='form-config' class="menu-blue" style="width: 40px;">Conf</button>
+	                 	<img src="images/1321455058_reload.png" alt="Refresh" class="tabbar-image" onClick="window.location.href = '/coconut/_design/coconut/index.html'"/>
+	                 </td>
+	             </tr>
+	        	</tbody>
+	        </table>
+	    </form>
+        <div id="search-results-body-vert">
+	       	<div id="search-results-list">
+	       		<table id="incidents" width="100%" class="stripeMe">
+					<thead>
+						<tr>
+							<th>Phone</th><th>Alert</th><th>Dept.</th><th style="border-right:none;">Date</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+					{{#if startkey_docid}}
+					<tr style="background-color: #6EA8E4;" id="noStripeMe"><td></td><td></td><td></td><td><div id="nextLink" onmouseover="style.color='red';" onmouseout="style.color='#034AF3';">&gt;&gt;</div></td></tr>
+					{{/if}}
+				</table>
+	       	</div>
+      	</div>
+	</div>
+</div>
