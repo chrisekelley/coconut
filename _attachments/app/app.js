@@ -119,9 +119,9 @@ var AppRouter = Backbone.Router.extend({
 							FORMY.Incidents = searchResults.remove(next_start_record);
 						}
 					}
-					if (startkey == "") {	//home (/)
+					if (startkey == "" || startkey == null) {	//home (/)
 						FORMY.Incidents = searchResults;
-						startkey = 16
+						startkey = 16;
 						//console.log("searchResults: " + JSON.stringify(searchResults));
 					}
 					console.log("startkey: " + startkey);

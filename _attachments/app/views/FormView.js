@@ -300,6 +300,6 @@ function inspectModelAndGo(newRecord) {
 			queryId = parentId;
 			//console.log("parentId is queryId: " + queryId + " for formId: " + formId);
 		 }
-		FORMY.router.navigate('patientRecords/' + queryId, true);
-		//FORMY.router.navigate('patientRecords/' + queryId);
+		//FORMY.router.navigate('patientRecords/' + queryId, true);
+		FORMY.router.navigate('home', true);
 }
