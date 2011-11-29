@@ -7,21 +7,16 @@ var AppRouter = Backbone.Router.extend({
     "design": "design",
     "select": "select",
     "collect/:form_id": "collect",
-    "analyze/:form_id": "analyze"
+    "analyze/:form_id": "analyze",
+    "": "blank"
+  },
+  blank: function() {
+    $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>")
   },
   design: function() {
-    $("#content").empty()
-    if (!$("#designer").length) {
-      var viewDiv = document.createElement("div");
-      viewDiv.setAttribute("id", "designer");
-      $("#content").append(viewDiv);
-      $("#content").width("1000px");
-    }
-    formdesigner.launch({
-      rootElement: "#designer",
-      staticPrefix: "app/FormDesignerAlpha/",
-      langs: ""
-    });
+    $("#content").empty();
+    design_view = new DesignView()
+    design_view.render();
   },
   select: function() {
     $("#content").empty();
@@ -68,6 +63,20 @@ var AppRouter = Backbone.Router.extend({
         }
         result_view.render();
       }
+    });
+  },
+  oldDesign: function() {
+    $("#content").empty()
+    if (!$("#designer").length) {
+      var viewDiv = document.createElement("div");
+      viewDiv.setAttribute("id", "designer");
+      $("#content").append(viewDiv);
+      $("#content").width("1000px");
+    }
+    formdesigner.launch({
+      rootElement: "#designer",
+      staticPrefix: "app/FormDesignerAlpha/",
+      langs: ""
     });
   }
 });
