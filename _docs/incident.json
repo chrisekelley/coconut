@@ -82,63 +82,35 @@
            "rows": "0",
            "cols": "0",
            "identifier": "subcounty",
-           "inputType": "selectFDA",
+           "inputType": "selectCascadeParent",
            "enumerations": [
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "Kayunga",
-                   "labelItextID": "Kayunga",
+                   "label": "Kayonza",
+                   "labelItextID": "Kayonza",
                    "defaultValue": "1"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "SubB",
-                   "labelItextID": "SubB",
+                   "label": "Kitimbwa",
+                   "labelItextID": "Kitimbwa",
                    "defaultValue": "2"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "SubC",
-                   "labelItextID": "SubC",
+                   "label": "Bbaale",
+                   "labelItextID": "Bbaale",
                    "defaultValue": "3"
                },
                {
                    "name": "Item",
                    "tagName": "item",
-                   "label": "SubD",
-                   "labelItextID": "SubD",
+                   "label": "Galiraya",
+                   "labelItextID": "Galiraya",
                    "defaultValue": "4"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "SubE",
-                   "labelItextID": "SubE",
-                   "defaultValue": "5"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "SubF",
-                   "labelItextID": "SubF",
-                   "defaultValue": "6"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "SubG",
-                   "labelItextID": "SubG",
-                   "defaultValue": "7"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "SubH",
-                   "labelItextID": "SubH",
-                   "defaultValue": "8"
                }
            ]
        },
@@ -159,64 +131,1629 @@
            "rows": "0",
            "cols": "0",
            "identifier": "village",
-           "inputType": "selectFDA",
+           "class": "village",
+           "inputType": "selectCascadeChild",
            "enumerations": [
                {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "Mansa A",
-                   "labelItextID": "Mansa A",
-                   "defaultValue": "1"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "VillageB",
-                   "labelItextID": "VillageB",
-                   "defaultValue": "2"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "VillageC",
-                   "labelItextID": "VillageC",
-                   "defaultValue": "3"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "VillageD",
-                   "labelItextID": "VillageD",
-                   "defaultValue": "4"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "VillageE",
-                   "labelItextID": "VillageE",
-                   "defaultValue": "5"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "VillageF",
-                   "labelItextID": "VillageF",
-                   "defaultValue": "6"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "VillageG",
-                   "labelItextID": "VillageG",
-                   "defaultValue": "7"
-               },
-               {
-                   "name": "Item",
-                   "tagName": "item",
-                   "label": "VillageH",
-                   "labelItextID": "VillageH",
-                   "defaultValue": "8"
-               }
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bugatto", 
+					"labelItextID": "Bugatto", 
+					"defaultValue":"1", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bugonya A", 
+					"labelItextID": "Bugonya A", 
+					"defaultValue":"2", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bugonya B", 
+					"labelItextID": "Bugonya B", 
+					"defaultValue":"3", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nsiima", 
+					"labelItextID": "Nsiima", 
+					"defaultValue":"4", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kamusabi", 
+					"labelItextID": "Kamusabi", 
+					"defaultValue":"5", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kasolokamponye", 
+					"labelItextID": "Kasolokamponye", 
+					"defaultValue":"6", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiganda", 
+					"labelItextID": "Kiganda", 
+					"defaultValue":"7", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Lugasa West", 
+					"labelItextID": "Lugasa West", 
+					"defaultValue":"8", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Lukonda", 
+					"labelItextID": "Lukonda", 
+					"defaultValue":"9", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nsanvu", 
+					"labelItextID": "Nsanvu", 
+					"defaultValue":"10", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wabunyonyi", 
+					"labelItextID": "Wabunyonyi", 
+					"defaultValue":"11", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakyesa I", 
+					"labelItextID": "Nakyesa I", 
+					"defaultValue":"12", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakyeasa Ii", 
+					"labelItextID": "Nakyeasa Ii", 
+					"defaultValue":"13", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakyesa Iii", 
+					"labelItextID": "Nakyesa Iii", 
+					"defaultValue":"14", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakyeasa Iv", 
+					"labelItextID": "Nakyeasa Iv", 
+					"defaultValue":"15", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namatogonya I", 
+					"labelItextID": "Namatogonya I", 
+					"defaultValue":"16", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namatogonya Ii", 
+					"labelItextID": "Namatogonya Ii", 
+					"defaultValue":"17", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namatogonya Iii", 
+					"labelItextID": "Namatogonya Iii", 
+					"defaultValue":"18", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namatogonya Iv", 
+					"labelItextID": "Namatogonya Iv", 
+					"defaultValue":"19", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bukerere", 
+					"labelItextID": "Bukerere", 
+					"defaultValue":"20", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kakiika A", 
+					"labelItextID": "Kakiika A", 
+					"defaultValue":"21", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kakiika B", 
+					"labelItextID": "Kakiika B", 
+					"defaultValue":"22", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kaligoya", 
+					"labelItextID": "Kaligoya", 
+					"defaultValue":"23", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kirintoogo", 
+					"labelItextID": "Kirintoogo", 
+					"defaultValue":"24", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakyesanja", 
+					"labelItextID": "Nakyesanja", 
+					"defaultValue":"25", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namanoga", 
+					"labelItextID": "Namanoga", 
+					"defaultValue":"26", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nsungwe", 
+					"labelItextID": "Nsungwe", 
+					"defaultValue":"27", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Katuugo", 
+					"labelItextID": "Katuugo", 
+					"defaultValue":"28", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kazinga", 
+					"labelItextID": "Kazinga", 
+					"defaultValue":"29", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiddukulu", 
+					"labelItextID": "Kiddukulu", 
+					"defaultValue":"30", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiseeta A", 
+					"labelItextID": "Kiseeta A", 
+					"defaultValue":"31", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiseeta B", 
+					"labelItextID": "Kiseeta B", 
+					"defaultValue":"32", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kitwe East", 
+					"labelItextID": "Kitwe East", 
+					"defaultValue":"33", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Takajunge", 
+					"labelItextID": "Takajunge", 
+					"defaultValue":"34", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wunga", 
+					"labelItextID": "Wunga", 
+					"defaultValue":"35", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kawolokota West", 
+					"labelItextID": "Kawolokota West", 
+					"defaultValue":"36", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kayonza", 
+					"labelItextID": "Kayonza", 
+					"defaultValue":"37", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyatto I", 
+					"labelItextID": "Kyatto I", 
+					"defaultValue":"38", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyatto Ii", 
+					"labelItextID": "Kyatto Ii", 
+					"defaultValue":"39", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyatto Iii", 
+					"labelItextID": "Kyatto Iii", 
+					"defaultValue":"40", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Luagsa East", 
+					"labelItextID": "Luagsa East", 
+					"defaultValue":"41", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Makukulu", 
+					"labelItextID": "Makukulu", 
+					"defaultValue":"42", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakabango", 
+					"labelItextID": "Nakabango", 
+					"defaultValue":"43", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namaliri", 
+					"labelItextID": "Namaliri", 
+					"defaultValue":"44", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bukomba", 
+					"labelItextID": "Bukomba", 
+					"defaultValue":"45", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kafumba", 
+					"labelItextID": "Kafumba", 
+					"defaultValue":"46", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kakooge", 
+					"labelItextID": "Kakooge", 
+					"defaultValue":"47", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiwuna", 
+					"labelItextID": "Kiwuna", 
+					"defaultValue":"48", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nawankonge", 
+					"labelItextID": "Nawankonge", 
+					"defaultValue":"49", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nyondo A", 
+					"labelItextID": "Nyondo A", 
+					"defaultValue":"50", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nyondo B", 
+					"labelItextID": "Nyondo B", 
+					"defaultValue":"51", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bujwaya", 
+					"labelItextID": "Bujwaya", 
+					"defaultValue":"52", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kawolokota East", 
+					"labelItextID": "Kawolokota East", 
+					"defaultValue":"53", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namavundu", 
+					"labelItextID": "Namavundu", 
+					"defaultValue":"54", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namizo A", 
+					"labelItextID": "Namizo A", 
+					"defaultValue":"55", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namizo B", 
+					"labelItextID": "Namizo B", 
+					"defaultValue":"56", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nawansama", 
+					"labelItextID": "Nawansama", 
+					"defaultValue":"57", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bugoma", 
+					"labelItextID": "Bugoma", 
+					"defaultValue":"58", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Busabira", 
+					"labelItextID": "Busabira", 
+					"defaultValue":"59", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyaato", 
+					"labelItextID": "Kyaato", 
+					"defaultValue":"60", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyamugongo A", 
+					"labelItextID": "Kyamugongo A", 
+					"defaultValue":"61", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyamugongo B", 
+					"labelItextID": "Kyamugongo B", 
+					"defaultValue":"62", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyamujumba", 
+					"labelItextID": "Kyamujumba", 
+					"defaultValue":"63", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Salama", 
+					"labelItextID": "Salama", 
+					"defaultValue":"64", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Balisanga", 
+					"labelItextID": "Balisanga", 
+					"defaultValue":"65", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kabalangajja", 
+					"labelItextID": "Kabalangajja", 
+					"defaultValue":"66", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kikwatambogo", 
+					"labelItextID": "Kikwatambogo", 
+					"defaultValue":"67", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kirisiru", 
+					"labelItextID": "Kirisiru", 
+					"defaultValue":"68", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Matigi", 
+					"labelItextID": "Matigi", 
+					"defaultValue":"69", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nabusanja", 
+					"labelItextID": "Nabusanja", 
+					"defaultValue":"70", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nkokonjeru", 
+					"labelItextID": "Nkokonjeru", 
+					"defaultValue":"71", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nsambya", 
+					"labelItextID": "Nsambya", 
+					"defaultValue":"72", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nzingu", 
+					"labelItextID": "Nzingu", 
+					"defaultValue":"73", 
+					"parent": "subcounty",
+					"parent_id":1
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bulawula A", 
+					"labelItextID": "Bulawula A", 
+					"defaultValue":"74", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bulawula B", 
+					"labelItextID": "Bulawula B", 
+					"defaultValue":"75", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bulawula C", 
+					"labelItextID": "Bulawula C", 
+					"defaultValue":"76", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nkokonjeruya", 
+					"labelItextID": "Nkokonjeruya", 
+					"defaultValue":"77", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nkokonjeru B", 
+					"labelItextID": "Nkokonjeru B", 
+					"defaultValue":"78", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Tweyagalire", 
+					"labelItextID": "Tweyagalire", 
+					"defaultValue":"79", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bweramondo", 
+					"labelItextID": "Bweramondo", 
+					"defaultValue":"80", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kigalama", 
+					"labelItextID": "Kigalama", 
+					"defaultValue":"81", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyerima A", 
+					"labelItextID": "Kyerima A", 
+					"defaultValue":"82", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyerima B", 
+					"labelItextID": "Kyerima B", 
+					"defaultValue":"83", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyerima C", 
+					"labelItextID": "Kyerima C", 
+					"defaultValue":"84", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mafumbe", 
+					"labelItextID": "Mafumbe", 
+					"defaultValue":"85", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mbulakati", 
+					"labelItextID": "Mbulakati", 
+					"defaultValue":"86", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nanjwenge", 
+					"labelItextID": "Nanjwenge", 
+					"defaultValue":"87", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakaseeta", 
+					"labelItextID": "Nakaseeta", 
+					"defaultValue":"88", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namabuga", 
+					"labelItextID": "Namabuga", 
+					"defaultValue":"89", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bisaka", 
+					"labelItextID": "Bisaka", 
+					"defaultValue":"90", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kabalira", 
+					"labelItextID": "Kabalira", 
+					"defaultValue":"91", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakivubo", 
+					"labelItextID": "Nakivubo", 
+					"defaultValue":"92", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakivubo B", 
+					"labelItextID": "Nakivubo B", 
+					"defaultValue":"93", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nongo -Nakivubo", 
+					"labelItextID": "Nongo -Nakivubo", 
+					"defaultValue":"94", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bugirinya", 
+					"labelItextID": "Bugirinya", 
+					"defaultValue":"95", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bwamiramira", 
+					"labelItextID": "Bwamiramira", 
+					"defaultValue":"96", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kitatya A", 
+					"labelItextID": "Kitatya A", 
+					"defaultValue":"97", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kitatya B", 
+					"labelItextID": "Kitatya B", 
+					"defaultValue":"98", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kitatya C", 
+					"labelItextID": "Kitatya C", 
+					"defaultValue":"99", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kakoola", 
+					"labelItextID": "Kakoola", 
+					"defaultValue":"100", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kirimampokya A", 
+					"labelItextID": "Kirimampokya A", 
+					"defaultValue":"101", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kirimampokya B", 
+					"labelItextID": "Kirimampokya B", 
+					"defaultValue":"102", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wabuti", 
+					"labelItextID": "Wabuti", 
+					"defaultValue":"103", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wabwoko A", 
+					"labelItextID": "Wabwoko A", 
+					"defaultValue":"104", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wabwoko B", 
+					"labelItextID": "Wabwoko B", 
+					"defaultValue":"105", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiwuba", 
+					"labelItextID": "Kiwuba", 
+					"defaultValue":"106", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyebanja", 
+					"labelItextID": "Kyebanja", 
+					"defaultValue":"107", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mansa A", 
+					"labelItextID": "Mansa A", 
+					"defaultValue":"108", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mansa B", 
+					"labelItextID": "Mansa B", 
+					"defaultValue":"109", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namulaba", 
+					"labelItextID": "Namulaba", 
+					"defaultValue":"110", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namulaba", 
+					"labelItextID": "Namulaba", 
+					"defaultValue":"111", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nongo", 
+					"labelItextID": "Nongo", 
+					"defaultValue":"112", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wantete", 
+					"labelItextID": "Wantete", 
+					"defaultValue":"113", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Budada", 
+					"labelItextID": "Budada", 
+					"defaultValue":"114", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kitimbwa Town", 
+					"labelItextID": "Kitimbwa Town", 
+					"defaultValue":"115", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kitimbwa Village", 
+					"labelItextID": "Kitimbwa Village", 
+					"defaultValue":"116", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyatto", 
+					"labelItextID": "Kyatto", 
+					"defaultValue":"117", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyetume A", 
+					"labelItextID": "Kyetume A", 
+					"defaultValue":"118", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyetume B", 
+					"labelItextID": "Kyetume B", 
+					"defaultValue":"119", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyetume C", 
+					"labelItextID": "Kyetume C", 
+					"defaultValue":"120", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wabuyinja", 
+					"labelItextID": "Wabuyinja", 
+					"defaultValue":"121", 
+					"parent": "subcounty",
+					"parent_id":2
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bbaale East", 
+					"labelItextID": "Bbaale East", 
+					"defaultValue":"122", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bbaale West", 
+					"labelItextID": "Bbaale West", 
+					"defaultValue":"123", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kanamugadu", 
+					"labelItextID": "Kanamugadu", 
+					"defaultValue":"124", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyasande", 
+					"labelItextID": "Kyasande", 
+					"defaultValue":"125", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mukondo", 
+					"labelItextID": "Mukondo", 
+					"defaultValue":"126", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namirembe", 
+					"labelItextID": "Namirembe", 
+					"defaultValue":"127", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Wabirumba", 
+					"labelItextID": "Wabirumba", 
+					"defaultValue":"128", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Gayaza", 
+					"labelItextID": "Gayaza", 
+					"defaultValue":"129", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mulaya", 
+					"labelItextID": "Mulaya", 
+					"defaultValue":"130", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Muluga", 
+					"labelItextID": "Muluga", 
+					"defaultValue":"131", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namataala", 
+					"labelItextID": "Namataala", 
+					"defaultValue":"132", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bugembo", 
+					"labelItextID": "Bugembo", 
+					"defaultValue":"133", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kokotero", 
+					"labelItextID": "Kokotero", 
+					"defaultValue":"134", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyakwambala", 
+					"labelItextID": "Kyakwambala", 
+					"defaultValue":"135", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Tangoye", 
+					"labelItextID": "Tangoye", 
+					"defaultValue":"136", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kabira", 
+					"labelItextID": "Kabira", 
+					"defaultValue":"137", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Misanga A", 
+					"labelItextID": "Misanga A", 
+					"defaultValue":"138", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Misanga B", 
+					"labelItextID": "Misanga B", 
+					"defaultValue":"139", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Misanga C", 
+					"labelItextID": "Misanga C", 
+					"defaultValue":"140", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nsube", 
+					"labelItextID": "Nsube", 
+					"defaultValue":"141", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Jiira", 
+					"labelItextID": "Jiira", 
+					"defaultValue":"142", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mugongo East", 
+					"labelItextID": "Mugongo East", 
+					"defaultValue":"143", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Mugongo West", 
+					"labelItextID": "Mugongo West", 
+					"defaultValue":"144", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kabaku", 
+					"labelItextID": "Kabaku", 
+					"defaultValue":"145", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Katuugo", 
+					"labelItextID": "Katuugo", 
+					"defaultValue":"146", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nabisubyaki", 
+					"labelItextID": "Nabisubyaki", 
+					"defaultValue":"147", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakitokolo", 
+					"labelItextID": "Nakitokolo", 
+					"defaultValue":"148", 
+					"parent": "subcounty",
+					"parent_id":3
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Busungire", 
+					"labelItextID": "Busungire", 
+					"defaultValue":"149", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Galiraya", 
+					"labelItextID": "Galiraya", 
+					"defaultValue":"150", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kidibya A", 
+					"labelItextID": "Kidibya A", 
+					"defaultValue":"151", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kidibya B", 
+					"labelItextID": "Kidibya B", 
+					"defaultValue":"152", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiwula", 
+					"labelItextID": "Kiwula", 
+					"defaultValue":"153", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kasokwe A", 
+					"labelItextID": "Kasokwe A", 
+					"defaultValue":"154", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kasokwe B", 
+					"labelItextID": "Kasokwe B", 
+					"defaultValue":"155", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kilyola", 
+					"labelItextID": "Kilyola", 
+					"defaultValue":"156", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kirubo", 
+					"labelItextID": "Kirubo", 
+					"defaultValue":"157", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kirasa Central", 
+					"labelItextID": "Kirasa Central", 
+					"defaultValue":"158", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiwenda", 
+					"labelItextID": "Kiwenda", 
+					"defaultValue":"159", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kiyago", 
+					"labelItextID": "Kiyago", 
+					"defaultValue":"160", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Sobya", 
+					"labelItextID": "Sobya", 
+					"defaultValue":"161", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bweyale A", 
+					"labelItextID": "Bweyale A", 
+					"defaultValue":"162", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Bweyale B", 
+					"labelItextID": "Bweyale B", 
+					"defaultValue":"163", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kambatane", 
+					"labelItextID": "Kambatane", 
+					"defaultValue":"164", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kisugga A", 
+					"labelItextID": "Kisugga A", 
+					"defaultValue":"165", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kisugga B", 
+					"labelItextID": "Kisugga B", 
+					"defaultValue":"166", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kyedikyo", 
+					"labelItextID": "Kyedikyo", 
+					"defaultValue":"167", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Namalere", 
+					"labelItextID": "Namalere", 
+					"defaultValue":"168", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Baizo", 
+					"labelItextID": "Baizo", 
+					"defaultValue":"169", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Gweero", 
+					"labelItextID": "Gweero", 
+					"defaultValue":"170", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nabityanka", 
+					"labelItextID": "Nabityanka", 
+					"defaultValue":"171", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nakatuli", 
+					"labelItextID": "Nakatuli", 
+					"defaultValue":"172", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Nkutu", 
+					"labelItextID": "Nkutu", 
+					"defaultValue":"173", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Sokoso", 
+					"labelItextID": "Sokoso", 
+					"defaultValue":"174", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kalenge", 
+					"labelItextID": "Kalenge", 
+					"defaultValue":"175", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kawongo A", 
+					"labelItextID": "Kawongo A", 
+					"defaultValue":"176", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kawongo B", 
+					"labelItextID": "Kawongo B", 
+					"defaultValue":"177", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kikota ", 
+					"labelItextID": "Kikota ", 
+					"defaultValue":"178", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Kitwe", 
+					"labelItextID": "Kitwe", 
+					"defaultValue":"179", 
+					"parent": "subcounty",
+					"parent_id":4
+				},
+				{
+					"name": "Item",
+					"tagName": "item",
+					"label":"Misozi", 
+					"labelItextID": "Misozi", 
+					"defaultValue":"180", 
+					"parent": "subcounty",
+					"parent_id":4
+				}
            ]
        },
        {

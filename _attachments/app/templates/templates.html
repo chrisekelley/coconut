@@ -65,6 +65,12 @@
 	{{/dropdownWidgetValue}}
 	</select>
 </script>
+<script id="dropdownWidgetCascade" type="text/x-handlebars-template">
+<select id='{{identifier}}' class='{{identifier}}' {{#options}}data-{{name}}='{{value}}' {{/options}} name='{{identifier}}'>
+{{#dropdownWidgetValue enumerations value}}
+	{{/dropdownWidgetValue}}
+	</select>
+</script>
 <script id="displayTableWidget" type="text/x-handlebars-template">
 	<table id="tbl{{{identifier}}}" border="0" cellpadding="4" cellspacing="2" class="formTable">
 	<tr id="beginTableRow{{{identifier}}}"></tr>

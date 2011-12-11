@@ -1,6 +1,0 @@
-[
-  {"title":"Health","subtitle":"number of cases","ranges":[10,20,30],"measures":[220,270],"markers":[250]},
-  {"title":"Education","subtitle":"number of cases","ranges":[10,20,30],"measures":[21,23],"markers":[26]},
-  {"title":"Works","subtitle":"number of cases","ranges":[10,20,30],"measures":[100,320],"markers":[550]},
-  {"title":"Other","subtitle":"number of cases","ranges":[10,20,30],"measures":[3.2,4.7],"markers":[4.4]}
-]

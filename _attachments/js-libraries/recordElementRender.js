@@ -71,6 +71,10 @@ Handlebars.registerHelper("renderValue", function(context) {
 		template = recordDropdownCSVValueCompiledHtml;
 	} else if (inputType == 'selectFDA') {
 		template = recordDropdownValueCompiledHtml;
+	} else if (inputType == 'selectCascadeParent') {
+		template = recordDropdownValueCompiledHtml;
+	} else if (inputType == 'selectCascadeChild') {
+		template = recordDropdownValueCompiledHtml;
 	} else if (inputType == 'textarea') {
 		template = recordValueCompiledHtml;
 	} else if (inputType == 'yesno_br') {

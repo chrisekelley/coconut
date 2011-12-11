@@ -22,6 +22,7 @@ datepickerWidgetCompiledHtml = Handlebars.compile($("#datepickerWidget").html())
 checkboxWidgetCompiledHtml = Handlebars.compile($("#checkboxWidget").html());
 dropdownWidgetCompiledHtml = Handlebars.compile($("#dropdownWidget").html());
 dropdownWidgetFormDesignerCompiledHtml = Handlebars.compile($("#dropdownWidgetFormDesigner").html());
+dropdownWidgetCascadeCompiledHtml = Handlebars.compile($("#dropdownWidgetCascade").html());
 textareaWidgetCompiledHtml = Handlebars.compile($("#textareaWidget").html());
 displayTableWidgetCompiledHtml = Handlebars.compile($("#displayTableWidget").html());
 displayHeaderWidgetCompiledHtml = Handlebars.compile($("#displayHeaderWidget").html());
@@ -72,6 +73,10 @@ Handlebars.registerHelper("renderWidget", function(context) {
 		template = dropdownWidgetCompiledHtml;
 	} else if (inputType == 'selectFDA') {
 		template = dropdownWidgetFormDesignerCompiledHtml;
+	} else if (inputType == 'selectCascadeParent') {
+		template = dropdownWidgetFormDesignerCompiledHtml;
+	} else if (inputType == 'selectCascadeChild') {
+		template = dropdownWidgetCascadeCompiledHtml;
 	} else if (inputType == 'select') {
 		template = dropdownWidgetCompiledHtml;
 	} else if (inputType == 'textarea') {
@@ -145,16 +150,24 @@ Handlebars.registerHelper('dropdown', function(items) {
 Handlebars.registerHelper('dropdownWidgetValue', function(enumerations, value) {
 	var out = "";
 	out = out + "<option value=\"\">--Select--</option>";
+	enumerations.sort(sortBylabelAlpha);
 	for (fenum in enumerations) {
 		var record = enumerations[fenum];
 		if (record.defaultValue === value) {
-			out = out + "<option value=\"" + record.defaultValue + "\" selected=\"selected\">" + record.label + "</option>";
+			out = out + "<option value=\"" + record.defaultValue + "\" selected=\"selected\"";
 		} else {
-			out = out + "<option value=\"" + record.defaultValue + "\">" + record.label + "</option>";
+			out = out + "<option value=\"" + record.defaultValue + "\"";
 		}
+		if (record.parent_id != null) {
+			out = out + " class = \"sub_" + record.parent_id + "\"";
+		}
+		out = out + ">" + record.label + "</option>";
 	}
 	return out;
 });
+function sortBylabelAlpha(a,b) {
+	return a.label.toLowerCase() > b.label.toLowerCase();
+}
 Handlebars.registerHelper('renderPriority', function(value) {
 	var out = "";
 	switch (value){
@@ -197,7 +210,7 @@ Handlebars.registerHelper('renderDepartment', function(value) {
 
 Handlebars.registerHelper('dateFormat', function(item) {
 	var out = "";
-	var d1 = new Date(item);
+	var d1 = new Date(item * 1000);
 	//out = d1.toString('yyyy-MM-dd hh:mm');
 	//out = $.format.date(d1, "yyyy-MM-dd hh:mm:ss");
 	out = $.format.date(d1, "dd-MM hh:mm");
@@ -205,14 +218,14 @@ Handlebars.registerHelper('dateFormat', function(item) {
 });
 Handlebars.registerHelper('dateFormatDate', function(item) {
 	var out = "";
-	var d1 = new Date(item);
+	var d1 = new Date(item * 1000);
 	out = $.format.date(d1, "dd/MM");
 	//console.log("item: " + item + " d1: " + d1 + " out: " + out);
 	return out;
 });
 Handlebars.registerHelper('dateFormatdMY', function(item) {
 	var out = "";
-	var d1 = new Date(item);
+	var d1 = new Date(item * 1000);
 	//out = d1.toString('yyyy-MM-dd hh:mm');
 	//out = $.format.date(d1, "yyyy-MM-dd hh:mm:ss");
 	out = $.format.date(d1, "dd/MM/yyyy");
@@ -221,4 +234,16 @@ Handlebars.registerHelper('dateFormatdMY', function(item) {
 Handlebars.registerHelper('substring', function(identifier, from) {
 	return identifier.substring(from);
 });
+Handlebars.registerHelper('ifEquals', function(context, fn, inverse, comparisonString) {
+	//console.log(this);
+	  if(!context || context == []) {
+	    return inverse(this);
+	  } else {
+		  if (context === comparisonString) {
+			    return fn(this); 
+		  } else {
+			  	return inverse(this);	
+		  }
+	  }
+	});
 

@@ -212,6 +212,7 @@ var AppRouter = Backbone.Router.extend({
         			$(document).ready(function() {
         				//$("#" + identifier).datepicker({
         				//$("#dateReported").datepicker({
+        				loadCascadedSelects();
         					$('.datep').each(function () {
         						//console.log("init dateppicker");
 //        				        var currentYear = (new Date).getFullYear();
@@ -360,6 +361,9 @@ var AppRouter = Backbone.Router.extend({
             			FORMY.loadForm(record.get("formId"), null,{
             				success: function(form){
             					(new FormView({model: record, currentForm:form, el: $("#formRenderingView")})).render();
+                    			$(document).ready(function() {
+                    				loadCascadedSelects();
+                    			});
             				},
             				error : function(){
             					console.log("Error loading form: " + arguments); 
@@ -493,8 +497,8 @@ var AppRouter = Backbone.Router.extend({
         				day=randomFromTo(1,31);	
         			break;
         			}
-
-        			var created  =  new Date().valueOf();
+        			var unixTimestamp = Math.round(+new Date()/1000);
+        			var created  =  unixTimestamp;
         			var lastModified =  created;
 
         			//var id =  "test" + ct;  

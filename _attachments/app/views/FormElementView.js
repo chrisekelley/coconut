@@ -8,17 +8,29 @@ window.FormElementView = Backbone.View.extend({
 	  this.model.view = this;
   },
   events: {
-    "change" : "validate",
+    "change" : "validate"
   },
   validate: function() {
     // clear old error messages before validation occurs
     this.$(".error-message").html("").hide();
-    console.log("inputType: " + this.model.get("inputType"));
     this.inputType = this.model.get("inputType");
+    console.log("inputType: " + this.inputType);
+//	  if (this.inputType == "selectCascadeParent") {
+//		  var cascadeForm = $('#theForm');
+//		  var parent = cascadeForm.find('#subcounty');
+//		  var child = cascadeForm.find('#village'); 
+//		  cascadeSelect(parent, child);
+//	  }
     this.currentValue = this.$("input").val();
     if (this.inputType == "dropdown") {
     	this.currentValue = this.$("select").val();
     } else if (this.inputType == "dropdown-add-one") {
+    	this.currentValue = this.$("select").val();
+    } else if (this.inputType == "selectFDA") {
+    	this.currentValue = this.$("select").val();
+    } else if (this.inputType == "selectCascadeParent") {
+    	this.currentValue = this.$("select").val();
+    } else if (this.inputType == "selectCascadeChild") {
     	this.currentValue = this.$("select").val();
     } else if (this.inputType == "checkbox") {
     	this.currentValue = this.$("checkbox").val();
@@ -30,6 +42,10 @@ window.FormElementView = Backbone.View.extend({
         console.log("validation error: " + this.validationResult);
     }
     return this.validationResult;
+  },
+  changeSelected: function() {
+	  this.inputType = this.model.get("inputType");
+	  
   },
   render: function(){
 	  this.colspan = this.model.get("colspan");
