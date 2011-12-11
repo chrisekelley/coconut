@@ -60,7 +60,9 @@ var HomeView = Backbone.View.extend({
 		e.preventDefault();
 		console.log("Searching");
 		var searchTerm =  $('#search_string').val();
-		FORMY.router.navigate('search/' + searchTerm, true);
+		var department =  $('#department').val();
+		//FORMY.router.navigate('search/' + searchTerm, true);
+		FORMY.router.navigate('search/' + searchTerm + "/" + department, true);
 	},
 	orientation: "horiz",
 	//reportEducationInstance:null,

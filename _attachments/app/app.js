@@ -54,7 +54,7 @@ var AppRouter = Backbone.Router.extend({
         routes: {
         	"/":                 							"home",    			// #home
         	"home/:startkey":								"home",    			// #home
-        	"search/:query":        						"search",    		// #search
+        	"search/:query/:department":        			"search",    		// #search
         	"incident":           							"incident",    		// #incident
         	"arrestDocket/:query":  						"arrestDocket",    	// #arrestDocket
         	"problem/:query":       						"problem",    		// #arrestDocket
@@ -99,7 +99,7 @@ var AppRouter = Backbone.Router.extend({
 			if (startkey == null || startkey == "" || startkey == "home") {
 				viewQuery = "byIncidentSorted?descending=true&limit=" + limit;
 			}
-			console.log("viewQuery: " + viewQuery)
+			console.log("viewQuery: " + viewQuery);
 			searchResults.db["view"] = [viewQuery];
 			searchResults.fetch({
 				success : function(){
@@ -153,7 +153,7 @@ var AppRouter = Backbone.Router.extend({
         	var page = new Page({content: "Configuration"});
         	(new ConfigView({model: page, el: $("#homePageView")})).render();
         },
-        search: function (searchTerm) {
+        search: function (searchTerm, department) {
         	console.log("search route.");
 //        	if ($("#charts").length <= 0){
 //        		window.location.href = '/coconut/_design/coconut/index.html';
@@ -166,16 +166,23 @@ var AppRouter = Backbone.Router.extend({
 				viewDiv.setAttribute("id", "homePageView");
 				$("#views").append(viewDiv);
 			}
-    		console.log("Searching for " + searchTerm);
+    		console.log("Searching for " + searchTerm + " department: " + department);
     		var searchResults = new IncidentsList();
     		if (searchTerm !== "") {
     			//var searchInt = parseInt(searchTerm);
+    			console.log("bySearchKeywords search");
     			searchResults.db["keys"] = [searchTerm];
     			//searchResults.db["keys"] = {"keys": [8]};
     			//searchResults.db["view"] = ["bySurnameOrId?startkey=\"" + searchTerm + "\"&endkey=\"" + searchTerm + "\u9999\""];
     			//searchResults.db["view"] = ["byId?startkey=\"" + searchTerm + "\"&endkey=\"" + searchTerm + "Z\""];   			
     			searchResults.db["view"] = ["bySearchKeywords"];
-    			//searchResults.db["view"] = ["byId?descending=true&limit=15"];   			
+    			//searchResults.db["view"] = ["byId?descending=true&limit=15"];
+    		} else if (department !== "") {
+    			console.log("byDepartment search");
+    			searchResults.db["keys"] = [department];
+    			//searchResults.db["keys"] = ["3"];
+    			//searchResults.db["keys"] = null;
+    			searchResults.db["view"] = ["byDepartment"];
     		} else {
     			//console.log("This should reset the collection.");
     			searchResults.db["keys"] = null;
@@ -183,6 +190,7 @@ var AppRouter = Backbone.Router.extend({
     		}
     		searchResults.fetch({
     		success : function(){
+    			console.log("searchResults: " + JSON.stringify(searchResults));
     			var next_start_record = searchResults.get(15);
     			console.log("next_start_record: " + JSON.stringify(next_start_record));
     			FORMY.Incidents = searchResults;
@@ -463,7 +471,7 @@ var AppRouter = Backbone.Router.extend({
         		function randomFromTo(from, to){
         			return Math.floor(Math.random() * (to - from + 1) + from);
         		};
-        		var countTestDocs = 20;
+        		var countTestDocs = 2000;
 
         		while (ct < (countTestDocs+1)) {
         			ct++;

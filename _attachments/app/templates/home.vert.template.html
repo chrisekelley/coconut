@@ -5,10 +5,19 @@
 	            <tbody>
 	             <tr>
 	                 <td style="vertical-align: top;">
-		                 <input type="text" id="search_string" name="search_string" placeholder="Search:Phone/ID" size="15"/>						
+		                 <input type="text" id="search_string" name="search_string" placeholder="Search:Phone" size="15"/>						
 		                 <button id='form-search' value="Search" class="shiny-red" style="width: 65px;">Search</button>
 		                 <button id='form-client'class="menu-blue" style="width: 55px;">Incident</button>
 		                 <button id='form-config' class="menu-blue" style="width: 40px;">Conf</button>
+						 <select id="department" data-optional="true" name="department">
+						 	<option value="">Department</option>
+						 	<option value="1">Admin</option>
+						 	<option value="6">Council</option>
+						 	<option value="3">Education</option>
+						 	<option value="2">Finance</option>
+						 	<option value="4">Health</option>
+						 	<option value="5">Works</option>
+						 </select>
 	                 	<img src="images/1321455058_reload.png" alt="Refresh" class="tabbar-image" onClick="window.location.href = '/coconut/_design/coconut/index.html'"/>
 	                 </td>
 	             </tr>
