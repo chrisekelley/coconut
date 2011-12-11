@@ -40,8 +40,8 @@ var HomeView = Backbone.View.extend({
 	nextLink: function() {
 		console.log("this.model.toJSON(): " + this.model.get("startkey"));
 		if (this.model.get("startkey") != null) {
-			//FORMY.router.navigate('home/' + this.model.get("startkey") + '/' + this.model.get("startkey_docid"), true);
-			FORMY.router.navigate('home/' + this.model.get("startkey"), true);
+			FORMY.router.navigate('home/' + this.model.get("startkey") + '/' + this.model.get("startkey_docid"), true);
+			//FORMY.router.navigate('home/' + this.model.get("startkey"), true);
 		} else {
 			console.log("nextLink");
 		}
@@ -62,7 +62,11 @@ var HomeView = Backbone.View.extend({
 		var searchTerm =  $('#search_string').val();
 		var department =  $('#department').val();
 		//FORMY.router.navigate('search/' + searchTerm, true);
-		FORMY.router.navigate('search/' + searchTerm + "/" + department, true);
+		if (searchTerm == "" && department == "") {
+			FORMY.router.navigate('home', true);
+		} else {
+			FORMY.router.navigate('search/' + searchTerm + "/" + department, true);
+		}
 	},
 	orientation: "horiz",
 	//reportEducationInstance:null,

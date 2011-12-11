@@ -53,7 +53,7 @@ var AppRouter = Backbone.Router.extend({
 
         routes: {
         	"/":                 							"home",    			// #home
-        	"home/:startkey":								"home",    			// #home
+        	"home/:startkey/:startkey_docid":				"home",    			// #home
         	"search/:query/:department":        			"search",    		// #search
         	"incident":           							"incident",    		// #incident
         	"arrestDocket/:query":  						"arrestDocket",    	// #arrestDocket
@@ -95,7 +95,8 @@ var AppRouter = Backbone.Router.extend({
 			var searchResults = new IncidentsList();
 			searchResults.db["keys"] = null;
 			//var viewQuery = "byIncidentSorted?descending=true&limit=" + limit + "&startkey=" + startkey + "&startkey_docid=" + startkey_docid;
-			var viewQuery = "byIncidentSorted?descending=true&limit=" + limit + "&startkey=" + "[" + startkey + "]";
+			var viewQuery = "byIncidentSorted?descending=true&limit=" + limit + "&startkey=" + "[" + startkey + "]" + "&startkey_docid=" + startkey_docid;
+			//var viewQuery = "byIncidentSorted?descending=true&limit=" + limit + "&startkey=" + "[" + startkey + "]";
 			if (startkey == null || startkey == "" || startkey == "home") {
 				viewQuery = "byIncidentSorted?descending=true&limit=" + limit;
 			}
@@ -190,7 +191,7 @@ var AppRouter = Backbone.Router.extend({
     		}
     		searchResults.fetch({
     		success : function(){
-    			console.log("searchResults: " + JSON.stringify(searchResults));
+    			//console.log("searchResults: " + JSON.stringify(searchResults));
     			var next_start_record = searchResults.get(15);
     			console.log("next_start_record: " + JSON.stringify(next_start_record));
     			FORMY.Incidents = searchResults;
