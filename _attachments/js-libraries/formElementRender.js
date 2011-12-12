@@ -20,6 +20,7 @@ loadWidgetTemplates();
 inputTextWidgetCompiledHtml = Handlebars.compile($("#inputTextWidget").html());
 datepickerWidgetCompiledHtml = Handlebars.compile($("#datepickerWidget").html());
 checkboxWidgetCompiledHtml = Handlebars.compile($("#checkboxWidget").html());
+checkboxWidgetAlertCompiledHtml = Handlebars.compile($("#checkboxAlertWidget").html());
 dropdownWidgetCompiledHtml = Handlebars.compile($("#dropdownWidget").html());
 dropdownWidgetFormDesignerCompiledHtml = Handlebars.compile($("#dropdownWidgetFormDesigner").html());
 dropdownWidgetCascadeCompiledHtml = Handlebars.compile($("#dropdownWidgetCascade").html());
@@ -67,6 +68,8 @@ Handlebars.registerHelper("renderWidget", function(context) {
 		template = datepickerWidgetCompiledHtml;
 	} else if (inputType == 'checkbox') {
 		template = checkboxWidgetCompiledHtml;
+	} else if (inputType == 'alertCheckbox') {
+		template = checkboxWidgetAlertCompiledHtml;
 	} else if (inputType == 'dropdown-add-one') {
 		template = dropdownWidgetCompiledHtml;
 	} else if (inputType == 'dropdown') {
@@ -150,6 +153,7 @@ Handlebars.registerHelper('dropdown', function(items) {
 Handlebars.registerHelper('dropdownWidgetValue', function(enumerations, value) {
 	var out = "";
 	out = out + "<option value=\"\">--Select--</option>";
+	//console.log("sorting");
 	enumerations.sort(sortBylabelAlpha);
 	for (fenum in enumerations) {
 		var record = enumerations[fenum];
@@ -168,18 +172,21 @@ Handlebars.registerHelper('dropdownWidgetValue', function(enumerations, value) {
 function sortBylabelAlpha(a,b) {
 	return a.label.toLowerCase() > b.label.toLowerCase();
 }
-Handlebars.registerHelper('renderPriority', function(value) {
+Handlebars.registerHelper('renderPriority', function(priority, resolved) {
 	var out = "";
-	switch (value){
+	switch (priority){
     case "1":
-    	out = "Low";
+    	out = '<img src="images/alert-low.png" title="Low Priority">';
     	break;
     case "2":
-    	out = "Med.";
+    	out = '<img src="images/alert-medium.png" title="Medium Priority">';
     	break;
     case "3":
-    	out = "High";
+    	out = '<img src="images/alert-high.png" title="High Priority">';
     	break;
+	}
+	if (resolved != null && resolved == "1") {
+		out = '<img src="images/resolved.png" title="Resolved">';
 	}
 	return out;
 });
@@ -205,6 +212,10 @@ Handlebars.registerHelper('renderDepartment', function(value) {
 		out = "Council.";
 		break;
 	}
+	return out;
+});
+Handlebars.registerHelper('renderVillage', function(value) {
+	var out = FORMY.village[value];
 	return out;
 });
 

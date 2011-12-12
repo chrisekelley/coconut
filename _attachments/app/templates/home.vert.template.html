@@ -5,20 +5,18 @@
 	            <tbody>
 	             <tr>
 	                 <td style="vertical-align: top;">
-		                 <input type="text" id="search_string" name="search_string" placeholder="Search:Phone" size="15"/>						
-		                 <button id='form-search' value="Search" class="shiny-red" style="width: 65px;">Search</button>
-		                 <button id='form-client'class="menu-blue" style="width: 55px;">Incident</button>
-		                 <button id='form-config' class="menu-blue" style="width: 40px;">Conf</button>
+		                 <input type="text" id="search_string" name="search_string" placeholder="Search:Phone" size="13"/>
 						 <select id="department" data-optional="true" name="department">
-						 	<option value="">Department</option>
+						 	<option value="">Filter by Department</option>
 						 	<option value="1">Admin</option>
 						 	<option value="6">Council</option>
 						 	<option value="3">Education</option>
 						 	<option value="2">Finance</option>
 						 	<option value="4">Health</option>
 						 	<option value="5">Works</option>
-						 </select>
-	                 	<img src="images/1321455058_reload.png" alt="Refresh" class="tabbar-image" onClick="window.location.href = '/coconut/_design/coconut/index.html'"/>
+						 </select>						
+		                 <button id='form-search' value="Search" class="shiny-red" style="width: 65px;">Search</button>
+		                 <img src="images/1321455058_reload.png" alt="Refresh" class="tabbar-image" onClick="window.location.href = '/coconut/_design/coconut/index.html'"/>
 	                 </td>
 	             </tr>
 	        	</tbody>
@@ -29,13 +27,22 @@
 	       		<table id="incidents" width="100%" class="stripeMe">
 					<thead>
 						<tr>
-							<th>Phone</th><th>Alert</th><th>Dept.</th><th style="border-right:none;">Date</th>
+							<th title="Priority"><strong>!</strong></th><th>Phone</th><th>Village</th><th>Dept.</th><th style="border-right:none;">Date</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
-					{{#if startkey_docid}}
-					<tr style="background-color: #6EA8E4;" id="noStripeMe"><td></td><td></td><td></td><td><div id="nextLink" onmouseover="style.color='red';" onmouseout="style.color='#034AF3';">&gt;&gt;</div></td></tr>
-					{{/if}}
+						<tr style="background-color: #6EA8E4;" id="noStripeMe">
+							<td colspan="2"><button id='form-client'class="menu-blue" style="width: 55px;">Incident</button>
+							<button id='form-config' class="menu-blue" style="width: 40px;">Conf</button>
+							</td>
+							<td colspan="2">
+							<strong>Priority:</strong><img src="images/alert-low.png" title="Low Priority"> Low
+							<img src="images/alert-medium.png" title="Medium Priority"> Med. 
+							<img src="images/alert-high.png" title="High Priority"> High
+							<img src="images/resolved.png" title="Resolved"> Resolved
+							</td>
+							<td>{{#if startkey_docid}}<div id="nextLink" onmouseover="style.color='red';" onmouseout="style.color='#034AF3';">&gt;&gt;</div>{{/if}}</td>
+						</tr>
 				</table>
 	       	</div>
       	</div>

@@ -1901,6 +1901,101 @@
            "inputType": "textarea"
        },
        {
+           "label": "Send an Alert",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "display",
+           "visible": "true",
+           "closeRow": "true",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "display_alert",
+           "inputType": "display-header"
+       },
+       {
+           "label": "Sub-County",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "boolean",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "alert_subcounty",
+           "inputType": "alertCheckbox"
+       },
+       {
+           "label": "Education",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "boolean",
+           "visible": "true",
+           "closeRow": "true",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "alert_education",
+           "inputType": "alertCheckbox"
+       },
+       {
+           "label": "Health",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "boolean",
+           "visible": "true",
+           "closeRow": "false",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "alert_health",
+           "inputType": "alertCheckbox"
+       },
+       {
+           "label": "Works",
+           "value": "",
+           "options": [
+               {
+                   "name": "optional",
+                   "value": "true"
+               }
+           ],
+           "datatype": "boolean",
+           "visible": "true",
+           "closeRow": "true",
+           "colspan": "1",
+           "size": "0",
+           "rows": "0",
+           "cols": "0",
+           "identifier": "alert_works",
+           "inputType": "alertCheckbox"
+       },
+       {
            "label": "Save",
            "value": "",
            "options": [

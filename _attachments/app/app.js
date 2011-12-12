@@ -30,6 +30,35 @@ FORMY.loadForm = function(name, parentId, options) {
 		}
 	}
 };
+// Preload the incident form definition to enable easier access to form elements.
+FORMY.loadForm("incident", null, {
+	success: function(form, resp){
+		var incident = FORMY.forms.get("incident");
+		var formElements = incident.get("form_elements");
+		//console.log("form_elements: " + JSON.stringify(form_elements));
+		//formElements.each(processFormElement);
+		FORMY.village = new Array();
+		for (var i = 0; i < formElements.length; i++) {    	
+		    var formElement = formElements[i];
+		    if (formElement.identifier == "village") {
+		    	var enumerations = formElement.enumerations;
+		    	for (var j = 0; j < enumerations.length; j++) {
+		    		var enumeration = enumerations[j];
+		    		var value = enumeration.defaultValue;
+		    		var label = enumeration.label;
+		    		FORMY.village[value] = label;
+		    		//console.log("FORMY.village[value]:" + FORMY.village[value]);
+		    	}
+		    	//console.log("formElement: " + JSON.stringify(formElements[i]));
+		    }
+		}
+	},
+	error: function() { 
+		console.log("Error loading incident: " + arguments); 
+	}
+});
+
+
 
 // Wrap an optional error callback with a fallback error event.
 // kudos: http://stackoverflow.com/questions/7090202/error-callback-always-fired-even-when-it-is-successful/7101589#7101589
@@ -472,12 +501,12 @@ var AppRouter = Backbone.Router.extend({
         		function randomFromTo(from, to){
         			return Math.floor(Math.random() * (to - from + 1) + from);
         		};
-        		var countTestDocs = 2000;
+        		var countTestDocs = 30;
 
         		while (ct < (countTestDocs+1)) {
         			ct++;
         			var subcounty=randomFromTo(1,8).toString();
-        			var village=randomFromTo(1,8).toString();
+        			var village=randomFromTo(1,180).toString();
         			var priority=randomFromTo(1,3).toString();
         			var department=randomFromTo(1,6).toString();
         			var resolved=randomFromTo(0,1).toString();

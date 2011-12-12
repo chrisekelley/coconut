@@ -1063,8 +1063,8 @@ button.menu-skinny-blue {
 	background: #BFA040;
 	color: white;
 	font-weight: bold;
-	padding: 2px 11px;
-	text-align: left;
+	padding: 2px 6px;
+	text-align: center;
 	border-right: 1px solid white;
 	line-height: 1.2;
 }
@@ -1075,7 +1075,7 @@ button.menu-skinny-blue {
 	color: #669;
 	font-size: 16px;
 	
-	padding: 6px 11px;
+	padding: 6px 2px;
 	/*border-bottom: 1px solid #2175BC;*/
 	border-bottom: 1px solid #BBB195;
 	vertical-align: top;
@@ -1211,8 +1211,7 @@ font-weight: bold;
 
 .tabbar-image {
 	vertical-align:bottom;
-	padding-left: 10px;
-	
+	padding-left: 5px;
 }
 
 #nextLink {
@@ -1222,4 +1221,8 @@ font-weight: bold;
 .noStripeMeHeader
 {
 	background: #6EA8E4; 
+}
+
+#department {
+	font-size:10px;
 }

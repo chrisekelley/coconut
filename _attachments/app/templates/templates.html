@@ -11,7 +11,7 @@
     <td><a href="#edit/{{_id}}">{{formId}}</a></td><td>{{#dateFormat lastModified}}{{/dateFormat}}</td>
 </script>
 <script id="search-template" type="text/x-handlebars-template">
-    <td><a href="#incidentRecords/{{_id}}" title="ID: {{assignedId}}">{{phone}}</a></td><td>{{#renderPriority priority}}{{/renderPriority}}</td><td>{{#renderDepartment department}}{{/renderDepartment}}</td><td>{{#dateFormatDate lastModified}}{{/dateFormatDate}}</td>
+    <td>{{#renderPriority priority resolved}}{{/renderPriority}}</td><td><a href="#incidentRecords/{{_id}}" title="ID: {{assignedId}}">{{phone}}</a></td><td>{{#renderVillage village}}{{/renderVillage}}</td><td>{{#renderDepartment department}}{{/renderDepartment}}</td><td>{{#dateFormatDate lastModified}}{{/dateFormatDate}}</td>
 </script>
 <script id="recordValue" type="text/x-handlebars-template">
     {{value}}
@@ -27,6 +27,8 @@
 <script id="recordCheckboxValue" type="text/x-handlebars-template">
 	{{#checkboxValue value}}
 	{{/checkboxValue}}
+</script>
+<script id="recordCheckboxAlert" type="text/x-handlebars-template">
 </script>
 <script id="recordYesnoValue" type="text/x-handlebars-template">
 	{{#yesNoValue value}}
@@ -49,6 +51,9 @@
   	{{else}}
   	  	<input id='{{identifier}}' {{#options}}data-{{name}}='{{value}}' {{/options}} name='{{identifier}}' type='checkbox' value='1'></input>
 		{{/if}}
+</script>
+<script id="checkboxAlertWidget" type="text/x-handlebars-template">
+	<input id='{{identifier}}' {{#options}}data-{{name}}='{{value}}' {{/options}} name='{{identifier}}' type='checkbox' value='1'></input>
 </script>
 <script id="textareaWidget" type="text/x-handlebars-template">
   	<br/><textarea id='{{identifier}}' {{#options}}data-{{name}}='{{value}}' {{/options}} name='{{identifier}}' rows='{{rows}}' cols='{{cols}}'>{{value}}</textarea>

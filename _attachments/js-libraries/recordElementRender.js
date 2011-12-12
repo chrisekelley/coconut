@@ -21,6 +21,7 @@ recordValueCompiledHtml = Handlebars.compile($("#recordValue").html());
 recordDropdownValueCompiledHtml = Handlebars.compile($("#recordDropdownValue").html());
 doNotRenderCompiledHtml = Handlebars.compile($("#doNotRender").html());
 recordCheckboxValueCompiledHtml = Handlebars.compile($("#recordCheckboxValue").html());
+recordCheckboxAlertCompiledHtml = Handlebars.compile($("#recordCheckboxAlert").html());
 recordDropdownCSVValueCompiledHtml = Handlebars.compile($("#recordDropdownCSVValue").html());
 recordYesnoValueCompiledHtml = Handlebars.compile($("#recordYesnoValue").html());
 recordGenderValueCompiledHtml = Handlebars.compile($("#recordGenderValue").html());
@@ -63,6 +64,8 @@ Handlebars.registerHelper("renderValue", function(context) {
 		template = recordValueCompiledHtml;
 	} else if (inputType == 'checkbox') {
 		template = recordCheckboxValueCompiledHtml;
+	} else if (inputType == 'alertCheckbox') {
+		template = recordCheckboxAlertCompiledHtml;
 	} else if (inputType == 'dropdown-add-one') {
 		template = recordDropdownCSVValueCompiledHtml;
 	} else if (inputType == 'dropdown') {
