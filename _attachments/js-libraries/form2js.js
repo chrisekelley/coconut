@@ -24,8 +24,11 @@
  * Time: 19:02:33
  */
 
-(function()
+
+var form2js = (function()
 {
+	"use strict";
+
 	/**
 	 * Returns form values represented as Javascript object
 	 * "name" attribute defines structure of resulting object
@@ -34,11 +37,13 @@
 	 * @param delimiter {String} structure parts delimiter defaults to '.'
 	 * @param skipEmpty {Boolean} should skip empty text values, defaults to true
 	 * @param nodeCallback {Function} custom function to get node value
+	 * @param useIdIfEmptyName {Boolean} if true value of id attribute of field will be used if name of field is empty
 	 */
-	window.form2object = function(rootNode, delimiter, skipEmpty, nodeCallback)
+	function form2js(rootNode, delimiter, skipEmpty, nodeCallback, useIdIfEmptyName)
 	{
 		if (typeof skipEmpty == 'undefined' || skipEmpty == null) skipEmpty = true;
 		if (typeof delimiter == 'undefined' || delimiter == null) delimiter = '.';
+		if (arguments.length < 5) useIdIfEmptyName = false;
 
 		rootNode = typeof rootNode == 'string' ? document.getElementById(rootNode) : rootNode;
 
@@ -47,20 +52,20 @@
 			i = 0;
 
 		/* If rootNode is array - combine values */
-		if (rootNode.constructor == Array || rootNode.constructor == NodeList)
+		if (rootNode.constructor == Array || (typeof NodeList != "undefined" && rootNode.constructor == NodeList))
 		{
 			while(currNode = rootNode[i++])
 			{
-				formValues = formValues.concat(getFormValues(currNode, nodeCallback));
+				formValues = formValues.concat(getFormValues(currNode, nodeCallback, useIdIfEmptyName));
 			}
 		}
 		else
 		{
-			formValues = getFormValues(rootNode, nodeCallback);
+			formValues = getFormValues(rootNode, nodeCallback, useIdIfEmptyName);
 		}
 
 		return processNameValues(formValues, skipEmpty, delimiter);
-	};
+	}
 
 	/**
 	 * Processes collection of { name: 'name', value: 'value' } objects.
@@ -87,7 +92,7 @@
 		{
 			value = nameValues[i].value;
 
-			if (skipEmpty && value === '') continue;
+			if (skipEmpty && (value === '' || value === null)) continue;
 
 			name = nameValues[i].name;
 			_nameParts = name.split(delimiter);
@@ -115,7 +120,7 @@
 							namePart[k] = '[' + namePart[k] + ']';
 						}
 
-						arrIdx = namePart[k].match(/([a-z_]+)?\[([a-z_][a-z0-9]+?)\]/i);
+						arrIdx = namePart[k].match(/([a-z_]+)?\[([a-z_][a-z0-9_]+?)\]/i);
 						if (arrIdx)
 						{
 							for(l = 1; l < arrIdx.length; l++)
@@ -208,44 +213,69 @@
 		return result;
 	}
 
-	function getFormValues(rootNode, nodeCallback)
-	{
-		var result = [];
-		var currentNode = rootNode.firstChild;
+    function getFormValues(rootNode, nodeCallback, useIdIfEmptyName)
+    {
+        var result = extractNodeValues(rootNode, nodeCallback, useIdIfEmptyName);
+        return result.length > 0 ? result : getSubFormValues(rootNode, nodeCallback, useIdIfEmptyName);
+    }
 
+    function getSubFormValues(rootNode, nodeCallback, useIdIfEmptyName)
+	{
+		var result = [],
+			currentNode = rootNode.firstChild;
+		
 		while (currentNode)
 		{
-			var callbackResult = nodeCallback && nodeCallback(currentNode);
-
-			if (callbackResult && callbackResult.name)
-			{
-				result.push(callbackResult);
-			}
-			else if (currentNode.nodeName.match(/INPUT|SELECT|TEXTAREA/i))
-			{
-				var fieldValue = getFieldValue(currentNode);
-				if (fieldValue !== null) result.push({ name: currentNode.name, value: fieldValue});
-			}
-			else
-			{
-				var subresult = getFormValues(currentNode, nodeCallback);
-				result = result.concat(subresult);
-			}
-
+			result = result.concat(extractNodeValues(currentNode, nodeCallback, useIdIfEmptyName));
 			currentNode = currentNode.nextSibling;
 		}
 
 		return result;
 	}
 
+    function extractNodeValues(node, nodeCallback, useIdIfEmptyName) {
+        var callbackResult, fieldValue, result, fieldName = getFieldName(node, useIdIfEmptyName);
+
+        callbackResult = nodeCallback && nodeCallback(node);
+
+        if (callbackResult && callbackResult.name) {
+            result = [callbackResult];
+        }
+        else if (fieldName != '' && node.nodeName.match(/INPUT|TEXTAREA/i)) {
+            fieldValue = getFieldValue(node);
+			result = [ { name: fieldName, value: fieldValue} ];
+        }
+        else if (fieldName != '' && node.nodeName.match(/SELECT/i)) {
+	        fieldValue = getFieldValue(node);
+	        result = [ { name: fieldName.replace(/\[\]$/, ''), value: fieldValue } ];
+        }
+        else {
+            result = getSubFormValues(node, nodeCallback, useIdIfEmptyName);
+        }
+
+        return result;
+    }
+
+	function getFieldName(node, useIdIfEmptyName)
+	{
+		if (node.name && node.name != '') return node.name;
+		else if (useIdIfEmptyName && node.id && node.id != '') return node.id;
+		else return '';
+	}
+
+
 	function getFieldValue(fieldNode)
 	{
+		if (fieldNode.disabled) return null;
+		
 		switch (fieldNode.nodeName) {
 			case 'INPUT':
 			case 'TEXTAREA':
 				switch (fieldNode.type.toLowerCase()) {
 					case 'radio':
 					case 'checkbox':
+                        if (fieldNode.checked && fieldNode.value === "true") return true;
+                        if (!fieldNode.checked && fieldNode.value === "true") return false;
 						if (fieldNode.checked) return fieldNode.value;
 						break;
 
@@ -275,11 +305,14 @@
 
 	function getSelectedOptionValue(selectNode)
 	{
-		var multiple = selectNode.multiple;
+		var multiple = selectNode.multiple,
+			result = [],
+			options,
+			i, l;
+
 		if (!multiple) return selectNode.value;
 
-		var result = [];
-		for (var options = selectNode.getElementsByTagName("option"), i = 0, l = options.length; i < l; i++)
+		for (options = selectNode.getElementsByTagName("option"), i = 0, l = options.length; i < l; i++)
 		{
 			if (options[i].selected) result.push(options[i].value);
 		}
@@ -287,11 +320,6 @@
 		return result;
 	}
 
-	/**
-	 * @deprecated Use form2object() instead
-	 * @param rootNode
-	 * @param delimiter
-	 */
-	window.form2json = window.form2object;
+	return form2js;
 
 })();
