@@ -38,6 +38,7 @@ class DesignView extends Backbone.View
     </small>
     <button>Advanced Mode</button>
     <hr/>
+    <button type='button'>Save</button>
     <label for='element_selector'>Add questions</label>
     <select id='element_selector'>
       {{#each types}}
@@ -47,6 +48,8 @@ class DesignView extends Backbone.View
     <button>Add</button>
 
     <div id='questions'>
+      <label for='rootQuestionName'>Name</label>
+      <input id='rootQuestionName' name='rootQuestionName' type='text'/>
     </div>
     <button>Preview</button>
     <hr/>
@@ -67,6 +70,12 @@ class DesignView extends Backbone.View
     "click button:contains(+)" : "repeat"
     "click button:contains(Advanced Mode)" : "advancedMode"
     "click button:contains(Basic Mode)" : "basicMode"
+    "click button:contains(Save)" : "save"
+
+  save: ->
+    question = new Question()
+    question.loadFromDesigner $("#questions")
+    question.save()
 
   add: (event) ->
     type = $(event.target).prev().val()
@@ -158,14 +167,11 @@ class DesignView extends Backbone.View
   questions: ->
     return $('#questions').children()
 
-  toJson: ->
-    return Question.toJSON @questions()
-
-  toObject: ->
-    return Question.toObject @questions()
-
   toHTMLForm: ->
-    return Question.toHTMLForm(@toObject())
+    question = new Question()
+    question.loadFromDesigner($("#questions"))
+    questionView = new QuestionView(model: question)
+    questionView.toHTMLForm()
 
   dump: ->
     $('#dump').html(@toJson())
@@ -206,57 +212,3 @@ class DesignView extends Backbone.View
     $('body').addClass("all-advanced-hidden")
     $('button:contains(Basic Mode)').html "Advanced Mode"
 
-class Question
-
-Question.toJSON = (questions) ->
-  return JSON.stringify(Question.toObject(questions))
-
-Question.toObject = (questions) ->
-  _(questions).chain()
-    .map (question) ->
-      question = $(question)
-      id = question.attr("id")
-      return unless id
-      result = { id : id }
-      for property in ["label","type","repeatable"]
-        result[property] = question.find("##{property}-#{id}").val()
-      if question.find(".question-definition").length > 0
-        result.questions = Question.toObject(question.find(".question-definition"))
-      return result
-    .compact().value()
-
-Question.toHTMLForm = (questions, groupId) ->
-  _.map(questions, (question) ->
-    if question.repeatable == "true" then repeatable = "<button>+</button>" else repeatable = ""
-    if question.type? and question.label? and question.label != ""
-      name = question.label.replace(/[^a-zA-Z0-9 -]/g,"").replace(/[ -]/g,"")
-      if question.repeatable == "true"
-        name = name + "[0]"
-        question.id = question.id + "-0"
-      if groupId?
-        name = "group.#{groupId}.#{name}"
-      result = "
-        <div class='question'>
-        "
-      question.value = "" unless question.value?
-      unless question.type.match(/hidden/)
-        result += "
-          <label for='#{question.id}'>#{question.label}</label>
-        "
-      if question.type.match(/textarea/)
-        result += "
-          <textarea name='#{name}' id='#{question.id}'>#{question.value}</textarea>
-        "
-      else
-        result += "
-          <input name='#{name}' id='#{question.id}' type='#{question.type}' value='#{question.value}'></input>
-        "
-      result += "
-        </div>
-      "
-      return result + repeatable
-    else
-      newGroupId = question.id
-      newGroupId = newGroupId + "[0]" if question.repeatable
-      return "<div data-group-id='#{question.id}' class='question group'>" + Question.toHTMLForm(question.questions, newGroupId) + "</div>" + repeatable
-  ).join("")

@@ -1,48 +1,18 @@
 <html>
   <head>
   	<title>Coconut</title>
-    <style>
-
-      body {
-        color: black;
-        font-family: Verdana,Arial,sans-serif;
-        font-size: 1.1em;
-      }
-
-      a {
-        color: black;
-      }
-
-      div#menu {
-        margin-bottom: 20px;
-      }
-
-      label{
-        display: block;
-      }
-
-
-      table.results{
-        border-color: #600;
-        border-width: 0 0 1px 1px;
-        border-style: solid;
-      }
-
-      table.results td{
-        border-color: #600;
-        border-width: 1px 1px 0 0;
-        border-style: solid;
-        margin: 0;
-        padding: 4px;
-        background-color: #CCC;
-      }
-      
-    </style>
+    <link href="css/style.css" type="text/css" rel="stylesheet" />
   </head>
   <body>
     <div id="menu">
-      <a href='#select'>Select</a>
+      <h2>Zanzibar R C D</h2>
+      <a href='#facility'>Facility Action <small>(2)</small></blink></a>
+      <a href='#household'>Household Action</a>
+      <a href='#reports'>District Reports</a>
+      <small>
       <a href='#design'>Design</a>
+      <a href='#logout'>Logout</a>
+      </small>
     </div>
     <div id="content">
     </div>
@@ -60,7 +30,7 @@
 	<script type="text/javascript" src="js-libraries/handlebars.js"></script>
 	<!-- These are used to get form contents into a well structured javascript object -->
 	<script type="text/javascript" src="js-libraries/form2js.js"></script>
-  <!-- This can be used to populate a form from a json object -- >
+  <!-- This can be used to populate a form from a json object -->
 	<script type="text/javascript" src="js-libraries/js2form.js"></script>
 	<script type="text/javascript" src="js-libraries/jquery.toObject.js"></script>
 	<!-- String munging library -->
@@ -75,14 +45,11 @@
 	
 	<!-- The app itself - note that if new models/views are added they need to be added here-->
 	<script type="text/javascript" src="app/config.js"></script>
-	<script type="text/javascript" src="app/models/Form.js"></script>
-	<script type="text/javascript" src="app/models/FormCollection.js"></script>
-	<script type="text/javascript" src="app/views/FormCollectView.js"></script>
-	<script type="text/javascript" src="app/views/FormSelectView.js"></script>
-	<script type="text/javascript" src="app/models/Result.js"></script>
-	<script type="text/javascript" src="app/models/ResultCollection.js"></script>
-	<script type="text/javascript" src="app/views/ResultView.js"></script>
+	<script type="text/javascript" src="app/models/Question.js"></script>
+	<script type="text/javascript" src="app/models/QuestionCollection.js"></script>
 	<script type="text/javascript" src="app/views/DesignView.js"></script>
+	<script type="text/javascript" src="app/views/QuestionView.js"></script>
+	<script type="text/javascript" src="app/views/TodoView.js"></script>
 	<script type="text/javascript" src="app/app.js"></script>
 </html>
 

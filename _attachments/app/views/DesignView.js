@@ -1,20 +1,21 @@
-var DesignView, Question;
-var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-  function ctor() { this.constructor = child; }
-  ctor.prototype = parent.prototype;
-  child.prototype = new ctor;
-  child.__super__ = parent.prototype;
-  return child;
-};
-DesignView = (function() {
-  __extends(DesignView, Backbone.View);
+var DesignView,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
+  __hasProp = Object.prototype.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+DesignView = (function(_super) {
+
+  __extends(DesignView, _super);
+
   function DesignView() {
     this.render = __bind(this.render, this);
     DesignView.__super__.constructor.apply(this, arguments);
   }
+
   DesignView.prototype.initialize = function() {};
+
   DesignView.prototype.el = $('#content');
+
   DesignView.prototype.render = function() {
     var templateData;
     templateData = {};
@@ -22,8 +23,11 @@ DesignView = (function() {
     $("#content").html(this.template(templateData));
     return this.basicMode();
   };
-  DesignView.prototype.template = Handlebars.compile("    <style>      .question-definition{        border-style: dotted;        border-width: 1px;        margin: 10px;        margin-top: 32px;      }      .question-definition-controls{        float: right;      }      .group{        border-style: dotted;        border-width: 1px;      }      body.all-advanced-hidden .advanced{        display: none;      }    </style>    <h3>      Design    </h3>    <small>    <b>Instructions</b>: <p>Use the drop down below to select the type of questions that you will be asking. Click <button>Preview</button> to see what the questions will look like.</p>    <div class='advanced'><b>Advanced: </b><p>Use <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> to make the question repeatable. If you want to group questions together to form a repeatable block then click <img title='group' src='images/group.png' style='background-color:#DDD'/> between the questions and use the <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> as before. Ungroup by using <img title='ungroup' src='images/ungroup.png' style='background-color:#DDD'/>.</p>    </div>    </small>    <button>Advanced Mode</button>    <hr/>    <label for='element_selector'>Add questions</label>    <select id='element_selector'>      {{#each types}}        <option>{{this}}</option>      {{/each}}    </select>    <button>Add</button>    <div id='questions'>    </div>    <button>Preview</button>    <hr/>    <form id='render'></form>    <div id='form_output'></form>  ");
+
+  DesignView.prototype.template = Handlebars.compile("    <style>      .question-definition{        border-style: dotted;        border-width: 1px;        margin: 10px;        margin-top: 32px;      }      .question-definition-controls{        float: right;      }      .group{        border-style: dotted;        border-width: 1px;      }      body.all-advanced-hidden .advanced{        display: none;      }    </style>    <h3>      Design    </h3>    <small>    <b>Instructions</b>: <p>Use the drop down below to select the type of questions that you will be asking. Click <button>Preview</button> to see what the questions will look like.</p>    <div class='advanced'><b>Advanced: </b><p>Use <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> to make the question repeatable. If you want to group questions together to form a repeatable block then click <img title='group' src='images/group.png' style='background-color:#DDD'/> between the questions and use the <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> as before. Ungroup by using <img title='ungroup' src='images/ungroup.png' style='background-color:#DDD'/>.</p>    </div>    </small>    <button>Advanced Mode</button>    <hr/>    <button type='button'>Save</button>    <label for='element_selector'>Add questions</label>    <select id='element_selector'>      {{#each types}}        <option>{{this}}</option>      {{/each}}    </select>    <button>Add</button>    <div id='questions'>      <label for='rootQuestionName'>Name</label>      <input id='rootQuestionName' name='rootQuestionName' type='text'/>    </div>    <button>Preview</button>    <hr/>    <form id='render'></form>    <div id='form_output'></form>  ");
+
   DesignView.prototype.questionTypes = ["text", "number", "date", "datetime", "textarea", "hidden"];
+
   DesignView.prototype.events = {
     "click button:contains(Add)": "add",
     "click button[title=group]": "groupClick",
@@ -34,8 +38,17 @@ DesignView = (function() {
     "click button:contains(Show Form Output)": "formDump",
     "click button:contains(+)": "repeat",
     "click button:contains(Advanced Mode)": "advancedMode",
-    "click button:contains(Basic Mode)": "basicMode"
+    "click button:contains(Basic Mode)": "basicMode",
+    "click button:contains(Save)": "save"
   };
+
+  DesignView.prototype.save = function() {
+    var question;
+    question = new Question();
+    question.loadFromDesigner($("#questions"));
+    return question.save();
+  };
+
   DesignView.prototype.add = function(event) {
     var id, type;
     type = $(event.target).prev().val();
@@ -45,12 +58,14 @@ DesignView = (function() {
     }
     return $("#questions").append("      <div data-repeat='false' class='question-definition' id='" + id + "'>        <div class='question-definition-controls'>          <button class='advanced' title='repeat'><img src='images/repeat.png'></button>          <input type='hidden' id=repeatable-" + id + " value='false'></input>          <button title='delete'><img src='images/delete.png'></button>        </div>        <div>Type: " + type + "</div>        <label for='label-" + id + "'>Label</label>        <input type='text' name='label-" + id + "' id='label-" + id + "'></input>        <input type='hidden' name='type-" + id + "' id='type-" + id + "' value='" + type + "'></input>        <input type='hidden' name='required-" + id + "' value='false'></input>      </div>    ");
   };
+
   DesignView.prototype.groupClick = function(event) {
     var groupDiv;
     groupDiv = $(event.target).closest("button");
     this.group(groupDiv.prev(), groupDiv.next());
     return groupDiv.remove();
   };
+
   DesignView.prototype.group = function(group1, group2) {
     var group, id, _i, _len, _ref;
     _ref = [group1, group2];
@@ -63,11 +78,13 @@ DesignView = (function() {
     id = Math.ceil(Math.random() * 1000);
     return group1.add(group2).wrapAll("      <div data-repeat='false' class='question-definition' id='" + id + "'>        <div class='question-definition-controls'>          <button class='advanced' title='repeat'><img src='images/repeat.png'></button>          <input type='hidden' id=repeatable-" + id + " value='false'></input>          <button title='delete'><img src='images/delete.png'></button>          <button class='advanced' title='ungroup'><img src='images/ungroup.png'></button>        </div>      </div>    ");
   };
+
   DesignView.prototype.ungroupClick = function(event) {
     var controls;
     controls = $(event.target).closest("button").parent();
     return this.ungroup(controls);
   };
+
   DesignView.prototype.ungroup = function(itemInGroup) {
     var controls, firstQuestionDefinition;
     controls = itemInGroup.parent().children(".question-definition-controls");
@@ -77,9 +94,11 @@ DesignView = (function() {
     firstQuestionDefinition.after("      <button class='advanced' title='group'><img src='images/group.png'/></button>    ");
     return itemInGroup;
   };
+
   DesignView.prototype.deleteClick = function(event) {
     return this.deleteQuestion($(event.target).closest(".question-definition"));
   };
+
   DesignView.prototype.deleteQuestion = function(question) {
     var surroundingQuestion;
     surroundingQuestion = question.parent(".question-definition");
@@ -93,6 +112,7 @@ DesignView = (function() {
     }
     return question.remove();
   };
+
   DesignView.prototype.toggleRepeatable = function(event) {
     var button, hiddenRepeatableInputElement;
     button = $(event.target).closest("button");
@@ -105,36 +125,40 @@ DesignView = (function() {
       return hiddenRepeatableInputElement.val("false");
     }
   };
+
   DesignView.prototype.questions = function() {
     return $('#questions').children();
   };
-  DesignView.prototype.toJson = function() {
-    return Question.toJSON(this.questions());
-  };
-  DesignView.prototype.toObject = function() {
-    return Question.toObject(this.questions());
-  };
+
   DesignView.prototype.toHTMLForm = function() {
-    return Question.toHTMLForm(this.toObject());
+    var question, questionView;
+    question = new Question();
+    question.loadFromDesigner($("#questions"));
+    questionView = new QuestionView({
+      model: question
+    });
+    return questionView.toHTMLForm();
   };
+
   DesignView.prototype.dump = function() {
     return $('#dump').html(this.toJson());
   };
+
   DesignView.prototype.renderForm = function() {
     $('#render').html(this.toHTMLForm());
     return $('#form_output').html("      <hr/>      <button type='button'>Show Form Output</button><br/>      <textarea id='dump' style='width:400px;height:100px'></textarea>    ");
   };
+
   DesignView.prototype.formDump = function() {
     return $('#dump').html(JSON.stringify($('form').toObject()));
   };
+
   DesignView.prototype.repeat = function(event) {
     var button, inputElement, name, newIndex, newQuestion, questionID, re, _i, _len, _ref;
     button = $(event.target);
     newQuestion = button.prev(".question").clone();
     questionID = newQuestion.attr("data-group-id");
-    if (questionID == null) {
-      questionID = "";
-    }
+    if (questionID == null) questionID = "";
     _ref = newQuestion.find("input");
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       inputElement = _ref[_i];
@@ -147,82 +171,17 @@ DesignView = (function() {
     button.after(newQuestion.add(button.clone()));
     return button.remove();
   };
+
   DesignView.prototype.advancedMode = function() {
     $('body').removeClass("all-advanced-hidden");
     return $('button:contains(Advanced Mode)').html("Basic Mode");
   };
+
   DesignView.prototype.basicMode = function() {
     $('body').addClass("all-advanced-hidden");
     return $('button:contains(Basic Mode)').html("Advanced Mode");
   };
+
   return DesignView;
-})();
-Question = (function() {
-  function Question() {}
-  return Question;
-})();
-Question.toJSON = function(questions) {
-  return JSON.stringify(Question.toObject(questions));
-};
-Question.toObject = function(questions) {
-  return _(questions).chain().map(function(question) {
-    var id, property, result, _i, _len, _ref;
-    question = $(question);
-    id = question.attr("id");
-    if (!id) {
-      return;
-    }
-    result = {
-      id: id
-    };
-    _ref = ["label", "type", "repeatable"];
-    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-      property = _ref[_i];
-      result[property] = question.find("#" + property + "-" + id).val();
-    }
-    if (question.find(".question-definition").length > 0) {
-      result.questions = Question.toObject(question.find(".question-definition"));
-    }
-    return result;
-  }).compact().value();
-};
-Question.toHTMLForm = function(questions, groupId) {
-  return _.map(questions, function(question) {
-    var name, newGroupId, repeatable, result;
-    if (question.repeatable === "true") {
-      repeatable = "<button>+</button>";
-    } else {
-      repeatable = "";
-    }
-    if ((question.type != null) && (question.label != null) && question.label !== "") {
-      name = question.label.replace(/[^a-zA-Z0-9 -]/g, "").replace(/[ -]/g, "");
-      if (question.repeatable === "true") {
-        name = name + "[0]";
-        question.id = question.id + "-0";
-      }
-      if (groupId != null) {
-        name = "group." + groupId + "." + name;
-      }
-      result = "        <div class='question'>        ";
-      if (question.value == null) {
-        question.value = "";
-      }
-      if (!question.type.match(/hidden/)) {
-        result += "          <label for='" + question.id + "'>" + question.label + "</label>        ";
-      }
-      if (question.type.match(/textarea/)) {
-        result += "          <textarea name='" + name + "' id='" + question.id + "'>" + question.value + "</textarea>        ";
-      } else {
-        result += "          <input name='" + name + "' id='" + question.id + "' type='" + question.type + "' value='" + question.value + "'></input>        ";
-      }
-      result += "        </div>      ";
-      return result + repeatable;
-    } else {
-      newGroupId = question.id;
-      if (question.repeatable) {
-        newGroupId = newGroupId + "[0]";
-      }
-      return ("<div data-group-id='" + question.id + "' class='question group'>") + Question.toHTMLForm(question.questions, newGroupId) + "</div>" + repeatable;
-    }
-  }).join("");
-};
+
+})(Backbone.View);

@@ -1,89 +1,145 @@
-Coconut = {}
-Coconut.forms = new FormCollection();
-Coconut.results = new ResultCollection();
+var Coconut, Router,
+  __hasProp = Object.prototype.hasOwnProperty,
+  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
-var AppRouter = Backbone.Router.extend({
-  routes: {
+Router = (function(_super) {
+
+  __extends(Router, _super);
+
+  function Router() {
+    Router.__super__.constructor.apply(this, arguments);
+  }
+
+  Router.prototype.routes = {
     "design": "design",
     "select": "select",
-    "collect/:form_id": "collect",
+    "facility": "facility",
+    "househould": "household",
+    "collect/:question_id/:case_id": "collect",
     "analyze/:form_id": "analyze",
     "": "blank"
-  },
-  blank: function() {
-    $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>")
-  },
-  design: function() {
+  };
+
+  Router.prototype.blank = function() {
+    return $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>");
+  };
+
+  Router.prototype.facility = function() {
+    Coconut.todoView.templateData = {
+      todoType: "Facility",
+      todoItems: [
+        {
+          form: "facility",
+          caseID: "XASDAX",
+          shahia: "Washoe",
+          firstName: "Abdul"
+        }, {
+          form: "facility",
+          caseID: "XSSDAX",
+          shahia: "Reno",
+          firstName: "Mohammed"
+        }
+      ],
+      completedItems: [
+        {
+          form: "facility",
+          caseID: "ASSXXZ",
+          shahia: "Stone Town",
+          firstName: "Sarah",
+          date: "11-Nov-2011"
+        }, {
+          form: "facility",
+          caseID: "XASDAX",
+          shahia: "Washoe",
+          firstName: "Eva",
+          date: "11-Dec-2011"
+        }
+      ]
+    };
+    return Coconut.todoView.render();
+  };
+
+  Router.prototype.household = function() {
+    Coconut.todoView.templateData = {
+      todoType: "Household",
+      todoItems: [
+        {
+          form: "facility",
+          caseID: "XASDAX",
+          shahia: "Washoe",
+          firstName: "Abdul"
+        }, {
+          form: "facility",
+          caseID: "XSSDAX",
+          shahia: "Reno",
+          firstName: "Mohammed"
+        }
+      ],
+      completedItems: [
+        {
+          form: "facility",
+          caseID: "ASSXXZ",
+          shahia: "Stone Town",
+          firstName: "Sarah",
+          date: "11-Nov-2011"
+        }, {
+          form: "facility",
+          caseID: "XASDAX",
+          shahia: "Washoe",
+          firstName: "Eva",
+          date: "11-Dec-2011"
+        }
+      ]
+    };
+    return Coconut.todoView.render();
+  };
+
+  Router.prototype.design = function() {
     $("#content").empty();
-    design_view = new DesignView()
-    design_view.render();
-  },
-  select: function() {
+    if (Coconut.designView == null) Coconut.designView = new DesignView();
+    return Coconut.designView.render();
+  };
+
+  Router.prototype.select = function() {
     $("#content").empty();
-    Coconut.forms.fetch({
-      success: function(){
-        form_select_view = new FormSelectView()
-        form_select_view.render();
+    return Coconut.questions.fetch({
+      success: function() {
+        if (Coconut.formSelectView == null) {
+          Coconut.formSelectView = new FormSelectView();
+        }
+        return Coconut.formSelectView.render();
       }
     });
-  },
-  collect: function(id) {
-    $("#content").empty()
-    Coconut.forms.fetch({
-      success: function(){
-        var form = Coconut.forms.get(id)
-        if(typeof form_collect_view == "undefined"){
-          form_collect_view = new FormCollectView(form)
-        }
-        else{
-          form_collect_view.model = form;
-        }
-        form_collect_view.render();
+  };
+
+  Router.prototype.collect = function(question_id, case_id) {
+    var question;
+    $("#content").empty();
+    question = new Question({
+      id: question_id,
+      case_id: case_id
+    });
+    return question.fetch({
+      success: function() {
+        Coconut.questionView.model = question;
+        return Coconut.questionView.render();
       }
     });
-  },
-  analyze: function(form_id) {
-    $("#content").empty()
-    Coconut.results.fetch({
-      success: function(){
-        // Match only results with form_id
-        var results = Coconut.results.chain()
-          .map(function(result){
-            if(result.get("form_id") == form_id){
-              return result
-            }
-          })
-          .compact().value();
-        if(typeof result_view == "undefined"){
-          result_view = new ResultView(form_id,results)
-        }
-        else{
-          result_view.form_id = form_id
-          result_view.results = results
-        }
-        result_view.render();
-      }
-    });
-  },
-  oldDesign: function() {
-    $("#content").empty()
-    if (!$("#designer").length) {
-      var viewDiv = document.createElement("div");
-      viewDiv.setAttribute("id", "designer");
-      $("#content").append(viewDiv);
-      $("#content").width("1000px");
-    }
-    formdesigner.launch({
-      rootElement: "#designer",
-      staticPrefix: "app/FormDesignerAlpha/",
-      langs: ""
-    });
-  }
-});
+  };
 
+  Router.prototype.startApp = function() {
+    Coconut.questions = new QuestionCollection();
+    Coconut.questionView = new QuestionView();
+    Coconut.todoView = new TodoView();
+    return Backbone.history.start();
+  };
 
-// Initiate the router
-Coconut.router = new AppRouter();
+  return Router;
 
-// Start Backbone history a necessary step for bookmarkable URL's
-Backbone.history.start();
+})(Backbone.Router);
+
+Coconut = {};
+
+Coconut.router = new Router();
+
+Coconut.router.startApp();

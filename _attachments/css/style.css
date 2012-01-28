@@ -1,0 +1,40 @@
+body {
+  background-color: lightgray;
+  color: black;
+  font-family: Verdana,Arial,sans-serif;
+  font-size: 1.1em;
+}
+
+div#menu {
+  margin-bottom: 20px;
+}
+
+label{
+  display: block;
+}
+
+table.results{
+  border-color: #600;
+  border-width: 0 0 1px 1px;
+  border-style: solid;
+}
+
+table.results td{
+  border-color: #600;
+  border-width: 1px 1px 0 0;
+  border-style: solid;
+  margin: 0;
+  padding: 4px;
+  background-color: #CCC;
+}
+
+a{
+  color:black;
+  border-style: solid;
+  background-color: gray;
+  font-size: 150%;
+}
+
+li{
+  margin-bottom: 15px;
+}
