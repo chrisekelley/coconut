@@ -1,9 +1,28 @@
 class QuestionView extends Backbone.View
-  initialize: ->
-
   el: $('#content')
 
-  render: => @el.html @toHTMLForm(@model)
+  render: =>
+    @el.html "
+      <form>
+        #{@toHTMLForm(@model)}
+        <input type='submit' value='complete'>
+      </form>
+    "
+    if @result?
+      js2form($('form'),@result.toJSON())
+    else
+      @result = new Result
+        question: @model.id
+
+  events:
+    "submit form": "complete"
+
+  complete: ->
+    @result.set $('form').toObject()
+    @result.set({complete:true})
+    @result.save()
+    # Don't let the browser redirect by default
+    return false
 
   toHTMLForm: (questions = @model, groupId) ->
     # Need this because we have recursion later

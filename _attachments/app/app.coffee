@@ -2,14 +2,27 @@ class Router extends Backbone.Router
   routes:
     "design": "design"
     "select": "select"
-    "facility": "facility"
-    "househould": "household"
-    "collect/:question_id/:case_id": "collect"
+    "show/results/:question_id": "showResults"
+    "new/result/:question_id": "newResult"
     "analyze/:form_id": "analyze"
-    "": "blank"
+    "": "default"
 
-  blank: ->
+  default: ->
     $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>")
+    $("#content").empty()
+    Coconut.questions.fetch
+      success: ->
+        _.each Coconut.questions.models, (question) ->
+          $("div#menu").prepend "
+            <a href='#show/results/#{question.id}'>#{question.id}</a>
+          "
+
+  newResult: (question_id) ->
+    Coconut.questionView ?= new QuestionView()
+    Coconut.questionView.model = new Question {id: question_id}
+    Coconut.questionView.model.fetch
+      success: ->
+        Coconut.questionView.render()
 
   facility: ->
     Coconut.todoView.templateData = {
@@ -88,23 +101,47 @@ class Router extends Backbone.Router
     Coconut.designView ?= new DesignView()
     Coconut.designView.render()
 
-  select: ->
-    $("#content").empty()
-    Coconut.questions.fetch
-      success: ->
-        Coconut.formSelectView ?= new FormSelectView()
-        Coconut.formSelectView.render()
+  showResults:(question_id) ->
+    $("#content").html "
+      <h1>#{question_id}</h1>
+      <a href='#new/result/#{question_id}'>Start new result</a>
+      <h2>Partial Results</h2>
+      <table class='notComplete'>
+        <thead><tr>
+          <th>Name</th>
+          <th></th>
+          <th></th>
+        </tr></thead>
+      </table>
+      <h2>Complete Results</h2>
+      <table class='complete'>
+        <thead><tr>
+          <th>Name</th>
+          <th></th>
+          <th></th>
+        </tr></thead>
+      </table>
+    "
+    rowTemplate = Handlebars.compile "
+      <tr>
+        <td>{{toShortString}}</td>
+        <td><a href='#edit/result/{{id}}'>Edit</a></td>
+        <td><a href='#view/result/{{id}}'>View</a></td>
+      </tr>
+    "
 
-  collect:(question_id,case_id) ->
-    $("#content").empty()
-    question = new Question
-      id: question_id
-      case_id: case_id
-
-    question.fetch
+    # 3 options: edit partials, edit complete, create new
+    Coconut.resultCollection ?= new ResultCollection()
+    Coconut.resultCollection.fetch
       success: ->
-        Coconut.questionView.model = question
-        Coconut.questionView.render()
+        Coconut.resultCollection.each (result) ->
+          result.fetch
+            success: ->
+              return unless result.question() is question_id
+              if result.get("complete") is true
+                $("table.complete").append(rowTemplate(result))
+              else
+                $("table.notComplete").append(rowTemplate(result))
 
   startApp: ->
     Coconut.questions = new QuestionCollection()

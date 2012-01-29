@@ -1,3 +1,3 @@
 class QuestionCollection extends Backbone.Collection
-  model: "question"
+  model: Question
   url: '/question'
