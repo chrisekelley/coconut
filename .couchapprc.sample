@@ -1,13 +1,10 @@
 {
   "env" : {
     "default" : {
-      "db" : "http://coco:cocopuffs@0.0.0.0:5985/coconut"
+      "db" : "http://user:pass@0.0.0.0:5985/coconut"
     },
     "public" : {
-      "db" : "http://mikeymckay:con7qzw.@mikeymckay.iriscouch.com/coconut"
-    },
-    "dev" : {
-      "db" : "http://localhost:5984/coconut"
+      "db" : "http://user:pass.@username.iriscouch.com/coconut"
     }
   }
 }
