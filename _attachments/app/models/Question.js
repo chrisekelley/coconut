@@ -103,7 +103,7 @@ Question.fromDomNode = function(domNode) {
     }
     if (question.find(".question-definition").length > 0) {
       result.set({
-        questions: Question.fromDomNode(question.find(".question-definition"))
+        questions: Question.fromDomNode(question.children(".question-definition"))
       });
     }
     return result;

@@ -4,6 +4,7 @@ class Router extends Backbone.Router
     "select": "select"
     "show/results/:question_id": "showResults"
     "new/result/:question_id": "newResult"
+    "edit/result/:result_id": "editResult"
     "analyze/:form_id": "analyze"
     "": "default"
 
@@ -19,6 +20,17 @@ class Router extends Backbone.Router
 
   newResult: (question_id) ->
     Coconut.questionView ?= new QuestionView()
+    Coconut.questionView.result = new Result
+      question: @model.id
+    Coconut.questionView.model = new Question {id: question_id}
+    Coconut.questionView.model.fetch
+      success: ->
+        Coconut.questionView.render()
+
+  editResult: (result_id) ->
+    Coconut.questionView ?= new QuestionView()
+    Coconut.questionView.result = new Result
+      question: @model.id
     Coconut.questionView.model = new Question {id: question_id}
     Coconut.questionView.model.fetch
       success: ->

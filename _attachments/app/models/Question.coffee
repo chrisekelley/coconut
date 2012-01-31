@@ -40,10 +40,11 @@ Question.fromDomNode = (domNode) ->
       result.set { id : id }
       for property in ["label","type","repeatable"]
         attribute = {}
+        # Note that we are using find but the id property ensures a proper match
         attribute[property] = question.find("##{property}-#{id}").val()
         result.set attribute
       if question.find(".question-definition").length > 0
-        result.set {questions: Question.fromDomNode(question.find(".question-definition"))}
+        result.set {questions: Question.fromDomNode(question.children(".question-definition"))}
       return result
     .compact().value()
 
