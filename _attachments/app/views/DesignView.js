@@ -46,7 +46,11 @@ DesignView = (function(_super) {
     var question;
     question = new Question();
     question.loadFromDesigner($("#questions"));
-    return question.save();
+    return question.save(null, {
+      success: function() {
+        return Coconut.menuView.render();
+      }
+    });
   };
 
   DesignView.prototype.add = function(event) {

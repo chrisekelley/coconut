@@ -16,7 +16,7 @@ QuestionView = (function(_super) {
 
   QuestionView.prototype.render = function() {
     this.el.html("      <form>        " + (this.toHTMLForm(this.model)) + "        <input type='submit' value='complete'>      </form>    ");
-    return js2form($('form'), this.result.toJSON());
+    return js2form($('form').get(0), this.result.toJSON());
   };
 
   QuestionView.prototype.events = {

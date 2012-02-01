@@ -17,16 +17,33 @@ Router = (function(_super) {
     "new/result/:question_id": "newResult",
     "edit/result/:result_id": "editResult",
     "analyze/:form_id": "analyze",
+    "delete/:question_id": "deleteQuestion",
+    "edit/:question_id": "editQuestion",
+    "manage": "manage",
     "": "default"
   };
 
   Router.prototype["default"] = function() {
     $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>");
-    $("#content").empty();
+    return $("#content").empty();
+  };
+
+  Router.prototype.deleteQuestion = function(question_id) {
+    console.log(Coconut.questions.get(question_id));
+    return Coconut.questions.get(question_id).destroy({
+      success: function() {
+        Coconut.menuView.render();
+        return Coconut.router.navigate("manage", true);
+      }
+    });
+  };
+
+  Router.prototype.manage = function() {
     return Coconut.questions.fetch({
       success: function() {
-        return _.each(Coconut.questions.models, function(question) {
-          return $("div#menu").prepend("            <a href='#show/results/" + question.id + "'>" + question.id + "</a>          ");
+        $("#content").html("          <a href='#design'>New</a>          <table>            <thead>              <th>                <td>Name</td>              </th>              <th></th>              <th></th>            </thead>            <tbody>            </tbody>          </table>        ");
+        return Coconut.questions.each(function(question) {
+          return $("tbody").append("            <tr>              <td>" + question.id + "</td>              <td><a href='#edit/" + question.id + "'>edit</a></td>              <td><a href='#delete/" + question.id + "'>delete</a></td>            </tr>          ");
         });
       }
     });
@@ -35,7 +52,7 @@ Router = (function(_super) {
   Router.prototype.newResult = function(question_id) {
     if (Coconut.questionView == null) Coconut.questionView = new QuestionView();
     Coconut.questionView.result = new Result({
-      question: this.model.id
+      question: question_id
     });
     Coconut.questionView.model = new Question({
       id: question_id
@@ -50,86 +67,20 @@ Router = (function(_super) {
   Router.prototype.editResult = function(result_id) {
     if (Coconut.questionView == null) Coconut.questionView = new QuestionView();
     Coconut.questionView.result = new Result({
-      question: this.model.id
+      _id: result_id
     });
-    Coconut.questionView.model = new Question({
-      id: question_id
-    });
-    return Coconut.questionView.model.fetch({
+    return Coconut.questionView.result.fetch({
       success: function() {
-        return Coconut.questionView.render();
+        Coconut.questionView.model = new Question({
+          id: Coconut.questionView.result.question()
+        });
+        return Coconut.questionView.model.fetch({
+          success: function() {
+            return Coconut.questionView.render();
+          }
+        });
       }
     });
-  };
-
-  Router.prototype.facility = function() {
-    Coconut.todoView.templateData = {
-      todoType: "Facility",
-      todoItems: [
-        {
-          form: "facility",
-          caseID: "XASDAX",
-          shahia: "Washoe",
-          firstName: "Abdul"
-        }, {
-          form: "facility",
-          caseID: "XSSDAX",
-          shahia: "Reno",
-          firstName: "Mohammed"
-        }
-      ],
-      completedItems: [
-        {
-          form: "facility",
-          caseID: "ASSXXZ",
-          shahia: "Stone Town",
-          firstName: "Sarah",
-          date: "11-Nov-2011"
-        }, {
-          form: "facility",
-          caseID: "XASDAX",
-          shahia: "Washoe",
-          firstName: "Eva",
-          date: "11-Dec-2011"
-        }
-      ]
-    };
-    return Coconut.todoView.render();
-  };
-
-  Router.prototype.household = function() {
-    Coconut.todoView.templateData = {
-      todoType: "Household",
-      todoItems: [
-        {
-          form: "facility",
-          caseID: "XASDAX",
-          shahia: "Washoe",
-          firstName: "Abdul"
-        }, {
-          form: "facility",
-          caseID: "XSSDAX",
-          shahia: "Reno",
-          firstName: "Mohammed"
-        }
-      ],
-      completedItems: [
-        {
-          form: "facility",
-          caseID: "ASSXXZ",
-          shahia: "Stone Town",
-          firstName: "Sarah",
-          date: "11-Nov-2011"
-        }, {
-          form: "facility",
-          caseID: "XASDAX",
-          shahia: "Washoe",
-          firstName: "Eva",
-          date: "11-Dec-2011"
-        }
-      ]
-    };
-    return Coconut.todoView.render();
   };
 
   Router.prototype.design = function() {
@@ -167,6 +118,8 @@ Router = (function(_super) {
     Coconut.questions = new QuestionCollection();
     Coconut.questionView = new QuestionView();
     Coconut.todoView = new TodoView();
+    Coconut.menuView = new MenuView();
+    Coconut.menuView.render();
     return Backbone.history.start();
   };
 

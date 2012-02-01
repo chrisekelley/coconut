@@ -13,9 +13,12 @@ class Result extends Backbone.Model
       "collection"
     ]
     _.map relevantKeys, (key) =>
-      @get(key)
+      result = @get(key)
+      if typeof result == "object"
+        result = JSON.stringify(result)
+      result
     .join(" | ")
         
   toShortString: ->
     result = @toString()
-    if result.length > 20 then result.substring(0,20) + "..." else result
+    if result.length > 40 then result.substring(0,40) + "..." else result

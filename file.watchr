@@ -12,17 +12,19 @@ end
 
 push_and_test()
 
+
+
 watch( '.html$') {|match_data|
   push_and_test()
-#  `couchapp push` unless match_data[0] =~ /\.sw.$/
 }
 watch( '.js$') {|match_data|
   push_and_test()
-#  `couchapp push` unless match_data[0] =~ /\.sw.$/
 }
 watch( '.*\.json$') {|match_data|
   push_and_test()
-#  `couchapp push` unless match_data[0] =~ /\.sw.$/
+}
+watch( '.css$') {|match_data|
+  push_and_test()
 }
 watch( '(.*\.coffee$)' ) {|match_data|
   puts match_data[0]

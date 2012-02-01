@@ -75,7 +75,9 @@ class DesignView extends Backbone.View
   save: ->
     question = new Question()
     question.loadFromDesigner $("#questions")
-    question.save()
+    question.save null,
+      success: ->
+        Coconut.menuView.render()
 
   add: (event) ->
     type = $(event.target).prev().val()

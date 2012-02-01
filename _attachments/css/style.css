@@ -9,6 +9,10 @@ div#menu {
   margin-bottom: 20px;
 }
 
+div#menu .otherNavigation{
+  font-size: 75%;
+}
+
 label{
   display: block;
 }

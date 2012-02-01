@@ -8,7 +8,7 @@ class QuestionView extends Backbone.View
         <input type='submit' value='complete'>
       </form>
     "
-    js2form($('form'),@result.toJSON())
+    js2form($('form').get(0), @result.toJSON())
 
   events:
     "submit form": "complete"
