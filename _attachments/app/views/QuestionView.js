@@ -15,12 +15,14 @@ QuestionView = (function(_super) {
   QuestionView.prototype.el = $('#content');
 
   QuestionView.prototype.render = function() {
-    this.el.html("      <form>        " + (this.toHTMLForm(this.model)) + "        <input type='submit' value='complete'>      </form>    ");
+    this.el.html("      <div id='question-view'>        <form>          " + (this.toHTMLForm(this.model)) + "          <input type='submit' value='complete'>        </form>      </div>    ");
     return js2form($('form').get(0), this.result.toJSON());
   };
 
   QuestionView.prototype.events = {
-    "submit form": "complete"
+    "submit #question-view form": "complete",
+    "submit #question-view form": "complete",
+    "click #question-view button:contains(+)": "repeat"
   };
 
   QuestionView.prototype.complete = function() {
@@ -30,6 +32,25 @@ QuestionView = (function(_super) {
     });
     this.result.save();
     return false;
+  };
+
+  QuestionView.prototype.repeat = function(event) {
+    var button, inputElement, name, newIndex, newQuestion, questionID, re, _i, _len, _ref;
+    button = $(event.target);
+    newQuestion = button.prev(".question").clone();
+    questionID = newQuestion.attr("data-group-id");
+    if (questionID == null) questionID = "";
+    _ref = newQuestion.find("input");
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      inputElement = _ref[_i];
+      inputElement = $(inputElement);
+      name = inputElement.attr("name");
+      re = new RegExp("" + questionID + "\\[(\\d)\\]");
+      newIndex = parseInt(_.last(name.match(re))) + 1;
+      inputElement.attr("name", name.replace(re, "" + questionID + "[" + newIndex + "]"));
+    }
+    button.after(newQuestion.add(button.clone()));
+    return button.remove();
   };
 
   QuestionView.prototype.toHTMLForm = function(questions, groupId) {
@@ -45,17 +66,20 @@ QuestionView = (function(_super) {
       }
       if ((question.type() != null) && (question.label() != null) && question.label() !== "") {
         name = question.label().replace(/[^a-zA-Z0-9 -]/g, "").replace(/[ -]/g, "");
+        question_id = question.get("id");
         if (question.repeatable() === "true") {
           name = name + "[0]";
-          question_id = question.id() + "-0";
+          question_id = question.get("id") + "-0";
         }
         if (groupId != null) name = "group." + groupId + "." + name;
-        result = "          <div class='question'>          ";
+        result = "          <div class='question'>        ";
         if (!question.type().match(/hidden/)) {
           result += "            <label for='" + question_id + "'>" + (question.label()) + "</label>          ";
         }
         if (question.type().match(/textarea/)) {
           result += "            <textarea name='" + name + "' id='" + question_id + "'>" + (question.value()) + "</textarea>          ";
+        } else if (question.type().match(/select/)) {
+          result += "            TODO          ";
         } else {
           result += "            <input name='" + name + "' id='" + question_id + "' type='" + (question.type()) + "' value='" + (question.value()) + "'></input>          ";
         }

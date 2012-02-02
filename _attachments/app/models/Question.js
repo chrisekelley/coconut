@@ -10,10 +10,6 @@ Question = (function(_super) {
     Question.__super__.constructor.apply(this, arguments);
   }
 
-  Question.prototype.id = function() {
-    return this.get("id");
-  };
-
   Question.prototype.type = function() {
     return this.get("type");
   };
@@ -101,6 +97,7 @@ Question.fromDomNode = function(domNode) {
       attribute[property] = question.find("#" + property + "-" + id).val();
       result.set(attribute);
     }
+    console.log(question);
     if (question.find(".question-definition").length > 0) {
       result.set({
         questions: Question.fromDomNode(question.children(".question-definition"))

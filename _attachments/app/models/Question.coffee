@@ -1,5 +1,4 @@
 class Question extends Backbone.Model
-  id: -> @get("id")
   type: -> @get("type")
   label: -> if @get("label")? then @get("label") else ""
   repeatable: -> @get("repeatable")
@@ -17,6 +16,7 @@ class Question extends Backbone.Model
 
   loadFromDesigner: (domNode) ->
     result = Question.fromDomNode(domNode)
+# TODO is this always going to just be the root question - containing only a name?
     if result.length is 1
       result = result[0]
       @set { id : result.id }
@@ -43,6 +43,9 @@ Question.fromDomNode = (domNode) ->
         # Note that we are using find but the id property ensures a proper match
         attribute[property] = question.find("##{property}-#{id}").val()
         result.set attribute
+      # TODO handle selects
+      console.log question
+
       if question.find(".question-definition").length > 0
         result.set {questions: Question.fromDomNode(question.children(".question-definition"))}
       return result

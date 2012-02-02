@@ -10,67 +10,50 @@ class DesignView extends Backbone.View
     @basicMode()
 
   template: Handlebars.compile "
-    <style>
-      .question-definition{
-        border-style: dotted;
-        border-width: 1px;
-        margin: 10px;
-        margin-top: 32px;
-      }
-      .question-definition-controls{
-        float: right;
-      }
-      .group{
-        border-style: dotted;
-        border-width: 1px;
-      }
-      body.all-advanced-hidden .advanced{
-        display: none;
-      }
-    </style>
-    <h3>
-      Design
-    </h3>
-    <small>
-    <b>Instructions</b>: <p>Use the drop down below to select the type of questions that you will be asking. Click <button>Preview</button> to see what the questions will look like.</p>
-    <div class='advanced'><b>Advanced: </b><p>Use <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> to make the question repeatable. If you want to group questions together to form a repeatable block then click <img title='group' src='images/group.png' style='background-color:#DDD'/> between the questions and use the <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> as before. Ungroup by using <img title='ungroup' src='images/ungroup.png' style='background-color:#DDD'/>.</p>
-    </div>
-    </small>
-    <button>Advanced Mode</button>
-    <hr/>
-    <button type='button'>Save</button>
-    <label for='element_selector'>Add questions</label>
-    <select id='element_selector'>
-      {{#each types}}
-        <option>{{this}}</option>
-      {{/each}}
-    </select>
-    <button>Add</button>
+    <div id='design-view'>
+      <h3>
+        Design
+      </h3>
+      <small>
+      <b>Instructions</b>: <p>Use the drop down below to select the type of questions that you will be asking. Click <button>Preview</button> to see what the questions will look like.</p>
+      <div class='advanced'><b>Advanced: </b><p>Use <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> to make the question repeatable. If you want to group questions together to form a repeatable block then click <img title='group' src='images/group.png' style='background-color:#DDD'/> between the questions and use the <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> as before. Ungroup by using <img title='ungroup' src='images/ungroup.png' style='background-color:#DDD'/>.</p>
+      </div>
+      </small>
+      <hr/>
 
-    <div id='questions'>
-      <label for='rootQuestionName'>Name</label>
-      <input id='rootQuestionName' name='rootQuestionName' type='text'/>
+      <div id='questions'>
+        <label for='rootQuestionName'>Name</label>
+        <input id='rootQuestionName' name='rootQuestionName' type='text'/>
+      </div>
+      <label for='element_selector'>Add questions</label>
+      <select id='element_selector'>
+        {{#each types}}
+          <option>{{this}}</option>
+        {{/each}}
+      </select>
+      <button>Add</button><br/>
+      <button type='button'>Save</button>
+      <button>Preview</button>
+      <button>Advanced Mode</button>
+      <hr/>
+      <form id='render'></form>
+      <div id='form_output'></form>
     </div>
-    <button>Preview</button>
-    <hr/>
-    <form id='render'></form>
-    <div id='form_output'></form>
   "
 
-  questionTypes: ["text","number","date","datetime", "textarea", "hidden"]
+  questionTypes: ["text","number","date","datetime", "textarea", "select", "hidden"]
 
   events:
-    "click button:contains(Add)": "add"
-    "click button[title=group]": "groupClick"
-    "click button[title=ungroup]": "ungroupClick"
-    "click button[title=delete]": "deleteClick"
-    "click button[title=repeat]": "toggleRepeatable"
-    "click button:contains(Preview)" : "renderForm"
-    "click button:contains(Show Form Output)" : "formDump"
-    "click button:contains(+)" : "repeat"
-    "click button:contains(Advanced Mode)" : "advancedMode"
-    "click button:contains(Basic Mode)" : "basicMode"
-    "click button:contains(Save)" : "save"
+    "click #design-view button:contains(Add)": "add"
+    "click #design-view button[title=group]": "groupClick"
+    "click #design-view button[title=ungroup]": "ungroupClick"
+    "click #design-view button[title=delete]": "deleteClick"
+    "click #design-view button[title=repeat]": "toggleRepeatable"
+    "click #design-view button:contains(Preview)" : "renderForm"
+    "click #design-view button:contains(Show Form Output)" : "formDump"
+    "click #design-view button:contains(Advanced Mode)" : "advancedMode"
+    "click #design-view button:contains(Basic Mode)" : "basicMode"
+    "click #design-view button:contains(Save)" : "save"
 
   save: ->
     question = new Question()
@@ -86,7 +69,7 @@ class DesignView extends Backbone.View
       $("#questions").append "
         <button class='advanced' title='group'><img src='images/group.png'/></button>
       "
-    $("#questions").append "
+    result = "
       <div data-repeat='false' class='question-definition' id='#{id}'>
         <div class='question-definition-controls'>
           <button class='advanced' title='repeat'><img src='images/repeat.png'></button>
@@ -96,10 +79,20 @@ class DesignView extends Backbone.View
         <div>Type: #{type}</div>
         <label for='label-#{id}'>Label</label>
         <input type='text' name='label-#{id}' id='label-#{id}'></input>
+    "
+    if type is "select"
+      result += "
+        <label for='select-options-#{id}'>Select Options</label>
+        <textarea name='select-options-#{id}' id='select-options-#{id}'>option1,option2</textarea>
+      "
+
+    result += "
         <input type='hidden' name='type-#{id}' id='type-#{id}' value='#{type}'></input>
         <input type='hidden' name='required-#{id}' value='false'></input>
       </div>
     "
+
+    $("#questions").append result
 
   groupClick: (event) ->
     groupDiv = $(event.target).closest("button")
@@ -189,22 +182,6 @@ class DesignView extends Backbone.View
   formDump: ->
     $('#dump').html(JSON.stringify($('form').toObject()))
 
-  repeat: (event) ->
-    button = $(event.target)
-    newQuestion = button.prev(".question").clone()
-    questionID = newQuestion.attr("data-group-id")
-    questionID = "" unless questionID?
-
-    # Fix the indexes
-    for inputElement in newQuestion.find("input")
-      inputElement = $(inputElement)
-      name = inputElement.attr("name")
-      re = new RegExp("#{questionID}\\[(\\d)\\]")
-      newIndex = parseInt(_.last(name.match(re))) + 1
-      inputElement.attr("name", name.replace(re,"#{questionID}[#{newIndex}]"))
-
-    button.after(newQuestion.add(button.clone()))
-    button.remove()
 
   advancedMode:->
     $('body').removeClass("all-advanced-hidden")

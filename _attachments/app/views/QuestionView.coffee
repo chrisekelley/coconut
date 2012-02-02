@@ -3,15 +3,19 @@ class QuestionView extends Backbone.View
 
   render: =>
     @el.html "
-      <form>
-        #{@toHTMLForm(@model)}
-        <input type='submit' value='complete'>
-      </form>
+      <div id='question-view'>
+        <form>
+          #{@toHTMLForm(@model)}
+          <input type='submit' value='complete'>
+        </form>
+      </div>
     "
     js2form($('form').get(0), @result.toJSON())
 
   events:
-    "submit form": "complete"
+    "submit #question-view form": "complete"
+    "submit #question-view form": "complete"
+    "click #question-view button:contains(+)" : "repeat"
 
   complete: ->
     @result.set $('form').toObject()
@@ -20,6 +24,23 @@ class QuestionView extends Backbone.View
     # Don't let the browser redirect by default
     return false
 
+  repeat: (event) ->
+    button = $(event.target)
+    newQuestion = button.prev(".question").clone()
+    questionID = newQuestion.attr("data-group-id")
+    questionID = "" unless questionID?
+
+    # Fix the indexes
+    for inputElement in newQuestion.find("input")
+      inputElement = $(inputElement)
+      name = inputElement.attr("name")
+      re = new RegExp("#{questionID}\\[(\\d)\\]")
+      newIndex = parseInt(_.last(name.match(re))) + 1
+      inputElement.attr("name", name.replace(re,"#{questionID}[#{newIndex}]"))
+
+    button.after(newQuestion.add(button.clone()))
+    button.remove()
+
   toHTMLForm: (questions = @model, groupId) ->
     # Need this because we have recursion later
     questions = [questions] unless questions.length?
@@ -27,14 +48,15 @@ class QuestionView extends Backbone.View
       if question.repeatable() == "true" then repeatable = "<button>+</button>" else repeatable = ""
       if question.type()? and question.label()? and question.label() != ""
         name = question.label().replace(/[^a-zA-Z0-9 -]/g,"").replace(/[ -]/g,"")
+        question_id = question.get("id")
         if question.repeatable() == "true"
           name = name + "[0]"
-          question_id = question.id() + "-0"
+          question_id = question.get("id") + "-0"
         if groupId?
           name = "group.#{groupId}.#{name}"
         result = "
           <div class='question'>
-          "
+        "
         unless question.type().match(/hidden/)
           result += "
             <label for='#{question_id}'>#{question.label()}</label>
@@ -42,6 +64,10 @@ class QuestionView extends Backbone.View
         if question.type().match(/textarea/)
           result += "
             <textarea name='#{name}' id='#{question_id}'>#{question.value()}</textarea>
+          "
+        else if question.type().match(/select/)
+          result += "
+            TODO
           "
         else
           result += "
