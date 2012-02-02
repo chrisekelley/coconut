@@ -38,13 +38,13 @@ Question.fromDomNode = (domNode) ->
       return unless id
       result = new Question
       result.set { id : id }
-      for property in ["label","type","repeatable"]
+      for property in ["label","type","repeatable","select-options"]
         attribute = {}
         # Note that we are using find but the id property ensures a proper match
-        attribute[property] = question.find("##{property}-#{id}").val()
-        result.set attribute
-      # TODO handle selects
-      console.log question
+        propertyValue = question.find("##{property}-#{id}").val()
+        if propertyValue
+          attribute[property] = propertyValue if propertyValue
+          result.set attribute
 
       if question.find(".question-definition").length > 0
         result.set {questions: Question.fromDomNode(question.children(".question-definition"))}

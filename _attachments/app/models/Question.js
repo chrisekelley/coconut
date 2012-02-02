@@ -79,7 +79,7 @@ Question = (function(_super) {
 
 Question.fromDomNode = function(domNode) {
   return _(domNode).chain().map(function(question) {
-    var attribute, id, property, result, _i, _len, _ref;
+    var attribute, id, property, propertyValue, result, _i, _len, _ref;
     question = $(question);
     id = question.attr("id");
     if (question.children("#rootQuestionName").length > 0) {
@@ -90,14 +90,16 @@ Question.fromDomNode = function(domNode) {
     result.set({
       id: id
     });
-    _ref = ["label", "type", "repeatable"];
+    _ref = ["label", "type", "repeatable", "select-options"];
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       property = _ref[_i];
       attribute = {};
-      attribute[property] = question.find("#" + property + "-" + id).val();
-      result.set(attribute);
+      propertyValue = question.find("#" + property + "-" + id).val();
+      if (propertyValue) {
+        if (propertyValue) attribute[property] = propertyValue;
+        result.set(attribute);
+      }
     }
-    console.log(question);
     if (question.find(".question-definition").length > 0) {
       result.set({
         questions: Question.fromDomNode(question.children(".question-definition"))

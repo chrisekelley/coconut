@@ -67,7 +67,15 @@ class QuestionView extends Backbone.View
           "
         else if question.type().match(/select/)
           result += "
-            TODO
+            <select name='#{name}'>
+          "
+          _.each question.get("select-options").split(/, */), (option) ->
+            result += "
+              <option>#{option}</option>
+            "
+
+          result +=  "
+            </select>
           "
         else
           result += "

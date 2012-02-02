@@ -79,7 +79,11 @@ QuestionView = (function(_super) {
         if (question.type().match(/textarea/)) {
           result += "            <textarea name='" + name + "' id='" + question_id + "'>" + (question.value()) + "</textarea>          ";
         } else if (question.type().match(/select/)) {
-          result += "            TODO          ";
+          result += "            <select name='" + name + "'>          ";
+          _.each(question.get("select-options").split(/, */), function(option) {
+            return result += "              <option>" + option + "</option>            ";
+          });
+          result += "            </select>          ";
         } else {
           result += "            <input name='" + name + "' id='" + question_id + "' type='" + (question.type()) + "' value='" + (question.value()) + "'></input>          ";
         }
