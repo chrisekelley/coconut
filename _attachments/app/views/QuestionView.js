@@ -1,30 +1,33 @@
-var QuestionView,
-  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-  __hasProp = Object.prototype.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-QuestionView = (function(_super) {
-
-  __extends(QuestionView, _super);
-
+var QuestionView;
+var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; }, __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
+  function ctor() { this.constructor = child; }
+  ctor.prototype = parent.prototype;
+  child.prototype = new ctor;
+  child.__super__ = parent.prototype;
+  return child;
+};
+QuestionView = (function() {
+  __extends(QuestionView, Backbone.View);
   function QuestionView() {
     this.render = __bind(this.render, this);
     QuestionView.__super__.constructor.apply(this, arguments);
   }
-
   QuestionView.prototype.el = $('#content');
-
   QuestionView.prototype.render = function() {
     this.el.html("      <div id='question-view'>        <form>          " + (this.toHTMLForm(this.model)) + "          <input type='submit' value='complete'>        </form>      </div>    ");
     return js2form($('form').get(0), this.result.toJSON());
   };
-
   QuestionView.prototype.events = {
     "submit #question-view form": "complete",
-    "submit #question-view form": "complete",
+    "change #question-view input": "save",
+    "change #question-view select": "save",
     "click #question-view button:contains(+)": "repeat"
   };
-
+  QuestionView.prototype.save = function() {
+    this.result.set($('form').toObject());
+    return this.result.save();
+  };
   QuestionView.prototype.complete = function() {
     this.result.set($('form').toObject());
     this.result.set({
@@ -33,13 +36,14 @@ QuestionView = (function(_super) {
     this.result.save();
     return false;
   };
-
   QuestionView.prototype.repeat = function(event) {
     var button, inputElement, name, newIndex, newQuestion, questionID, re, _i, _len, _ref;
     button = $(event.target);
     newQuestion = button.prev(".question").clone();
     questionID = newQuestion.attr("data-group-id");
-    if (questionID == null) questionID = "";
+    if (questionID == null) {
+      questionID = "";
+    }
     _ref = newQuestion.find("input");
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       inputElement = _ref[_i];
@@ -52,12 +56,14 @@ QuestionView = (function(_super) {
     button.after(newQuestion.add(button.clone()));
     return button.remove();
   };
-
   QuestionView.prototype.toHTMLForm = function(questions, groupId) {
-    var _this = this;
-    if (questions == null) questions = this.model;
-    if (questions.length == null) questions = [questions];
-    return _.map(questions, function(question) {
+    if (questions == null) {
+      questions = this.model;
+    }
+    if (questions.length == null) {
+      questions = [questions];
+    }
+    return _.map(questions, __bind(function(question) {
       var name, newGroupId, question_id, repeatable, result;
       if (question.repeatable() === "true") {
         repeatable = "<button>+</button>";
@@ -71,7 +77,9 @@ QuestionView = (function(_super) {
           name = name + "[0]";
           question_id = question.get("id") + "-0";
         }
-        if (groupId != null) name = "group." + groupId + "." + name;
+        if (groupId != null) {
+          name = "group." + groupId + "." + name;
+        }
         result = "          <div class='question'>        ";
         if (!question.type().match(/hidden/)) {
           result += "            <label for='" + question_id + "'>" + (question.label()) + "</label>          ";
@@ -91,12 +99,12 @@ QuestionView = (function(_super) {
         return result + repeatable;
       } else {
         newGroupId = question_id;
-        if (question.repeatable()) newGroupId = newGroupId + "[0]";
-        return ("<div data-group-id='" + question_id + "' class='question group'>") + _this.toHTMLForm(question.questions(), newGroupId) + "</div>" + repeatable;
+        if (question.repeatable()) {
+          newGroupId = newGroupId + "[0]";
+        }
+        return ("<div data-group-id='" + question_id + "' class='question group'>") + this.toHTMLForm(question.questions(), newGroupId) + "</div>" + repeatable;
       }
-    }).join("");
+    }, this)).join("");
   };
-
   return QuestionView;
-
-})(Backbone.View);
+})();

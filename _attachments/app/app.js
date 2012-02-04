@@ -1,15 +1,17 @@
-var Coconut, Router,
-  __hasProp = Object.prototype.hasOwnProperty,
-  __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-Router = (function(_super) {
-
-  __extends(Router, _super);
-
+var Coconut, Router;
+var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
+  for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
+  function ctor() { this.constructor = child; }
+  ctor.prototype = parent.prototype;
+  child.prototype = new ctor;
+  child.__super__ = parent.prototype;
+  return child;
+};
+Router = (function() {
+  __extends(Router, Backbone.Router);
   function Router() {
     Router.__super__.constructor.apply(this, arguments);
   }
-
   Router.prototype.routes = {
     "design": "design",
     "select": "select",
@@ -22,14 +24,19 @@ Router = (function(_super) {
     "manage": "manage",
     "": "default"
   };
-
   Router.prototype["default"] = function() {
     $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>");
     return $("#content").empty();
   };
-
+  Router.prototype.editQuestion = function(question_id) {
+    var _ref;
+    if ((_ref = Coconut.designView) == null) {
+      Coconut.designView = new DesignView();
+    }
+    Coconut.designView.render();
+    return Coconut.designView.loadQuestion(question_id);
+  };
   Router.prototype.deleteQuestion = function(question_id) {
-    console.log(Coconut.questions.get(question_id));
     return Coconut.questions.get(question_id).destroy({
       success: function() {
         Coconut.menuView.render();
@@ -37,7 +44,6 @@ Router = (function(_super) {
       }
     });
   };
-
   Router.prototype.manage = function() {
     return Coconut.questions.fetch({
       success: function() {
@@ -48,9 +54,11 @@ Router = (function(_super) {
       }
     });
   };
-
   Router.prototype.newResult = function(question_id) {
-    if (Coconut.questionView == null) Coconut.questionView = new QuestionView();
+    var _ref;
+    if ((_ref = Coconut.questionView) == null) {
+      Coconut.questionView = new QuestionView();
+    }
     Coconut.questionView.result = new Result({
       question: question_id
     });
@@ -63,9 +71,11 @@ Router = (function(_super) {
       }
     });
   };
-
   Router.prototype.editResult = function(result_id) {
-    if (Coconut.questionView == null) Coconut.questionView = new QuestionView();
+    var _ref;
+    if ((_ref = Coconut.questionView) == null) {
+      Coconut.questionView = new QuestionView();
+    }
     Coconut.questionView.result = new Result({
       _id: result_id
     });
@@ -82,18 +92,19 @@ Router = (function(_super) {
       }
     });
   };
-
   Router.prototype.design = function() {
+    var _ref;
     $("#content").empty();
-    if (Coconut.designView == null) Coconut.designView = new DesignView();
+    if ((_ref = Coconut.designView) == null) {
+      Coconut.designView = new DesignView();
+    }
     return Coconut.designView.render();
   };
-
   Router.prototype.showResults = function(question_id) {
-    var rowTemplate;
+    var rowTemplate, _ref;
     $("#content").html("      <h1>" + question_id + "</h1>      <a href='#new/result/" + question_id + "'>Start new result</a>      <h2>Partial Results</h2>      <table class='notComplete'>        <thead><tr>          <th>Name</th>          <th></th>          <th></th>        </tr></thead>      </table>      <h2>Complete Results</h2>      <table class='complete'>        <thead><tr>          <th>Name</th>          <th></th>          <th></th>        </tr></thead>      </table>    ");
     rowTemplate = Handlebars.compile("      <tr>        <td>{{toShortString}}</td>        <td><a href='#edit/result/{{id}}'>Edit</a></td>        <td><a href='#view/result/{{id}}'>View</a></td>      </tr>    ");
-    if (Coconut.resultCollection == null) {
+    if ((_ref = Coconut.resultCollection) == null) {
       Coconut.resultCollection = new ResultCollection();
     }
     return Coconut.resultCollection.fetch({
@@ -101,7 +112,9 @@ Router = (function(_super) {
         return Coconut.resultCollection.each(function(result) {
           return result.fetch({
             success: function() {
-              if (result.question() !== question_id) return;
+              if (result.question() !== question_id) {
+                return;
+              }
               if (result.get("complete") === true) {
                 return $("table.complete").append(rowTemplate(result));
               } else {
@@ -113,7 +126,6 @@ Router = (function(_super) {
       }
     });
   };
-
   Router.prototype.startApp = function() {
     Coconut.questions = new QuestionCollection();
     Coconut.questionView = new QuestionView();
@@ -122,13 +134,8 @@ Router = (function(_super) {
     Coconut.menuView.render();
     return Backbone.history.start();
   };
-
   return Router;
-
-})(Backbone.Router);
-
+})();
 Coconut = {};
-
 Coconut.router = new Router();
-
 Coconut.router.startApp();

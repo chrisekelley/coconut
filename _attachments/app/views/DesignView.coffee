@@ -1,5 +1,6 @@
 class DesignView extends Backbone.View
   initialize: ->
+    @question = new Question()
 
   el: $('#content')
 
@@ -56,15 +57,32 @@ class DesignView extends Backbone.View
     "click #design-view button:contains(Save)" : "save"
 
   save: ->
-    question = new Question()
-    question.loadFromDesigner $("#questions")
-    question.save null,
+    @question.loadFromDesigner $("#questions")
+    @question.save null,
       success: ->
         Coconut.menuView.render()
 
   add: (event) ->
-    type = $(event.target).prev().val()
-    id = Math.ceil(Math.random()*1000)
+    @addQuestion
+      type : $(event.target).prev().val()
+
+  loadQuestion: (questionId) ->
+    @question = new Question
+      id: questionId
+    @question.fetch
+      success: =>
+        $('#rootQuestionName').val @question.id
+        _.each @question.questions(), (question) =>
+          @addQuestion question.attributes
+
+  addQuestion: (options) ->
+    alert "Support for editing grouped forms not yet implemented" if options.questions
+    type = options.type
+    id = options.id || Math.ceil(Math.random()*1000)
+    label = options.label || ""
+    repeatable = options.repeatable || ""
+    selectOptions = options["select-options"] || "option1,option2"
+
     if $("#questions").children().length > 0
       $("#questions").append "
         <button class='advanced' title='group'><img src='images/group.png'/></button>
@@ -78,12 +96,12 @@ class DesignView extends Backbone.View
         </div>
         <div>Type: #{type}</div>
         <label for='label-#{id}'>Label</label>
-        <input type='text' name='label-#{id}' id='label-#{id}'></input>
+        <input type='text' name='label-#{id}' id='label-#{id}' value='#{label}'></input>
     "
     if type is "select"
       result += "
         <label for='select-options-#{id}'>Select Options</label>
-        <textarea name='select-options-#{id}' id='select-options-#{id}'>option1,option2</textarea>
+        <textarea name='select-options-#{id}' id='select-options-#{id}'>#{selectOptions}</textarea>
       "
 
     result += "
@@ -163,9 +181,8 @@ class DesignView extends Backbone.View
     return $('#questions').children()
 
   toHTMLForm: ->
-    question = new Question()
-    question.loadFromDesigner($("#questions"))
-    questionView = new QuestionView(model: question)
+    @question.loadFromDesigner($("#questions"))
+    questionView = new QuestionView(model: @question)
     questionView.toHTMLForm()
 
   dump: ->

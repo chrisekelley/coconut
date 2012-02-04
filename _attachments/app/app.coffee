@@ -15,8 +15,12 @@ class Router extends Backbone.Router
     $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>")
     $("#content").empty()
 
+  editQuestion: (question_id) ->
+    Coconut.designView ?= new DesignView()
+    Coconut.designView.render()
+    Coconut.designView.loadQuestion question_id
+
   deleteQuestion: (question_id) ->
-    console.log Coconut.questions.get(question_id)
     Coconut.questions.get(question_id).destroy
       success: ->
         Coconut.menuView.render()

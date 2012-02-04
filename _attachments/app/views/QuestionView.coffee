@@ -14,8 +14,13 @@ class QuestionView extends Backbone.View
 
   events:
     "submit #question-view form": "complete"
-    "submit #question-view form": "complete"
+    "change #question-view input": "save"
+    "change #question-view select": "save"
     "click #question-view button:contains(+)" : "repeat"
+
+  save: ->
+    @result.set $('form').toObject()
+    @result.save()
 
   complete: ->
     @result.set $('form').toObject()
