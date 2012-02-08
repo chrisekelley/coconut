@@ -1,6 +1,11 @@
 {
    "_id": "TCL for Children < 1 Year",
    "id": "TCL for Children < 1 Year",
+   "resultSummaryFields": {
+     "Child First Name": "on",
+     "Child Last Name": "on",
+     "Complete Name of Mother": "on"
+   },
    "questions": [
        {
            "id": "36",

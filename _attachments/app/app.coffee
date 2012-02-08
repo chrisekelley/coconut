@@ -5,6 +5,7 @@ class Router extends Backbone.Router
     "show/results/:question_id": "showResults"
     "new/result/:question_id": "newResult"
     "edit/result/:result_id": "editResult"
+    "edit/resultSummary/:question_id": "editResultSummary"
     "analyze/:form_id": "analyze"
     "delete/:question_id": "deleteQuestion"
     "edit/:question_id": "editQuestion"
@@ -14,6 +15,16 @@ class Router extends Backbone.Router
   default: ->
     $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>")
     $("#content").empty()
+    $("#loading").toggle(false)
+
+  editResultSummary: (question_id) ->
+    Coconut.resultSummaryEditor ?= new ResultSummaryEditorView()
+    Coconut.resultSummaryEditor.question = new Question
+      id: question_id
+
+    Coconut.resultSummaryEditor.question.fetch
+      success: ->
+        Coconut.resultSummaryEditor.render()
 
   editQuestion: (question_id) ->
     Coconut.designView ?= new DesignView()
@@ -38,6 +49,7 @@ class Router extends Backbone.Router
               </th>
               <th></th>
               <th></th>
+              <th></th>
             </thead>
             <tbody>
             </tbody>
@@ -49,8 +61,8 @@ class Router extends Backbone.Router
               <td>#{question.id}</td>
               <td><a href='#edit/#{question.id}'>edit</a></td>
               <td><a href='#delete/#{question.id}'>delete</a></td>
+              <td><a href='#edit/resultSummary/#{question.id}'>summary</a></td>
             </tr>
-
           "
 
   newResult: (question_id) ->
@@ -81,46 +93,10 @@ class Router extends Backbone.Router
     Coconut.designView.render()
 
   showResults:(question_id) ->
-    $("#content").html "
-      <h1>#{question_id}</h1>
-      <a href='#new/result/#{question_id}'>Start new result</a>
-      <h2>Partial Results</h2>
-      <table class='notComplete'>
-        <thead><tr>
-          <th>Name</th>
-          <th></th>
-          <th></th>
-        </tr></thead>
-      </table>
-      <h2>Complete Results</h2>
-      <table class='complete'>
-        <thead><tr>
-          <th>Name</th>
-          <th></th>
-          <th></th>
-        </tr></thead>
-      </table>
-    "
-    rowTemplate = Handlebars.compile "
-      <tr>
-        <td>{{toShortString}}</td>
-        <td><a href='#edit/result/{{id}}'>Edit</a></td>
-        <td><a href='#view/result/{{id}}'>View</a></td>
-      </tr>
-    "
-
-    # 3 options: edit partials, edit complete, create new
-    Coconut.resultCollection ?= new ResultCollection()
-    Coconut.resultCollection.fetch
-      success: ->
-        Coconut.resultCollection.each (result) ->
-          result.fetch
-            success: ->
-              return unless result.question() is question_id
-              if result.get("complete") is true
-                $("table.complete").append(rowTemplate(result))
-              else
-                $("table.notComplete").append(rowTemplate(result))
+    Coconut.resultsView ?= new ResultsView()
+    Coconut.resultsView.question = new Question
+      id: question_id
+    Coconut.resultsView.render()
 
   startApp: ->
     Coconut.questions = new QuestionCollection()

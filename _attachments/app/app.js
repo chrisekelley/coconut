@@ -18,6 +18,7 @@ Router = (function() {
     "show/results/:question_id": "showResults",
     "new/result/:question_id": "newResult",
     "edit/result/:result_id": "editResult",
+    "edit/resultSummary/:question_id": "editResultSummary",
     "analyze/:form_id": "analyze",
     "delete/:question_id": "deleteQuestion",
     "edit/:question_id": "editQuestion",
@@ -26,7 +27,22 @@ Router = (function() {
   };
   Router.prototype["default"] = function() {
     $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>");
-    return $("#content").empty();
+    $("#content").empty();
+    return $("#loading").toggle(false);
+  };
+  Router.prototype.editResultSummary = function(question_id) {
+    var _ref;
+    if ((_ref = Coconut.resultSummaryEditor) == null) {
+      Coconut.resultSummaryEditor = new ResultSummaryEditorView();
+    }
+    Coconut.resultSummaryEditor.question = new Question({
+      id: question_id
+    });
+    return Coconut.resultSummaryEditor.question.fetch({
+      success: function() {
+        return Coconut.resultSummaryEditor.render();
+      }
+    });
   };
   Router.prototype.editQuestion = function(question_id) {
     var _ref;
@@ -47,9 +63,9 @@ Router = (function() {
   Router.prototype.manage = function() {
     return Coconut.questions.fetch({
       success: function() {
-        $("#content").html("          <a href='#design'>New</a>          <table>            <thead>              <th>                <td>Name</td>              </th>              <th></th>              <th></th>            </thead>            <tbody>            </tbody>          </table>        ");
+        $("#content").html("          <a href='#design'>New</a>          <table>            <thead>              <th>                <td>Name</td>              </th>              <th></th>              <th></th>              <th></th>            </thead>            <tbody>            </tbody>          </table>        ");
         return Coconut.questions.each(function(question) {
-          return $("tbody").append("            <tr>              <td>" + question.id + "</td>              <td><a href='#edit/" + question.id + "'>edit</a></td>              <td><a href='#delete/" + question.id + "'>delete</a></td>            </tr>          ");
+          return $("tbody").append("            <tr>              <td>" + question.id + "</td>              <td><a href='#edit/" + question.id + "'>edit</a></td>              <td><a href='#delete/" + question.id + "'>delete</a></td>              <td><a href='#edit/resultSummary/" + question.id + "'>summary</a></td>            </tr>          ");
         });
       }
     });
@@ -101,30 +117,14 @@ Router = (function() {
     return Coconut.designView.render();
   };
   Router.prototype.showResults = function(question_id) {
-    var rowTemplate, _ref;
-    $("#content").html("      <h1>" + question_id + "</h1>      <a href='#new/result/" + question_id + "'>Start new result</a>      <h2>Partial Results</h2>      <table class='notComplete'>        <thead><tr>          <th>Name</th>          <th></th>          <th></th>        </tr></thead>      </table>      <h2>Complete Results</h2>      <table class='complete'>        <thead><tr>          <th>Name</th>          <th></th>          <th></th>        </tr></thead>      </table>    ");
-    rowTemplate = Handlebars.compile("      <tr>        <td>{{toShortString}}</td>        <td><a href='#edit/result/{{id}}'>Edit</a></td>        <td><a href='#view/result/{{id}}'>View</a></td>      </tr>    ");
-    if ((_ref = Coconut.resultCollection) == null) {
-      Coconut.resultCollection = new ResultCollection();
+    var _ref;
+    if ((_ref = Coconut.resultsView) == null) {
+      Coconut.resultsView = new ResultsView();
     }
-    return Coconut.resultCollection.fetch({
-      success: function() {
-        return Coconut.resultCollection.each(function(result) {
-          return result.fetch({
-            success: function() {
-              if (result.question() !== question_id) {
-                return;
-              }
-              if (result.get("complete") === true) {
-                return $("table.complete").append(rowTemplate(result));
-              } else {
-                return $("table.notComplete").append(rowTemplate(result));
-              }
-            }
-          });
-        });
-      }
+    Coconut.resultsView.question = new Question({
+      id: question_id
     });
+    return Coconut.resultsView.render();
   };
   Router.prototype.startApp = function() {
     Coconut.questions = new QuestionCollection();

@@ -17,6 +17,10 @@ label{
   display: block;
 }
 
+#resultSummaryEditor label{
+  display: inline;
+}
+
 table.results{
   border-color: #600;
   border-width: 0 0 1px 1px;
@@ -58,4 +62,14 @@ li{
 }
 body.all-advanced-hidden .advanced{
   display: none;
+}
+
+#loading{
+  background-color: black;
+  color: white;
+  position: fixed;
+  top: 100px;
+  left: 100px;
+  border: solid thin;
+  padding: 15px;
 }
