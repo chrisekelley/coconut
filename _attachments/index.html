@@ -2,9 +2,11 @@
   <head>
   	<title>Coconut</title>
     <link href="css/style.css" type="text/css" rel="stylesheet" />
+    <link href="css/ui-darkness/jquery-ui-1.8.17.custom.css" type="text/css" rel="stylesheet" />
+    <link href="css/jquery.tagit.css" type="text/css" rel="stylesheet" />
   </head>
   <body>
-    <h2><a href='#'>Mobile Midwife</a></h2>
+    <h2><a id='application-title' href='#'>Coconut</a></h2>
     <div id="menu">
     </div>
     <div id="content">
@@ -14,8 +16,8 @@
     </div>
   </body>
   <!-- TODO for deployment - combine & minify all of this -->
-  <script type="text/javascript" src="js-libraries/jquery-1.6.2.js"></script>
-  <script type="text/javascript" src="js-libraries/jquery-ui-1.8.15.custom.min.js"></script>
+  <script type="text/javascript" src="js-libraries/jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="js-libraries/jquery-ui-1.8.17.custom.min.js"></script>
 
   <script type="text/javascript" src="js-libraries/underscore-min.js"></script>
   <script type="text/javascript" src="js-libraries/backbone.js"></script>
@@ -31,16 +33,16 @@
 	<script type="text/javascript" src="js-libraries/jquery.toObject.js"></script>
 	<!-- String munging library -->
 	<script type="text/javascript" src="js-libraries/inflection.js"></script>
-	<!-- Render Zcore form elements -->
 	<script type="text/javascript" src="js-libraries/jquery.dateFormat-1.0.js"></script>
-	<script type="text/javascript" src="js-libraries/d3.js"></script>
-	<script type="text/javascript" src="js-libraries/d3.chart.js"></script>
 	<script type="text/javascript" src="js-libraries/table2CSV.js"></script>
 	<script type="text/javascript" src="js-libraries/jquery.tablesorter.min.js"></script>
+	<script type="text/javascript" src="js-libraries/picnet.table.filter.min.js"></script>
+	<script type="text/javascript" src="js-libraries/tag-it.js"></script>
   <link href="css/tablesorter.css" type="text/css" rel="stylesheet" />
 	
 	<!-- The app itself - note that if new models/views are added they need to be added here-->
 	<script type="text/javascript" src="app/config.js"></script>
+	<script type="text/javascript" src="app/models/Config.js"></script>
 	<script type="text/javascript" src="app/models/Question.js"></script>
 	<script type="text/javascript" src="app/models/QuestionCollection.js"></script>
 	<script type="text/javascript" src="app/models/Result.js"></script>

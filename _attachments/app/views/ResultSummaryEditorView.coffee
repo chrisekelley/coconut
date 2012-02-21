@@ -35,3 +35,8 @@ class ResultSummaryEditorView extends Backbone.View
     "
 
     @el.html result
+
+    console.log @question
+
+
+    js2form($('form').get(0), @question.resultSummaryFields())

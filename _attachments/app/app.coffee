@@ -12,10 +12,27 @@ class Router extends Backbone.Router
     "manage": "manage"
     "": "default"
 
+  route: (route, name, callback) ->
+    Backbone.history || (Backbone.history = new Backbone.History)
+    if !_.isRegExp(route)
+      route = this._routeToRegExp(route)
+    Backbone.history.route(route, (fragment) =>
+      args = this._extractParameters(route, fragment)
+      callback.apply(this, args)
+
+# Run this before
+      $('#loading').slideDown()
+
+      this.trigger.apply(this, ['route:' + name].concat(args))
+
+# Run these after
+      $('#loading').fadeOut()
+
+    , this)
+
   default: ->
     $("#content").html("<img src='images/coconut_logo_hori_1_med.jpg'/>")
     $("#content").empty()
-    $("#loading").toggle(false)
 
   editResultSummary: (question_id) ->
     Coconut.resultSummaryEditor ?= new ResultSummaryEditorView()
@@ -96,7 +113,9 @@ class Router extends Backbone.Router
     Coconut.resultsView ?= new ResultsView()
     Coconut.resultsView.question = new Question
       id: question_id
-    Coconut.resultsView.render()
+    Coconut.resultsView.question.fetch
+      success: ->
+        Coconut.resultsView.render()
 
   startApp: ->
     Coconut.questions = new QuestionCollection()
@@ -106,6 +125,10 @@ class Router extends Backbone.Router
     Coconut.menuView.render()
     # Start Backbone history a necessary step for bookmarkable URL's
     Backbone.history.start()
+    Coconut.config = new Config()
+    Coconut.config.fetch
+      success: ->
+        $('#application-title').html Coconut.config.title()
 
 Coconut = {}
 Coconut.router = new Router()

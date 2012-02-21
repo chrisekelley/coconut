@@ -28,6 +28,23 @@ class Question extends Backbone.Model
     else
       throw "More than one root node"
 
+  resultSummaryFields: =>
+    resultSummaryFields = @get("resultSummaryFields")
+    # If this hasn't been defined, default to first 3 fields
+    unless resultSummaryFields
+      resultSummaryFields = {}
+      _.each([0..2], (index) =>
+        resultSummaryFields[@questions()[index].label()] = "on"
+      )
+    return resultSummaryFields
+
+  summaryFieldNames: =>
+    return _.keys @resultSummaryFields()
+
+  summaryFieldKeys: ->
+    return _.map @summaryFieldNames(), (key) ->
+      key.replace(/[^a-zA-Z0-9 -]/g,"").replace(/[ -]/g,"")
+
 Question.fromDomNode = (domNode) ->
   _(domNode).chain()
     .map (question) ->

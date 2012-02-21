@@ -36,11 +36,24 @@ table.results td{
   background-color: #CCC;
 }
 
-a{
+table.results th{
+  border-color: #600;
+  border-width: 1px 1px 0 0;
+  border-style: solid;
+}
+
+
+.small-button{
+  font-size: 50%;
+  font-weight: normal;
+}
+
+a, input[type=submit]{
   color:black;
   border-style: solid;
   background-color: gray;
   font-size: 150%;
+  border: solid black 2px;
 }
 
 li{
@@ -65,11 +78,18 @@ body.all-advanced-hidden .advanced{
 }
 
 #loading{
-  background-color: black;
+  background: rgba(18, 82, 0, 0.5);
   color: white;
   position: fixed;
   top: 100px;
-  left: 100px;
+  right: 10px;
   border: solid thin;
+  padding: 15px;
+}
+
+#messageText{
+  position: fixed;
+  right: 10px;
+  background: rgba(18, 82, 0, 0.5);
   padding: 15px;
 }

@@ -3,31 +3,32 @@ class QuestionView extends Backbone.View
 
   render: =>
     @el.html "
+      <div style='display:none' id='messageText'>
+        Saving...
+      </div>
       <div id='question-view'>
         <form>
           #{@toHTMLForm(@model)}
-          <input type='submit' value='complete'>
         </form>
       </div>
     "
     js2form($('form').get(0), @result.toJSON())
+    $("input[name=Tags]").tagit
+      availableTags: [
+        "complete"
+      ]
+      onTagChanged: ->
+        $("input[name=Tags]").trigger('change')
 
   events:
-    "submit #question-view form": "complete"
     "change #question-view input": "save"
     "change #question-view select": "save"
     "click #question-view button:contains(+)" : "repeat"
 
   save: ->
     @result.set $('form').toObject()
+    $("#messageText").slideDown().fadeOut()
     @result.save()
-
-  complete: ->
-    @result.set $('form').toObject()
-    @result.set({complete:true})
-    @result.save()
-    # Don't let the browser redirect by default
-    return false
 
   repeat: (event) ->
     button = $(event.target)

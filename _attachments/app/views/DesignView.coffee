@@ -199,7 +199,6 @@ class DesignView extends Backbone.View
   formDump: ->
     $('#dump').html(JSON.stringify($('form').toObject()))
 
-
   advancedMode:->
     $('body').removeClass("all-advanced-hidden")
     $('button:contains(Advanced Mode)').html "Basic Mode"

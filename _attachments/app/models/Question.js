@@ -1,4 +1,5 @@
 var Question,
+  __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   __hasProp = Object.prototype.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -7,6 +8,8 @@ Question = (function(_super) {
   __extends(Question, _super);
 
   function Question() {
+    this.summaryFieldNames = __bind(this.summaryFieldNames, this);
+    this.resultSummaryFields = __bind(this.resultSummaryFields, this);
     Question.__super__.constructor.apply(this, arguments);
   }
 
@@ -71,6 +74,29 @@ Question = (function(_super) {
     } else {
       throw "More than one root node";
     }
+  };
+
+  Question.prototype.resultSummaryFields = function() {
+    var resultSummaryFields,
+      _this = this;
+    resultSummaryFields = this.get("resultSummaryFields");
+    if (!resultSummaryFields) {
+      resultSummaryFields = {};
+      _.each([0, 1, 2], function(index) {
+        return resultSummaryFields[_this.questions()[index].label()] = "on";
+      });
+    }
+    return resultSummaryFields;
+  };
+
+  Question.prototype.summaryFieldNames = function() {
+    return _.keys(this.resultSummaryFields());
+  };
+
+  Question.prototype.summaryFieldKeys = function() {
+    return _.map(this.summaryFieldNames(), function(key) {
+      return key.replace(/[^a-zA-Z0-9 -]/g, "").replace(/[ -]/g, "");
+    });
   };
 
   return Question;

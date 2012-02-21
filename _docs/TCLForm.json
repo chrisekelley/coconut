@@ -252,6 +252,13 @@
            "label": "Father's Name",
            "type": "text",
            "repeatable": "false"
+       },
+       {
+           "id": "742",
+           "_id": "742",
+           "label": "Tags",
+           "type": "text",
+           "repeatable": "false"
        }
    ],
    "collection": "question"
