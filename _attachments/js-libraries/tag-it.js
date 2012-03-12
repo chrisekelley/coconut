@@ -210,7 +210,8 @@
                     }
                 }).blur(function(e){
                     // Create a tag when the element loses focus (unless it's empty).
-                    that.createTag(that._cleanedInput());
+                    // Removed by mikeymckay because it breaks the onTagChange event
+                    //that.createTag(that._cleanedInput());
                 });
                 
 
