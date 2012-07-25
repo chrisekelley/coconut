@@ -25,7 +25,7 @@ var ReportView = Backbone.View.extend({
 		"click #form-client " : "incidentLink",
 		"click #form-config " : "configLink",
 		"click #form-design " : "designLink",
-		"orientationEvent " : "orientation",
+		//"orientationEvent " : "orientation",
 	},
 	reseted: function() {
 		console.log("reseted; Incidents count: " + FORMY.Incidents.length);
@@ -51,7 +51,7 @@ var ReportView = Backbone.View.extend({
 		var searchTerm =  $('#search_string').val();
 		FORMY.router.navigate('search/' + searchTerm, true);
 	},
-	orientation: "horiz",
+	//orientation: "horiz",
 	//reportEducationInstance:null,
 	render: function() {
 //		$("#formRenderingView").remove();
@@ -70,7 +70,7 @@ var ReportView = Backbone.View.extend({
 			this.template =  loadTemplate("report.template.html");
 		} else {
 			//alert('HOLY ROTATING SCREENS BATMAN - otherwise:' + window.orientation + " screen.width: " + screen.width);
-			this.orientation = "horiz";
+			//this.orientation = "horiz";
 			this.template =  loadTemplate("report.template.html");
 			//this.template =  loadTemplate("home.template.html");
 		}

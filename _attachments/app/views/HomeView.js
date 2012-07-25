@@ -2,7 +2,7 @@ var HomeView = Backbone.View.extend({
 	//el: $("#homePageView"),
 	template: loadTemplate("home.template.html"),
 	initialize: function() {
-		_.bindAll(this, 'addOne', 'reseted', 'render', 'search', 'orientation', 'nextLink');
+		_.bindAll(this, 'addOne', 'reseted', 'render', 'search', 'nextLink');
 		FORMY.Incidents.bind('add',   this.addOne, this);
 		//FORMY.Incidents.bind('search',   this.search, this);
 		FORMY.Incidents.bind('reset', this.reseted, this);
@@ -11,6 +11,7 @@ var HomeView = Backbone.View.extend({
 		FORMY.Incidents.bind('render', this.render, this);
 		return this;
 	},
+	
 	startkey: null,
 	startkey_docid: null,
 	endkey_docid: null,
@@ -26,7 +27,7 @@ var HomeView = Backbone.View.extend({
 		"click #form-config " : "configLink",
 		"click #form-design " : "designLink",
 		"click #nextLink"	  : "nextLink",
-		"orientationEvent " : "orientation",
+		//"orientationEvent " : "orientation",
 	},
 	reseted: function() {
 		console.log("reseted; Incidents count: " + FORMY.Incidents.length);
@@ -58,17 +59,22 @@ var HomeView = Backbone.View.extend({
 	},
 	search: function(e) {
 		e.preventDefault();
-		console.log("Searching");
 		var searchTerm =  $('#search_string').val();
 		var department =  $('#department').val();
 		//FORMY.router.navigate('search/' + searchTerm, true);
 		if (searchTerm == "" && department == "") {
+			console.log("No search terms; Back to home");
 			FORMY.router.navigate('home', true);
-		} else {
+		} else if (searchTerm == "" && department != "") {
+			console.log("Searching department");
+			searchTerm = " ";
 			FORMY.router.navigate('search/' + searchTerm + "/" + department, true);
+		} else {
+			console.log("Searching keyword");
+			FORMY.router.navigate('search/' + searchTerm, true);
 		}
 	},
-	orientation: "horiz",
+	//orientation: "horiz",
 	//reportEducationInstance:null,
 	render: function() {
 //		$("#formRenderingView").remove();
@@ -87,7 +93,7 @@ var HomeView = Backbone.View.extend({
 			this.template =  loadTemplate("home.vert.template.html");
 		} else {
 			//alert('HOLY ROTATING SCREENS BATMAN - otherwise:' + window.orientation + " screen.width: " + screen.width);
-			this.orientation = "horiz";
+			//this.orientation = "horiz";
 			this.template =  loadTemplate("home.vert.template.html");
 			//this.template =  loadTemplate("home.template.html");
 		}
@@ -118,7 +124,7 @@ var SearchListItemView = Backbone.View.extend({
 		this.content = this.model.toJSON();
 		this.html = this.template(this.content);
 		$(this.el).html(this.html);
-		//console.log("render SearchListItemView: "+ JSON.stringify(html));
+		//console.log("render SearchListItemView: "+ JSON.stringify(this.html));
 		return this;
 	}
 });

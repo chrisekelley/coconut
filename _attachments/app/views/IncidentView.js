@@ -14,7 +14,7 @@ window.IncidentView = Backbone.View.extend({
 			this.orientation = "vert";
 			this.template =  loadTemplate("patient.vert.template.html");
 		} else {
-			this.orientation = "horiz";
+			//this.orientation = "horiz";
 			this.template =  loadTemplate("patient.vert.template.html");
 			//this.template =  loadTemplate("home.template.html");
 		}

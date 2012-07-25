@@ -1,4 +1,5 @@
 FORMY.forms = new FormCollection();
+
 FORMY.loadForm = function(name, parentId, options) {
 	options || (options = {});
 	var form = new Form({_id: name});
@@ -83,6 +84,7 @@ var AppRouter = Backbone.Router.extend({
         routes: {
         	"/":                 							"home",    			// #home
         	"home/:startkey/:startkey_docid":				"home",    			// #home
+        	"search/:query":        						"search",    		// #search
         	"search/:query/:department":        			"search",    		// #search
         	"incident":           							"incident",    		// #incident
         	"arrestDocket/:query":  						"arrestDocket",    	// #arrestDocket
@@ -108,6 +110,11 @@ var AppRouter = Backbone.Router.extend({
         },
         home: function (startkey, startkey_docid) {
         	console.log("home route." + startkey);
+        	if (FORMY.SyncpointLocalDb != null) {
+        		console.log("FORMY.SyncpointLocalDb: " + FORMY.SyncpointLocalDb);
+        		Backbone.couch_connector.config.db_name = FORMY.SyncpointLocalDb;
+        	}
+        	
 //        	if ($("#charts").length <= 0){
 //        		window.location.href = '/coconut/_design/coconut/index.html';
 //        		}
@@ -185,6 +192,10 @@ var AppRouter = Backbone.Router.extend({
         },
         search: function (searchTerm, department) {
         	console.log("search route.");
+        	if (FORMY.SyncpointLocalDb != null) {
+        		console.log("FORMY.SyncpointLocalDb: " + FORMY.SyncpointLocalDb);
+        		Backbone.couch_connector.config.db_name = FORMY.SyncpointLocalDb;
+        	}
 //        	if ($("#charts").length <= 0){
 //        		window.location.href = '/coconut/_design/coconut/index.html';
 //        		}
@@ -198,7 +209,7 @@ var AppRouter = Backbone.Router.extend({
 			}
     		console.log("Searching for " + searchTerm + " department: " + department);
     		var searchResults = new IncidentsList();
-    		if (searchTerm !== "") {
+    		if ((searchTerm !== "") && (searchTerm !== " ")) {
     			//var searchInt = parseInt(searchTerm);
     			console.log("bySearchKeywords search");
     			searchResults.db["keys"] = [searchTerm];
@@ -242,6 +253,10 @@ var AppRouter = Backbone.Router.extend({
 				viewDiv.setAttribute("id", "formRenderingView");
 				$("#views").append(viewDiv);
 			}
+			if (FORMY.SyncpointLocalDb != null) {
+        		console.log("FORMY.SyncpointLocalDb: " + FORMY.SyncpointLocalDb);
+        		Backbone.couch_connector.config.db_name = FORMY.SyncpointLocalDb;
+        	}
         	FORMY.loadForm("incident", null, {
         		success: function(form, resp){
         			var newModel = new Form();

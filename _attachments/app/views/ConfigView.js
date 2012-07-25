@@ -9,7 +9,7 @@ var ConfigView = Backbone.View.extend({
 		"click #form-client " : "incidentLink",
 		"click #form-config " : "configLink",
 		"click #form-design " : "designLink",
-		"orientationEvent " : "orientation",
+		//"orientationEvent " : "orientation",
 	},
 	reseted: function() {
 		console.log("reseted.");
