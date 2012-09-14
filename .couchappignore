@@ -8,5 +8,6 @@
   "features*",
   "log",
   ".*\\.coffee$",
+  "build_android_app",
   "scripts"
 ]

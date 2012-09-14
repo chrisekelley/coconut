@@ -1,0 +1,24 @@
+Limit completed cases
+
+Check that reports system limits and vice versa
+
+Check locations are right
+  - Do we have the right shehias
+  - Make Shehia autocomplete
+  - Connect district to shehia
+  - Rename ward -> shehia
+  - Associate shehia to district for case notification
+
+Change all test results
+
+Add summary table report
+
+Add some new colors: Especially on results page. Especiallyt make buttons that can be pressed colorful. "SHOUTING colors"
+
+On index page show a report that shows how many things are pending with some details.
+
+DISTRICT should be dropdown on users page
+
+Check altitude
+
+Do we need to change parasite type on Facility to match Household?

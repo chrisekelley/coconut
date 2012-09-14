@@ -1,0 +1,20 @@
+/* DesignView */
+.question-definition{
+  border-style: dotted;
+  border-width: 1px;
+  margin: 10px;
+  margin-top: 32px;
+}
+.question-definition-controls{
+  float: right;
+}
+.group{
+  border-style: dotted;
+  border-width: 1px;
+}
+body.all-advanced-hidden .advanced{
+  display: none;
+}
+.question-definition label{
+  display: block;
+}

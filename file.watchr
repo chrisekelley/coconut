@@ -1,8 +1,10 @@
 def push_and_test
 #    `make combined`
+  `git log --pretty=format:'%h' -n 1 > _attachments/version`
   `couchapp push`
-  `pkill cucumber`
-  sleep(2)
+  `couchapp push http://coco:cocopuffs@localhost:5984/coconut-factory`
+#  `pkill cucumber`
+#  sleep(2)
 #  puts "starting cuke"
 #  cuke_result = `cucumber`
 #  puts cuke_result
@@ -27,6 +29,7 @@ watch( '.css$') {|match_data|
   push_and_test()
 }
 watch( '(.*\.coffee$)' ) {|match_data|
+  puts "\n"
   puts match_data[0]
   result = `coffee --bare --compile #{match_data[0]} 2>&1`
   error = false
