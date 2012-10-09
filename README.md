@@ -17,13 +17,11 @@ To get Coconut working you need to put the files in this directory into a couchd
 
     apt-get install couchapp
 
-Now we can use couchapp to push the files into your database:
+Create a .couchapprc file based on .couchapprc.sample. Then we can use couchapp to push the files into your database:
 
     couchapp push
 
 Now you can point your browser at the [Coconut](http://localhost:5984/coconut/_design/coconut/index.html)
-
-You may wish to customise the .couchapprc file to point to different targets.
 
 How does this work?
 -------------------
@@ -72,4 +70,4 @@ It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a lit
 
 Help!
 ----
-Check out the project's [issues](https://github.com/vetula/cconut/issues). Please help me fix issues and add any problem that you come across.
+Check out the project's [issues](https://github.com/mikeymckay/coconut/issues). Please help me fix issues and add any problem that you come across.
