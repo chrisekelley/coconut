@@ -72,4 +72,4 @@ It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a lit
 
 Help!
 ----
-Check out the project's [issues](https://github.com/vetula/cconut/issues). Please help me fix issues and add any problem that you come across.
+Check out the project's [issues](https://github.com/mikeymckay/coconut/issues). Please help me fix issues and add any problem that you come across.
