@@ -60,12 +60,12 @@ class Sync extends Backbone.Model
                     #data: JSON.stringify(result.toJSON())
                     data: result.toJSON()
                     success: =>
-                      result.set "sentTo", Coconut.config.get("synchronization_target")
+                      result.set "sentTo", Coconut.config.get("http-post-target")
                       result.set("complete", "true") if Coconut.config.get("completion_mode") is "on-send"
                       result.save()
                       saveSyncLog()
                     error: (error) =>
-                      $(".sync-sent-status").html "Error saving to #{Coconut.config.get("synchronization_target")}"
+                      $(".sync-sent-status").html "Error saving to #{Coconut.config.get("http-post-target")}: #{JSON.stringify(error)}"
 
   log: (message) =>
     Coconut.debug message
