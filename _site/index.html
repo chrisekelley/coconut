@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Coconut &curren; Coconut</title>
+   <meta name="author" content="Chris Kelley" />
+   <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/960.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/text.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/pygment_trac.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/vetula.css" type="text/css" media="screen, projection" />
+<!--    <script type="text/javascript" src="http://use.typekit.com/sql4bwb.js"></script> -->
+<!--    <script type="text/javascript">try{Typekit.load();}catch(e){}</script> -->
+</head>
+<body>
+  <div class="container_12">
+    <div id="main" class="grid_8">
+    <header class = "clearfix">
+    <a href="/coconut" style="text-decoration: none"><img src="images/coconut_logo_hori_1_med.jpg"/></a>
+    </header>
+
+      <!--  http://chestofbooks.com/gardening-horticulture/Cyclopedia-2/index.html -->
+      <p>Coconut renders JSON defined forms in a browser and then saves the results to couchdb.</p>
+
+<h2 id='what_is_it_for'>What is it for?</h2>
+
+<p>You can use Coconut to create data entry applications that can be used on smart phones and computers. Data is stored on the device. When a network connection is available, the data is automatically synchronized with the server.<br />A dashboard is available so that the user can track progress.</p>
+
+<h2 id='how_does_it_work'>How does it work?</h2>
+<a href='images/coconut_dashboard.png' style='text-decoration:underline'><img align='right' src='images/coconut_dashboard_small.png' /></a>
+<p>Coconut uses CouchDB for data storage and synchronization, <a href='http://documentcloud.github.com/backbone'>Backbone.js</a> for MVC, <a href='https://github.com/janmonschke/backbone-couchdb'>backbone-couchdb</a> to connect backbone to CouchDB, and <a href='http://mbostock.github.com/d3/'>D3</a> for charts.</p>
+
+<p>Coconut can be run on a computer or installed on a mobile phone or tablet. <a href='https://github.com/vetula/Android-Coconut-MobileFuton'>Android-Coconut-MobileFuton</a> is an example that may be used on an Android 10.1&#8221; tablet. <a href='https://github.com/vetula/Android-Tims-MobileFuton'>Android-Tims-MobileFuton</a> is formatted for Android smart phones.</p>
+
+<h2 id='how_do_i_get_started'>How do I get started?</h2>
+
+<p>When the application starts, it displays a list of records with button to forms on the left and charts on the right. The application user interface is described in greater detail in <a href='using.html'>Using Coconut</a>.</p>
+
+<h2 id='may_i_see_it'>May I see it?</h2>
+
+<p>Yes, here are some <a href='screencasts.html'>screencasts</a>.</p>
+
+<h2 id='technical_details'>Technical details</h2>
+
+<p>Coconut features a built-in form designer - big shout out to the Dimagi folks who created <a href='https://github.com/dimagi/FormDesignerAlpha'>FormDesignerAlpha</a>. Coconut uses a <a href='https://github.com/vetula/FormDesignerAlpha'>version customized for JSON form export</a>. The form is saved to the CouchDB and may then be used by your application. View the <a href='form_designer.html'>Form Designer</a> page for more information on creating forms.</p>
+
+<p>Coconut uses <a href='http://documentcloud.github.com/backbone'>Backbone.js</a> for its MVC (Model View Controller) framework. All of the backbone <a href='http://documentcloud.github.com/backbone/#Model'>models</a> and <a href='http://documentcloud.github.com/backbone/#Model'>views</a> have their own file and are in app/models and app/views respectively. app/app.js is responsible for tying it all together.</p>
+
+<p>You can put json forms into the _docs directory and they will be added to your couch when you do a couchapp push.</p>
+
+<p>See the page about <a href='app_design.html'>Application Design</a> for more information on Coconut form rendering and application flow.</p>
+
+<p>Charts and the use of Jquery promise are described on the <a href='charts.html'>charts page</a>.</p>
+
+<h2 id='gimme_a_features_list'>Gimme a features list!</h2>
+
+<ul>
+<li><a href='form_designer.html'>Form Designer</a></li>
+
+<li><a href='charts.html'>Charts</a></li>
+
+<li>Storage and Replication using CouchDB</li>
+
+<li>Support for mobile phones and tablets</li>
+</ul>
+
+<h2 id='download'>Download</h2>
+
+<p>You can download this project in either <a href='http://github.com/vetula/coconut/zipball/master'>zip</a> or <a href='http://github.com/vetula/coconut/tarball/master'>tar</a> formats.</p>
+
+<p>You can also clone the project with <a href='http://git-scm.com'>Git</a> by running: <pre>$ git clone git://github.com/vetula/coconut</pre></p>
+
+<p>get the source code on GitHub : <a href='http://github.com/vetula/coconut'>vetula/coconut</a></p>
+
+<h2 id='credit'>Credit</h2>
+
+<p>Authors: Chris E. Kelley (ckelley@rti.org), Mike McKay (mmckay@rti.org)</p>
+
+<p>Contact: Chris E. Kelley (ckelley@rti.org)</p>
+<script type='text/javascript'>
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type='text/javascript'>
+try {
+var pageTracker = _gat._getTracker("UA-22835379-4");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+      <hr/>
+      <div id="footer" class="footer">
+      <div id="footer-inner" class="footer-inner inner clearfix">
+<div id="footer-message-wrapper" class="footer-message-wrapper full-width">
+        <div id="footer-message" class="footer-message row grid16-16">
+          <div id="footer-message-inner" class="footer-message-inner inner clearfix">
+            <div id="footer-message-text" class="footer-message-text block">
+<div id="footer-message-text-inner" class="footer-message-text-inner inner clearfix">
+<div class="bottom_logo"><a href="http://www.rti.org/ict"><img src="images/rti-international-logo.png" alt="logo" class="png"/></a></div>
+      <p>RTI International, P.O. Box 12194, 3040 Cornwallis Rd., Research Triangle Park, NC 27709.<br>
+        ©2011 RTI International. All Rights Reserved. RTI International is a trade name of Research Triangle Institute.</p>
+    </div><!-- /footer-message-text-inner -->
+      </div><!-- /footer-message-text -->
+          </div><!-- /footer-message-inner -->
+        </div><!-- /footer-message -->
+      </div><!-- /footer-message-wrapper -->
+      
+<!--        <a href="http://github.com/vetula/Android-Tims-MobileFuton">managed by github</a> -->
+<!--         &curren; -->
+<!--         <a href="http://github.com/mojombo/jekyll">generated by jekyll</a> -->
+<!--         &curren; -->
+<!--         <a href="http://creativecommons.org/licenses/by-sa/3.0/us/">licensed by creative commons</a> -->
+      </div>
+    </div>
+  <script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+  try {
+  var pageTracker = _gat._getTracker("UA-22835379-3");
+  pageTracker._trackPageview();
+  } catch(err) {}</script>
+</body>
+</html>

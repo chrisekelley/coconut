@@ -1,0 +1,84 @@
+body {
+      margin-top: 1.0em;
+      font-family: proxima-nova,Helvetica, Arial, FreeSans, san-serif;
+      line-height: 24px;
+    }
+    .download { float: right; }
+h1 { font-weight: normal; }
+h1 .small { font-size: 0.4em; }
+h1 a { text-decoration: none }
+.description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+.container_12 .grid_8 {
+width: 820px;
+}
+h1, h2, h3, #footer { 
+	font-weight: normal;
+}
+h2 {
+	text-transform: uppercase;
+	text-align: left;
+}
+header h1 {
+	color: #333;
+	font-size: 62px;
+	float: left;
+	height: 65px;
+	letter-spacing: -5px;
+	margin: 0 0 0 0px;
+	padding-top: 12px;
+	position: relative;
+	text-transform: uppercase;
+	width: 290px;
+	text-align: left
+}
+
+.centeredImage {
+	text-align: center;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding: 0px;
+}
+.footer {
+}
+
+ul.menu {
+list-style: none;
+border: none;
+text-align: left;
+}
+ul {
+font-size: 14px;
+color: #003065;
+margin-bottom: 20px;
+}
+.footer-inner #block-menu-menu-footer-about li {
+list-style: none !important;
+float: left;
+color: white;
+font-size: 14px;
+font-weight: bold;
+}
+.footer-inner #block-menu-menu-footer-about li:first-child::before {
+content: "";
+}
+.footer-inner #block-menu-menu-footer-about li::before {
+content: "|";
+}
+.footer-inner #block-menu-menu-footer-about a {
+padding: 0 5px 0 10px !important;
+display: inline;
+color: white;
+font-size: 14px;
+font-weight: bold;
+padding: 0 8px 0 0;
+text-transform: uppercase;
+}
+.bottom_logo {
+float: left;
+padding: 10px 0 0 25px;
+}
+.footer-message-text p {
+float: left;
+font-size: 12px;
+padding: 5px 0 0 20px;
+}

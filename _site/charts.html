@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Coconut &curren; Charts in Coconut</title>
+   <meta name="author" content="Chris Kelley" />
+   <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/960.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/text.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/pygment_trac.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/vetula.css" type="text/css" media="screen, projection" />
+<!--    <script type="text/javascript" src="http://use.typekit.com/sql4bwb.js"></script> -->
+<!--    <script type="text/javascript">try{Typekit.load();}catch(e){}</script> -->
+</head>
+<body>
+  <div class="container_12">
+    <div id="main" class="grid_8">
+    <header class = "clearfix">
+    <a href="/coconut" style="text-decoration: none"><img src="images/coconut_logo_hori_1_med.jpg"/></a>
+    </header>
+
+      <!--  http://chestofbooks.com/gardening-horticulture/Cyclopedia-2/index.html -->
+      <h1 id='charts_in_coconut'>Charts in Coconut</h1>
+
+<p>The Coconut dashboard features charts that are rendered using the <a href='http://mbostock.github.com/d3/'>D3</a> javascript library.</p>
+<img src='images/coconut_charts.png' /><p>&nbsp;</p>
+<h2 id='making_sure_all_the_data_arrives_when_needed'>Making sure all the data arrives when needed</h2>
+
+<p>The charts are activated in the home route. Coconut uses Jquery&#8217;s <a href='http://api.jquery.com/deferred.promise/'>deferred.promise()</a> capability to ensure that all of the data, which is assembled from asynchronous queries to CouchDB views, is available when rendering the charts.</p>
+
+<p>The following sites were very helpful in explaining how to use deferreds:</p>
+
+<ul>
+<li><a href='http://www.erichynds.com/jquery/using-deferreds-in-jquery/'>Using Deferreds in jQuery 1.5</a></li>
+
+<li><a href='http://a-developer-life.blogspot.com/2011/05/using-jquery-deferred-with-backbone.html'>Using Jquery Deferred with Backbone</a></li>
+</ul>
+
+<p>A side benefit of using deferreds is that the code is alot simpler. You do not have to nest each asynchronous call.</p>
+
+<p>The following code from app.js home route queries two CouchDB views and stores the data in the deferred object:</p>
+<div class='highlight'><pre><code class='js'><span class='kd'>var</span> <span class='nx'>reportEducationInstance</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>ReportCollection</span><span class='p'>();</span>
+<span class='nx'>reportEducationInstance</span><span class='p'>.</span><span class='nx'>db</span><span class='p'>[</span><span class='s2'>&quot;view&quot;</span><span class='p'>]</span> <span class='o'>=</span> 
+<span class='p'>[</span><span class='s2'>&quot;byDepartmentEducation?reduce=true&amp;group_level=2&quot;</span><span class='p'>];</span>
+<span class='nx'>reportEducationInstance</span><span class='p'>.</span><span class='nx'>deferred</span> <span class='o'>=</span> <span class='nx'>reportEducationInstance</span><span class='p'>.</span><span class='nx'>fetch</span><span class='p'>({</span>
+    <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
+        <span class='p'>},</span>
+    <span class='nx'>error</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
+        <span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='s2'>&quot;Error loading Report: &quot;</span> <span class='o'>+</span> <span class='nx'>arguments</span><span class='p'>);</span>
+    <span class='p'>}</span>
+<span class='p'>});</span>
+
+<span class='kd'>var</span> <span class='nx'>reportHealthInstance</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>ReportCollection</span><span class='p'>();</span>
+<span class='nx'>reportHealthInstance</span><span class='p'>.</span><span class='nx'>db</span><span class='p'>[</span><span class='s2'>&quot;view&quot;</span><span class='p'>]</span> <span class='o'>=</span> 
+<span class='p'>[</span><span class='s2'>&quot;byDepartmentHealth?reduce=true&amp;group_level=2&quot;</span><span class='p'>];</span>
+<span class='nx'>reportHealthInstance</span><span class='p'>.</span><span class='nx'>deferred</span> <span class='o'>=</span> <span class='nx'>reportHealthInstance</span><span class='p'>.</span><span class='nx'>fetch</span><span class='p'>({</span>
+    <span class='nx'>success</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
+        <span class='p'>},</span>
+    <span class='nx'>error</span><span class='o'>:</span> <span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
+        <span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='s2'>&quot;Error loading Report: &quot;</span> <span class='o'>+</span> <span class='nx'>arguments</span><span class='p'>);</span>
+    <span class='p'>}</span>
+<span class='p'>});</span>
+</code></pre>
+</div>
+<p>Data from the views is then added to the HomeView (home route in app.js):</p>
+<div class='highlight'><pre><code class='js'><span class='kd'>var</span> <span class='nx'>page</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nx'>Page</span><span class='p'>({</span>
+    <span class='nx'>content</span><span class='o'>:</span> <span class='s2'>&quot;Default List of Incidents:&quot;</span>
+<span class='p'>});</span>
+ <span class='p'>(</span><span class='k'>new</span> <span class='nx'>HomeView</span><span class='p'>(</span>
+<span class='p'>{</span>
+    <span class='nx'>model</span><span class='o'>:</span> <span class='nx'>page</span><span class='p'>,</span>
+    <span class='nx'>el</span><span class='o'>:</span> <span class='nx'>$</span><span class='p'>(</span><span class='s2'>&quot;#homePageView&quot;</span><span class='p'>),</span>
+    <span class='nx'>reportEducationInstance</span><span class='o'>:</span> <span class='nx'>reportEducationInstance</span><span class='p'>,</span>
+    <span class='nx'>reportHealthInstance</span><span class='o'>:</span> <span class='nx'>reportHealthInstance</span><span class='p'>,</span>
+    <span class='nx'>reportWorksInstance</span><span class='o'>:</span> <span class='nx'>reportWorksInstance</span><span class='p'>,</span>
+    <span class='nx'>reportOtherInstance</span><span class='o'>:</span> <span class='nx'>reportOtherInstance</span>
+<span class='p'>}</span>
+<span class='p'>)).</span><span class='nx'>render</span><span class='p'>();</span>
+</code></pre>
+</div>
+<p>In the render method in HomeView.js, the jquery when() &#8220;waits&#8221; until all of those deferred fields are complete before continuing. It is executing the callback when the deferred objects are either resolved or fail.</p>
+<div class='highlight'><pre><code class='js'><span class='nx'>$</span><span class='p'>.</span><span class='nx'>when</span><span class='p'>(</span><span class='k'>this</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>reportEducationInstance</span><span class='p'>.</span><span class='nx'>deferred</span><span class='p'>,</span> 
+<span class='k'>this</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>reportHealthInstance</span><span class='p'>.</span><span class='nx'>deferred</span><span class='p'>,</span>
+<span class='k'>this</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>reportWorksInstance</span><span class='p'>.</span><span class='nx'>deferred</span><span class='p'>,</span> 
+<span class='k'>this</span><span class='p'>.</span><span class='nx'>options</span><span class='p'>.</span><span class='nx'>reportOtherInstance</span><span class='p'>.</span><span class='nx'>deferred</span><span class='p'>)</span>
+<span class='p'>.</span><span class='nx'>then</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>(</span><span class='nx'>countData</span><span class='p'>,</span> <span class='nx'>countData2</span><span class='p'>,</span> <span class='nx'>worksData</span><span class='p'>,</span> <span class='nx'>otherData</span><span class='p'>)</span> <span class='p'>{</span>
+    <span class='kd'>var</span> <span class='nx'>departmentReport</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nb'>Object</span><span class='p'>({</span>
+        <span class='nx'>date</span><span class='o'>:</span> <span class='kc'>null</span><span class='p'>,</span>
+        <span class='nx'>education</span><span class='o'>:</span> <span class='kc'>null</span><span class='p'>,</span>
+        <span class='nx'>health</span><span class='o'>:</span> <span class='kc'>null</span><span class='p'>,</span>
+        <span class='nx'>works</span><span class='o'>:</span> <span class='kc'>null</span><span class='p'>,</span>
+        <span class='nx'>other</span><span class='o'>:</span> <span class='kc'>null</span>
+    <span class='p'>});</span>
+    <span class='kd'>var</span> <span class='nx'>reportDate</span> <span class='o'>=</span> <span class='k'>new</span> <span class='nb'>Date</span><span class='p'>();</span>
+    <span class='kd'>var</span> <span class='nx'>education</span> <span class='o'>=</span> <span class='nx'>parseData</span><span class='p'>(</span><span class='nx'>reportDate</span><span class='p'>,</span> <span class='nx'>countData</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>]);</span>
+    <span class='nx'>departmentReport</span><span class='p'>.</span><span class='nx'>education</span> <span class='o'>=</span> <span class='nx'>education</span><span class='p'>;</span>
+    <span class='kd'>var</span> <span class='nx'>health</span> <span class='o'>=</span> <span class='nx'>parseData</span><span class='p'>(</span><span class='nx'>reportDate</span><span class='p'>,</span> <span class='nx'>countData2</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>]);</span>
+    <span class='nx'>departmentReport</span><span class='p'>.</span><span class='nx'>health</span> <span class='o'>=</span> <span class='nx'>health</span><span class='p'>;</span>
+    <span class='kd'>var</span> <span class='nx'>works</span> <span class='o'>=</span> <span class='nx'>parseData</span><span class='p'>(</span><span class='nx'>reportDate</span><span class='p'>,</span> <span class='nx'>worksData</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>]);</span>
+    <span class='nx'>departmentReport</span><span class='p'>.</span><span class='nx'>works</span> <span class='o'>=</span> <span class='nx'>works</span><span class='p'>;</span>
+    <span class='kd'>var</span> <span class='nx'>other</span> <span class='o'>=</span> <span class='nx'>parseData</span><span class='p'>(</span><span class='nx'>reportDate</span><span class='p'>,</span> <span class='nx'>otherData</span><span class='p'>[</span><span class='mi'>0</span><span class='p'>]);</span>
+    <span class='nx'>departmentReport</span><span class='p'>.</span><span class='nx'>other</span> <span class='o'>=</span> <span class='nx'>other</span><span class='p'>;</span>
+    <span class='nx'>bulletChart</span><span class='p'>(</span><span class='nx'>departmentReport</span><span class='p'>);</span>
+    <span class='nx'>rendercharts</span><span class='p'>();</span>
+<span class='p'>})</span>
+<span class='p'>.</span><span class='nx'>fail</span><span class='p'>(</span><span class='kd'>function</span><span class='p'>()</span> <span class='p'>{</span>
+    <span class='nx'>console</span><span class='p'>.</span><span class='nx'>log</span><span class='p'>(</span><span class='s1'>&#39;I fire if one or more requests failed.&#39;</span><span class='p'>);</span>
+<span class='p'>});</span>
+</code></pre>
+</div>
+<h2 id='types_of_charts'>Types of Charts</h2>
+
+<p>The code in this page is used to prepare the bullet chart &#8220;Cases Per Department&#8221; displayed on the lower half of the dashboard screenshot. The code in coco-charts.js has examples of two charts:</p>
+
+<ul>
+<li>simpleBarCharts() - Simple bar charts, based on <a href='http://mbostock.github.com/d3/tutorial/bar-1.html'>A Bar Chart, Part 1</a></li>
+
+<li>bulletChart() - Bullet chart used this example, based on <a href='http://mbostock.github.com/d3/ex/bullet.html'>Bullet Charts</a></li>
+</ul>
+      <hr/>
+      <div id="footer" class="footer">
+      <div id="footer-inner" class="footer-inner inner clearfix">
+<div id="footer-message-wrapper" class="footer-message-wrapper full-width">
+        <div id="footer-message" class="footer-message row grid16-16">
+          <div id="footer-message-inner" class="footer-message-inner inner clearfix">
+            <div id="footer-message-text" class="footer-message-text block">
+<div id="footer-message-text-inner" class="footer-message-text-inner inner clearfix">
+<div class="bottom_logo"><a href="http://www.rti.org/ict"><img src="images/rti-international-logo.png" alt="logo" class="png"/></a></div>
+      <p>RTI International, P.O. Box 12194, 3040 Cornwallis Rd., Research Triangle Park, NC 27709.<br>
+        ©2011 RTI International. All Rights Reserved. RTI International is a trade name of Research Triangle Institute.</p>
+    </div><!-- /footer-message-text-inner -->
+      </div><!-- /footer-message-text -->
+          </div><!-- /footer-message-inner -->
+        </div><!-- /footer-message -->
+      </div><!-- /footer-message-wrapper -->
+      
+<!--        <a href="http://github.com/vetula/Android-Tims-MobileFuton">managed by github</a> -->
+<!--         &curren; -->
+<!--         <a href="http://github.com/mojombo/jekyll">generated by jekyll</a> -->
+<!--         &curren; -->
+<!--         <a href="http://creativecommons.org/licenses/by-sa/3.0/us/">licensed by creative commons</a> -->
+      </div>
+    </div>
+  <script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+  try {
+  var pageTracker = _gat._getTracker("UA-22835379-3");
+  pageTracker._trackPageview();
+  } catch(err) {}</script>
+</body>
+</html>

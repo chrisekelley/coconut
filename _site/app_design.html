@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>Coconut &curren; Application Design in Coconut</title>
+   <meta name="author" content="Chris Kelley" />
+   <link rel="stylesheet" href="css/reset.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/960.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/text.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/screen.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/pygment_trac.css" type="text/css" media="screen, projection" />
+   <link rel="stylesheet" href="css/vetula.css" type="text/css" media="screen, projection" />
+<!--    <script type="text/javascript" src="http://use.typekit.com/sql4bwb.js"></script> -->
+<!--    <script type="text/javascript">try{Typekit.load();}catch(e){}</script> -->
+</head>
+<body>
+  <div class="container_12">
+    <div id="main" class="grid_8">
+    <header class = "clearfix">
+    <a href="/coconut" style="text-decoration: none"><img src="images/coconut_logo_hori_1_med.jpg"/></a>
+    </header>
+
+      <!--  http://chestofbooks.com/gardening-horticulture/Cyclopedia-2/index.html -->
+      <h2 id='introduction'>Introduction</h2>
+
+<p>Coconut loops through the JSON form definitions to render the forms.</p>
+
+<p>FormView loads the form.template.html, which provides the formElements div, where each form element is appended. FormView&#8217;s render function loops through each of the formElements using the addOne function. AddOne sets up the table and inserts new rows when a formelement&#8217;s closeRow == &#8220;true&#8221;. It also renders a few other special widgets, such as headers and hidden fields. Most form elements are inserted using the following code: <pre><code>
+currentParent.append((new FormElementView({model: formElement}))
+.render().el);
+</code>
+</pre> Note how the currentParentName is saved in FormView&#8217;s currentParentName field - this shows where the element should be appended.</p>
+
+<p>FormElementView renders each element inside a td using the form-element-template, which calls the } tag. Handlebars.registerHelper(&#8220;renderWidget&#8221;&#8230; in formElementRender.js uses the relevant template based on the inputType for the element. Each widget is pre-compiled before the loop:</p>
+<div class='highlight'><pre><code class='html'>inputTextWidgetCompiledHtml = Handlebars.compile($(&quot;#inputTextWidget&quot;)
+.html());
+datepickerWidgetCompiledHtml = Handlebars.compile($(&quot;#datepickerWidget&quot;)
+.html());
+checkboxWidgetCompiledHtml = Handlebars.compile($(&quot;#checkboxWidget&quot;)
+.html());
+</code></pre>
+</div>
+<p>Look at the index2.html example. Each widget has its own handlebars.js template (see inputTextWidget).</p>
+<div class='highlight'><pre><code class='js'><span class='o'>&lt;</span><span class='nx'>script</span> <span class='nx'>id</span><span class='o'>=</span><span class='s2'>&quot;dropdownWidget&quot;</span> <span class='nx'>type</span><span class='o'>=</span><span class='s2'>&quot;text/x-handlebars-template&quot;</span><span class='o'>&gt;</span>
+	<span class='o'>&lt;</span><span class='nx'>select</span> <span class='nx'>id</span><span class='o'>=</span><span class='s1'>&#39;{{identifier}}&#39;</span> 
+	<span class='p'>{{</span><span class='err'>#</span><span class='nx'>options</span><span class='p'>}}</span><span class='nx'>data</span><span class='o'>-</span><span class='p'>{{</span><span class='nx'>name</span><span class='p'>}}</span><span class='o'>=</span><span class='s1'>&#39;{{value}}&#39;</span> 
+	<span class='p'>{{</span><span class='err'>/options}} name=&#39;{{identifier}}&#39;&gt;</span>
+	<span class='p'>{{</span><span class='nx'>dropdown</span> <span class='nx'>enumerations</span><span class='p'>}}</span>
+	<span class='p'>{{</span><span class='err'>/dropdown}}</span>
+	<span class='o'>&lt;</span><span class='err'>/select&gt;</span>
+<span class='o'>&lt;</span><span class='err'>/script&gt;</span>
+</code></pre>
+</div>
+<p>Performance test is at http://jsperf.com/test-pre-compiling-handlebars-js-templates</p>
+
+<p>In the current example, the forms are PatientRegistration and ArrestDocket.js.</p>
+
+<h2 id='how_do_i_customize_page_flow'>How do I customize page flow?</h2>
+<hr />
+<p>app.js constructs the Backbone.Router. List the routes in the routes method:</p>
+
+<pre><code>routes: {
+    	&quot;home&quot;:                 &quot;home&quot;,    // #home
+    	&quot;newPatient&quot;:                 &quot;newPatient&quot;,    // #newPatient
+    	&quot;arrestDocket&quot;:                 &quot;arrestDocket&quot;,    // #arrestDocket
+        &quot;*actions&quot;: &quot;defaultRoute&quot; // matches http://example.com/#anything-here
+    }</code></pre>
+
+<p>and create a method for each route:</p>
+
+<pre><code>    newPatient: function () {
+    	registration = new Form({_id: &quot;PatientRegistration&quot;});
+    	registration.fetch({
+    		success: function(model){
+    			(new FormView({model: model})).render(); 
+    		}
+    	});
+    },</code></pre>
+      <hr/>
+      <div id="footer" class="footer">
+      <div id="footer-inner" class="footer-inner inner clearfix">
+<div id="footer-message-wrapper" class="footer-message-wrapper full-width">
+        <div id="footer-message" class="footer-message row grid16-16">
+          <div id="footer-message-inner" class="footer-message-inner inner clearfix">
+            <div id="footer-message-text" class="footer-message-text block">
+<div id="footer-message-text-inner" class="footer-message-text-inner inner clearfix">
+<div class="bottom_logo"><a href="http://www.rti.org/ict"><img src="images/rti-international-logo.png" alt="logo" class="png"/></a></div>
+      <p>RTI International, P.O. Box 12194, 3040 Cornwallis Rd., Research Triangle Park, NC 27709.<br>
+        ©2011 RTI International. All Rights Reserved. RTI International is a trade name of Research Triangle Institute.</p>
+    </div><!-- /footer-message-text-inner -->
+      </div><!-- /footer-message-text -->
+          </div><!-- /footer-message-inner -->
+        </div><!-- /footer-message -->
+      </div><!-- /footer-message-wrapper -->
+      
+<!--        <a href="http://github.com/vetula/Android-Tims-MobileFuton">managed by github</a> -->
+<!--         &curren; -->
+<!--         <a href="http://github.com/mojombo/jekyll">generated by jekyll</a> -->
+<!--         &curren; -->
+<!--         <a href="http://creativecommons.org/licenses/by-sa/3.0/us/">licensed by creative commons</a> -->
+      </div>
+    </div>
+  <script type="text/javascript">
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  </script>
+  <script type="text/javascript">
+  try {
+  var pageTracker = _gat._getTracker("UA-22835379-3");
+  pageTracker._trackPageview();
+  } catch(err) {}</script>
+</body>
+</html>
