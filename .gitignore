@@ -10,3 +10,5 @@
 .settings/org.eclipse.wst.jsdt.ui.superType.name
 
 .couchappignore
+.idea
+
