@@ -7,7 +7,12 @@
   "Vagrantfile",
   "features*",
   "log",
-  ".*\\.coffee$",
+  ".*map\\.coffee$",
+  ".*map\\.map$",
+  "filters.*\\.coffee$",
+  "filters.*\\.map$",
   "build_android_app",
-  "scripts"
+  "scripts",
+  "tests",
+  "node_modules"
 ]

@@ -33,13 +33,7 @@ class ReportView extends Backbone.View
     Coconut.router.navigate(url,true)
 
   render: (options) =>
-#    @locationTypes = "region, district, constituan, shehia".split(/, /)
 
-#    _.each (@locationTypes), (option) ->
-#      if options[option] is undefined
-#        this[option] = "ALL"
-#      else
-#        this[option] = unescape(options[option])
     @reportType = options.reportType || "results"
     @startDate = options.startDate || moment(new Date).subtract('days',30).format("YYYY-MM-DD")
     @endDate = options.endDate || moment(new Date).format("YYYY-MM-DD")

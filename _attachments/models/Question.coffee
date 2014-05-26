@@ -1,11 +1,14 @@
 class Question extends Backbone.Model
   type: -> @get("type")
   label: -> if @get("label")? then @get("label") else @get("id")
+  safeLabel: -> @label().replace(/[^a-zA-Z0-9 -]/g,"").replace(/[ -]/g,"")
   repeatable: -> @get("repeatable")
   questions: -> @get("questions")
   value: -> if @get("value")? then @get("value") else ""
   required: -> if @get("required")? then @get("required") else "true"
   validation: -> if @get("validation")? then @get("validation") else null
+  skipLogic: -> @get("skip_logic") || ""
+  actionOnChange: -> @get("action_on_change") || ""
   attributeSafeText: ->
     returnVal = if @get("label")? then @get("label") else @get("id")
     returnVal.replace(/[^a-zA-Z0-9]/g,"")
@@ -56,7 +59,7 @@ class Question extends Backbone.Model
 #Recursive
 Question.fromDomNode = (domNode) ->
   _(domNode).chain()
-    .map (question) ->
+    .map (question) =>
       question = $(question)
       id = question.attr("id")
       if question.children("#rootQuestionName").length > 0
@@ -64,7 +67,7 @@ Question.fromDomNode = (domNode) ->
       return unless id
       result = new Question
       result.set { id : id }
-      for property in ["label","type","repeatable","select-options","radio-options","autocomplete-options","validation","required"]
+      for property in ["label","type","repeatable","select-options","radio-options","autocomplete-options","validation","required", "action_on_questions_loaded", "skip_logic", "action_on_change", "image-path", "image-style"]
         attribute = {}
         # Note that we are using find but the id property ensures a proper match
         propertyValue = question.find("##{property}-#{id}").val()
@@ -73,6 +76,9 @@ Question.fromDomNode = (domNode) ->
           attribute[property] = propertyValue
           result.set attribute
 
+      result.set
+        safeLabel: result.safeLabel()
+        
       if question.find(".question-definition").length > 0
         result.set {questions: Question.fromDomNode(question.children(".question-definition"))}
       return result
