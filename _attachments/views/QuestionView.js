@@ -544,6 +544,9 @@ QuestionView = (function(_super) {
         if (question.type() === 'header') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
           label = "<h2>" + (question.label()) + " </h2>";
+        } else if (question.type() === 'spacer') {
+          div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+          label = "<p>&nbsp</p>";
         } else {
           div = "<div          " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + "          data-required='" + (question.required()) + "'          class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'          data-question-name='" + name + "'          data-question-id='" + question_id + "'          data-action_on_change='" + (_.escape(question.actionOnChange())) + "'          >";
           label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + (question.label()) + " <span></span></label>";
@@ -598,6 +601,8 @@ QuestionView = (function(_super) {
             case "label":
               return "";
             case "header":
+              return "";
+            case "spacer":
               return "";
             default:
               return "<input name='" + name + "' id='" + question_id + "' type='" + (question.type()) + "' value='" + (question.value()) + "'></input>";
