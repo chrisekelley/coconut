@@ -526,23 +526,31 @@ class QuestionView extends Backbone.View
           question_id = question.get("id") + "-0"
         if groupId?
           name = "group.#{groupId}.#{name}"
-        return "
-          <div 
-            #{
-            if question.validation()
-              "data-validation = '#{escape(question.validation())}'" if question.validation() 
-            else
-              ""
-            } 
-            data-required='#{question.required()}'
-            class='question #{question.type?() or ''}'
-            data-question-name='#{name}'
-            data-question-id='#{question_id}'
-            data-action_on_change='#{_.escape(question.actionOnChange())}'
-
-          >
+        if question.type() == 'header'
+          div = "<div class='question #{question.type?() or ''}'>"
+          label = "<h2>#{question.label()} </h2>"
+        else
+          div = "<div
           #{
-          "<label type='#{question.type()}' for='#{question_id}'>#{question.label()} <span></span></label>" unless ~question.type().indexOf('hidden')
+          if question.validation()
+            "data-validation = '#{escape(question.validation())}'" if question.validation()
+          else
+            ""
+          }
+          data-required='#{question.required()}'
+          class='question #{question.type?() or ''}'
+          data-question-name='#{name}'
+          data-question-id='#{question_id}'
+          data-action_on_change='#{_.escape(question.actionOnChange())}'
+
+          >"
+          label = "<label type='#{question.type()}' for='#{question_id}'>#{question.label()} <span></span></label>"
+        return "
+          #{
+          div
+          }
+          #{
+          label unless ~question.type().indexOf('hidden')
           }
           <div class='message'></div>
           #{
@@ -593,7 +601,6 @@ class QuestionView extends Backbone.View
                     "
                   ).join("")
 
-
               when "checkbox"
                 if @readonly
                   "<input name='#{name}' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input>"
@@ -631,6 +638,8 @@ class QuestionView extends Backbone.View
               when "image"
                 "<img style='#{question.get "image-style"}' src='#{question.get "image-path"}'/>"
               when "label"
+                ""
+              when "header"
                 ""
               else
                 "<input name='#{name}' id='#{question_id}' type='#{question.type()}' value='#{question.value()}'></input>"

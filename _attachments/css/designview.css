@@ -18,3 +18,7 @@ body.all-advanced-hidden .advanced{
 .question-definition label{
   display: block;
 }
+#question-view h2 {
+    padding-left: 1em;
+    font-size: 34px;
+}
