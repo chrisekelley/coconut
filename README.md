@@ -36,6 +36,24 @@ All of the backbone [models](http://documentcloud.github.com/backbone/#Model) an
 
 You can put json forms into the \_docs directory and they will be added to your couch when you do a couchapp push.
 
+Form building tips
+------------------
+
+Login as admin to create/edit forms. See the Setup instructions for creating the admin user.
+
+Add a complete checkbox at the bottom of the form to make it easy to view the results. 
+
+Setup
+-----
+
+This app is designed to sync with a central server for configuration data. Create another couch called coconut-central. 
+Upload samplejson/coconut.config to it.
+
+You can also create another couch to sync data to it. See the name for synchronization_target in samplejson/coconut.config.
+
+To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly, 
+it may have already sync'd these users over. If not, well here you go.
+
 How do I customise page flow?
 -----------------
 

@@ -105,6 +105,17 @@ class QuestionView extends Backbone.View
       <div id='question-view'>
         <form>
           #{@toHTMLForm(@model)}
+          <div data-required=\"true\" class=\"question submit\" data-question-name=\"complete\" data-question-id=\"15\" data-action_on_change=\"\">
+          <div class=\"ui-submit\">
+            <label type=\"submit\" for=\"15\" data-corners=\"true\" data-shadow=\"false\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"submit\" data-theme=\"c\" class=\"ui-btn ui-btn-corner-all ui-btn-icon-left ui-submit-off ui-btn-up-c\">
+              <span class=\"ui-btn-inner ui-btn-corner-all\">
+                <span class=\"ui-btn-text\">Submit</span>
+              </span>
+          </label>
+          <input style=\"display:none\" name=\"complete\" id=\"15\" type=\"checkbox\" value=\"true\">
+          </div>
+                <div class=\"message\"></div>
+          </div>
         </form>
       </div>
     "
@@ -169,6 +180,7 @@ class QuestionView extends Backbone.View
     "change #question-view select"   : "onChange"
     "change #question-view textarea" : "onChange"
     "click #question-view button:contains(+)" : "repeat"
+    "click #question-view button:contains(Submit)" : "next"
     "click #question-view a:contains(Get current location)" : "getLocation"
     "click .next_error"   : "runValidate"
     "click .validate_one" : "onValidateOne"
@@ -218,6 +230,8 @@ class QuestionView extends Backbone.View
           @autoscroll(event) if wasValid
       , 500
 
+  next: (event) ->
+    alert("hay!")
 
   onValidateOne: (event) ->
     $target = $(event.target)

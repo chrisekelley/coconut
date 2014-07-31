@@ -1,0 +1,7 @@
+{
+   "_id": "user.admin",
+   "type": "admin",
+   "name": "admin",
+   "roles": [
+   ]
+}
