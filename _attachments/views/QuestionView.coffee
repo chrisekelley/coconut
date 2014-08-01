@@ -454,69 +454,7 @@ class QuestionView extends Backbone.View
           Coconut.menuView.update()
       
           if @result.complete()
-            unless @result.nextLevelCreated is true # hack needed for tablets
-              @result.nextLevelCreated = true
-              # Check if the next level needs to be created
-              malariaCase = new Case
-                caseID: @result.get "MalariaCaseID"
-              malariaCase.fetch
-                error: (error) => console.log error
-                success: =>
-                  switch(@result.get 'question')
-                    when "Case Notification"
-                      unless _(malariaCase.questions).contains 'Facility'
-                        result = new Result
-                          question: "Facility"
-                          MalariaCaseID: @result.get "MalariaCaseID"
-                          FacilityName: @result.get "FacilityName"
-                          Shehia: @result.get "Shehia"
-                        result.save null,
-                          success: ->
-                            Coconut.menuView.update()
-                    when "Facility"
-                      #Add phone number/sheha/shehia/village to household to help with locating
-                      #Especially important when shehia is outside of facility's district
-                      unless _(malariaCase.questions).contains 'Household'
-                        result = new Result
-                          question: "Household"
-                          MalariaCaseID: @result.get "MalariaCaseID"
-                          HeadofHouseholdName: @result.get "HeadofHouseholdName"
-                          Shehia: @result.get "Shehia"
-                          Village: @result.get "Village"
-                          ShehaMjumbe: @result.get "ShehaMjumbe"
-                          ContactMobilepatientrelative: @result.get "ContactMobilepatientrelative"
-                        result.save null,
-                          success: ->
-                            Coconut.menuView.update()
-                    when "Household"
-                      unless _(malariaCase.questions).contains 'Household Members'
-                        # -1 because we don't need information for index case
-                        _(@result.get("TotalNumberofResidentsintheHousehold")-1).times =>
-                          result = new Result
-                            question: "Household Members"
-                            MalariaCaseID: @result.get "MalariaCaseID"
-                            HeadofHouseholdName: @result.get "HeadofHouseholdName"
-                          result.save null,
-                            success: ->
-                              Coconut.menuView.update()
-                      ###
-                        TODO need to update Case to handle arrays of Households
-                        Two options:
-                        1) Add new questions: HouseholdNeighbor - > breaks question paradigm
-                        2) Change Household to be an array - > breaks reports
-                      unless _(malariaCase.questions).contains 'Household'
-                        _(@result.get("Numberofotherhouseholdswithin50stepsofindexcasehousehold")).times =>
-                          result = new Result
-                            question: "Household"
-                            MalariaCaseID: @result.get "MalariaCaseID"
-                            Shehia: @result.get "Shehia"
-                            Village: @result.get "Village"
-                            ShehaMjumbe: @result.get "ShehaMjumbe"
-                          result.save null,
-                            success: ->
-                              Coconut.menuView.update()
-                      ###
-
+            Coconut.router.navigate("",true)
     , 1000)
 
   completeButton: ( value ) ->

@@ -417,93 +417,11 @@ QuestionView = (function(_super) {
     currentData.savedBy = $.cookie('current_user');
     return this.result.save(currentData, {
       success: function(model) {
-        var malariaCase;
         $("#messageText").slideDown().fadeOut();
         Coconut.router.navigate("edit/result/" + model.id, false);
         Coconut.menuView.update();
         if (_this.result.complete()) {
-          if (_this.result.nextLevelCreated !== true) {
-            _this.result.nextLevelCreated = true;
-            malariaCase = new Case({
-              caseID: _this.result.get("MalariaCaseID")
-            });
-            return malariaCase.fetch({
-              error: function(error) {
-                return console.log(error);
-              },
-              success: function() {
-                var result;
-                switch (_this.result.get('question')) {
-                  case "Case Notification":
-                    if (!_(malariaCase.questions).contains('Facility')) {
-                      result = new Result({
-                        question: "Facility",
-                        MalariaCaseID: _this.result.get("MalariaCaseID"),
-                        FacilityName: _this.result.get("FacilityName"),
-                        Shehia: _this.result.get("Shehia")
-                      });
-                      return result.save(null, {
-                        success: function() {
-                          return Coconut.menuView.update();
-                        }
-                      });
-                    }
-                    break;
-                  case "Facility":
-                    if (!_(malariaCase.questions).contains('Household')) {
-                      result = new Result({
-                        question: "Household",
-                        MalariaCaseID: _this.result.get("MalariaCaseID"),
-                        HeadofHouseholdName: _this.result.get("HeadofHouseholdName"),
-                        Shehia: _this.result.get("Shehia"),
-                        Village: _this.result.get("Village"),
-                        ShehaMjumbe: _this.result.get("ShehaMjumbe"),
-                        ContactMobilepatientrelative: _this.result.get("ContactMobilepatientrelative")
-                      });
-                      return result.save(null, {
-                        success: function() {
-                          return Coconut.menuView.update();
-                        }
-                      });
-                    }
-                    break;
-                  case "Household":
-                    if (!_(malariaCase.questions).contains('Household Members')) {
-                      return _(_this.result.get("TotalNumberofResidentsintheHousehold") - 1).times(function() {
-                        result = new Result({
-                          question: "Household Members",
-                          MalariaCaseID: _this.result.get("MalariaCaseID"),
-                          HeadofHouseholdName: _this.result.get("HeadofHouseholdName")
-                        });
-                        return result.save(null, {
-                          success: function() {
-                            return Coconut.menuView.update();
-                          }
-                        });
-                      });
-                    }
-                    /*
-                      TODO need to update Case to handle arrays of Households
-                      Two options:
-                      1) Add new questions: HouseholdNeighbor - > breaks question paradigm
-                      2) Change Household to be an array - > breaks reports
-                    unless _(malariaCase.questions).contains 'Household'
-                      _(@result.get("Numberofotherhouseholdswithin50stepsofindexcasehousehold")).times =>
-                        result = new Result
-                          question: "Household"
-                          MalariaCaseID: @result.get "MalariaCaseID"
-                          Shehia: @result.get "Shehia"
-                          Village: @result.get "Village"
-                          ShehaMjumbe: @result.get "ShehaMjumbe"
-                        result.save null,
-                          success: ->
-                            Coconut.menuView.update()
-                    */
-
-                }
-              }
-            });
-          }
+          return Coconut.router.navigate("", true);
         }
       }
     });
