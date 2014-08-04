@@ -456,7 +456,11 @@ QuestionView = (function(_super) {
         repeatable = "";
       }
       if ((question.type() != null) && (question.label() != null) && question.label() !== "") {
-        name = question.safeLabel();
+        name = question.get('safeLabel');
+        if (name === null) {
+          name = question.safeLabel();
+        }
+        console.log("name (safeLabel?): " + name);
         window.skipLogicCache[name] = question.skipLogic() !== '' ? CoffeeScript.compile(question.skipLogic(), {
           bare: true
         }) : '';
@@ -471,6 +475,9 @@ QuestionView = (function(_super) {
         if (question.type() === 'header') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
           label = "<h2>" + (question.label()) + " </h2>";
+        } else if (question.type() === 'subheader') {
+          div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+          label = "<h3>" + (question.label()) + " </h3>";
         } else if (question.type() === 'spacer') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
           label = "<p>&nbsp</p>";
@@ -528,6 +535,8 @@ QuestionView = (function(_super) {
             case "label":
               return "";
             case "header":
+              return "";
+            case "subheader":
               return "";
             case "spacer":
               return "";

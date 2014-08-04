@@ -466,10 +466,12 @@ class QuestionView extends Backbone.View
     # Need this because we have recursion later
     questions = [questions] unless questions.length?
     _.map(questions, (question) =>
-
       if question.repeatable() == "true" then repeatable = "<button>+</button>" else repeatable = ""
       if question.type()? and question.label()? and question.label() != ""
-        name = question.safeLabel()
+        name = question.get('safeLabel')
+        if (name == null)
+          name = question.safeLabel()
+        console.log("name (safeLabel?): " + name);
         window.skipLogicCache[name] = if question.skipLogic() isnt '' then CoffeeScript.compile(question.skipLogic(),bare:true) else ''
         question_id = question.get("id")
         if question.repeatable() == "true"
@@ -480,6 +482,9 @@ class QuestionView extends Backbone.View
         if question.type() == 'header'
           div = "<div class='question #{question.type?() or ''}'>"
           label = "<h2>#{question.label()} </h2>"
+        else if question.type() == 'subheader'
+          div = "<div class='question #{question.type?() or ''}'>"
+          label = "<h3>#{question.label()} </h3>"
         else if question.type() == 'spacer'
           div = "<div class='question #{question.type?() or ''}'>"
           label = "<p>&nbsp</p>"
@@ -593,6 +598,8 @@ class QuestionView extends Backbone.View
               when "label"
                 ""
               when "header"
+                ""
+              when "subheader"
                 ""
               when "spacer"
                 ""

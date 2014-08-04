@@ -42,7 +42,7 @@ class DesignView extends Backbone.View
     </div>
   "
 
-  questionTypes: ["text","number","date","datetime", "textarea", "select", "hidden", "radio","checkbox","autocomplete from list", "autocomplete from previous entries", "location", "image", "header", "spacer", "submit"]
+  questionTypes: ["text","number","date","datetime", "textarea", "select", "hidden", "radio","checkbox","autocomplete from list", "autocomplete from previous entries", "location", "image", "header", "subheader", "spacer", "submit"]
 
   events:
     "click #design-view button:contains(Add)": "add"
