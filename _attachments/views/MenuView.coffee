@@ -44,7 +44,7 @@ class MenuView extends Backbone.View
         success: =>
           $("#menu-#{index} #menu-partial-amount").html results.length
 
-    $.ajax "app/version",
+    $.ajax "version",
       success: (result) ->
         $("#version").html result
       error:

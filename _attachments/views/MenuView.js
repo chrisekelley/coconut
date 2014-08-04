@@ -61,7 +61,7 @@ MenuView = (function(_super) {
         }
       });
     });
-    return $.ajax("app/version", {
+    return $.ajax("version", {
       success: function(result) {
         return $("#version").html(result);
       },
