@@ -530,7 +530,7 @@ class QuestionView extends Backbone.View
                 if @readonly
                   question.value()
                 else
-                  html = "<select name='#{name}' id='#{question_id}'>"
+                  html = "<select name='#{name}' id='#{question_id}'><option value=''> -- Select One -- </option>"
                   for option, index in question.get("select-options").split(/, */)
                     html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{option}</option>"
                   html += "</select>"

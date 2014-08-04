@@ -494,7 +494,7 @@ QuestionView = (function(_super) {
               if (this.readonly) {
                 return question.value();
               } else {
-                html = "<select name='" + name + "' id='" + question_id + "'>";
+                html = "<select name='" + name + "' id='" + question_id + "'><option value=''> -- Select One -- </option>";
                 _ref1 = question.get("select-options").split(/, */);
                 for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
                   option = _ref1[index];
