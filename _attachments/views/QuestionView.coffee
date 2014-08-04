@@ -89,7 +89,7 @@ class QuestionView extends Backbone.View
       }
       .tt-suggestion .{
       }
-      
+
     </style>
 
       <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>
@@ -107,6 +107,7 @@ class QuestionView extends Backbone.View
     <span class=\"ui-btn-inner ui-btn-corner-all\">
     <span class=\"ui-btn-text\">Submit</span></span>
     <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>
+    <input type=\"hidden\" id=\"complete\" name=\"complete\"/>
     </div>
 
     </form>
@@ -174,7 +175,6 @@ class QuestionView extends Backbone.View
     "change #question-view select"   : "onChange"
     "change #question-view textarea" : "onChange"
     "click #question-view button:contains(+)" : "repeat"
-#    "click #submitButton" : "next"
     "click #question-view a:contains(Get current location)" : "getLocation"
     "click .next_error"   : "runValidate"
     "click .validate_one" : "onValidateOne"
@@ -226,7 +226,11 @@ class QuestionView extends Backbone.View
       , 500
 
   onSubmitButton: (event) ->
-    alert("hay!")
+    complete = $('#complete')
+    complete.val(true);
+    event.target = complete
+    this.onChange(event)
+
 
   onValidateOne: (event) ->
     $target = $(event.target)
