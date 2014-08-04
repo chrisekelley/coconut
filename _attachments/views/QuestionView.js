@@ -70,7 +70,7 @@ QuestionView = (function(_super) {
   QuestionView.prototype.render = function() {
     var autocompleteElements, skipperList,
       _this = this;
-    this.$el.html("    <style>      .message      {        color: grey;        font-weight: bold;        padding: 10px;        border: 1px yellow dotted;        background: yellow;        display: none;      }      label.radio {        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      input[type='radio']:checked + label {        background-color:#ddd;        background: #5393c5;        background-image: -webkit-gradient(linear,left top,left bottom,from(#5393c5),to(#6facd5));        background-image: -webkit-linear-gradient(#5393c5,#6facd5);        background-image: -moz-linear-gradient(#5393c5,#6facd5);        background-image: -ms-linear-gradient(#5393c5,#6facd5);        background-image: -o-linear-gradient(#5393c5,#6facd5);        background-image: linear-gradient(#5393c5,#6facd5);      }      input[type='radio']{        height: 0px;      }      div.question.radio{        padding-top: 8px;        padding-bottom: 8px;      }      .tt-hint{        display:none      }      .tt-dropdown-menu{        width: 100%;        background-color: lightgray;      }      .tt-suggestion{        background-color: white;        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      .tt-suggestion .{      }          </style>      <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>        <a href='#help/" + this.model.id + "'>Help</a>      </div>      <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>        Saving...      </div>      <h1>" + this.model.id + "</h1>      <div id='question-view'>        <form>          " + (this.toHTMLForm(this.model)) + "          <div data-required=\"true\" class=\"question submit\" data-question-name=\"complete\" data-question-id=\"submitButton\" data-action_on_change=\"alert('hi')\">          <div class=\"ui-submit\">            <label type=\"submit\" for=\"submitButton\" data-corners=\"true\" data-shadow=\"false\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"submit\" data-theme=\"c\" class=\"ui-btn ui-btn-corner-all ui-btn-icon-left ui-submit-off ui-btn-up-c\">              <span class=\"ui-btn-inner ui-btn-corner-all\">                <span class=\"ui-btn-text\">Submit</span>              </span>          </label>          <input style=\"display:none\" name=\"complete\" id=\"submitButton\" type=\"checkbox\" value=\"true\">          </div>                <div class=\"message\"></div>          </div>        </form>      </div>    ");
+    this.$el.html("    <style>      .message      {        color: grey;        font-weight: bold;        padding: 10px;        border: 1px yellow dotted;        background: yellow;        display: none;      }      label.radio {        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      input[type='radio']:checked + label {        background-color:#ddd;        background: #5393c5;        background-image: -webkit-gradient(linear,left top,left bottom,from(#5393c5),to(#6facd5));        background-image: -webkit-linear-gradient(#5393c5,#6facd5);        background-image: -moz-linear-gradient(#5393c5,#6facd5);        background-image: -ms-linear-gradient(#5393c5,#6facd5);        background-image: -o-linear-gradient(#5393c5,#6facd5);        background-image: linear-gradient(#5393c5,#6facd5);      }      input[type='radio']{        height: 0px;      }      div.question.radio{        padding-top: 8px;        padding-bottom: 8px;      }      .tt-hint{        display:none      }      .tt-dropdown-menu{        width: 100%;        background-color: lightgray;      }      .tt-suggestion{        background-color: white;        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      .tt-suggestion .{      }          </style>      <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>        <a href='#help/" + this.model.id + "'>Help</a>      </div>      <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>        Saving...      </div>      <h1>" + this.model.id + "</h1>      <div id='question-view'>        <form onsubmit=\"return false;\">          " + (this.toHTMLForm(this.model)) + "            <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">    <span class=\"ui-btn-inner ui-btn-corner-all\">    <span class=\"ui-btn-text\">Submit</span></span>    <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>    </div>    </form>      </div>    ");
     js2form($('form').get(0), this.result.toJSON());
     this.updateCache();
     this.updateSkipLogic();
@@ -132,7 +132,8 @@ QuestionView = (function(_super) {
     "click #question-view button:contains(+)": "repeat",
     "click #question-view a:contains(Get current location)": "getLocation",
     "click .next_error": "runValidate",
-    "click .validate_one": "onValidateOne"
+    "click .validate_one": "onValidateOne",
+    "click #submitButton": "onSubmitButton"
   };
 
   QuestionView.prototype.runValidate = function() {
@@ -182,7 +183,7 @@ QuestionView = (function(_super) {
     }
   };
 
-  QuestionView.prototype.next = function(event) {
+  QuestionView.prototype.onSubmitButton = function(event) {
     return alert("hay!");
   };
 
@@ -535,7 +536,7 @@ QuestionView = (function(_super) {
         if (question.repeatable()) {
           newGroupId = newGroupId + "[0]";
         }
-        return ("<div data-group-id='" + question_id + "' class='question group'>") + _this.toHTMLForm(question.questions(), newGroupId) + "</div>" + repeatable;
+        return ("<div data-group-id='" + question_id + "' class='question'>") + _this.toHTMLForm(question.questions(), newGroupId) + "</div>" + repeatable;
       }
     }).join("");
   };

@@ -90,8 +90,6 @@ class QuestionView extends Backbone.View
       .tt-suggestion .{
       }
       
-
-
     </style>
 
       <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>
@@ -103,22 +101,18 @@ class QuestionView extends Backbone.View
       </div>
       <h1>#{@model.id}</h1>
       <div id='question-view'>
-        <form>
+        <form onsubmit=\"return false;\">
           #{@toHTMLForm(@model)}
-          <div data-required=\"true\" class=\"question submit\" data-question-name=\"complete\" data-question-id=\"submitButton\" data-action_on_change=\"alert('hi')\">
-          <div class=\"ui-submit\">
-            <label type=\"submit\" for=\"submitButton\" data-corners=\"true\" data-shadow=\"false\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"submit\" data-theme=\"c\" class=\"ui-btn ui-btn-corner-all ui-btn-icon-left ui-submit-off ui-btn-up-c\">
-              <span class=\"ui-btn-inner ui-btn-corner-all\">
-                <span class=\"ui-btn-text\">Submit</span>
-              </span>
-          </label>
-          <input style=\"display:none\" name=\"complete\" id=\"submitButton\" type=\"checkbox\" value=\"true\">
-          </div>
-                <div class=\"message\"></div>
-          </div>
-        </form>
+            <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">
+    <span class=\"ui-btn-inner ui-btn-corner-all\">
+    <span class=\"ui-btn-text\">Submit</span></span>
+    <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>
+    </div>
+
+    </form>
       </div>
     "
+
 
     #Load data into form
     js2form($('form').get(0), @result.toJSON())
@@ -184,6 +178,7 @@ class QuestionView extends Backbone.View
     "click #question-view a:contains(Get current location)" : "getLocation"
     "click .next_error"   : "runValidate"
     "click .validate_one" : "onValidateOne"
+    "click #submitButton" : "onSubmitButton"
 
   runValidate: -> @validateAll()
 
@@ -230,7 +225,7 @@ class QuestionView extends Backbone.View
           @autoscroll(event) if wasValid
       , 500
 
-  next: (event) ->
+  onSubmitButton: (event) ->
     alert("hay!")
 
   onValidateOne: (event) ->
@@ -606,7 +601,7 @@ class QuestionView extends Backbone.View
       else
         newGroupId = question_id
         newGroupId = newGroupId + "[0]" if question.repeatable()
-        return "<div data-group-id='#{question_id}' class='question group'>" + @toHTMLForm(question.questions(), newGroupId) + "</div>" + repeatable
+        return "<div data-group-id='#{question_id}' class='question'>" + @toHTMLForm(question.questions(), newGroupId) + "</div>" + repeatable
     ).join("")
 
   updateCache: ->
