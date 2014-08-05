@@ -1,0 +1,4 @@
+pygments: true
+markdown: redcarpet
+baseurl:
+version: 2.2.3

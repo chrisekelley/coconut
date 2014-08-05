@@ -1,0 +1,28 @@
+{
+  "name": "coconut",
+  "version": "0.0.1",
+  "homepage": "https://github.com/chrisekelley/coconut",
+  "authors": [
+    "Chris Kelley <chris@vetula.com>",
+    "Mike McKay <mike@vdomck.org>"
+  ],
+  "description": "Coconut renders json defined forms in a browser and then saves the results to CouchDB or PouchDB.",
+  "keywords": [
+    "couchdb",
+    "pouchdb",
+    "forms"
+  ],
+  "license": "APL2",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "www/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "pouchdb": "~2.2.3",
+    "backbone-pouch": "https://raw.githubusercontent.com/jo/backbone-pouch/master/backbone-pouch.js"
+  }
+}

@@ -1,8 +1,6 @@
-Coconut renders json defined forms in a browser and then saves the results to couchdb.
-=========================================================================================
+# Coconut renders json defined forms in a browser and then saves the results to couchdb.
 
-Instructions
-------------
+## Instructions
 
 You will need [couchdb](http://couchdb.apache.org/) to make it run:
 
@@ -23,28 +21,31 @@ Create a .couchapprc file based on .couchapprc.sample. Then we can use couchapp 
 
 Now you can point your browser at the [Coconut](http://localhost:5984/coconut/_design/coconut/index.html)
 
-How does this work?
--------------------
+## How does this work?
 
 CouchDB, [Backbone.js](http://documentcloud.github.com/backbone), [backbone-couchdb](https://github.com/janmonschke/backbone-couchdb), json, fermented eyebrow sweat, fairy dust.
 
 
-How is this organized?
-----------------------
+## How is this organized?
 
 All of the backbone [models](http://documentcloud.github.com/backbone/#Model) and [views](http://documentcloud.github.com/backbone/#Model) have their own file and are in app/models and app/views respectively. app/app.js is responsible for tying it all together.
 
 You can put json forms into the \_docs directory and they will be added to your couch when you do a couchapp push.
 
-Form building tips
-------------------
+## How do I add new libraries?
+
+Use [bower](bower.io). The following libs are already installed. The "-S" switch saves the lib to your bower.json.
+
+    bower install -S pouchdb
+    bower install -S https://raw.githubusercontent.com/jo/backbone-pouch/master/backbone-pouch.js  
+
+## Form building tips
 
 Login as admin to create/edit forms. See the Setup instructions for creating the admin user.
 
 Add a complete checkbox at the bottom of the form to make it easy to view the results. 
 
-Setup
------
+## Setup
 
 This app is designed to sync with a central server for configuration data. Create another couch called coconut-central. 
 Upload samplejson/coconut.config to it.
@@ -54,8 +55,7 @@ You can also create another couch to sync data to it. See the name for synchroni
 To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly, 
 it may have already sync'd these users over. If not, well here you go.
 
-How do I customise page flow?
------------------
+## How do I customise page flow?
 
 app.js constructs the Backbone.Router. List the routes in the routes method:
     
@@ -78,14 +78,13 @@ and create a method for each route:
         },
 
            
-Other useful info
------------------
+## Other useful info
 
 It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a little [watchr](http://rubygems.org/gems/watchr) script that watches for changes to any relevant files and then automatically pushes them into your couch. To get it you need to install rubygems and watchr:
 
     apt-get install rubygems
     gem install watchr
 
-Help!
-----
+## Help!
+
 Check out the project's [issues](https://github.com/mikeymckay/coconut/issues). Please help me fix issues and add any problem that you come across.
