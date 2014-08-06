@@ -37,6 +37,12 @@ MenuView = (function(_super) {
     var _this = this;
     this.$el.html("    <select name=\"select-choice-0\" id=\"select-choice-0\">    <option value=''>Select</option>    <option value='home'>Home</option>    </select>        ");
     return Coconut.questions.fetch({
+      fetch: 'query',
+      options: {
+        query: {
+          fun: QUERIES.byCollection
+        }
+      },
       success: function() {
         _this.$el.find("#select-choice-0").append(Coconut.questions.map(function(question, index) {
           return "<option value='" + question.id + "'>" + question.id + "</option>";

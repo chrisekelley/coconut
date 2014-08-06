@@ -159,50 +159,56 @@ class Sync extends Backbone.Model
                       last_get_success: false
                     options?.error?(error)
                   success: =>
-                    $.couch.logout()
-
-                    $.couch.db(Coconut.config.database_name()).saveDoc
+#                    $.couch.logout()
+                    console.log("TODO: enable User.currentUser.id")
+                    logFile =
                       collection: "log"
                       action: "getFromCloud"
-                      user: User.currentUser.id
+                      user: 'testUser'
+#                      user: User.currentUser.id
                       time: moment().format(Coconut.config.get "date_format")
+                    Backbone.sync.defaults.db.post logFile
                     ,
-                      error: (error) => @log "Could not create log file #{JSON.stringify(error)}"
-                      success: =>
-
-                        @log "Sending log messages to cloud."
-                        @sendLogMessagesToCloud
-                          success: =>
-                            @log "Finished, refreshing app in 5 seconds..."
-                            @fetch
-                              error: (error) => @log "Unable to fetch Sync doc: #{JSON.stringify(error)}"
-                              success: =>
-                                @save
-                                  last_get_success: true
-                                  last_get_time: new Date().getTime()
-                                options?.success?()
-                                _.delay ->
-                                  document.location.reload()
-                                , 5000
+                      (err, response) =>
+#                        @log "Sending log messages to cloud."
+                        @log "TODO: implement sendLogMessagesToCloud"
+#                        @sendLogMessagesToCloud
+#                          success: =>
+#                            @log "Finished, refreshing app in 5 seconds..."
+#                            @fetch
+#                              error: (error) => @log "Unable to fetch Sync doc: #{JSON.stringify(error)}"
+#                              success: =>
+#                                @save
+#                                  last_get_success: true
+#                                  last_get_time: new Date().getTime()
+#                                options?.success?()
+                        _.delay ->
+                          document.location.reload()
+                        , 5000
+#                      error: (error) => @log "Could not create log file #{JSON.stringify(error)}"
 
   replicate: (options) ->
-    $.couch.login
-      name: Coconut.config.get "local_couchdb_admin_username"
-      password: Coconut.config.get "local_couchdb_admin_password"
-      success: ->
-        $.couch.replicate(
-          Coconut.config.cloud_url_with_credentials(),
-          Coconut.config.database_name(),
-            success: ->
-              options.success()
-            error: ->
-              options.error()
-          ,
-            options.replicationArguments
-        )
-        Coconut.menuView.checkReplicationStatus()
-      error: ->
-        console.log "Unable to login as local admin for replicating the design document (main application)"
+    opts =
+      continuous: true
+      withCredentials:true
+#      auth:
+#        username:account.username
+#        password:account.password
+      complete: (result) ->
+        if typeof result != 'undefined' && result.ok
+          console.log "onComplete: Replication is fine. "
+        else
+          console.log "onComplete: Replication error: " + JSON.stringify result
+      error: (result) ->
+          console.log "error: Replication error: " + JSON.stringify result
+      timeout: 60000
+    Backbone.sync.defaults.db.replicate.from(Coconut.config.cloud_url_with_credentials(), opts).on('uptodate', (result) ->
+      if typeof result != 'undefined' && result.ok
+        console.log "uptodate: Replication is fine. "
+        options.success()
+      else
+        console.log "uptodate: Replication error: " + JSON.stringify result)
+#    Coconut.menuView.checkReplicationStatus();
 
   replicateApplicationDocs: (options) =>
     # Updating design_doc, users & forms

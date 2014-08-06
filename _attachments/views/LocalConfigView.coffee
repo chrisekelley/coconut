@@ -6,7 +6,7 @@ class LocalConfigView extends Backbone.View
       <form id='local-config'>
         <h1>Configure your Coconut system</h1>
         <label>Coconut Cloud URL</label>
-        <input type='text' name='coconut-cloud' value='http://'></input>
+        <input type='text' name='coconut-cloud' value='http://localhost:5984/coconut-central'></input>
         <fieldset id='mode-fieldset'>
           <legend>Mode</legend>
             <label for='cloud'>Cloud (reporting system)</label>
@@ -52,6 +52,19 @@ class LocalConfigView extends Backbone.View
               localConfig = new LocalConfig()
               localConfig.fetch
                 complete: ->
+                  localConfig.save localConfig,
+                    success: ->
+                      $('#message').append "Local configuration file saved<br/>"
+                      sync = new Sync()
+                      sync.save null,
+                        success: ->
+                          $('#message').append "Updating application<br/>"
+                          sync.getFromCloud
+                            success: ->
+                              Coconut.router.navigate("",false)
+                              location.reload()
+                error: (error) ->
+                  console.log "Couldn't find localConfig file."
                   localConfig.save localConfig,
                     success: ->
                       $('#message').append "Local configuration file saved<br/>"

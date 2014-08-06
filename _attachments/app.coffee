@@ -362,6 +362,17 @@ class Router extends Backbone.Router
         Coconut.localConfigView.render()
 
 Coconut = {}
+matchResults = document.location.pathname.match(/^\/(.*)\/_design\/(.*?)\//)
+if matchResults == null
+  console.log 'Configuring for Pouchdb'
+  Coconut.db_name = 'coconut'
+  Coconut.ddoc_name = 'coconut'
+else
+  Coconut.db_name = matchResults[1]
+  Coconut.ddoc_name = matchResults[2]
+Backbone.sync = BackbonePouch.sync({
+  db: PouchDB(Coconut.db_name)
+});
 Coconut.router = new Router()
 Coconut.router.startApp()
 

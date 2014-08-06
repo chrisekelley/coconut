@@ -1,0 +1,11 @@
+{
+  "name": "coconut",
+  "version": "0.0.1",
+  "type": "app",
+  "scripts": {
+    "start": "http-server _attachments --silent"
+  },
+  "dependencies": {
+    "http-server": "^0.6.1"
+  }
+}

@@ -21,13 +21,14 @@ class Config extends Backbone.Model
   title: -> @get("title") || "Coconut"
 
   database_name: ->
-    Backbone.couch_connector.config.db_name
+    Coconut.db_name
 
   design_doc_name: ->
-    Backbone.couch_connector.config.ddoc_name
+    Coconut.ddoc_name
 
   cloud_url: ->
     "#{@get "synchronization_target"}"
 
   cloud_url_with_credentials: ->
     @cloud_url().replace(/http:\/\//,"http://#{@get "cloud_credentials"}@")
+

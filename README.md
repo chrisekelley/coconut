@@ -47,10 +47,14 @@ Add a complete checkbox at the bottom of the form to make it easy to view the re
 
 ## Setup
 
+Use pouch.watchr to compile your coffeescripts automatically.
+
 This app is designed to sync with a central server for configuration data. Create another couch called coconut-central. 
 Upload samplejson/coconut.config to it.
 
 You can also create another couch to sync data to it. See the name for synchronization_target in samplejson/coconut.config.
+
+The first time the app runs, enter the url to coconut-central.
 
 To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly, 
 it may have already sync'd these users over. If not, well here you go.
@@ -80,10 +84,13 @@ and create a method for each route:
            
 ## Other useful info
 
-It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a little [watchr](http://rubygems.org/gems/watchr) script that watches for changes to any relevant files and then automatically pushes them into your couch. To get it you need to install rubygems and watchr:
+It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a little [watchr](http://rubygems.org/gems/watchr) 
+script that watches for changes to any relevant files and then automatically pushes them into your couch. 
+To get it you need to install rubygems and watchr:
 
     apt-get install rubygems
     gem install watchr
+    watchr pouch.watchr 
 
 ## Help!
 
