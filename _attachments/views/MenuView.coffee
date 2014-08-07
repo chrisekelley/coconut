@@ -28,7 +28,7 @@ class MenuView extends Backbone.View
       fetch: 'query',
       options:
         query:
-          fun:QUERIES.byCollection
+          fun:QUERIES.byQuestion
       success: =>
         @$el.find("#select-choice-0").append(Coconut.questions.map (question,index) ->
 #          "<li><a id='menu-#{index}' href='#show/results/#{escape(question.id)}'><h2>#{question.id}<div id='menu-partial-amount'></div></h2></a></li>"

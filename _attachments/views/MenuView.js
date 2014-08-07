@@ -40,7 +40,7 @@ MenuView = (function(_super) {
       fetch: 'query',
       options: {
         query: {
-          fun: QUERIES.byCollection
+          fun: QUERIES.byQuestion
         }
       },
       success: function() {
