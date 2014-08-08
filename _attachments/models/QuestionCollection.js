@@ -15,6 +15,17 @@ QuestionCollection = (function(_super) {
 
   QuestionCollection.prototype.url = '/question';
 
+  QuestionCollection.prototype.sync = BackbonePouch.sync({
+    db: PouchDB(Coconut.db_name),
+    fetch: 'query',
+    options: {
+      query: {
+        include_docs: true,
+        fun: QUERIES.byQuestion
+      }
+    }
+  });
+
   QuestionCollection.prototype.parse = function(result) {
     return _.pluck(result.rows, 'value');
   };

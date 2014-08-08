@@ -460,7 +460,6 @@ QuestionView = (function(_super) {
         if (name === null) {
           name = question.safeLabel();
         }
-        console.log("name (safeLabel?): " + name);
         window.skipLogicCache[name] = question.skipLogic() !== '' ? CoffeeScript.compile(question.skipLogic(), {
           bare: true
         }) : '';

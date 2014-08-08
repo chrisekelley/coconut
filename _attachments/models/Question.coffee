@@ -22,6 +22,26 @@ class Question extends Backbone.Model
     attributes._id = attributes.id if attributes.id?
     super(attributes)
 
+  setProperties: (attributes) ->
+    if attributes.questions?
+      questionArray = []
+      attributes.questions =  _.map attributes.questions, (question) ->
+        questionAtt = {}
+        for property in ["id","_id","label","type","repeatable","required","validation","safeLabel"]
+          attribute = {}
+          questionAtt[property] = question.get(property)
+        questionArray.push(questionAtt)
+#          @set attribute
+#          return attribute
+#        question = new Question(question)
+#        delete question.loadFromDesigner
+#        delete question.resultSummaryFields
+#        delete question.summaryFieldNames
+#        return question
+    attributes.questions = questionArray
+    attributes._id = attributes.id if attributes.id?
+    Question.__super__.set.call(this, attributes);
+
   loadFromDesigner: (domNode) ->
     result = Question.fromDomNode(domNode)
 # TODO is this always going to just be the root question - containing only a name?
@@ -32,7 +52,10 @@ class Question extends Backbone.Model
         attribute = {}
         attribute[property] = result.get(property)
         @set attribute
-      @set {questions: result.questions()}
+#      @set {questions: result.questions()}
+      @setProperties {questions: result.questions()}
+#       for question in result.questions()
+
     else
       throw "More than one root node"
 

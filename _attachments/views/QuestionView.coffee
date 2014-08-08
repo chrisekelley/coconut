@@ -471,7 +471,6 @@ class QuestionView extends Backbone.View
         name = question.get('safeLabel')
         if (name == null)
           name = question.safeLabel()
-        console.log("name (safeLabel?): " + name);
         window.skipLogicCache[name] = if question.skipLogic() isnt '' then CoffeeScript.compile(question.skipLogic(),bare:true) else ''
         question_id = question.get("id")
         if question.repeatable() == "true"

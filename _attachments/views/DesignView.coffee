@@ -58,7 +58,7 @@ class DesignView extends Backbone.View
 
   save: ->
     @question.loadFromDesigner $("#questions")
-    @question.save null,
+    @question.save @question,
       success: ->
         Coconut.menuView.render()
 

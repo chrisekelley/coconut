@@ -46,7 +46,7 @@ DesignView = (function(_super) {
 
   DesignView.prototype.save = function() {
     this.question.loadFromDesigner($("#questions"));
-    return this.question.save(null, {
+    return this.question.save(this.question, {
       success: function() {
         return Coconut.menuView.render();
       }
