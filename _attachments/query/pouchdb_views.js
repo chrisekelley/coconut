@@ -12,6 +12,18 @@ QUERIES.byQuestion = function(doc) {
     }
 };
 
+QUERIES.resultsByQuestionAndComplete = function(questionId, complete) {
+//    if (document.collection === "result") {
+    console.log("questionId:" + questionId);
+    if (document.question == questionId) {
+        if (document.complete === complete) {
+            return emit(document.question + ':true:' + document.lastModifiedAt, null);
+        } else {
+            return emit(document.question + ':false:' + document.lastModifiedAt, null);
+        }
+    }
+};
+
 QUERIES.byDepartment = function(department) {
     console.log("byDepartment: " + department);
     if (department === '1') {

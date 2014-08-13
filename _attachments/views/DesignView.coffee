@@ -4,6 +4,8 @@ class DesignView extends Backbone.View
 
   el: '#content'
 
+  collection: 'question'
+
   render: =>
     templateData = {}
     templateData.types = @questionTypes
@@ -58,6 +60,7 @@ class DesignView extends Backbone.View
 
   save: ->
     @question.loadFromDesigner $("#questions")
+    @question.collection = 'question'
     @question.save @question,
       success: ->
         Coconut.menuView.render()

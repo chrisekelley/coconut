@@ -27,7 +27,7 @@ class Question extends Backbone.Model
       questionArray = []
       attributes.questions =  _.map attributes.questions, (question) ->
         questionAtt = {}
-        for property in ["id","_id","label","type","repeatable","required","validation","safeLabel"]
+        for property in ["id","_id","label","type","repeatable","required","validation","safeLabel", "radio-options"]
           attribute = {}
           questionAtt[property] = question.get(property)
         questionArray.push(questionAtt)

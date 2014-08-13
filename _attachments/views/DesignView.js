@@ -19,6 +19,8 @@ DesignView = (function(_super) {
 
   DesignView.prototype.el = '#content';
 
+  DesignView.prototype.collection = 'question';
+
   DesignView.prototype.render = function() {
     var templateData;
     templateData = {};
@@ -46,6 +48,7 @@ DesignView = (function(_super) {
 
   DesignView.prototype.save = function() {
     this.question.loadFromDesigner($("#questions"));
+    this.question.collection = 'question';
     return this.question.save(this.question, {
       success: function() {
         return Coconut.menuView.render();

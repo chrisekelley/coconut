@@ -3,15 +3,30 @@ class CaseView extends Backbone.View
 
   render: =>
     @$el.html "
-      <h1>Case ID: #{@case.MalariaCaseID()}</h1>
-      <h2>Last Modified: #{@case.LastModifiedAt()}</h2>
-      <h2>Questions: #{@case.Questions()}</h2>
-      #{
-        _.map( ("region,district,constituan,ward".split(",")), (locationType) =>
-          "<h2>#{locationType.humanize()}: #{@case.location(locationType)}</h2>"
-        ).join("")
-      }
-      <pre>
-      #{JSON.stringify(@case.toJSON(), null, 4)}
-      </pre>
+          <h1>Case ID: #{@case.get("caseID")}</h1>
+          <h2>Last Modified: #{@case.get("lastModifiedAt")}</h1>
+          <table>
+            <thead>
+              <th>Property</th>
+              <th>Value</th>
+            </thead>
+            <tbody>
+               #{
+    _.map @case.attributes, (value, property) ->
+      "
+                      <tr>
+                        <td>
+                          #{property}
+                        </td>
+                        <td>
+                          #{value}
+                        </td>
+                      </tr>
+                    "
+    .join("")
+    }
+                <tr>
+              </tr>
+            </tbody>
+          </table>
     "

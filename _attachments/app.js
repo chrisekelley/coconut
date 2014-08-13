@@ -132,30 +132,29 @@ Router = (function(_super) {
   Router.prototype["default"] = function() {
     return this.userLoggedIn({
       success: function() {
-        var _this = this;
-        $("#content").html("          <!--          Reported/Facility Followup/Household Followup/#Tested/ (Show for Same period last year)          For completed cases, average time between notification and household followup          Last seven days          Last 30 days          Last 365 days          Current month          Current year          Total          -->          <table class='summary tablesorter'>            <thead><tr>              <th>Question</th>              <th>Not Completed</th>              <th>Completed</th>            </tr></thead>            <tbody>            </tbody>          </table>        ");
-        return Coconut.questions.each(function(question, index) {
-          $("#content table tbody").append("<tr id='" + (question.attributeSafeText()) + "'><td>" + (question.get("id")) + "</td></tr>");
-          _.each(["false", "true"], function(complete) {
-            var results,
-              _this = this;
-            results = new ResultCollection();
-            return results.fetch({
-              question: question.id,
-              isComplete: complete,
-              success: function() {
-                return $("tr#" + (question.attributeSafeText())).append("<td>" + results.length + "</td>");
+        $("#content").html("          <!--          Reported/Facility Followup/Household Followup/#Tested/ (Show for Same period last year)          For completed cases, average time between notification and household followup          Last seven days          Last 30 days          Last 365 days          Current month          Current year          Total          -->          <table class='summary tablesorter'>            <thead><tr>              <th>Question</th>              <th>User</th>              <th>Last Modified</th>            </tr></thead>            <tbody>            </tbody>          </table>        ");
+        return Backbone.sync.defaults.db.query('question_complete_index', {
+          include_docs: true
+        }).then(function(result) {
+          var results,
+            _this = this;
+          results = new SecondaryIndexCollection();
+          return results.fetch({
+            fetch: 'query',
+            options: {
+              include_docs: true,
+              query: {
+                include_docs: true,
+                fun: 'question_complete_index'
               }
-            });
-          });
-          if (index + 1 === Coconut.questions.length) {
-            $('table').tablesorter();
-            $("table a").button();
-            $("table").trigger("update");
-          }
-          return _.each($('table tr'), function(row, index) {
-            if (index % 2 === 1) {
-              return $(row).addClass("odd");
+            },
+            success: function() {
+              return results.each(function(result, index) {
+                return $("#content table tbody").append("<tr id='" + (result.get("_id")) + "'>                  <td><a href=\"/#show/case/" + (result.get("_id")) + "\">" + (result.get("question")) + "</a></td><td>" + (result.get("user")) + "</td>                  <td>" + (result.get("lastModifiedAt")) + "</td></tr>");
+              });
+            },
+            error: function(msg) {
+              return console.log("error: " + msg);
             }
           });
         });
@@ -204,8 +203,9 @@ Router = (function(_super) {
         if (Coconut.caseView == null) {
           Coconut.caseView = new CaseView();
         }
-        Coconut.caseView["case"] = new Case({
-          caseID: caseID
+        Coconut.caseView["case"] = new Result({
+          caseID: caseID,
+          _id: caseID
         });
         return Coconut.caseView["case"].fetch({
           success: function() {
@@ -494,10 +494,6 @@ if (matchResults === null) {
   Coconut.db_name = matchResults[1];
   Coconut.ddoc_name = matchResults[2];
 }
-
-Backbone.sync = BackbonePouch.sync({
-  db: PouchDB(Coconut.db_name)
-});
 
 Coconut.router = new Router();
 

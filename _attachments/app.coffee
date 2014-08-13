@@ -106,29 +106,40 @@ class Router extends Backbone.Router
           <table class='summary tablesorter'>
             <thead><tr>
               <th>Question</th>
-              <th>Not Completed</th>
-              <th>Completed</th>
+              <th>User</th>
+              <th>Last Modified</th>
             </tr></thead>
             <tbody>
             </tbody>
           </table>
         "
 
-        Coconut.questions.each (question,index) =>
-          $("#content table tbody").append "<tr id='#{question.attributeSafeText()}'><td>#{question.get "id"}</td></tr>"
-          _.each ["false","true"], (complete) ->
-            results = new ResultCollection()
-            results.fetch
-              question: question.id
-              isComplete: complete
+        Backbone.sync.defaults.db.query('question_complete_index', {include_docs: true}).then (result) ->
+          results = new SecondaryIndexCollection()
+          results.fetch
+              fetch: 'query',
+              options:
+                include_docs: true,
+                query:
+                  include_docs: true,
+#                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
+#                  key:'Individual Registration',
+                  fun: 'question_complete_index'
               success: =>
-                $("tr##{question.attributeSafeText()}").append "<td>#{results.length}</td>"
-          if index+1 is Coconut.questions.length
-            $('table').tablesorter()
-            $("table a").button()
-            $("table").trigger("update")
-          _.each $('table tr'), (row, index) ->
-            $(row).addClass("odd") if index%2 is 1
+                results.each (result,index) =>
+                #                    $("tr##{question.attributeSafeText()}").append "<td>#{results.length}</td>"
+#                  console.log("result: " + JSON.stringify(result))
+                  $("#content table tbody").append "<tr id='#{result.get "_id"}'>
+                  <td><a href=\"/#show/case/#{result.get "_id"}\">#{result.get "question"}</a></td><td>#{result.get "user"}</td>
+                  <td>#{result.get "lastModifiedAt"}</td></tr>"
+              error: (msg)=>
+                console.log "error: " + msg
+#              if index+1 is Coconut.questions.length
+#                $('table').tablesorter()
+#                $("table a").button()
+#                $("table").trigger("update")
+#              _.each $('table tr'), (row, index) ->
+#                $(row).addClass("odd") if index%2 is 1
 
   alerts: ->
     @userLoggedIn
@@ -169,8 +180,9 @@ class Router extends Backbone.Router
     @userLoggedIn
       success: ->
         Coconut.caseView ?= new CaseView()
-        Coconut.caseView.case = new Case
+        Coconut.caseView.case = new Result
           caseID: caseID
+          _id: caseID
         Coconut.caseView.case.fetch
           success: ->
             Coconut.caseView.render()
@@ -370,9 +382,9 @@ if matchResults == null
 else
   Coconut.db_name = matchResults[1]
   Coconut.ddoc_name = matchResults[2]
-Backbone.sync = BackbonePouch.sync({
-  db: PouchDB(Coconut.db_name)
-});
+#Backbone.sync = BackbonePouch.sync({
+#  db: PouchDB(Coconut.db_name)
+#});
 Coconut.router = new Router()
 Coconut.router.startApp()
 

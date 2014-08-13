@@ -97,7 +97,7 @@ Question = (function(_super) {
       attributes.questions = _.map(attributes.questions, function(question) {
         var attribute, property, questionAtt, _i, _len, _ref1;
         questionAtt = {};
-        _ref1 = ["id", "_id", "label", "type", "repeatable", "required", "validation", "safeLabel"];
+        _ref1 = ["id", "_id", "label", "type", "repeatable", "required", "validation", "safeLabel", "radio-options"];
         for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
           property = _ref1[_i];
           attribute = {};
