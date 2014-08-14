@@ -42,15 +42,27 @@ Router = (function(_super) {
   };
 
   Router.prototype.route = function(route, name, callback) {
-    var _this = this;
+    var router,
+      _this = this;
     Backbone.history || (Backbone.history = new Backbone.History);
     if (!_.isRegExp(route)) {
       route = this._routeToRegExp(route);
     }
+    if (_.isFunction(name)) {
+      callback = name;
+      name = '';
+    }
+    if (!callback) {
+      callback = this[name];
+    }
+    router = this;
     return Backbone.history.route(route, function(fragment) {
       var args;
-      args = _this._extractParameters(route, fragment);
-      callback.apply(_this, args);
+      args = router._extractParameters(route, fragment);
+      callback && callback.apply(router, args);
+      router.trigger.apply(router, ['route:' + name].concat(args));
+      router.trigger('route', name, args);
+      Backbone.history.trigger('route', router, name, args);
       $('#loading').slideDown();
       _this.trigger.apply(_this, ['route:' + name].concat(args));
       return $('#loading').fadeOut();
@@ -132,31 +144,23 @@ Router = (function(_super) {
   Router.prototype["default"] = function() {
     return this.userLoggedIn({
       success: function() {
-        $("#content").html("          <!--          Reported/Facility Followup/Household Followup/#Tested/ (Show for Same period last year)          For completed cases, average time between notification and household followup          Last seven days          Last 30 days          Last 365 days          Current month          Current year          Total          -->          <table class='summary tablesorter'>            <thead><tr>              <th>Question</th>              <th>User</th>              <th>Last Modified</th>            </tr></thead>            <tbody>            </tbody>          </table>        ");
-        return Backbone.sync.defaults.db.query('question_complete_index', {
-          include_docs: true
-        }).then(function(result) {
-          var results,
-            _this = this;
-          results = new SecondaryIndexCollection();
-          return results.fetch({
-            fetch: 'query',
-            options: {
+        var _this = this;
+        if (Coconut.homeView == null) {
+          Coconut.homeView = new HomeView();
+        }
+        Coconut.homeView.results = new SecondaryIndexCollection;
+        return Coconut.homeView.results.fetch({
+          fetch: 'query',
+          options: {
+            include_docs: true,
+            query: {
               include_docs: true,
-              query: {
-                include_docs: true,
-                fun: 'question_complete_index'
-              }
-            },
-            success: function() {
-              return results.each(function(result, index) {
-                return $("#content table tbody").append("<tr id='" + (result.get("_id")) + "'>                  <td><a href=\"/#show/case/" + (result.get("_id")) + "\">" + (result.get("question")) + "</a></td><td>" + (result.get("user")) + "</td>                  <td>" + (result.get("lastModifiedAt")) + "</td></tr>");
-              });
-            },
-            error: function(msg) {
-              return console.log("error: " + msg);
+              fun: 'question_complete_index'
             }
-          });
+          },
+          success: function() {
+            return Coconut.homeView.render();
+          }
         });
       }
     });

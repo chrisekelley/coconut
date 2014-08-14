@@ -32,9 +32,18 @@ class Router extends Backbone.Router
     Backbone.history || (Backbone.history = new Backbone.History)
     if !_.isRegExp(route)
       route = this._routeToRegExp(route)
+    if _.isFunction(name)
+      callback = name;
+      name = '';
+    if !callback
+      callback = this[name];
+    router = this;
     Backbone.history.route(route, (fragment) =>
-      args = this._extractParameters(route, fragment)
-      callback.apply(this, args)
+      args = router._extractParameters(route, fragment)
+      callback && callback.apply(router, args)
+      router.trigger.apply(router, ['route:' + name].concat(args))
+      router.trigger('route', name, args)
+      Backbone.history.trigger('route', router, name, args)
 
 # Run this before
       $('#loading').slideDown()
@@ -92,54 +101,57 @@ class Router extends Backbone.Router
   default: ->
     @userLoggedIn
       success: ->
-        $("#content").html "
-          <!--
-          Reported/Facility Followup/Household Followup/#Tested/ (Show for Same period last year)
-          For completed cases, average time between notification and household followup
-          Last seven days
-          Last 30 days
-          Last 365 days
-          Current month
-          Current year
-          Total
-          -->
-          <table class='summary tablesorter'>
-            <thead><tr>
-              <th>Question</th>
-              <th>User</th>
-              <th>Last Modified</th>
-            </tr></thead>
-            <tbody>
-            </tbody>
-          </table>
-        "
-
-        Backbone.sync.defaults.db.query('question_complete_index', {include_docs: true}).then (result) ->
-          results = new SecondaryIndexCollection()
-          results.fetch
-              fetch: 'query',
-              options:
-                include_docs: true,
-                query:
-                  include_docs: true,
+        Coconut.homeView ?= new HomeView()
+        Coconut.homeView.results = new SecondaryIndexCollection
+        Coconut.homeView.results.fetch
+          fetch: 'query',
+          options:
+            include_docs: true,
+            query:
+              include_docs: true,
 #                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
 #                  key:'Individual Registration',
-                  fun: 'question_complete_index'
-              success: =>
-                results.each (result,index) =>
-                #                    $("tr##{question.attributeSafeText()}").append "<td>#{results.length}</td>"
-#                  console.log("result: " + JSON.stringify(result))
-                  $("#content table tbody").append "<tr id='#{result.get "_id"}'>
-                  <td><a href=\"/#show/case/#{result.get "_id"}\">#{result.get "question"}</a></td><td>#{result.get "user"}</td>
-                  <td>#{result.get "lastModifiedAt"}</td></tr>"
-              error: (msg)=>
-                console.log "error: " + msg
-#              if index+1 is Coconut.questions.length
-#                $('table').tablesorter()
-#                $("table a").button()
-#                $("table").trigger("update")
-#              _.each $('table tr'), (row, index) ->
-#                $(row).addClass("odd") if index%2 is 1
+              fun: 'question_complete_index'
+          success: =>
+            Coconut.homeView.render()
+#        $("#content").html "
+#          <table class='summary tablesorter'>
+#            <thead><tr>
+#              <th>Question</th>
+#              <th>User</th>
+#              <th>Last Modified</th>
+#            </tr></thead>
+#            <tbody>
+#            </tbody>
+#          </table>
+#        "
+
+#        Backbone.sync.defaults.db.query('question_complete_index', {include_docs: true}).then (result) ->
+#          results = new SecondaryIndexCollection()
+#          results.fetch
+#              fetch: 'query',
+#              options:
+#                include_docs: true,
+#                query:
+#                  include_docs: true,
+##                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
+##                  key:'Individual Registration',
+#                  fun: 'question_complete_index'
+#              success: =>
+#                results.each (result,index) =>
+#                #                    $("tr##{question.attributeSafeText()}").append "<td>#{results.length}</td>"
+##                  console.log("result: " + JSON.stringify(result))
+#                  $("#content table tbody").append "<tr id='#{result.get "_id"}'>
+#                  <td><a href=\"/#show/case/#{result.get "_id"}\">#{result.get "question"}</a></td><td>#{result.get "user"}</td>
+#                  <td>#{result.get "lastModifiedAt"}</td></tr>"
+#              error: (msg)=>
+#                console.log "error: " + msg
+##              if index+1 is Coconut.questions.length
+##                $('table').tablesorter()
+##                $("table a").button()
+##                $("table").trigger("update")
+##              _.each $('table tr'), (row, index) ->
+##                $(row).addClass("odd") if index%2 is 1
 
   alerts: ->
     @userLoggedIn
