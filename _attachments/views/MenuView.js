@@ -36,6 +36,7 @@ MenuView = (function(_super) {
   MenuView.prototype.render = function() {
     var _this = this;
     this.$el.html("    <select name=\"select-choice-0\" id=\"select-choice-0\">    <option value=''>Select</option>    <option value='home'>Home</option>    </select>        ");
+    $('select').selectmenu();
     return Coconut.questions.fetch({
       fetch: 'query',
       options: {

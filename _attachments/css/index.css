@@ -1,0 +1,38 @@
+#header {
+    background-color: #8dc63f;
+    overflow: hidden;
+}
+#top-menu {
+    /*background-color: #8dc63f;*/
+    float: left;
+}
+#logo {
+    /*background-color: #5a4a42;*/
+    float: right;
+    padding-right: 1em;
+}
+#footer-menu {
+    background-color: #8dc63f;
+}
+/*5a4a42*/
+#records td {
+    background-color: #ffd8ba;
+}
+#records th {
+    background-color: #8dc63f;
+}
+#content {
+    background-color: #fff;
+}
+table.tablesorter {
+    background-color: #5a4a42;
+}
+table.tablesorter thead tr th, table.tablesorter tfoot tr th {
+    border: none;
+}
+
+/*--- reset p from bootstrap ---*/
+
+p {
+    margin : 1em 0px;
+}

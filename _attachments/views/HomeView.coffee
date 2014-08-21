@@ -6,11 +6,12 @@ class HomeView extends Backbone.View
     recordView = new HomeRecordView  {model:result}
 #    this.rendered = this.view.render().el
     rendered = recordView.render()
-    $("#content table tbody").append(rendered)
+    $("#records tbody").append(rendered)
 
   render: =>
     @$el.html "
-              <table class='summary tablesorter'>
+                <table id=\"dashboard\"></table>
+                <table id=\"records\" class='summary tablesorter'>
                 <thead><tr>
                   <th>Question</th>
                   <th>User</th>
@@ -20,4 +21,8 @@ class HomeView extends Backbone.View
                 </tbody>
               </table>
         "
+    dashboard = new ClientDashboardView {model: Coconut.homeView.client}
+    renderedDash = dashboard.render()
+    $("#dashboard").append(renderedDash)
     Coconut.homeView.results.each @addOne
+    $('select').selectmenu()

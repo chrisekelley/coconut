@@ -1,0 +1,143 @@
+<!--<link rel="import" href="../polymer/polymer.html">-->
+
+<!--
+Element providing solution to no problem in particular.
+
+##### Example
+
+    <admin-registration-form></admin-registration-form>
+
+@element admin-registration-form
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://.github.io/admin-registration-form
+-->
+<polymer-element name="admin-registration-form">
+
+  <template>
+
+      <link rel="stylesheet" href="admin-registration-form.css" />
+      <link rel="stylesheet" type="text/css" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
+      <link rel="stylesheet" type="text/css" href="../../bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+      <app-globals id="globals"></app-globals>
+      <pouch-db id="pouch" name="report-form"></pouch-db>
+
+      <p>You do not appear to be registered to use this device.</p>
+      <p>Please register with the following information before continuing.</p>
+      <input type="text" name="name" id="name" placeholder="Name" value="{{theData.name}}"/>
+      <input type="text" name="profession" id="profession" placeholder="Profession" value="{{theData.profession}}"/>
+      <input type="text" name="association" id="association" placeholder="Association" value="{{theData.association}}"/>
+      <input type="text" name="district" id="district" placeholder="District" value="{{theData.district}}"/>
+      <p><a data-role="button" id="submitAdminRegistration" class="btn btn-primary btn-lg" on-click="{{updateModel}}">Press to Register</a></p>
+
+    <content></content>
+
+  </template>
+
+  <script>
+
+      document.addEventListener("deviceready", function (e) {
+          console.log("deviceready in reg form");
+
+
+      }, false);
+
+    Polymer('admin-registration-form', {
+      /**
+       * The `noevent` event is not actually fired from here,
+       * we document it as an example of documenting events.
+       *
+       * @event noevent
+       */
+
+      /**
+       * The `notitle` attribute does not yet have a purpose.
+       *
+       * @attribute notitle
+       * @type string
+       */
+      notitle: '',
+      DB: '',
+
+      /**
+       * The `aProp` is a property that does something cool.
+       *
+       * @property aProp
+       * @type bool
+       */
+        aProp: false,
+        pouch: '',
+        attached: function() {
+            console.log("Attaching form to pouch....");
+            this.isAttached = true;
+
+        },
+        domReady: function() {
+            console.log("domReady ....");
+            this.isDomReady = true;
+            // wait for bindings are all setup
+//            this.async('pouchChanged');
+            if (this.pouch) {
+//                this.db = new PouchDB('pouchy');
+//                this.db = new App.PouchDB('pouchy');
+//                this.globals = this.$.globals;
+//                this.PouchDB = this.globals.App.PouchDB;
+//                this.$.pouch.PouchDB = this.PouchDB;
+                this.$.pouch.PouchDB = App.PouchDB;
+                // wait for bindings are all setup
+                this.async('pouchChanged');
+            }
+        },
+        ready: function() {
+            this.theData = {
+                'name' : '',
+                'profession' : '',
+                'association' : '',
+                'district' : '',
+                'collection' : 'adminRegistration'
+            }
+            this.store = this.$.storage;
+            this.pouch = this.$.pouch;
+        },
+        pouchChanged: function() {
+            if (this.$.pouch.PouchDB) {
+                this.db = new this.$.pouch.PouchDB('pouchy');
+            }
+        },
+        pouchCreated: function() {
+            console.log("PouchDB is created.")
+            if (this.$.pouch.PouchDB) {
+                this.db = new this.$.pouch.PouchDB('pouchy');
+            }
+        },
+        updateModel: function() {
+//            this.post(this.theData);
+            App.API.saveRecord(this.theData);
+        },
+        post: function(doc) {
+            var request = this.db.post(doc);
+            request.then(function(e) {
+                console.log('saved' +  JSON.stringify(e));
+                App.trigger("userMain");
+            }, function(err) {
+                console.error('error saving', doc._id, err);
+            }.bind(this));
+
+            return request;
+        },
+
+      /**
+       * The `task` method does no work at this time.
+       *
+       * @method task
+       * @return {Object} Returns undefined.
+       * @param {String} dummy Serves no purpose today.
+       */
+      task: function(dummy) {
+      }
+
+    });
+
+  </script>
+
+</polymer-element>

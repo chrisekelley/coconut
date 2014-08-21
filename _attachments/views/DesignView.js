@@ -29,7 +29,7 @@ DesignView = (function(_super) {
     return this.basicMode();
   };
 
-  DesignView.prototype.template = Handlebars.compile("    <div id='design-view'>      <h3>        Design      </h3>      <small>      <b>Instructions</b>: <p>Use the drop down below to select the type of questions that you will be asking. Click <button>Preview</button> to see what the questions will look like.</p>      <div class='advanced'><b>Advanced: </b><p>Use <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> to make the question repeatable. If you want to group questions together to form a repeatable block then click <img title='group' src='images/group.png' style='background-color:#DDD'/> between the questions and use the <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> as before. Ungroup by using <img title='ungroup' src='images/ungroup.png' style='background-color:#DDD'/>.</p>      </div>      </small>      <hr/>      <div id='questions'>        <label for='rootQuestionName'>Name</label>        <input id='rootQuestionName' name='rootQuestionName' type='text'/>      </div>      <label for='element_selector'>Add questions</label>      <select id='element_selector'>        {{#each types}}          <option>{{this}}</option>        {{/each}}      </select>      <button>Add</button><br/>      <button type='button'>Save</button>      <button>Preview</button>      <button>Advanced Mode</button>      <hr/>      <form id='render'></form>      <div id='form_output'></form>    </div>  ");
+  DesignView.prototype.template = Handlebars.compile("    <div id='design-view'>      <h3>        Design      </h3>      <small>      <b>Instructions</b>: <p>Use the drop down below to select the type of questions that you will be asking. Click <button>Preview</button> to see what the questions will look like.</p>      <div class='advanced'><b>Advanced: </b><p>Use <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> to make the question repeatable. If you want to group questions together to form a repeatable block then click <img title='group' src='images/group.png' style='background-color:#DDD'/> between the questions and use the <img title='repeat' src='images/repeat.png' style='background-color:#DDD'/> as before. Ungroup by using <img title='ungroup' src='images/ungroup.png' style='background-color:#DDD'/>.</p>      </div>      </small>      <hr/>      <div id='questions'>        <label for='rootQuestionName'>Name</label>        <input id='rootQuestionName' name='rootQuestionName' type='text'/>        <label for='rootQuestionEnabled'>Enabled</label>        <input id='rootQuestionEnabled' name='rootQuestionEnabled' type='checkbox'/>      </div>      <label for='element_selector'>Add questions</label>      <select id='element_selector'>        {{#each types}}          <option>{{this}}</option>        {{/each}}      </select>      <button>Add</button><br/>      <button type='button'>Save</button>      <button>Preview</button>      <button>Advanced Mode</button>      <hr/>      <form id='render'></form>      <div id='form_output'></form>    </div>  ");
 
   DesignView.prototype.questionTypes = ["text", "number", "date", "datetime", "textarea", "select", "hidden", "radio", "checkbox", "autocomplete from list", "autocomplete from previous entries", "location", "image", "header", "subheader", "spacer", "submit"];
 
@@ -47,11 +47,16 @@ DesignView = (function(_super) {
   };
 
   DesignView.prototype.save = function() {
+    var result;
     this.question.loadFromDesigner($("#questions"));
-    this.question.collection = 'question';
-    return this.question.save(this.question, {
+    result = new Result;
+    result.collection = 'question';
+    return result.save(this.question.answer, {
       success: function() {
         return Coconut.menuView.render();
+      },
+      error: function(model, err, cb) {
+        return console.log("Error: " + new Error().stack);
       }
     });
   };
@@ -70,6 +75,7 @@ DesignView = (function(_super) {
     return this.question.fetch({
       success: function() {
         $('#rootQuestionName').val(_this.question.id);
+        $('#rootQuestionEnabled').val(_this.question.enabled);
         return _.each(_this.question.questions(), function(question) {
           return _this.addQuestion(question.attributes);
         });

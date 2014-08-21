@@ -114,23 +114,41 @@ Question = (function(_super) {
   };
 
   Question.prototype.loadFromDesigner = function(domNode) {
-    var attribute, property, result, _i, _len, _ref1;
+    var answer, attribute, property, question, questionArray, result, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _ref3;
     result = Question.fromDomNode(domNode);
     if (result.length === 1) {
       result = result[0];
       this.set({
-        id: result.id
+        id: result.id,
+        enabled: result.get("enabled")
       });
-      _ref1 = ["label", "type", "repeatable", "required", "validation"];
+      answer = {
+        id: result.id,
+        enabled: result.get("enabled")
+      };
+      _ref1 = ["label", "type", "repeatable", "required", "validation", "enabled"];
       for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
         property = _ref1[_i];
         attribute = {};
         attribute[property] = result.get(property);
         this.set(attribute);
+        _.extend(answer, attribute);
       }
-      return this.setProperties({
-        questions: result.questions()
-      });
+      questionArray = [];
+      _ref2 = result.questions();
+      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+        question = _ref2[_j];
+        attribute = {};
+        _ref3 = ["id", "_id", "label", "type", "repeatable", "required", "validation", "safeLabel", "radio-options"];
+        for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
+          property = _ref3[_k];
+          attribute[property] = question.attributes.get(property);
+        }
+        questionArray.push(attribute);
+      }
+      answer.questions = questionArray;
+      answer.collection = 'question';
+      return this.answer = answer;
     } else {
       throw "More than one root node";
     }
@@ -174,18 +192,20 @@ Question = (function(_super) {
 Question.fromDomNode = function(domNode) {
   var _this = this;
   return _(domNode).chain().map(function(question) {
-    var attribute, id, property, propertyValue, result, _i, _len, _ref1;
+    var attribute, enabled, id, property, propertyValue, result, _i, _len, _ref1;
     question = $(question);
     id = question.attr("id");
     if (question.children("#rootQuestionName").length > 0) {
       id = question.children("#rootQuestionName").val();
     }
+    enabled = question.children("#rootQuestionEnabled").attr('checked');
     if (!id) {
       return;
     }
     result = new Question;
     result.set({
-      id: id
+      id: id,
+      enabled: enabled
     });
     _ref1 = ["label", "type", "repeatable", "select-options", "radio-options", "autocomplete-options", "validation", "required", "action_on_questions_loaded", "skip_logic", "action_on_change", "image-path", "image-style"];
     for (_i = 0, _len = _ref1.length; _i < _len; _i++) {

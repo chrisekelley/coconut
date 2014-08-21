@@ -22,7 +22,7 @@ class MenuView extends Backbone.View
     <option value='home'>Home</option>
     </select>
         "
-
+    $('select').selectmenu()
 
     Coconut.questions.fetch
       fetch: 'query',

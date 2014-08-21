@@ -25,7 +25,6 @@ Now you can point your browser at the [Coconut](http://localhost:5984/coconut/_d
 
 CouchDB, [Backbone.js](http://documentcloud.github.com/backbone), [backbone-couchdb](https://github.com/janmonschke/backbone-couchdb), json, fermented eyebrow sweat, fairy dust.
 
-
 ## How is this organized?
 
 All of the backbone [models](http://documentcloud.github.com/backbone/#Model) and [views](http://documentcloud.github.com/backbone/#Model) have their own file and are in app/models and app/views respectively. app/app.js is responsible for tying it all together.
@@ -44,6 +43,28 @@ Use [bower](bower.io). The following libs are already installed. The "-S" switch
 Login as admin to create/edit forms. See the Setup instructions for creating the admin user.
 
 Add a complete checkbox at the bottom of the form to make it easy to view the results. 
+
+Change the routing after a form is submitted in QuestionView:
+
+      @result.save currentData,
+        success: (model) =>
+          $("#messageText").slideDown().fadeOut()
+          Coconut.router.navigate("edit/result/#{model.id}",false)
+
+          # Update the menu
+          Coconut.menuView.update()
+      
+          if @result.complete()
+            if @result.question == 'Admin Registration'
+              Coconut.router.navigate("postUserRegistrationMenu",true)
+            else
+              Coconut.router.navigate("",true)
+
+## Templates
+
+The following grunt task will monitor _attachments/templates and pre-compile your handlebars templates:
+
+    grunt watch 
 
 ## Setup
 

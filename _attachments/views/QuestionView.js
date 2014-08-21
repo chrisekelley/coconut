@@ -426,7 +426,11 @@ QuestionView = (function(_super) {
         Coconut.router.navigate("edit/result/" + model.id, false);
         Coconut.menuView.update();
         if (_this.result.complete()) {
-          return Coconut.router.navigate("", true);
+          if (_this.result.question() === 'Admin Registration') {
+            return Coconut.router.navigate("postUserRegistrationMenu", true);
+          } else {
+            return Coconut.router.navigate("", true);
+          }
         }
       }
     });

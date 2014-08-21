@@ -22,7 +22,13 @@
     "tests"
   ],
   "dependencies": {
-    "pouchdb": "~2.2.3",
-    "backbone-pouch": "https://raw.githubusercontent.com/jo/backbone-pouch/master/backbone-pouch.js"
+    "pouchdb": "~3.0.1",
+    "backbone-pouch": "https://raw.githubusercontent.com/jo/backbone-pouch/master/backbone-pouch.js",
+    "polymer": "Polymer/polymer#~0.3.5",
+    "dustjs-linkedin": "~2.4.0",
+    "marionette": "~2.1.0",
+    "paper-progress": "Polymer/paper-progress#~0.3.5",
+    "bootstrap": "~3.2.0",
+    "handlebars": "~1.3.0"
   }
 }

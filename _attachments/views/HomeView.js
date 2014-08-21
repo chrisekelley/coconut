@@ -21,12 +21,19 @@ HomeView = (function(_super) {
       model: result
     });
     rendered = recordView.render();
-    return $("#content table tbody").append(rendered);
+    return $("#records tbody").append(rendered);
   };
 
   HomeView.prototype.render = function() {
-    this.$el.html("              <table class='summary tablesorter'>                <thead><tr>                  <th>Question</th>                  <th>User</th>                  <th>Last Modified</th>                </tr></thead>                <tbody>                </tbody>              </table>        ");
-    return Coconut.homeView.results.each(this.addOne);
+    var dashboard, renderedDash;
+    this.$el.html("                <table id=\"dashboard\"></table>                <table id=\"records\" class='summary tablesorter'>                <thead><tr>                  <th>Question</th>                  <th>User</th>                  <th>Last Modified</th>                </tr></thead>                <tbody>                </tbody>              </table>        ");
+    dashboard = new ClientDashboardView({
+      model: Coconut.homeView.client
+    });
+    renderedDash = dashboard.render();
+    $("#dashboard").append(renderedDash);
+    Coconut.homeView.results.each(this.addOne);
+    return $('select').selectmenu();
   };
 
   return HomeView;

@@ -23,10 +23,12 @@ class DesignView extends Backbone.View
       </div>
       </small>
       <hr/>
-
       <div id='questions'>
         <label for='rootQuestionName'>Name</label>
         <input id='rootQuestionName' name='rootQuestionName' type='text'/>
+
+        <label for='rootQuestionEnabled'>Enabled</label>
+        <input id='rootQuestionEnabled' name='rootQuestionEnabled' type='checkbox'/>
       </div>
       <label for='element_selector'>Add questions</label>
       <select id='element_selector'>
@@ -60,10 +62,13 @@ class DesignView extends Backbone.View
 
   save: ->
     @question.loadFromDesigner $("#questions")
-    @question.collection = 'question'
-    @question.save @question,
+    result = new Result
+    result.collection = 'question'
+    result.save @question.answer,
       success: ->
         Coconut.menuView.render()
+      error: (model, err, cb) ->
+        console.log "Error: " + new Error().stack
 
   add: (event) ->
     @addQuestion
@@ -75,6 +80,7 @@ class DesignView extends Backbone.View
     @question.fetch
       success: =>
         $('#rootQuestionName').val @question.id
+        $('#rootQuestionEnabled').val @question.enabled
         _.each @question.questions(), (question) =>
           @addQuestion question.attributes
 

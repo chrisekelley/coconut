@@ -47,15 +47,24 @@ class Question extends Backbone.Model
 # TODO is this always going to just be the root question - containing only a name?
     if result.length is 1
       result = result[0]
-      @set { id : result.id }
-      for property in ["label","type","repeatable","required","validation"]
+      @set { id : result.id, enabled : result.get("enabled") }
+      answer = { id : result.id, enabled : result.get("enabled") }
+      for property in ["label","type","repeatable","required","validation", "enabled"]
         attribute = {}
         attribute[property] = result.get(property)
         @set attribute
-#      @set {questions: result.questions()}
-      @setProperties {questions: result.questions()}
-#       for question in result.questions()
-
+        _.extend(answer, attribute)
+      #      @set {questions: result.questions()}
+      questionArray = []
+      for question in result.questions()
+        attribute = {}
+        for property in ["id","_id","label","type","repeatable","required","validation","safeLabel", "radio-options"]
+          attribute[property] = question.attributes.get(property)
+#          @set attribute
+        questionArray.push attribute
+      answer.questions = questionArray
+      answer.collection = 'question'
+      this.answer = answer
     else
       throw "More than one root node"
 
@@ -87,9 +96,10 @@ Question.fromDomNode = (domNode) ->
       id = question.attr("id")
       if question.children("#rootQuestionName").length > 0
         id = question.children("#rootQuestionName").val()
+      enabled = question.children("#rootQuestionEnabled").attr('checked')
       return unless id
       result = new Question
-      result.set { id : id }
+      result.set { id : id, enabled : enabled }
       for property in ["label","type","repeatable","select-options","radio-options","autocomplete-options","validation","required", "action_on_questions_loaded", "skip_logic", "action_on_change", "image-path", "image-style"]
         attribute = {}
         # Note that we are using find but the id property ensures a proper match
@@ -106,4 +116,3 @@ Question.fromDomNode = (domNode) ->
         result.set {questions: Question.fromDomNode(question.children(".question-definition"))}
       return result
     .compact().value()
-

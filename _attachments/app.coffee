@@ -26,6 +26,11 @@ class Router extends Backbone.Router
     "users": "users"
     "messaging": "messaging"
     "help": "help"
+    "displayScanner": "displayScanner"
+    "registration": "registration"
+    "userRegistration": "userRegistration"
+    "postUserRegistrationMenu": "postUserRegistrationMenu"
+    "displayReportMenu": "displayReportMenu"
     "": "default"
 
   route: (route, name, callback) ->
@@ -58,6 +63,40 @@ class Router extends Backbone.Router
       success: ->
         Coconut.helpView ?= new HelpView()
         Coconut.helpView.render()
+
+  displayScanVerifyView: ->
+    @userLoggedIn
+      success: ->
+        staticView = new VerifyView(template: JST["_attachments/templates/ScanVerifyView.handlebars"]())
+        Coconut.mainRegion.show staticView
+
+  displayScanner: ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.displayScanner()
+
+  registration: (user) ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.displayRegistration user
+
+  userRegistration: ->
+    @userLoggedIn
+      success: ->
+#        API.registration "user"
+        console.log("displayRegistration.")
+        Coconut.Controller.displayRegistration "user"
+
+  postUserRegistrationMenu: ->
+    @userLoggedIn
+      success: ->
+        console.log("postUserRegistrationMenu.")
+        Coconut.Controller.postUserRegistrationMenu()
+
+  displayReportMenu: ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.displayReportMenu()
 
   users: ->
     @adminLoggedIn
@@ -113,45 +152,13 @@ class Router extends Backbone.Router
 #                  key:'Individual Registration',
               fun: 'question_complete_index'
           success: =>
-            Coconut.homeView.render()
-#        $("#content").html "
-#          <table class='summary tablesorter'>
-#            <thead><tr>
-#              <th>Question</th>
-#              <th>User</th>
-#              <th>Last Modified</th>
-#            </tr></thead>
-#            <tbody>
-#            </tbody>
-#          </table>
-#        "
-
-#        Backbone.sync.defaults.db.query('question_complete_index', {include_docs: true}).then (result) ->
-#          results = new SecondaryIndexCollection()
-#          results.fetch
-#              fetch: 'query',
-#              options:
-#                include_docs: true,
-#                query:
-#                  include_docs: true,
-##                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
-##                  key:'Individual Registration',
-#                  fun: 'question_complete_index'
-#              success: =>
-#                results.each (result,index) =>
-#                #                    $("tr##{question.attributeSafeText()}").append "<td>#{results.length}</td>"
-##                  console.log("result: " + JSON.stringify(result))
-#                  $("#content table tbody").append "<tr id='#{result.get "_id"}'>
-#                  <td><a href=\"/#show/case/#{result.get "_id"}\">#{result.get "question"}</a></td><td>#{result.get "user"}</td>
-#                  <td>#{result.get "lastModifiedAt"}</td></tr>"
-#              error: (msg)=>
-#                console.log "error: " + msg
-##              if index+1 is Coconut.questions.length
-##                $('table').tablesorter()
-##                $("table a").button()
-##                $("table").trigger("update")
-##              _.each $('table tr'), (row, index) ->
-##                $(row).addClass("odd") if index%2 is 1
+            client = new Result
+              _id:'34409584-3922-1903-A2FC-954BF5552907'
+            client.fetch
+              success: ->
+                console.log JSON.stringify  client
+                Coconut.homeView.client = client
+                Coconut.homeView.render()
 
   alerts: ->
     @userLoggedIn
@@ -357,12 +364,12 @@ class Router extends Backbone.Router
         $("#footer-menu").html "
           <center>
           <span style='font-size:75%;display:inline-block'>
-            <span id='district'></span><br/>
-            <span id='user'></span>
+            User:<br/> <span id='user'></span>
           </span>
           <a href='#login'>Login</a>
           <a href='#logout'>Logout</a>
           <a id='reports' href='#reports'>Reports</a>
+          <a id='displayScanner' href='#displayScanner'>Scanner</a>
           <a id='manage-button' style='display:none' href='#manage'>Manage</a>
           &nbsp;
           <a href='#sync/send'>Send data (last done: <span class='sync-sent-status'></span>)</a>
@@ -379,13 +386,14 @@ class Router extends Backbone.Router
         Coconut.menuView = new MenuView()
         Coconut.syncView = new SyncView()
         Coconut.menuView.render()
+
         Coconut.syncView.update()
         Backbone.history.start()
       error: ->
         Coconut.localConfigView ?= new LocalConfigView()
         Coconut.localConfigView.render()
 
-Coconut = {}
+window.Coconut = new Marionette.Application()
 matchResults = document.location.pathname.match(/^\/(.*)\/_design\/(.*?)\//)
 if matchResults == null
   console.log 'Configuring for Pouchdb'
@@ -397,6 +405,16 @@ else
 #Backbone.sync = BackbonePouch.sync({
 #  db: PouchDB(Coconut.db_name)
 #});
+
+Coconut.addRegions mainRegion: "#content"
+
+Coconut.on "displayReportMenu", ->
+  Coconut.router.navigate("displayReportMenu")
+  Coconut.Controller.displayReportMenu()
+
+Coconut.Controller = Controller
+Coconut.API = API
+
 Coconut.router = new Router()
 Coconut.router.startApp()
 

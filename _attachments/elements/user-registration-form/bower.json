@@ -1,0 +1,9 @@
+{
+  "name": "user-registration-form",
+  "version": "0.0.0",
+  "keywords": "seed, polymer, web-components",
+  "main": "user-registration-form.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.1"
+  }
+}
