@@ -116,7 +116,7 @@ class QuestionView extends Backbone.View
 
 
     #Load data into form
-    js2form($('form').get(0), @result.toJSON())
+#    js2form($('form').get(0), @result.toJSON())
 
     @updateCache()
 
@@ -459,6 +459,8 @@ class QuestionView extends Backbone.View
           if @result.complete()
             if @result.question() == 'Admin Registration'
               Coconut.router.navigate("postUserRegistrationMenu",true)
+            else if @result.question() == 'Individual Registration'
+              Coconut.router.navigate("postUserRegistrationMenu",true)
             else
               Coconut.router.navigate("",true)
     , 1000)
@@ -514,14 +516,22 @@ class QuestionView extends Backbone.View
           #{
           div
           }
-          #{
-          label unless ~question.type().indexOf('hidden')
-          }
-          <div class='message'></div>
+
           #{
             switch question.type()
               when "textarea"
-                "<input name='#{name}' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input>"
+                ""
+              when "checkbox"
+                ""
+              else
+                label
+          }
+          <div class='message'></div>
+
+          #{
+            switch question.type()
+              when "textarea"
+                "<div class='form-group'><input name='#{name}' class='form-control' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input></div>"
 # Selects look lame - use radio buttons instead or autocomplete if long list
 #              when "select"
 #                "
@@ -536,19 +546,19 @@ class QuestionView extends Backbone.View
                 if @readonly
                   question.value()
                 else
-                  html = "<select name='#{name}' id='#{question_id}'><option value=''> -- Select One -- </option>"
+                  html = "<div class='form-group'><select name='#{name}' id='#{question_id}' class='form-control'><option value=''> -- Select One -- </option>"
                   for option, index in question.get("select-options").split(/, */)
                     html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{option}</option>"
-                  html += "</select>"
+                  html += "</select></div>"
               when "radio"
                 if @readonly
-                  "<input class='radioradio' name='#{name}' type='text' id='#{question_id}' value='#{question.value()}'></input>"
+                  "<div class='form-group radiodrop'><input class='radioradio form-control' name='#{name}' type='text' id='#{question_id}' value='#{question.value()}'></input></div>"
                 else
                   options = question.get("radio-options")
                   _.map(options.split(/, */), (option,index) ->
                     "
-                      <input class='radio' type='radio' name='#{name}' id='#{question_id}-#{index}' value='#{_.escape(option)}'/>
-                      <label class='radio' for='#{question_id}-#{index}'>#{option}</label>
+                      <div class='form-group'><input class='radio form-control' type='radio' name='#{name}' id='#{question_id}-#{index}' value='#{_.escape(option)}'/>
+                      <label class='radio' for='#{question_id}-#{index}'>#{option}</label></div>
 
 <!--
                       <div class='ui-radio'>
@@ -565,11 +575,15 @@ class QuestionView extends Backbone.View
                     "
                   ).join("")
 
+
               when "checkbox"
                 if @readonly
-                  "<input name='#{name}' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input>"
+                  "<div class='form-group'><input class='form-control' name='#{name}' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input></div>"
                 else
-                  "<input style='display:none' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>"
+#                  "<input style='display:none' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>"
+                  "<div class='form-group'><input  class='form-control' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>
+                    <label class= 'checkbox-label' type='#{question.type()}' for='#{question_id}'>#{question.label()} <span></span></label>
+                   </div>"
               when "autocomplete from list", "autocomplete from previous entries", "autocomplete from code"
                 "
                   <!-- autocomplete='off' disables browser completion -->
@@ -610,7 +624,8 @@ class QuestionView extends Backbone.View
               when "spacer"
                 ""
               else
-                "<input name='#{name}' id='#{question_id}' type='#{question.type()}' value='#{question.value()}'></input>"
+#                "<input name='#{name}' id='#{question_id}' type='#{question.type()}' value='#{question.value()}'></input>"
+                 "<div class='form-group'><input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='Enter #{name}'></div>"
           }
           </div>
           #{repeatable}

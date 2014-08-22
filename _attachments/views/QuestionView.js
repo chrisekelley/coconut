@@ -71,7 +71,6 @@ QuestionView = (function(_super) {
     var autocompleteElements, skipperList,
       _this = this;
     this.$el.html("    <style>      .message      {        color: grey;        font-weight: bold;        padding: 10px;        border: 1px yellow dotted;        background: yellow;        display: none;      }      label.radio {        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      input[type='radio']:checked + label {        background-color:#ddd;        background: #5393c5;        background-image: -webkit-gradient(linear,left top,left bottom,from(#5393c5),to(#6facd5));        background-image: -webkit-linear-gradient(#5393c5,#6facd5);        background-image: -moz-linear-gradient(#5393c5,#6facd5);        background-image: -ms-linear-gradient(#5393c5,#6facd5);        background-image: -o-linear-gradient(#5393c5,#6facd5);        background-image: linear-gradient(#5393c5,#6facd5);      }      input[type='radio']{        height: 0px;      }      div.question.radio{        padding-top: 8px;        padding-bottom: 8px;      }      .tt-hint{        display:none      }      .tt-dropdown-menu{        width: 100%;        background-color: lightgray;      }      .tt-suggestion{        background-color: white;        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      .tt-suggestion .{      }    </style>      <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>        <a href='#help/" + this.model.id + "'>Help</a>      </div>      <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>        Saving...      </div>      <h1>" + this.model.id + "</h1>      <div id='question-view'>        <form onsubmit=\"return false;\">          " + (this.toHTMLForm(this.model)) + "            <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">    <span class=\"ui-btn-inner ui-btn-corner-all\">    <span class=\"ui-btn-text\">Submit</span></span>    <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>    <input type=\"hidden\" id=\"complete\" name=\"complete\"/>    </div>    </form>      </div>    ");
-    js2form($('form').get(0), this.result.toJSON());
     this.updateCache();
     this.updateSkipLogic();
     skipperList = [];
@@ -428,6 +427,8 @@ QuestionView = (function(_super) {
         if (_this.result.complete()) {
           if (_this.result.question() === 'Admin Registration') {
             return Coconut.router.navigate("postUserRegistrationMenu", true);
+          } else if (_this.result.question() === 'Individual Registration') {
+            return Coconut.router.navigate("postUserRegistrationMenu", true);
           } else {
             return Coconut.router.navigate("", true);
           }
@@ -488,39 +489,48 @@ QuestionView = (function(_super) {
           div = "<div          " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + "          data-required='" + (question.required()) + "'          class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'          data-question-name='" + name + "'          data-question-id='" + question_id + "'          data-action_on_change='" + (_.escape(question.actionOnChange())) + "'          >";
           label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + (question.label()) + " <span></span></label>";
         }
-        return "          " + div + "          " + (!~question.type().indexOf('hidden') ? label : void 0) + "          <div class='message'></div>          " + ((function() {
+        return "          " + div + "          " + ((function() {
+          switch (question.type()) {
+            case "textarea":
+              return "";
+            case "checkbox":
+              return "";
+            default:
+              return label;
+          }
+        })()) + "          <div class='message'></div>          " + ((function() {
           var _i, _len, _ref1;
           switch (question.type()) {
             case "textarea":
-              return "<input name='" + name + "' type='text' id='" + question_id + "' value='" + (_.escape(question.value())) + "'></input>";
+              return "<div class='form-group'><input name='" + name + "' class='form-control' type='text' id='" + question_id + "' value='" + (_.escape(question.value())) + "'></input></div>";
             case "select":
               if (this.readonly) {
                 return question.value();
               } else {
-                html = "<select name='" + name + "' id='" + question_id + "'><option value=''> -- Select One -- </option>";
+                html = "<div class='form-group'><select name='" + name + "' id='" + question_id + "' class='form-control'><option value=''> -- Select One -- </option>";
                 _ref1 = question.get("select-options").split(/, */);
                 for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
                   option = _ref1[index];
                   html += "<option name='" + name + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + option + "</option>";
                 }
-                return html += "</select>";
+                return html += "</select></div>";
               }
               break;
             case "radio":
               if (this.readonly) {
-                return "<input class='radioradio' name='" + name + "' type='text' id='" + question_id + "' value='" + (question.value()) + "'></input>";
+                return "<div class='form-group radiodrop'><input class='radioradio form-control' name='" + name + "' type='text' id='" + question_id + "' value='" + (question.value()) + "'></input></div>";
               } else {
                 options = question.get("radio-options");
                 return _.map(options.split(/, */), function(option, index) {
-                  return "                      <input class='radio' type='radio' name='" + name + "' id='" + question_id + "-" + index + "' value='" + (_.escape(option)) + "'/>                      <label class='radio' for='" + question_id + "-" + index + "'>" + option + "</label><!--                      <div class='ui-radio'>                        <label for=''" + question_id + "-" + index + "' data-corners='true' data-shadow='false' data-iconshadow='true' data-wrapperels='span' data-icon='radio-off' data-theme='c' class='ui-btn ui-btn-corner-all ui-btn-icon-left ui-radio-off ui-btn-up-c'>                          <span class='ui-btn-inner ui-btn-corner-all'>                            <span class='ui-btn-text'>" + option + "</span>                            <span class='ui-icon ui-icon-radio-off ui-icon-shadow'>&nbsp;</span>                          </span>                        </label>                        <input type='radio' name='" + name + "' id='" + question_id + "-" + index + "' value='" + (_.escape(option)) + "'/>                      </div>-->                    ";
+                  return "                      <div class='form-group'><input class='radio form-control' type='radio' name='" + name + "' id='" + question_id + "-" + index + "' value='" + (_.escape(option)) + "'/>                      <label class='radio' for='" + question_id + "-" + index + "'>" + option + "</label></div><!--                      <div class='ui-radio'>                        <label for=''" + question_id + "-" + index + "' data-corners='true' data-shadow='false' data-iconshadow='true' data-wrapperels='span' data-icon='radio-off' data-theme='c' class='ui-btn ui-btn-corner-all ui-btn-icon-left ui-radio-off ui-btn-up-c'>                          <span class='ui-btn-inner ui-btn-corner-all'>                            <span class='ui-btn-text'>" + option + "</span>                            <span class='ui-icon ui-icon-radio-off ui-icon-shadow'>&nbsp;</span>                          </span>                        </label>                        <input type='radio' name='" + name + "' id='" + question_id + "-" + index + "' value='" + (_.escape(option)) + "'/>                      </div>-->                    ";
                 }).join("");
               }
               break;
             case "checkbox":
               if (this.readonly) {
-                return "<input name='" + name + "' type='text' id='" + question_id + "' value='" + (_.escape(question.value())) + "'></input>";
+                return "<div class='form-group'><input class='form-control' name='" + name + "' type='text' id='" + question_id + "' value='" + (_.escape(question.value())) + "'></input></div>";
               } else {
-                return "<input style='display:none' name='" + name + "' id='" + question_id + "' type='checkbox' value='true'></input>";
+                return "<div class='form-group'><input  class='form-control' name='" + name + "' id='" + question_id + "' type='checkbox' value='true'></input>                    <label class= 'checkbox-label' type='" + (question.type()) + "' for='" + question_id + "'>" + (question.label()) + " <span></span></label>                   </div>";
               }
               break;
             case "autocomplete from list":
@@ -544,7 +554,7 @@ QuestionView = (function(_super) {
             case "spacer":
               return "";
             default:
-              return "<input name='" + name + "' id='" + question_id + "' type='" + (question.type()) + "' value='" + (question.value()) + "'></input>";
+              return "<div class='form-group'><input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='Enter " + name + "'></div>";
           }
         }).call(_this)) + "          </div>          " + repeatable + "        ";
       } else {

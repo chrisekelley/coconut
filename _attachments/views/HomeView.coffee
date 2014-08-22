@@ -25,4 +25,4 @@ class HomeView extends Backbone.View
     renderedDash = dashboard.render()
     $("#dashboard").append(renderedDash)
     Coconut.homeView.results.each @addOne
-    $('select').selectmenu()
+#    $('select').selectmenu()

@@ -10,7 +10,7 @@ class ManageView extends Backbone.View
       <a href='#messaging'>Send message to users</a>
       <h2>Question Sets</h2>
       <a href='#design'>New</a>
-      <table>
+      <table style='width:100%'>
         <thead>
           <th></th>
           <th></th>
@@ -21,7 +21,7 @@ class ManageView extends Backbone.View
         </tbody>
       </table>
     "
-    $("a").button()
+#    $("a").button()
     Coconut.questions.fetch
       success: ->
         Coconut.questions.each (question) ->
@@ -35,4 +35,4 @@ class ManageView extends Backbone.View
               <td><a href='#edit/resultSummary/#{questionId}'>summary</a></td>
             </tr>
           "
-        $("table a").button()
+#        $("table a").button()

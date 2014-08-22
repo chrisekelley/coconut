@@ -1,5 +1,8 @@
 def push_and_test
-  puts "This script uses each_line from Ruby 1.9. Change to each if using Ruby 1.8."
+#  puts "This script uses each_line from Ruby 1.9. Change to each if using Ruby 1.8."
+time1 = Time.new
+
+puts "Current Time : " + time1.inspect
 #    `make combined`
   `git log --pretty=format:'%h' -n 1 > _attachments/version`
 #  `couchapp push`

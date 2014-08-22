@@ -3,30 +3,30 @@ var API;
 
 API = {
   home: function() {
-    App.Controller.displayScanner();
+    Coconut.Controller.displayScanner();
   },
   registration: function(user) {
-    App.Controller.displayRegistration(user);
+    Coconut.Controller.displayRegistration(user);
   },
   userScan: function(user) {
-    App.Controller.displayScanner("user");
+    Coconut.Controller.displayScanner("user");
   },
   userMain: function() {
-    App.Controller.displayUserMain();
+    Coconut.Controller.displayUserMain();
   },
   userRegistration: function() {
-    API.registration("user");
+    Coconut.API.registration("user");
   },
   postUserRegistrationMenu: function() {
-    App.Controller.postUserRegistrationMenu();
+    Coconut.Controller.postUserRegistrationMenu();
   },
   displayReportMenu: function() {
-    App.Controller.displayReportMenu();
+    Coconut.Controller.displayReportMenu();
   },
   displayImmunization: function() {
-    App.Controller.displayImmunization();
+    Coconut.Controller.displayImmunization();
   },
   saveRecord: function(record) {
-    App.Controller.saveRecord(record);
+    Coconut.Controller.saveRecord(record);
   }
 };

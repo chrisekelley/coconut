@@ -31,6 +31,7 @@ class Router extends Backbone.Router
     "userRegistration": "userRegistration"
     "postUserRegistrationMenu": "postUserRegistrationMenu"
     "displayReportMenu": "displayReportMenu"
+    "userScan": "userScan"
     "": "default"
 
   route: (route, name, callback) ->
@@ -97,6 +98,12 @@ class Router extends Backbone.Router
     @userLoggedIn
       success: ->
         Coconut.Controller.displayReportMenu()
+
+  userScan: (user) ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.displayScanner "user"
+    return
 
   users: ->
     @adminLoggedIn
@@ -361,31 +368,31 @@ class Router extends Backbone.Router
     Coconut.config = new Config()
     Coconut.config.fetch
       success: ->
-        $("#footer-menu").html "
-          <center>
-          <span style='font-size:75%;display:inline-block'>
-            User:<br/> <span id='user'></span>
-          </span>
-          <a href='#login'>Login</a>
-          <a href='#logout'>Logout</a>
-          <a id='reports' href='#reports'>Reports</a>
-          <a id='displayScanner' href='#displayScanner'>Scanner</a>
-          <a id='manage-button' style='display:none' href='#manage'>Manage</a>
-          &nbsp;
-          <a href='#sync/send'>Send data (last done: <span class='sync-sent-status'></span>)</a>
-          <a href='#sync/get'>Update (last done: <span class='sync-get-status'></span>)</a>
-          <a href='#help'>Help</a>
-          <span style='font-size:75%;display:inline-block'>Version<br/><span id='version'></span></span>
-          </center>
-        "
-        $("[data-role=footer]").navbar()
+#        $("#footer-menu").html "
+#          <center>
+#          <span style='font-size:75%;display:inline-block'>
+#            User:<br/> <span id='user'></span>
+#          </span>
+#          <a href='#login'>Login</a>
+#          <a href='#logout'>Logout</a>
+#          <a id='reports' href='#reports'>Reports</a>
+#          <a id='displayScanner' href='#displayScanner'>Scanner</a>
+#          <a id='manage-button' style='display:none' href='#manage'>Manage</a>
+#          &nbsp;
+#          <a href='#sync/send'>Send data (last done: <span class='sync-sent-status'></span>)</a>
+#          <a href='#sync/get'>Update (last done: <span class='sync-get-status'></span>)</a>
+#          <a href='#help'>Help</a>
+#          <span style='font-size:75%;display:inline-block'>Version<br/><span id='version'></span></span>
+#          </center>
+#        "
+#        $("[data-role=footer]").navbar()
         $('#application-title').html Coconut.config.title()
         Coconut.loginView = new LoginView()
         Coconut.questions = new QuestionCollection()
         Coconut.questionView = new QuestionView()
         Coconut.menuView = new MenuView()
         Coconut.syncView = new SyncView()
-        Coconut.menuView.render()
+#        Coconut.menuView.render()
 
         Coconut.syncView.update()
         Backbone.history.start()
@@ -406,16 +413,21 @@ else
 #  db: PouchDB(Coconut.db_name)
 #});
 
+Coconut.Controller = Controller
+Coconut.API = API
+Coconut.router = new Router()
+
 Coconut.addRegions mainRegion: "#content"
 
 Coconut.on "displayReportMenu", ->
   Coconut.router.navigate("displayReportMenu")
   Coconut.Controller.displayReportMenu()
 
-Coconut.Controller = Controller
-Coconut.API = API
+Coconut.on "userScan", ->
+  Coconut.router.navigate "userScan"
+  Coconut.API.userScan "user"
 
-Coconut.router = new Router()
+
 Coconut.router.startApp()
 
 Coconut.debug = (string) ->

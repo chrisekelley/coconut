@@ -1,36 +1,36 @@
 API =
   home: ->
-    App.Controller.displayScanner()
+    Coconut.Controller.displayScanner()
     return
 
   registration: (user) ->
-    App.Controller.displayRegistration user
+    Coconut.Controller.displayRegistration user
     return
 
   userScan: (user) ->
-    App.Controller.displayScanner "user"
+    Coconut.Controller.displayScanner "user"
     return
 
   userMain: ->
-    App.Controller.displayUserMain()
+    Coconut.Controller.displayUserMain()
     return
 
   userRegistration: ->
-    API.registration "user"
+    Coconut.API.registration "user"
     return
 
   postUserRegistrationMenu: ->
-    App.Controller.postUserRegistrationMenu()
+    Coconut.Controller.postUserRegistrationMenu()
     return
 
   displayReportMenu: ->
-    App.Controller.displayReportMenu()
+    Coconut.Controller.displayReportMenu()
     return
 
   displayImmunization: ->
-    App.Controller.displayImmunization()
+    Coconut.Controller.displayImmunization()
     return
 
   saveRecord: (record) ->
-    App.Controller.saveRecord record
+    Coconut.Controller.saveRecord record
     return

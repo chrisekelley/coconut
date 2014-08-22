@@ -47,16 +47,20 @@ DesignView = (function(_super) {
   };
 
   DesignView.prototype.save = function() {
-    var result;
+    var savedQuestion;
     this.question.loadFromDesigner($("#questions"));
-    result = new Result;
-    result.collection = 'question';
-    return result.save(this.question.answer, {
+    savedQuestion = new Result;
+    savedQuestion.collection = 'question';
+    if (this.question._rev !== null) {
+      this.question.questionProperties._rev = this.question._rev;
+    }
+    return savedQuestion.save(this.question.questionProperties, {
       success: function() {
         return Coconut.menuView.render();
       },
       error: function(model, err, cb) {
-        return console.log("Error: " + new Error().stack);
+        console.log("Error: " + JSON.stringify(err));
+        return console.log(new Error().stack);
       }
     });
   };
@@ -75,7 +79,10 @@ DesignView = (function(_super) {
     return this.question.fetch({
       success: function() {
         $('#rootQuestionName').val(_this.question.id);
-        $('#rootQuestionEnabled').val(_this.question.enabled);
+        if (_this.question.get("enabled") === 'checked') {
+          $('#rootQuestionEnabled').prop('checked', true);
+        }
+        _this.question._rev = _this.question.get("_rev");
         return _.each(_this.question.questions(), function(question) {
           return _this.addQuestion(question.attributes);
         });
@@ -189,6 +196,7 @@ DesignView = (function(_super) {
 
   DesignView.prototype.toHTMLForm = function() {
     var questionView;
+    console.log("about to loadFromDesigner...");
     this.question.loadFromDesigner($("#questions"));
     questionView = new QuestionView({
       model: this.question

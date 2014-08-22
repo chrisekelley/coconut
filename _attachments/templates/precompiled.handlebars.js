@@ -24,7 +24,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<script id=\"ScanVerifyView\" type=\"text/x-handlebars-template\">\n    <p>To register an individual, please place thumb on the scanner and press the \"Scan\" button.</p>\n    <p>\n    <a data-role=\"button\" id=\"scan\" class=\"btn btn-primary btn-lg\">Scan</a>\n    </p>\n\n    <style shim-shadowdom>\n\n        paper-progress::shadow #progressContainer {\n            height:200%;\n            width:200%;\n        }\n\n    </style>\n\n    <paper-progress id=\"scan-progress\"></paper-progress>\n\n    <p>\n        Do you want to verify if this individual was registered before?\n    </p>\n    <p style=\"font-style: italic\">If Yes, you must be connected to server</p>\n    <p>\n        <a data-role=\"button\" id=\"verifyYes\" class=\"btn btn-primary btn-lg\">Yes</a> &nbsp&nbsp&nbsp&nbsp&nbsp\n        <a data-role=\"button\" id=\"verifyNo\" class=\"btn btn-primary btn-lg\">No</a>\n    </p>\n</script>\n";
+  return "    <p>To register an individual, please place thumb on the scanner and press the \"Scan\" button.</p>\n    <p>\n    <a data-role=\"button\" id=\"scan\" class=\"btn btn-primary btn-lg\">Scan</a>\n    </p>\n\n    <style shim-shadowdom>\n\n        paper-progress::shadow #progressContainer {\n            height:200%;\n            width:200%;\n        }\n\n    </style>\n\n    <paper-progress id=\"scan-progress\"></paper-progress>\n\n    <p>\n        Do you want to verify if this individual was registered before?\n    </p>\n    <p style=\"font-style: italic\">If Yes, you must be connected to server</p>\n    <p>\n        <a data-role=\"button\" id=\"verifyYes\" class=\"btn btn-primary btn-lg\">Yes</a> &nbsp&nbsp&nbsp&nbsp&nbsp\n        <a data-role=\"button\" id=\"verifyNo\" class=\"btn btn-primary btn-lg\">No</a>\n    </p>\n";
   });
 
 this["JST"]["_attachments/templates/UserMainView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -51,7 +51,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<!--<report-form></report-form>-->\n<h1>New Report</h1>\n\n<p>\n    What Services are being provided?\n</p>\n\n<div role=\"heading\">\n    <legend>Select all that apply:</legend>\n</div>\n";
+  return "<!--<report-form></report-form>-->\n<h1>New Report</h1>\n\n<div role=\"heading\">\n    <legend>Click the name of the form you wish to use:</legend>\n</div>\n\n<ul>\n    <li id=\"TrichiasisSurgery\">Trichiasis Surgery</li>\n    <li id=\"PostOperativeFollowup\">Post-Operative Followup</li>\n</ul>\n";
   });
 
 this["JST"]["_attachments/templates/VerifyView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

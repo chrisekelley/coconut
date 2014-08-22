@@ -13,7 +13,9 @@ UserFormView = Backbone.Marionette.ItemView.extend({
   },
   events: {
     "click #registrationLink": "submitRegistration",
-    "click #newReportLink": "newReportLink"
+    "click #newReportLink": "newReportLink",
+    "click #PostOperativeFollowup": "postOperativeFollowup",
+    "click #TrichiasisSurgery": "trichiasisSurgery"
   },
   initialize: function() {},
   submitRegistration: function() {
@@ -31,5 +33,13 @@ UserFormView = Backbone.Marionette.ItemView.extend({
   submitImmunizationLink: function() {
     console.log("submitImmunizationLink");
     App.trigger("displayReportMenu");
+  },
+  trichiasisSurgery: function() {
+    console.log("trichiasisSurgery");
+    Coconut.router.navigate("#new/result/Trichiasis%20Surgery",true)
+  },
+  postOperativeFollowup: function() {
+    console.log("postOperativeFollowup");
+    Coconut.router.navigate("#new/result/Post-Operative%20Followup",true)
   }
 });

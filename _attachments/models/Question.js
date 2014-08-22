@@ -90,31 +90,8 @@ Question = (function(_super) {
     return Question.__super__.set.call(this, attributes);
   };
 
-  Question.prototype.setProperties = function(attributes) {
-    var questionArray;
-    if (attributes.questions != null) {
-      questionArray = [];
-      attributes.questions = _.map(attributes.questions, function(question) {
-        var attribute, property, questionAtt, _i, _len, _ref1;
-        questionAtt = {};
-        _ref1 = ["id", "_id", "label", "type", "repeatable", "required", "validation", "safeLabel", "radio-options"];
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          property = _ref1[_i];
-          attribute = {};
-          questionAtt[property] = question.get(property);
-        }
-        return questionArray.push(questionAtt);
-      });
-    }
-    attributes.questions = questionArray;
-    if (attributes.id != null) {
-      attributes._id = attributes.id;
-    }
-    return Question.__super__.set.call(this, attributes);
-  };
-
   Question.prototype.loadFromDesigner = function(domNode) {
-    var answer, attribute, property, question, questionArray, result, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _ref3;
+    var attribute, property, question, questionArray, questionProperties, result, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2, _ref3;
     result = Question.fromDomNode(domNode);
     if (result.length === 1) {
       result = result[0];
@@ -122,8 +99,9 @@ Question = (function(_super) {
         id: result.id,
         enabled: result.get("enabled")
       });
-      answer = {
+      questionProperties = {
         id: result.id,
+        _id: result.id,
         enabled: result.get("enabled")
       };
       _ref1 = ["label", "type", "repeatable", "required", "validation", "enabled"];
@@ -132,23 +110,23 @@ Question = (function(_super) {
         attribute = {};
         attribute[property] = result.get(property);
         this.set(attribute);
-        _.extend(answer, attribute);
+        _.extend(questionProperties, attribute);
       }
       questionArray = [];
       _ref2 = result.questions();
       for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
         question = _ref2[_j];
         attribute = {};
-        _ref3 = ["id", "_id", "label", "type", "repeatable", "required", "validation", "safeLabel", "radio-options"];
+        _ref3 = ["id", "_id", "label", "type", "repeatable", "required", "validation", "safeLabel", "radio-options", "select-options"];
         for (_k = 0, _len2 = _ref3.length; _k < _len2; _k++) {
           property = _ref3[_k];
           attribute[property] = question.attributes.get(property);
         }
         questionArray.push(attribute);
       }
-      answer.questions = questionArray;
-      answer.collection = 'question';
-      return this.answer = answer;
+      questionProperties.questions = questionArray;
+      questionProperties.collection = 'question';
+      return this.questionProperties = questionProperties;
     } else {
       throw "More than one root node";
     }

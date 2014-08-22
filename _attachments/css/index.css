@@ -14,12 +14,16 @@
 #footer-menu {
     background-color: #8dc63f;
 }
+
+#records {
+    width:100%
+}
 /*5a4a42*/
 #records td {
-    background-color: #ffd8ba;
+    background-color: #ACD369;
 }
 #records th {
-    background-color: #8dc63f;
+    background-color: #C85D47;
 }
 #content {
     background-color: #fff;
@@ -35,4 +39,47 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 
 p {
     margin : 1em 0px;
+}
+
+#content {
+    background-color: #ACD369;
+    margin-top: 80px;
+}
+
+.jumbotron {
+    padding-top: 5px;
+    padding-bottom: 48px;
+}
+
+.jumbotron h1, .jumbotron .h1 {
+    font-size: 30px;
+}
+
+/*@media (min-width: 768px)*/
+    .container>.navbar-header, .container-fluid>.navbar-header, .container>.navbar-collapse, .container-fluid>.navbar-collapse {
+        margin-right: 1em;
+        margin-left: 0;
+    }
+
+.container>.navbar-header, .container-fluid>.navbar-header, .container>.navbar-collapse, .container-fluid>.navbar-collapse {
+    margin-right: 1em;
+    margin-left: 0;
+}
+
+.navbar-nav {
+    margin: 15px;
+}
+
+.checkbox-label {
+    margin-top: 0.8em;
+}
+
+.radiodrop {
+    margin-top: 1em;
+}
+
+.radio label, .checkbox label {
+    padding-left: 0px;
+    margin-bottom: 1em;
+    font-weight: 700;
 }

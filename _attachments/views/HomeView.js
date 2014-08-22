@@ -32,8 +32,7 @@ HomeView = (function(_super) {
     });
     renderedDash = dashboard.render();
     $("#dashboard").append(renderedDash);
-    Coconut.homeView.results.each(this.addOne);
-    return $('select').selectmenu();
+    return Coconut.homeView.results.each(this.addOne);
   };
 
   return HomeView;

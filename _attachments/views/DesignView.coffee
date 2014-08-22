@@ -62,13 +62,16 @@ class DesignView extends Backbone.View
 
   save: ->
     @question.loadFromDesigner $("#questions")
-    result = new Result
-    result.collection = 'question'
-    result.save @question.answer,
+    savedQuestion = new Result
+    savedQuestion.collection = 'question'
+    if (@question._rev != null)
+      @question.questionProperties._rev = @question._rev
+    savedQuestion.save @question.questionProperties,
       success: ->
         Coconut.menuView.render()
       error: (model, err, cb) ->
-        console.log "Error: " + new Error().stack
+        console.log "Error: " + JSON.stringify err
+        console.log new Error().stack
 
   add: (event) ->
     @addQuestion
@@ -80,7 +83,9 @@ class DesignView extends Backbone.View
     @question.fetch
       success: =>
         $('#rootQuestionName').val @question.id
-        $('#rootQuestionEnabled').val @question.enabled
+        if (@question.get("enabled") == 'checked')
+          $('#rootQuestionEnabled').prop('checked', true);
+        @question._rev = @question.get("_rev")
         _.each @question.questions(), (question) =>
           @addQuestion question.attributes
 
@@ -208,6 +213,7 @@ class DesignView extends Backbone.View
     return $('#questions').children()
 
   toHTMLForm: ->
+    console.log("about to loadFromDesigner...")
     @question.loadFromDesigner($("#questions"))
     questionView = new QuestionView(model: @question)
     questionView.toHTMLForm()
