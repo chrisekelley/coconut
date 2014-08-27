@@ -1,0 +1,184 @@
+trichiasisForm =
+{
+    "_id": "Trichiasis Surgery",
+    "id": "Trichiasis Surgery",
+    "enabled": "true",
+    "required": "false",
+    "questions": [
+        {
+            "id": "345",
+            "_id": "345",
+            "label": "Date/Time",
+            "type": "datetime",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "DateTime"
+        },
+        {
+            "id": "765",
+            "_id": "765",
+            "label": "Left eye",
+            "type": "header",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "Lefteye"
+        },
+        {
+            "id": "566",
+            "_id": "566",
+            "label": "Type of Operation",
+            "type": "select",
+            "repeatable": "false",
+            "select-options": "BTRP,Trabut",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "TypeofOperationL"
+        },
+        {
+            "id": "964",
+            "_id": "964",
+            "label": "Suture Type",
+            "type": "select",
+            "repeatable": "false",
+            "select-options": "Silk, Absorable",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "SutureTypeL"
+        },
+        {
+            "id": "189",
+            "_id": "189",
+            "label": "Clamp used",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ClampusedL"
+        },
+        {
+            "id": "827",
+            "_id": "827",
+            "label": "Complications",
+            "type": "subheader",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ComplicationsL"
+        },
+        {
+            "id": "57",
+            "_id": "57",
+            "label": "Excess bleeding",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ExcessbleedingL"
+        },
+        {
+            "id": "533",
+            "_id": "533",
+            "label": "Margin fragmant severed",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "MarginfragmantseveredL"
+        },
+        {
+            "id": "151",
+            "_id": "151",
+            "label": "Globe Puncture",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "GlobePunctureL"
+        },
+        {
+            "id": "734",
+            "_id": "734",
+            "label": "Right eye",
+            "type": "header",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "Righteye"
+        },
+        {
+            "id": "47",
+            "_id": "47",
+            "label": "Type of Operation",
+            "type": "select",
+            "repeatable": "false",
+            "select-options": "BTRP,Trabut",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "TypeofOperationR"
+        },
+        {
+            "id": "985",
+            "_id": "985",
+            "label": "Suture Type",
+            "type": "select",
+            "repeatable": "false",
+            "select-options": "Silk, Absorable",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "SutureTypeR"
+        },
+        {
+            "id": "776",
+            "_id": "776",
+            "label": "Clamp used",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ClampusedR"
+        },
+        {
+            "id": "280",
+            "_id": "280",
+            "label": "Complications",
+            "type": "subheader",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ComplicationsR"
+        },
+        {
+            "id": "636",
+            "_id": "636",
+            "label": "Excess bleeding",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ExcessbleedingR"
+        },
+        {
+            "id": "207",
+            "_id": "207",
+            "label": "Margin fragmant severed",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "MarginfragmantseveredR"
+        },
+        {
+            "id": "174",
+            "_id": "174",
+            "label": "Globe Puncture",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "GlobePunctureR"
+        }
+    ],
+    "collection": "question"
+}

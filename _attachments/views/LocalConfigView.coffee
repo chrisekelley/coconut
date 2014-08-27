@@ -6,7 +6,7 @@ class LocalConfigView extends Backbone.View
       <form id='local-config'>
         <h1>Configure your Coconut system</h1>
         <label>Coconut Cloud URL</label>
-        <input type='text' name='coconut-cloud' value='http://localhost:5984/coconut-central'></input>
+        <input type='text' name='coconut-cloud' size='60' value='http://192.168.128.239:5984/coconut-central'></input>
         <fieldset id='mode-fieldset'>
           <legend>Mode</legend>
             <label for='cloud'>Cloud (reporting system)</label>
@@ -22,9 +22,9 @@ class LocalConfigView extends Backbone.View
       $("#mode-fieldset").hide()
       $("#mobile").prop("checked",true)
 
-    @$el.find('input[type=radio],input[type=checkbox]').checkboxradio()
-    @$el.find('button').button()
-    @$el.find('input[type=text]').textinput()
+#    @$el.find('input[type=radio],input[type=checkbox]').checkboxradio()
+#    @$el.find('button').button()
+#    @$el.find('input[type=text]').textinput()
     Coconut.config.local?.fetch
       success: ->
         js2form($('#local-config').get(0), Coconut.config.local.toJSON())
@@ -32,7 +32,7 @@ class LocalConfigView extends Backbone.View
         $('#message').html "Complete the fields before continuing"
 
   events:
-    "click #local-config button": "save"
+    "click #local-config button": "saveLocal"
 
   save: ->
     localConfig = $('#local-config').toObject()
@@ -50,35 +50,73 @@ class LocalConfigView extends Backbone.View
             success: ->
               $('#message').append "Creating local configuration file<br/>"
               localConfig = new LocalConfig()
-              localConfig.fetch
-                complete: ->
-                  localConfig.save localConfig,
+              localConfig.save {_id: "coconut.config.local"},
+                success: ->
+                  $('#message').append "Local configuration file saved<br/>"
+                  sync = new Sync()
+                  sync.save null,
                     success: ->
-                      $('#message').append "Local configuration file saved<br/>"
-                      sync = new Sync()
-                      sync.save null,
+                      $('#message').append "Updating application<br/>"
+#                      sync.getFromCloud
+                      sync.getFromDocs
                         success: ->
-                          $('#message').append "Updating application<br/>"
-                          sync.getFromCloud
-                            success: ->
-                              Coconut.router.navigate("",false)
-                              location.reload()
-                error: (error) ->
-                  console.log "Couldn't find localConfig file."
-                  localConfig.save localConfig,
-                    success: ->
-                      $('#message').append "Local configuration file saved<br/>"
-                      sync = new Sync()
-                      sync.save null,
-                        success: ->
-                          $('#message').append "Updating application<br/>"
-                          sync.getFromCloud
-                            success: ->
-                              Coconut.router.navigate("",false)
-                              location.reload()
+                          Coconut.router.navigate("",false)
+                          location.reload()
+                        error: (model, err, cb) ->
+                          console.log JSON.stringify err
+                    error: (model, err, cb) ->
+                      console.log JSON.stringify err
+                error: (model, err, cb) ->
+                  console.log JSON.stringify err
         error: (error) ->
           console.log "Couldn't find config file at #{coconutCloudConfigURL}"
       return false
     else
       $('#message').html "Fields incomplete"
       return false
+
+  saveLocal: ->
+    localConfig = $('#local-config').toObject()
+    coconutCloud = $("input[name=coconut-cloud]").val()
+    coconutCloudConfigURL = "#{coconutCloud}/coconut.config"
+    cloudConfig =
+      "_id": "coconut.config",
+      "_rev": "11-7b57beeb6ba84273897732a2a798b4b1",
+      "title": "Coconut Clinic",
+      "cloud": "localhost:5984",
+      "local_couchdb_admin_username": "admin",
+      "local_couchdb_admin_password": "password",
+      "cloud_credentials": "admin:password",
+      "date_format": "YYYY-MM-DD",
+      "datetime_format": "YYYY-MM-DD HH:mm:ss",
+      "sync_mode": "couchdb-sync",
+      "synchronization_target": "http://192.168.128.239:5984/coconut-boody"
+    Coconut.config.save cloudConfig,
+      success: ->
+        $('#message').append "Creating local configuration file<br/>"
+        Coconut.config.local = new LocalConfig()
+        Coconut.config.local.save {_id: "coconut.config.local", coconutCloud: coconutCloud},
+          success: ->
+            $('#message').append "Local configuration file saved<br/>"
+            sync = new Sync()
+            sync.save null,
+              success: ->
+                $('#message').append "Updating application<br/>"
+#                TODO: make getFromDocs deferred
+                _.delay ->
+                  document.location.reload()
+                , 3000
+                #                      sync.getFromCloud
+                sync.getFromJSs
+                  success: ->
+                    Coconut.router.navigate("",false)
+                    location.reload()
+                  error: (model, err, cb) ->
+                    console.log JSON.stringify err
+              error: (model, err, cb) ->
+                console.log JSON.stringify err
+          error: (model, err, cb) ->
+            console.log JSON.stringify err
+      error: (model, err, cb) ->
+        console.log JSON.stringify err
+    return false

@@ -2,6 +2,7 @@ class Result extends Backbone.Model
   initialize: ->
     unless this.attributes.createdAt
       @set
+        collection: 'result'
         createdAt: moment(new Date()).format(Coconut.config.get "date_format")
     unless this.attributes.lastModifiedAt
       @set

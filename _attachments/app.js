@@ -69,9 +69,7 @@ Router = (function(_super) {
       router.trigger.apply(router, ['route:' + name].concat(args));
       router.trigger('route', name, args);
       Backbone.history.trigger('route', router, name, args);
-      $('#loading').slideDown();
-      _this.trigger.apply(_this, ['route:' + name].concat(args));
-      return $('#loading').fadeOut();
+      return _this.trigger.apply(_this, ['route:' + name].concat(args));
     }, this);
   };
 
@@ -212,12 +210,11 @@ Router = (function(_super) {
   Router.prototype["default"] = function() {
     return this.userLoggedIn({
       success: function() {
-        var _this = this;
-        if (Coconut.homeView == null) {
-          Coconut.homeView = new HomeView();
-        }
-        Coconut.homeView.results = new SecondaryIndexCollection;
-        return Coconut.homeView.results.fetch({
+        var results, viewOptions,
+          _this = this;
+        viewOptions = {};
+        results = new SecondaryIndexCollection;
+        return results.fetch({
           fetch: 'query',
           options: {
             include_docs: true,
@@ -228,16 +225,26 @@ Router = (function(_super) {
           },
           success: function() {
             var client;
+            console.log(JSON.stringify(results));
+            viewOptions = {
+              collection: results
+            };
             client = new Result({
               _id: '34409584-3922-1903-A2FC-954BF5552907'
             });
-            return client.fetch({
+            client.fetch({
               success: function() {
                 console.log(JSON.stringify(client));
-                Coconut.homeView.client = client;
-                return Coconut.homeView.render();
+                return Coconut.client = client;
+              },
+              error: function(model, err, cb) {
+                return console.log(JSON.stringify(err));
               }
             });
+            return Coconut.mainRegion.show(new HomeCompositeView(viewOptions));
+          },
+          error: function(model, err, cb) {
+            return console.log(JSON.stringify(err));
           }
         });
       }

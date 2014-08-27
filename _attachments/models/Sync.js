@@ -10,6 +10,10 @@ Sync = (function(_super) {
   function Sync() {
     this.replicateApplicationDocs = __bind(this.replicateApplicationDocs, this);
     this.getFromCloud = __bind(this.getFromCloud, this);
+    this.loadJSON = __bind(this.loadJSON, this);
+    this.saveJS = __bind(this.saveJS, this);
+    this.getFromJSs = __bind(this.getFromJSs, this);
+    this.getFromDocs = __bind(this.getFromDocs, this);
     this.log = __bind(this.log, this);
     this.last_get_time = __bind(this.last_get_time, this);
     this.was_last_get_successful = __bind(this.was_last_get_successful, this);
@@ -205,6 +209,69 @@ Sync = (function(_super) {
     });
   };
 
+  Sync.prototype.getFromDocs = function(options) {
+    var file, fileList, _i, _len, _results;
+    fileList = ['admin_registration.json', 'individual_registration.json', 'post_operative_followup.json', 'trichiasis_surgery.json', 'user.admin.json'];
+    _results = [];
+    for (_i = 0, _len = fileList.length; _i < _len; _i++) {
+      file = fileList[_i];
+      _results.push(this.loadJSON('/docs/' + file));
+    }
+    return _results;
+  };
+
+  Sync.prototype.getFromJSs = function(options) {
+    var file, fileList, _i, _len, _results;
+    fileList = [adminRegistrationForm, trichiasisForm, userAdminForm, individualRegistrationForm, postOperativeFollowupForm];
+    _results = [];
+    for (_i = 0, _len = fileList.length; _i < _len; _i++) {
+      file = fileList[_i];
+      _results.push(this.saveJS(file));
+    }
+    return _results;
+  };
+
+  Sync.prototype.saveJS = function(json) {
+    var savedQuestion;
+    savedQuestion = new Result;
+    savedQuestion.collection = 'question';
+    return savedQuestion.save(json, {
+      success: function() {
+        return console.log('json saved');
+      },
+      error: function(model, err, cb) {
+        console.log("Error: " + JSON.stringify(err));
+        return console.log(new Error().stack);
+      }
+    });
+  };
+
+  Sync.prototype.loadJSON = function(file) {
+    return $.ajax('file', {
+      type: 'GET',
+      dataType: 'jsonp',
+      error: function(jqXHR, textStatus, errorThrown) {
+        $('body').append("AJAX Error: " + textStatus);
+        return console.log("Error: " + textStatus);
+      },
+      success: function(data, textStatus, jqXHR) {
+        var savedQuestion;
+        console.log(file + 'retrieved');
+        savedQuestion = new Result;
+        savedQuestion.collection = 'question';
+        return savedQuestion.save(data, {
+          success: function() {
+            return console.log(file + 'saved');
+          },
+          error: function(model, err, cb) {
+            console.log("Error: " + JSON.stringify(err));
+            return console.log(new Error().stack);
+          }
+        });
+      }
+    });
+  };
+
   Sync.prototype.getFromCloud = function(options) {
     var _this = this;
     return this.fetch({
@@ -235,20 +302,10 @@ Sync = (function(_super) {
                     return options != null ? typeof options.error === "function" ? options.error(error) : void 0 : void 0;
                   },
                   success: function() {
-                    var logFile;
                     console.log("TODO: enable User.currentUser.id");
-                    logFile = {
-                      collection: "log",
-                      action: "getFromCloud",
-                      user: 'testUser',
-                      time: moment().format(Coconut.config.get("date_format"))
-                    };
-                    return Backbone.sync.defaults.db.post(logFile, function(err, response) {
-                      _this.log("TODO: implement sendLogMessagesToCloud");
-                      return _.delay(function() {
-                        return document.location.reload();
-                      }, 5000);
-                    });
+                    return _.delay(function() {
+                      return document.location.reload();
+                    }, 2000);
                   }
                 });
               }
@@ -263,26 +320,32 @@ Sync = (function(_super) {
     var opts;
     opts = {
       continuous: true,
+      batch_size: 5,
       withCredentials: true,
       complete: function(result) {
         if (typeof result !== 'undefined' && result.ok) {
-          return console.log("onComplete: Replication is fine. ");
+          return Coconut.debug("onComplete: Replication is fine. ");
         } else {
-          return console.log("onComplete: Replication error: " + JSON.stringify(result));
+          return Coconut.debug("onComplete: Replication message: " + JSON.stringify(result));
         }
       },
       error: function(result) {
-        return console.log("error: Replication error: " + JSON.stringify(result));
+        return Coconut.debug("error: Replication error: " + JSON.stringify(result));
       },
       timeout: 60000
     };
-    return Backbone.sync.defaults.db.replicate.from(Coconut.config.cloud_url_with_credentials(), opts).on('uptodate', function(result) {
+    _.extend(options, opts);
+    return Backbone.sync.defaults.db.replicate.from(Coconut.config.cloud_url_with_credentials(), options).on('uptodate', function(result) {
       if (typeof result !== 'undefined' && result.ok) {
         console.log("uptodate: Replication is fine. ");
         return options.success();
       } else {
         return console.log("uptodate: Replication error: " + JSON.stringify(result));
       }
+    }).on('change', function(info) {
+      return Coconut.debug("Change: " + JSON.stringify(info));
+    }).on('complete', function(info) {
+      return Coconut.debug("Complete: " + JSON.stringify(info));
     });
   };
 
@@ -298,7 +361,7 @@ Sync = (function(_super) {
       success: function(result) {
         var doc_ids;
         doc_ids = _.pluck(result.rows, "id");
-        doc_ids.push("_design/" + (Coconut.config.design_doc_name()));
+        console.log(JSON.stringify(doc_ids));
         _this.log("Updating " + doc_ids.length + " docs (users, forms and the design document). Please wait.");
         return _this.replicate(_.extend(options, {
           replicationArguments: {

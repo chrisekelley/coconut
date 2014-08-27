@@ -52,10 +52,10 @@ class Router extends Backbone.Router
       Backbone.history.trigger('route', router, name, args)
 
 # Run this before
-      $('#loading').slideDown()
+#      $('#loading').slideDown()
       this.trigger.apply(this, ['route:' + name].concat(args))
 # Run this after
-      $('#loading').fadeOut()
+#      $('#loading').fadeOut()
 
     , this)
 
@@ -147,9 +147,9 @@ class Router extends Backbone.Router
   default: ->
     @userLoggedIn
       success: ->
-        Coconut.homeView ?= new HomeView()
-        Coconut.homeView.results = new SecondaryIndexCollection
-        Coconut.homeView.results.fetch
+        viewOptions = {}
+        results = new SecondaryIndexCollection
+        results.fetch
           fetch: 'query',
           options:
             include_docs: true,
@@ -159,13 +159,26 @@ class Router extends Backbone.Router
 #                  key:'Individual Registration',
               fun: 'question_complete_index'
           success: =>
+            console.log JSON.stringify results
+            viewOptions =
+              collection : results
             client = new Result
               _id:'34409584-3922-1903-A2FC-954BF5552907'
             client.fetch
               success: ->
                 console.log JSON.stringify  client
-                Coconut.homeView.client = client
-                Coconut.homeView.render()
+                Coconut.client = client
+#                Coconut.homeView.render()
+              error: (model, err, cb) ->
+                console.log JSON.stringify err
+#                Coconut.homeView.render()
+            Coconut.mainRegion.show new HomeCompositeView viewOptions
+          error: (model, err, cb) ->
+            console.log JSON.stringify err
+#            Coconut.homeView.render()
+#            Coconut.mainRegion.show Coconut.homeView
+
+#            App.headerRegion.show new Header()
 
   alerts: ->
     @userLoggedIn
@@ -212,6 +225,7 @@ class Router extends Backbone.Router
         Coconut.caseView.case.fetch
           success: ->
             Coconut.caseView.render()
+#        console.log("hoo ha")
 
   configure: ->
     @userLoggedIn
@@ -412,6 +426,12 @@ else
 #Backbone.sync = BackbonePouch.sync({
 #  db: PouchDB(Coconut.db_name)
 #});
+
+#Coconut.adminRegistrationForm = new Result(adminRegistrationForm);
+#Coconut.trichiasisForm = new Result(trichiasisForm);
+#Coconut.userAdminForm = new Result(userAdminForm);
+#Coconut.individualRegistrationForm = new Result(individualRegistrationForm);
+#Coconut.postOperativeFollowupForm = new Result(postOperativeFollowupForm);
 
 Coconut.Controller = Controller
 Coconut.API = API

@@ -91,11 +91,11 @@ class QuestionView extends Backbone.View
       }
 
     </style>
-
+      <!--
       <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>
         <a href='#help/#{@model.id}'>Help</a>
       </div>
-
+      -->
       <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>
         Saving...
       </div>
@@ -137,14 +137,14 @@ class QuestionView extends Backbone.View
     # Trigger a change event for each of the questions that contain skip logic in their actionOnChange code
     @triggerChangeIn skipperList
 
-    @$el.find("input[type=text],input[type=number],input[type='autocomplete from previous entries'],input[type='autocomplete from list'],input[type='autocomplete from code']").textinput()
-    @$el.find('input[type=checkbox]').checkboxradio()
-    @$el.find('ul').listview()
-    @$el.find('select').selectmenu()
-    @$el.find('a').button()
-    @$el.find('input[type=date]').datebox
-      mode: "calbox"
-      dateFormat: "%d-%m-%Y"
+#    @$el.find("input[type=text],input[type=number],input[type='autocomplete from previous entries'],input[type='autocomplete from list'],input[type='autocomplete from code']").textinput()
+#    @$el.find('input[type=checkbox]').checkboxradio()
+#    @$el.find('ul').listview()
+#    @$el.find('select').selectmenu()
+#    @$el.find('a').button()
+#    @$el.find('input[type=date]').datebox
+#      mode: "calbox"
+#      dateFormat: "%d-%m-%Y"
 
     autocompleteElements = []
     _.each $("input[type='autocomplete from list']"), (element) ->
@@ -215,14 +215,14 @@ class QuestionView extends Backbone.View
 # Hack by Mike to solve problem with autocomplete fields being validated before
       _.delay =>
         unless messageVisible
-          wasValid = @validateOne
-            key: targetName
-            autoscroll: false
-            button: "<button type='button' data-name='#{targetName}' class='validate_one'>Validate</button>"
+#          wasValid = @validateOne
+#            key: targetName
+#            autoscroll: false
+#            button: "<button type='button' data-name='#{targetName}' class='validate_one'>Validate</button>"
           @save()
           @updateSkipLogic()
           @actionOnChange(event)
-          @autoscroll(event) if wasValid
+#          @autoscroll(event) if wasValid
       , 500
 
   onSubmitButton: (event) ->
@@ -281,19 +281,19 @@ class QuestionView extends Backbone.View
     if $message.is(":visible") and leaveMessage
       if message is "" then return true else return false
 
-    if message is ""
-      $message.hide()
-      if autoscroll
-        @autoscroll $question
+#    if message is ""
+#      $message.hide()
+#      if autoscroll
+#        @autoscroll $question
       return true
-    else
-      $message.show().html("
-        #{message}
-        #{button}
-      ").find("button").button()
-      # undo autoscrolling - horrible hack but it works!
-      @scrollToQuestion($question)
-      return false
+#    else
+#      $message.show().html("
+#        #{message}
+#        #{button}
+#      ").find("button").button()
+#      # undo autoscrolling - horrible hack but it works!
+##      @scrollToQuestion($question)
+#      return false
 
 
   isValid: ( question_id ) ->

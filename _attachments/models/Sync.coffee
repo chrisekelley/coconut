@@ -134,6 +134,41 @@ class Sync extends Backbone.Model
             )
             Coconut.menuView.checkReplicationStatus()
 
+  getFromDocs: (options) =>
+    fileList = ['admin_registration.json','individual_registration.json','post_operative_followup.json','trichiasis_surgery.json','user.admin.json']
+    @loadJSON '/docs/'+file for file in fileList
+
+  getFromJSs: (options) =>
+    fileList = [adminRegistrationForm,trichiasisForm,userAdminForm,individualRegistrationForm,postOperativeFollowupForm]
+    @saveJS file for file in fileList
+
+  saveJS:(json) =>
+    savedQuestion = new Result
+    savedQuestion.collection = 'question'
+    savedQuestion.save json,
+      success: ->
+        console.log 'json saved'
+      error: (model, err, cb) ->
+        console.log "Error: " + JSON.stringify err
+        console.log new Error().stack
+
+  loadJSON: (file) =>
+    $.ajax 'file',
+      type: 'GET'
+      dataType: 'jsonp'
+      error: (jqXHR, textStatus, errorThrown) ->
+        $('body').append "AJAX Error: #{textStatus}"
+        console.log "Error: " + textStatus
+      success: (data, textStatus, jqXHR) ->
+        console.log file + 'retrieved'
+        savedQuestion = new Result
+        savedQuestion.collection = 'question'
+        savedQuestion.save data,
+          success: ->
+            console.log file + 'saved'
+          error: (model, err, cb) ->
+            console.log "Error: " + JSON.stringify err
+            console.log new Error().stack
 
   getFromCloud: (options) =>
     @fetch
@@ -161,17 +196,20 @@ class Sync extends Backbone.Model
                   success: =>
 #                    $.couch.logout()
                     console.log("TODO: enable User.currentUser.id")
-                    logFile =
-                      collection: "log"
-                      action: "getFromCloud"
-                      user: 'testUser'
-#                      user: User.currentUser.id
-                      time: moment().format(Coconut.config.get "date_format")
-                    Backbone.sync.defaults.db.post logFile
-                    ,
-                      (err, response) =>
-#                        @log "Sending log messages to cloud."
-                        @log "TODO: implement sendLogMessagesToCloud"
+                    _.delay ->
+                      document.location.reload()
+                    , 2000
+#                    logFile =
+#                      collection: "log"
+#                      action: "getFromCloud"
+#                      user: 'testUser'
+##                      user: User.currentUser.id
+#                      time: moment().format(Coconut.config.get "date_format")
+#                    Backbone.sync.defaults.db.post logFile
+#                    ,
+#                      (err, response) =>
+##                        @log "Sending log messages to cloud."
+#                        console.log "TODO: fix sendLogMessagesToCloud"
 #                        @sendLogMessagesToCloud
 #                          success: =>
 #                            @log "Finished, refreshing app in 5 seconds..."
@@ -182,32 +220,41 @@ class Sync extends Backbone.Model
 #                                  last_get_success: true
 #                                  last_get_time: new Date().getTime()
 #                                options?.success?()
-                        _.delay ->
-                          document.location.reload()
-                        , 5000
+#                          error: (err) =>
+#                            console.log "error: " + JSON.stringify err
+#                        _.delay ->
+#                          document.location.reload()
+#                        , 5000
 #                      error: (error) => @log "Could not create log file #{JSON.stringify(error)}"
 
   replicate: (options) ->
     opts =
       continuous: true
+      batch_size:5
+#      batches_limit:1
       withCredentials:true
 #      auth:
 #        username:account.username
 #        password:account.password
       complete: (result) ->
         if typeof result != 'undefined' && result.ok
-          console.log "onComplete: Replication is fine. "
+          Coconut.debug "onComplete: Replication is fine. "
         else
-          console.log "onComplete: Replication error: " + JSON.stringify result
+          Coconut.debug "onComplete: Replication message: " + JSON.stringify result
       error: (result) ->
-          console.log "error: Replication error: " + JSON.stringify result
+          Coconut.debug "error: Replication error: " + JSON.stringify result
       timeout: 60000
-    Backbone.sync.defaults.db.replicate.from(Coconut.config.cloud_url_with_credentials(), opts).on('uptodate', (result) ->
+    _.extend options, opts
+    Backbone.sync.defaults.db.replicate.from(Coconut.config.cloud_url_with_credentials(), options).on('uptodate', (result) ->
       if typeof result != 'undefined' && result.ok
         console.log "uptodate: Replication is fine. "
         options.success()
       else
-        console.log "uptodate: Replication error: " + JSON.stringify result)
+        console.log "uptodate: Replication error: " + JSON.stringify result).on('change', (info)->
+          Coconut.debug "Change: " + JSON.stringify info
+        ).on('complete', (info)->
+          Coconut.debug "Complete: " + JSON.stringify info
+        )
 #    Coconut.menuView.checkReplicationStatus();
 
   replicateApplicationDocs: (options) =>
@@ -222,8 +269,13 @@ class Sync extends Backbone.Model
       success: (result) =>
         doc_ids = _.pluck result.rows, "id"
         # Not needed since design_doc has option to index itself and is marked as applicationDoc
-        doc_ids.push "_design/#{Coconut.config.design_doc_name()}"
+#        doc_ids.push "_design/#{Coconut.config.design_doc_name()}"
+        console.log JSON.stringify doc_ids
+#        position = doc_ids.indexOf("_design/#{Coconut.config.design_doc_name()}");
+#        doc_ids.splice(position, 1)
+#        console.log JSON.stringify doc_ids
         @log "Updating #{doc_ids.length} docs (users, forms and the design document). Please wait."
         @replicate _.extend options,
           replicationArguments:
             doc_ids: doc_ids
+

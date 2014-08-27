@@ -35,29 +35,31 @@ function createDesignDoc(name, mapFunction) {
     return ddoc;
 }
 
-//var designDoc = createDesignDoc('question_complete_index', function (doc) {
-//    if (doc.question) {
-//        console.log("doc.question: " + doc.question + " doc.complete: " + doc.complete);
+var designDoc = createDesignDoc('question_complete_index', function (doc) {
+    if (doc.question) {
+        console.log("doc.question: " + doc.question + " doc.complete: " + doc.complete);
 //        if (doc.complete && doc.complete == 'true') {
-////            emit(doc.question + ':true:' + doc.lastModifiedAt, null);
-//            emit(doc.question, null);
+//            emit(doc.question + ':true:' + doc.lastModifiedAt, null);
+            emit(doc.question, null);
 //        }
-//    }
-//});
-//
+    }
+});
+
 //Backbone.sync.defaults.db.get('_design/question_complete_index', function(err, doc) {
 //    Backbone.sync.defaults.db.remove(doc, function(err, response) { });
 //    console.log("doc deleted: " + err);
 //});
-//
-//Backbone.sync.defaults.db.put(designDoc).then(function (doc) {
-//    // design doc created!
-//    Backbone.sync.defaults.db.query('question_complete_index', {stale: 'update_after'})
-////    Backbone.sync.defaults.db.viewCleanup()
-//}).catch(function (err) {
-//    // if err.name === 'conflict', then
-//    // design doc already exists
-//});
+
+Backbone.sync.defaults.db.put(designDoc).then(function (doc) {
+    // design doc created!
+    console.log("question_complete_index created")
+    Backbone.sync.defaults.db.query('question_complete_index', {stale: 'update_after'})
+//    Backbone.sync.defaults.db.viewCleanup()
+}).catch(function (err) {
+    if (err.name === 'conflict') {
+        console.log("question_complete_index exists.")
+    }
+});
 
 
 

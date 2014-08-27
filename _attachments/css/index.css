@@ -18,6 +18,10 @@
 #records {
     width:100%
 }
+
+#records td{
+    font-size:16pt;
+}
 /*5a4a42*/
 #records td {
     background-color: #ACD369;
@@ -43,7 +47,7 @@ p {
 
 #content {
     background-color: #ACD369;
-    margin-top: 80px;
+    margin-top: 50px;
 }
 
 .jumbotron {
@@ -82,4 +86,12 @@ p {
     padding-left: 0px;
     margin-bottom: 1em;
     font-weight: 700;
+}
+
+body {
+    padding-top: 50px;
+}
+.starter-template {
+    padding: 40px 15px;
+    text-align: center;
 }

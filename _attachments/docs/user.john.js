@@ -1,0 +1,9 @@
+userJohnForm =
+{
+    "_id": "user.john",
+    "password": "john",
+    "district": "9",
+    "name": "John Smith",
+    "comments": null,
+    "collection": "user"
+}

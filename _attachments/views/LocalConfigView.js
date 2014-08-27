@@ -15,14 +15,11 @@ LocalConfigView = (function(_super) {
 
   LocalConfigView.prototype.render = function() {
     var _ref1;
-    this.$el.html("      <form id='local-config'>        <h1>Configure your Coconut system</h1>        <label>Coconut Cloud URL</label>        <input type='text' name='coconut-cloud' value='http://localhost:5984/coconut-central'></input>        <fieldset id='mode-fieldset'>          <legend>Mode</legend>            <label for='cloud'>Cloud (reporting system)</label>            <input id='cloud' name='mode' type='radio' value='cloud'></input>            <label for='mobile'>Mobile (data collection, probably on a tablet)</label>            <input id='mobile' name='mode' type='radio' value='mobile'></input>        </fieldset>        <button>Save</button>        <div id='message'></div>      </form>    ");
+    this.$el.html("      <form id='local-config'>        <h1>Configure your Coconut system</h1>        <label>Coconut Cloud URL</label>        <input type='text' name='coconut-cloud' size='60' value='http://192.168.128.239:5984/coconut-central'></input>        <fieldset id='mode-fieldset'>          <legend>Mode</legend>            <label for='cloud'>Cloud (reporting system)</label>            <input id='cloud' name='mode' type='radio' value='cloud'></input>            <label for='mobile'>Mobile (data collection, probably on a tablet)</label>            <input id='mobile' name='mode' type='radio' value='mobile'></input>        </fieldset>        <button>Save</button>        <div id='message'></div>      </form>    ");
     if (Coconut.config.get("mode") == null) {
       $("#mode-fieldset").hide();
       $("#mobile").prop("checked", true);
     }
-    this.$el.find('input[type=radio],input[type=checkbox]').checkboxradio();
-    this.$el.find('button').button();
-    this.$el.find('input[type=text]').textinput();
     return (_ref1 = Coconut.config.local) != null ? _ref1.fetch({
       success: function() {
         return js2form($('#local-config').get(0), Coconut.config.local.toJSON());
@@ -34,7 +31,7 @@ LocalConfigView = (function(_super) {
   };
 
   LocalConfigView.prototype.events = {
-    "click #local-config button": "save"
+    "click #local-config button": "saveLocal"
   };
 
   LocalConfigView.prototype.save = function() {
@@ -54,47 +51,33 @@ LocalConfigView = (function(_super) {
             success: function() {
               $('#message').append("Creating local configuration file<br/>");
               localConfig = new LocalConfig();
-              return localConfig.fetch({
-                complete: function() {
-                  return localConfig.save(localConfig, {
+              return localConfig.save({
+                _id: "coconut.config.local"
+              }, {
+                success: function() {
+                  var sync;
+                  $('#message').append("Local configuration file saved<br/>");
+                  sync = new Sync();
+                  return sync.save(null, {
                     success: function() {
-                      var sync;
-                      $('#message').append("Local configuration file saved<br/>");
-                      sync = new Sync();
-                      return sync.save(null, {
+                      $('#message').append("Updating application<br/>");
+                      return sync.getFromDocs({
                         success: function() {
-                          $('#message').append("Updating application<br/>");
-                          return sync.getFromCloud({
-                            success: function() {
-                              Coconut.router.navigate("", false);
-                              return location.reload();
-                            }
-                          });
+                          Coconut.router.navigate("", false);
+                          return location.reload();
+                        },
+                        error: function(model, err, cb) {
+                          return console.log(JSON.stringify(err));
                         }
                       });
+                    },
+                    error: function(model, err, cb) {
+                      return console.log(JSON.stringify(err));
                     }
                   });
                 },
-                error: function(error) {
-                  console.log("Couldn't find localConfig file.");
-                  return localConfig.save(localConfig, {
-                    success: function() {
-                      var sync;
-                      $('#message').append("Local configuration file saved<br/>");
-                      sync = new Sync();
-                      return sync.save(null, {
-                        success: function() {
-                          $('#message').append("Updating application<br/>");
-                          return sync.getFromCloud({
-                            success: function() {
-                              Coconut.router.navigate("", false);
-                              return location.reload();
-                            }
-                          });
-                        }
-                      });
-                    }
-                  });
+                error: function(model, err, cb) {
+                  return console.log(JSON.stringify(err));
                 }
               });
             }
@@ -109,6 +92,69 @@ LocalConfigView = (function(_super) {
       $('#message').html("Fields incomplete");
       return false;
     }
+  };
+
+  LocalConfigView.prototype.saveLocal = function() {
+    var cloudConfig, coconutCloud, coconutCloudConfigURL, localConfig;
+    localConfig = $('#local-config').toObject();
+    coconutCloud = $("input[name=coconut-cloud]").val();
+    coconutCloudConfigURL = "" + coconutCloud + "/coconut.config";
+    cloudConfig = {
+      "_id": "coconut.config",
+      "_rev": "11-7b57beeb6ba84273897732a2a798b4b1",
+      "title": "Coconut Clinic",
+      "cloud": "localhost:5984",
+      "local_couchdb_admin_username": "admin",
+      "local_couchdb_admin_password": "password",
+      "cloud_credentials": "admin:password",
+      "date_format": "YYYY-MM-DD",
+      "datetime_format": "YYYY-MM-DD HH:mm:ss",
+      "sync_mode": "couchdb-sync",
+      "synchronization_target": "http://192.168.128.239:5984/coconut-boody"
+    };
+    Coconut.config.save(cloudConfig, {
+      success: function() {
+        $('#message').append("Creating local configuration file<br/>");
+        Coconut.config.local = new LocalConfig();
+        return Coconut.config.local.save({
+          _id: "coconut.config.local",
+          coconutCloud: coconutCloud
+        }, {
+          success: function() {
+            var sync;
+            $('#message').append("Local configuration file saved<br/>");
+            sync = new Sync();
+            return sync.save(null, {
+              success: function() {
+                $('#message').append("Updating application<br/>");
+                _.delay(function() {
+                  return document.location.reload();
+                }, 3000);
+                return sync.getFromJSs({
+                  success: function() {
+                    Coconut.router.navigate("", false);
+                    return location.reload();
+                  },
+                  error: function(model, err, cb) {
+                    return console.log(JSON.stringify(err));
+                  }
+                });
+              },
+              error: function(model, err, cb) {
+                return console.log(JSON.stringify(err));
+              }
+            });
+          },
+          error: function(model, err, cb) {
+            return console.log(JSON.stringify(err));
+          }
+        });
+      },
+      error: function(model, err, cb) {
+        return console.log(JSON.stringify(err));
+      }
+    });
+    return false;
   };
 
   return LocalConfigView;

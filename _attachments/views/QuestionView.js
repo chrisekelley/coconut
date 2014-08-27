@@ -70,7 +70,7 @@ QuestionView = (function(_super) {
   QuestionView.prototype.render = function() {
     var autocompleteElements, skipperList,
       _this = this;
-    this.$el.html("    <style>      .message      {        color: grey;        font-weight: bold;        padding: 10px;        border: 1px yellow dotted;        background: yellow;        display: none;      }      label.radio {        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      input[type='radio']:checked + label {        background-color:#ddd;        background: #5393c5;        background-image: -webkit-gradient(linear,left top,left bottom,from(#5393c5),to(#6facd5));        background-image: -webkit-linear-gradient(#5393c5,#6facd5);        background-image: -moz-linear-gradient(#5393c5,#6facd5);        background-image: -ms-linear-gradient(#5393c5,#6facd5);        background-image: -o-linear-gradient(#5393c5,#6facd5);        background-image: linear-gradient(#5393c5,#6facd5);      }      input[type='radio']{        height: 0px;      }      div.question.radio{        padding-top: 8px;        padding-bottom: 8px;      }      .tt-hint{        display:none      }      .tt-dropdown-menu{        width: 100%;        background-color: lightgray;      }      .tt-suggestion{        background-color: white;        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      .tt-suggestion .{      }    </style>      <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>        <a href='#help/" + this.model.id + "'>Help</a>      </div>      <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>        Saving...      </div>      <h1>" + this.model.id + "</h1>      <div id='question-view'>        <form onsubmit=\"return false;\">          " + (this.toHTMLForm(this.model)) + "            <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">    <span class=\"ui-btn-inner ui-btn-corner-all\">    <span class=\"ui-btn-text\">Submit</span></span>    <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>    <input type=\"hidden\" id=\"complete\" name=\"complete\"/>    </div>    </form>      </div>    ");
+    this.$el.html("    <style>      .message      {        color: grey;        font-weight: bold;        padding: 10px;        border: 1px yellow dotted;        background: yellow;        display: none;      }      label.radio {        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      input[type='radio']:checked + label {        background-color:#ddd;        background: #5393c5;        background-image: -webkit-gradient(linear,left top,left bottom,from(#5393c5),to(#6facd5));        background-image: -webkit-linear-gradient(#5393c5,#6facd5);        background-image: -moz-linear-gradient(#5393c5,#6facd5);        background-image: -ms-linear-gradient(#5393c5,#6facd5);        background-image: -o-linear-gradient(#5393c5,#6facd5);        background-image: linear-gradient(#5393c5,#6facd5);      }      input[type='radio']{        height: 0px;      }      div.question.radio{        padding-top: 8px;        padding-bottom: 8px;      }      .tt-hint{        display:none      }      .tt-dropdown-menu{        width: 100%;        background-color: lightgray;      }      .tt-suggestion{        background-color: white;        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      .tt-suggestion .{      }    </style>      <!--      <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>        <a href='#help/" + this.model.id + "'>Help</a>      </div>      -->      <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>        Saving...      </div>      <h1>" + this.model.id + "</h1>      <div id='question-view'>        <form onsubmit=\"return false;\">          " + (this.toHTMLForm(this.model)) + "            <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">    <span class=\"ui-btn-inner ui-btn-corner-all\">    <span class=\"ui-btn-text\">Submit</span></span>    <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>    <input type=\"hidden\" id=\"complete\" name=\"complete\"/>    </div>    </form>      </div>    ");
     this.updateCache();
     this.updateSkipLogic();
     skipperList = [];
@@ -83,15 +83,6 @@ QuestionView = (function(_super) {
       }
     });
     this.triggerChangeIn(skipperList);
-    this.$el.find("input[type=text],input[type=number],input[type='autocomplete from previous entries'],input[type='autocomplete from list'],input[type='autocomplete from code']").textinput();
-    this.$el.find('input[type=checkbox]').checkboxradio();
-    this.$el.find('ul').listview();
-    this.$el.find('select').selectmenu();
-    this.$el.find('a').button();
-    this.$el.find('input[type=date]').datebox({
-      mode: "calbox",
-      dateFormat: "%d-%m-%Y"
-    });
     autocompleteElements = [];
     _.each($("input[type='autocomplete from list']"), function(element) {
       element = $(element);
@@ -164,19 +155,10 @@ QuestionView = (function(_super) {
       this.changedComplete = false;
       messageVisible = window.questionCache[targetName].find(".message").is(":visible");
       return _.delay(function() {
-        var wasValid;
         if (!messageVisible) {
-          wasValid = _this.validateOne({
-            key: targetName,
-            autoscroll: false,
-            button: "<button type='button' data-name='" + targetName + "' class='validate_one'>Validate</button>"
-          });
           _this.save();
           _this.updateSkipLogic();
-          _this.actionOnChange(event);
-          if (wasValid) {
-            return _this.autoscroll(event);
-          }
+          return _this.actionOnChange(event);
         }
       }, 500);
     }
@@ -245,17 +227,7 @@ QuestionView = (function(_super) {
       } else {
         return false;
       }
-    }
-    if (message === "") {
-      $message.hide();
-      if (autoscroll) {
-        this.autoscroll($question);
-      }
       return true;
-    } else {
-      $message.show().html("        " + message + "        " + button + "      ").find("button").button();
-      this.scrollToQuestion($question);
-      return false;
     }
   };
 

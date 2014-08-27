@@ -424,3 +424,7 @@
       if(ct >= (countTestDocs+1)) clearInterval(interval);
     }, 2000);
   }
+
+  function sendTo(url) {
+      window.location.href=url;
+  }
