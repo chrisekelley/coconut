@@ -32,6 +32,7 @@ class Router extends Backbone.Router
     "postUserRegistrationMenu": "postUserRegistrationMenu"
     "displayReportMenu": "displayReportMenu"
     "userScan": "userScan"
+    "users": "users"
     "": "default"
 
   route: (route, name, callback) ->
@@ -270,10 +271,10 @@ class Router extends Backbone.Router
     Coconut.router.navigate("",false)
     @userLoggedIn
       success: ->
-        Coconut.syncView ?= new SyncView()
-        Coconut.syncView.sync.sendToCloud
-          success: ->
-            Coconut.syncView.update()
+#        Coconut.syncView ?= new SyncView()
+        Coconut.syncView.sync.replicateToServer()
+#        success: ->
+#            Coconut.syncView.update()
 
   syncGet: (action) ->
     Coconut.router.navigate("",false)
@@ -406,7 +407,8 @@ class Router extends Backbone.Router
         Coconut.questionView = new QuestionView()
         Coconut.menuView = new MenuView()
         Coconut.syncView = new SyncView()
-#        Coconut.menuView.render()
+        Coconut.syncView.sync.replicateToServer()
+        #        Coconut.menuView.render()
 
         Coconut.syncView.update()
         Backbone.history.start()

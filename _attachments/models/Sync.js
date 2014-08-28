@@ -316,10 +316,13 @@ Sync = (function(_super) {
     });
   };
 
-  Sync.prototype.replicate = function(options) {
+  Sync.prototype.replicateFromServer = function(options) {
     var opts;
+    if (!options) {
+      options = {};
+    }
     opts = {
-      continuous: true,
+      live: true,
       batch_size: 5,
       withCredentials: true,
       complete: function(result) {
@@ -349,6 +352,43 @@ Sync = (function(_super) {
     });
   };
 
+  Sync.prototype.replicateToServer = function(options) {
+    var opts;
+    if (!options) {
+      options = {};
+    }
+    opts = {
+      live: true,
+      continuous: true,
+      batch_size: 5,
+      withCredentials: true,
+      complete: function(result) {
+        if (typeof result !== 'undefined' && result.ok) {
+          return Coconut.debug("onComplete: Replication is fine. ");
+        } else {
+          return Coconut.debug("onComplete: Replication message: " + JSON.stringify(result));
+        }
+      },
+      error: function(result) {
+        return Coconut.debug("error: Replication error: " + JSON.stringify(result));
+      },
+      timeout: 60000
+    };
+    _.extend(options, opts);
+    return Backbone.sync.defaults.db.replicate.to(Coconut.config.cloud_url_with_credentials(), options).on('uptodate', function(result) {
+      if (typeof result !== 'undefined' && result.ok) {
+        console.log("uptodate: Replication is fine. ");
+        return options.success();
+      } else {
+        return console.log("uptodate: Replication error: " + JSON.stringify(result));
+      }
+    }).on('change', function(info) {
+      return Coconut.debug("Change: " + JSON.stringify(info));
+    }).on('complete', function(info) {
+      return Coconut.debug("Complete: " + JSON.stringify(info));
+    });
+  };
+
   Sync.prototype.replicateApplicationDocs = function(options) {
     var _this = this;
     return $.ajax({
@@ -363,7 +403,7 @@ Sync = (function(_super) {
         doc_ids = _.pluck(result.rows, "id");
         console.log(JSON.stringify(doc_ids));
         _this.log("Updating " + doc_ids.length + " docs (users, forms and the design document). Please wait.");
-        return _this.replicate(_.extend(options, {
+        return _this.replicateFromServer(_.extend(options, {
           replicationArguments: {
             doc_ids: doc_ids
           }

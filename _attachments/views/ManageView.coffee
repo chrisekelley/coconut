@@ -4,10 +4,10 @@ class ManageView extends Backbone.View
 
   render: =>
     @$el.html "
-      <a href='#sync'>Sync</a>
-      <a href='#configure'>Set cloud vs mobile</a>
-      <a href='#users'>Manage users</a>
-      <a href='#messaging'>Send message to users</a>
+      <a data-role='button' class='btn btn-primary btn-lg' href='#sync'>Sync</a>
+      <a data-role='button' class='btn btn-primary btn-lg' href='#configure'>Set cloud vs mobile</a>
+      <!-- a href='#users'>Manage users</a -->
+      <!-- a href='#messaging'>Send message to users</a -->
       <h2>Question Sets</h2>
       <a href='#design'>New</a>
       <table style='width:100%'>

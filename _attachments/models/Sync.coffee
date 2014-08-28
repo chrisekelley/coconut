@@ -227,9 +227,10 @@ class Sync extends Backbone.Model
 #                        , 5000
 #                      error: (error) => @log "Could not create log file #{JSON.stringify(error)}"
 
-  replicate: (options) ->
+  replicateFromServer: (options) ->
+    options = {} if !options
     opts =
-      continuous: true
+      live:true
       batch_size:5
 #      batches_limit:1
       withCredentials:true
@@ -257,6 +258,39 @@ class Sync extends Backbone.Model
         )
 #    Coconut.menuView.checkReplicationStatus();
 
+
+  replicateToServer: (options) ->
+    options = {} if !options
+    opts =
+      live:true
+      continuous: true
+      batch_size:5
+#      batches_limit:1
+      withCredentials:true
+#      auth:
+#        username:account.username
+#        password:account.password
+      complete: (result) ->
+        if typeof result != 'undefined' && result.ok
+          Coconut.debug "onComplete: Replication is fine. "
+        else
+          Coconut.debug "onComplete: Replication message: " + JSON.stringify result
+      error: (result) ->
+        Coconut.debug "error: Replication error: " + JSON.stringify result
+      timeout: 60000
+    _.extend options, opts
+    Backbone.sync.defaults.db.replicate.to(Coconut.config.cloud_url_with_credentials(), options).on('uptodate', (result) ->
+      if typeof result != 'undefined' && result.ok
+        console.log "uptodate: Replication is fine. "
+        options.success()
+      else
+        console.log "uptodate: Replication error: " + JSON.stringify result).on('change', (info)->
+      Coconut.debug "Change: " + JSON.stringify info
+    ).on('complete', (info)->
+      Coconut.debug "Complete: " + JSON.stringify info
+    )
+#    Coconut.menuView.checkReplicationStatus();
+
   replicateApplicationDocs: (options) =>
     # Updating design_doc, users & forms
     $.ajax
@@ -275,7 +309,7 @@ class Sync extends Backbone.Model
 #        doc_ids.splice(position, 1)
 #        console.log JSON.stringify doc_ids
         @log "Updating #{doc_ids.length} docs (users, forms and the design document). Please wait."
-        @replicate _.extend options,
+        @replicateFromServer _.extend options,
           replicationArguments:
             doc_ids: doc_ids
 

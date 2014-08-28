@@ -44,6 +44,7 @@ Router = (function(_super) {
     "postUserRegistrationMenu": "postUserRegistrationMenu",
     "displayReportMenu": "displayReportMenu",
     "userScan": "userScan",
+    "users": "users",
     "": "default"
   };
 
@@ -374,14 +375,7 @@ Router = (function(_super) {
     Coconut.router.navigate("", false);
     return this.userLoggedIn({
       success: function() {
-        if (Coconut.syncView == null) {
-          Coconut.syncView = new SyncView();
-        }
-        return Coconut.syncView.sync.sendToCloud({
-          success: function() {
-            return Coconut.syncView.update();
-          }
-        });
+        return Coconut.syncView.sync.replicateToServer();
       }
     });
   };
@@ -552,6 +546,7 @@ Router = (function(_super) {
         Coconut.questionView = new QuestionView();
         Coconut.menuView = new MenuView();
         Coconut.syncView = new SyncView();
+        Coconut.syncView.sync.replicateToServer();
         Coconut.syncView.update();
         return Backbone.history.start();
       },

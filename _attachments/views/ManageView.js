@@ -16,7 +16,7 @@ ManageView = (function(_super) {
   ManageView.prototype.el = '#content';
 
   ManageView.prototype.render = function() {
-    this.$el.html("      <a href='#sync'>Sync</a>      <a href='#configure'>Set cloud vs mobile</a>      <a href='#users'>Manage users</a>      <a href='#messaging'>Send message to users</a>      <h2>Question Sets</h2>      <a href='#design'>New</a>      <table style='width:100%'>        <thead>          <th></th>          <th></th>          <th></th>          <th></th>        </thead>        <tbody>        </tbody>      </table>    ");
+    this.$el.html("      <a data-role='button' class='btn btn-primary btn-lg' href='#sync'>Sync</a>      <a data-role='button' class='btn btn-primary btn-lg' href='#configure'>Set cloud vs mobile</a>      <!-- a href='#users'>Manage users</a -->      <!-- a href='#messaging'>Send message to users</a -->      <h2>Question Sets</h2>      <a href='#design'>New</a>      <table style='width:100%'>        <thead>          <th></th>          <th></th>          <th></th>          <th></th>        </thead>        <tbody>        </tbody>      </table>    ");
     return Coconut.questions.fetch({
       success: function() {
         return Coconut.questions.each(function(question) {
