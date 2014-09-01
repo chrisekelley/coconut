@@ -2,7 +2,7 @@
 var UserFormView;
 
 UserFormView = Backbone.Marionette.ItemView.extend({
-  template: JST["_attachments/templates/UserMainView.handlebars"],
+  template: JST["_attachments/templates/PostAdminRegistrationMenu.handlebars"],
   className: "app ui-content",
   triggers: {
     "click #submitContinueReportLink": {

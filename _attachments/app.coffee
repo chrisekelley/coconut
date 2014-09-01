@@ -26,14 +26,19 @@ class Router extends Backbone.Router
     "users": "users"
     "messaging": "messaging"
     "help": "help"
-    "displayScanner": "displayScanner"
+    "displayUserScanner": "displayUserScanner"
+    "displayAdminScanner": "displayAdminScanner"
     "registration": "registration"
     "userRegistration": "userRegistration"
     "postUserRegistrationMenu": "postUserRegistrationMenu"
+    "postAdminRegistrationMenu": "postAdminRegistrationMenu"
     "displayReportMenu": "displayReportMenu"
     "userScan": "userScan"
+    "scanRetry":	 "scanRetry"
+    "scanRetry/:user":	 "scanRetry"
     "users": "users"
-    "": "default"
+    "displayClientRecords": "displayClientRecords"
+    "": "displayAdminScanner"
 
   route: (route, name, callback) ->
     Backbone.history || (Backbone.history = new Backbone.History)
@@ -72,15 +77,20 @@ class Router extends Backbone.Router
         staticView = new VerifyView(template: JST["_attachments/templates/ScanVerifyView.handlebars"]())
         Coconut.mainRegion.show staticView
 
-  displayScanner: ->
+  displayUserScanner: ->
     @userLoggedIn
       success: ->
-        Coconut.Controller.displayScanner()
+        Coconut.Controller.displayUserScanner()
+
+  displayAdminScanner: ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.displayAdminScanner()
 
   registration: (user) ->
     @userLoggedIn
       success: ->
-        Coconut.Controller.displayRegistration user
+          Coconut.Controller.displayRegistration user
 
   userRegistration: ->
     @userLoggedIn
@@ -95,15 +105,28 @@ class Router extends Backbone.Router
         console.log("postUserRegistrationMenu.")
         Coconut.Controller.postUserRegistrationMenu()
 
+  postAdminRegistrationMenu: ->
+    @userLoggedIn(
+      success: ->
+        Coconut.Controller.postAdminRegistrationMenu()
+    )
+
   displayReportMenu: ->
     @userLoggedIn
       success: ->
         Coconut.Controller.displayReportMenu()
 
+
   userScan: (user) ->
     @userLoggedIn
       success: ->
-        Coconut.Controller.displayScanner "user"
+        Coconut.Controller.displayUserScanner
+    return
+
+  scanRetry: (user) ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.scanRetry user
     return
 
   users: ->
@@ -146,6 +169,9 @@ class Router extends Backbone.Router
     Coconut.router.navigate("",true)
 
   default: ->
+    Coconut.Controller.displayAdminScanner
+
+  displayClientRecords: ->
     @userLoggedIn
       success: ->
         viewOptions = {}
@@ -268,13 +294,12 @@ class Router extends Backbone.Router
 
   # TODO refactor these to not use view - just use the sync model
   syncSend: (action) ->
-    Coconut.router.navigate("",false)
+    Coconut.router.navigate("sync",false)
     @userLoggedIn
       success: ->
-#        Coconut.syncView ?= new SyncView()
-        Coconut.syncView.sync.replicateToServer()
-#        success: ->
-#            Coconut.syncView.update()
+        Coconut.syncView.sync.replicateToServer
+          success: ->
+              Coconut.syncView.refreshLog()
 
   syncGet: (action) ->
     Coconut.router.navigate("",false)
@@ -445,13 +470,30 @@ Coconut.on "displayReportMenu", ->
   Coconut.router.navigate("displayReportMenu")
   Coconut.Controller.displayReportMenu()
 
-Coconut.on "userScan", ->
-  Coconut.router.navigate "userScan"
-  Coconut.API.userScan "user"
+#Coconut.on "userScan", ->
+#  Coconut.router.navigate "userScan"
+#  Coconut.API.userScan "user"
 
+Coconut.on "displayAdminScanner", ->
+  Coconut.router.navigate "displayAdminScanner"
+  Coconut.Controller.displayAdminScanner()
+
+Coconut.on "displayUserScanner", ->
+  Coconut.router.navigate "displayUserScanner"
+  Coconut.Controller.displayUserScanner()
+
+Coconut.on "displayAdminRegistrationForm", ->
+  Coconut.router.navigate "displayRegistration"
+  Coconut.Controller.displayRegistration()
+
+Coconut.on "displayUserRegistrationForm", ->
+  Coconut.router.navigate "displayRegistration"
+  Coconut.Controller.displayRegistration "user"
 
 Coconut.router.startApp()
 
 Coconut.debug = (string) ->
   console.log string
-  $("#log").append string + "<br/>"
+  Coconut.replicationLog = "" unless Coconut.replicationLog?
+  Coconut.replicationLog += string
+#  $("#log").append string + "<br/>"

@@ -10,6 +10,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #verifyYes": "displayNewUserRegistration",
     "click #verifyNo": "displayNewUserRegistration"
   },
+  nextUrl: null,
   initialize: function() {},
   displayNewUserRegistration: function() {
     Coconut.router.navigate("userRegistration", true);
@@ -19,8 +20,9 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     this.scan("userRegistration");
   },
   scan: function(next, sliderId) {
-    var display, revealSlider;
-    console.log("Register clicked ");
+    var display, revealSlider,
+      _this = this;
+    this.nextUrl = this.nextUrl;
     display = function(message) {
       var label, lineBreak;
       console.log("display message: " + message);
@@ -38,8 +40,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           requestAnimationFrame(nextProgress);
         } else {
           window.setTimeout((function() {
-            if (typeof next === "string") {
-              Coconut.router.navigate(next, true);
+            if (_this.nextUrl != null) {
+              Coconut.router.navigate(_this.nextUrl, true);
             } else {
               Coconut.router.navigate("registration", true);
             }

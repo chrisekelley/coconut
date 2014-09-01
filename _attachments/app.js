@@ -38,14 +38,19 @@ Router = (function(_super) {
     "users": "users",
     "messaging": "messaging",
     "help": "help",
-    "displayScanner": "displayScanner",
+    "displayUserScanner": "displayUserScanner",
+    "displayAdminScanner": "displayAdminScanner",
     "registration": "registration",
     "userRegistration": "userRegistration",
     "postUserRegistrationMenu": "postUserRegistrationMenu",
+    "postAdminRegistrationMenu": "postAdminRegistrationMenu",
     "displayReportMenu": "displayReportMenu",
     "userScan": "userScan",
+    "scanRetry": "scanRetry",
+    "scanRetry/:user": "scanRetry",
     "users": "users",
-    "": "default"
+    "displayClientRecords": "displayClientRecords",
+    "": "displayAdminScanner"
   };
 
   Router.prototype.route = function(route, name, callback) {
@@ -97,10 +102,18 @@ Router = (function(_super) {
     });
   };
 
-  Router.prototype.displayScanner = function() {
+  Router.prototype.displayUserScanner = function() {
     return this.userLoggedIn({
       success: function() {
-        return Coconut.Controller.displayScanner();
+        return Coconut.Controller.displayUserScanner();
+      }
+    });
+  };
+
+  Router.prototype.displayAdminScanner = function() {
+    return this.userLoggedIn({
+      success: function() {
+        return Coconut.Controller.displayAdminScanner();
       }
     });
   };
@@ -131,6 +144,14 @@ Router = (function(_super) {
     });
   };
 
+  Router.prototype.postAdminRegistrationMenu = function() {
+    return this.userLoggedIn({
+      success: function() {
+        return Coconut.Controller.postAdminRegistrationMenu();
+      }
+    });
+  };
+
   Router.prototype.displayReportMenu = function() {
     return this.userLoggedIn({
       success: function() {
@@ -142,7 +163,15 @@ Router = (function(_super) {
   Router.prototype.userScan = function(user) {
     this.userLoggedIn({
       success: function() {
-        return Coconut.Controller.displayScanner("user");
+        return Coconut.Controller.displayUserScanner;
+      }
+    });
+  };
+
+  Router.prototype.scanRetry = function(user) {
+    this.userLoggedIn({
+      success: function() {
+        return Coconut.Controller.scanRetry(user);
       }
     });
   };
@@ -209,6 +238,10 @@ Router = (function(_super) {
   };
 
   Router.prototype["default"] = function() {
+    return Coconut.Controller.displayAdminScanner;
+  };
+
+  Router.prototype.displayClientRecords = function() {
     return this.userLoggedIn({
       success: function() {
         var results, viewOptions,
@@ -372,10 +405,14 @@ Router = (function(_super) {
   };
 
   Router.prototype.syncSend = function(action) {
-    Coconut.router.navigate("", false);
+    Coconut.router.navigate("sync", false);
     return this.userLoggedIn({
       success: function() {
-        return Coconut.syncView.sync.replicateToServer();
+        return Coconut.syncView.sync.replicateToServer({
+          success: function() {
+            return Coconut.syncView.refreshLog();
+          }
+        });
       }
     });
   };
@@ -591,14 +628,32 @@ Coconut.on("displayReportMenu", function() {
   return Coconut.Controller.displayReportMenu();
 });
 
-Coconut.on("userScan", function() {
-  Coconut.router.navigate("userScan");
-  return Coconut.API.userScan("user");
+Coconut.on("displayAdminScanner", function() {
+  Coconut.router.navigate("displayAdminScanner");
+  return Coconut.Controller.displayAdminScanner();
+});
+
+Coconut.on("displayUserScanner", function() {
+  Coconut.router.navigate("displayUserScanner");
+  return Coconut.Controller.displayUserScanner();
+});
+
+Coconut.on("displayAdminRegistrationForm", function() {
+  Coconut.router.navigate("displayRegistration");
+  return Coconut.Controller.displayRegistration();
+});
+
+Coconut.on("displayUserRegistrationForm", function() {
+  Coconut.router.navigate("displayRegistration");
+  return Coconut.Controller.displayRegistration("user");
 });
 
 Coconut.router.startApp();
 
 Coconut.debug = function(string) {
   console.log(string);
-  return $("#log").append(string + "<br/>");
+  if (Coconut.replicationLog == null) {
+    Coconut.replicationLog = "";
+  }
+  return Coconut.replicationLog += string;
 };

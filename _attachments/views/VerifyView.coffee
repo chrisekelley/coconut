@@ -8,6 +8,8 @@ VerifyView = Backbone.Marionette.ItemView.extend
       "click #verifyYes": "displayNewUserRegistration"
       "click #verifyNo": "displayNewUserRegistration"
 
+    nextUrl:null
+
     initialize: ->
 
     displayNewUserRegistration: ->
@@ -21,7 +23,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
       return
 
     scan: (next, sliderId) ->
-      console.log "Register clicked "
+      this.nextUrl = @nextUrl
       display = (message) ->
         console.log "display message: " + message
         display = document.getElementById("message") # the message div
@@ -31,17 +33,16 @@ VerifyView = Backbone.Marionette.ItemView.extend
         display.appendChild label # add the message node
         return
 
-      revealSlider = (next, sliderId) ->
-        
+      revealSlider = (next, sliderId) =>
         #                progress.show();
-        nextProgress = ->
+        nextProgress = () =>
           if progress.value < progress.max
             progress.value += (progress.step or 1)
             requestAnimationFrame nextProgress
           else
-            window.setTimeout (->
-              if typeof next is "string"
-                Coconut.router.navigate next, true
+            window.setTimeout (=>
+              if  @nextUrl?
+                Coconut.router.navigate @nextUrl, true
               else
                 Coconut.router.navigate "registration", true
               return

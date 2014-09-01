@@ -398,11 +398,11 @@ QuestionView = (function(_super) {
         Coconut.menuView.update();
         if (_this.result.complete()) {
           if (_this.result.question() === 'Admin Registration') {
-            return Coconut.router.navigate("postUserRegistrationMenu", true);
+            return Coconut.router.navigate("postAdminRegistrationMenu", true);
           } else if (_this.result.question() === 'Individual Registration') {
             return Coconut.router.navigate("postUserRegistrationMenu", true);
           } else {
-            return Coconut.router.navigate("", true);
+            return Coconut.router.navigate("displayClientRecords", true);
           }
         }
       }

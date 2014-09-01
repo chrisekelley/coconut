@@ -7,7 +7,7 @@ UserFormView = Backbone.Marionette.ItemView.extend
 #      id: "userMenu"
 #      class: "app"
 
-    template: JST["_attachments/templates/UserMainView.handlebars"]
+    template: JST["_attachments/templates/PostAdminRegistrationMenu.handlebars"]
     
     #        el: "#userMenu",
     className: "app ui-content" # this class will be added to the wrapping div when you render the view

@@ -2,18 +2,20 @@
 var Controller;
 
 Controller = {
-  displayScanner: function(user) {
+  displayUserScanner: function() {
     var staticView;
-    staticView = void 0;
-    if (typeof user !== "undefined") {
-      staticView = new VerifyView({
-        template: JST["_attachments/templates/ScanVerifyView.handlebars"]
-      });
-    } else {
-      staticView = new VerifyView({
-        template: JST["_attachments/templates/VerifyView.handlebars"]
-      });
-    }
+    staticView = new VerifyView({
+      template: JST["_attachments/templates/ScanVerifyView.handlebars"]
+    });
+    staticView.nextUrl = "#scanRetry/user";
+    Coconut.mainRegion.show(staticView);
+  },
+  displayAdminScanner: function() {
+    var staticView;
+    staticView = new VerifyView({
+      template: JST["_attachments/templates/VerifyView.handlebars"]
+    });
+    staticView.nextUrl = "#scanRetry";
     Coconut.mainRegion.show(staticView);
   },
   displayRegistration: function(user) {
@@ -27,14 +29,22 @@ Controller = {
   displayUserMain: function() {
     var staticView;
     $("#message").html("");
-    staticView = new UserMainView();
+    staticView = new StaticView();
     Coconut.mainRegion.show(staticView);
   },
   postUserRegistrationMenu: function() {
     var staticView;
     $("#message").html("");
-    staticView = new UserMainView({
+    staticView = new StaticView({
       template: JST["_attachments/templates/PostUserRegistrationMenuView.handlebars"]
+    });
+    Coconut.mainRegion.show(staticView);
+  },
+  postAdminRegistrationMenu: function() {
+    var staticView;
+    $("#message").html("");
+    staticView = new StaticView({
+      template: JST["_attachments/templates/PostAdminRegistrationMenuView.handlebars"]
     });
     Coconut.mainRegion.show(staticView);
   },
@@ -60,5 +70,14 @@ Controller = {
     record.post();
     console.log('saved' + JSON.stringify(record));
     Coconut.trigger("userMain");
+  },
+  scanRetry: function(user) {
+    var staticView;
+    $("#message").html("");
+    staticView = new StaticView({
+      template: JST["_attachments/templates/ScanRetry.handlebars"]
+    });
+    staticView.user = user;
+    Coconut.mainRegion.show(staticView);
   }
 };

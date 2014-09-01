@@ -1,10 +1,14 @@
 Controller =
-  displayScanner: (user) ->
-    staticView = undefined
-    if typeof user isnt "undefined"
-      staticView = new VerifyView(template: JST["_attachments/templates/ScanVerifyView.handlebars"])
-    else
-      staticView = new VerifyView(template: JST["_attachments/templates/VerifyView.handlebars"])
+  displayUserScanner: () ->
+    staticView = new VerifyView(template: JST["_attachments/templates/ScanVerifyView.handlebars"])
+    staticView.nextUrl = "#scanRetry/user"
+    Coconut.mainRegion.show staticView
+    return
+
+  displayAdminScanner: () ->
+    staticView = new VerifyView(template: JST["_attachments/templates/VerifyView.handlebars"])
+    staticView.nextUrl = "#scanRetry"
+#    staticView.nextUrl = "#new/result/Admin%20Registration"
     Coconut.mainRegion.show staticView
     return
 
@@ -26,13 +30,19 @@ Controller =
 
   displayUserMain: ->
     $("#message").html ""
-    staticView = new UserMainView()
+    staticView = new StaticView()
     Coconut.mainRegion.show staticView
     return
 
   postUserRegistrationMenu: ->
     $("#message").html ""
-    staticView = new UserMainView(template: JST["_attachments/templates/PostUserRegistrationMenuView.handlebars"])
+    staticView = new StaticView(template: JST["_attachments/templates/PostUserRegistrationMenuView.handlebars"])
+    Coconut.mainRegion.show staticView
+    return
+
+  postAdminRegistrationMenu: ->
+    $("#message").html ""
+    staticView = new StaticView(template: JST["_attachments/templates/PostAdminRegistrationMenuView.handlebars"])
     Coconut.mainRegion.show staticView
     return
 
@@ -54,5 +64,12 @@ Controller =
     record.post()
     console.log 'saved' +  JSON.stringify(record);
     Coconut.trigger "userMain"
+    return
+
+  scanRetry: (user) ->
+    $("#message").html ""
+    staticView = new StaticView(template: JST["_attachments/templates/ScanRetry.handlebars"])
+    staticView.user = user
+    Coconut.mainRegion.show staticView
     return
 

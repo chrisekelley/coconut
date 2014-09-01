@@ -8,6 +8,7 @@ SyncView = (function(_super) {
   __extends(SyncView, _super);
 
   function SyncView() {
+    this.refreshLog = __bind(this.refreshLog, this);
     this.update = __bind(this.update, this);
     this.render = __bind(this.render, this);
     _ref = SyncView.__super__.constructor.apply(this, arguments);
@@ -20,8 +21,12 @@ SyncView = (function(_super) {
 
   SyncView.prototype.el = '#content';
 
+  SyncView.prototype.events = {
+    "click #refreshLog": "refreshLog"
+  };
+
   SyncView.prototype.render = function() {
-    this.$el.html("        <h2>Cloud Server: <span class='sync-target'>" + (this.sync.target()) + "</span></h2>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>Send data</a>        ");
+    this.$el.html("        <h2>Cloud Server: <span class='sync-target'>" + (this.sync.target()) + "</span></h2>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>Send data</a>        <h2>Replication Log</h2>        <p>The replication log displays the result of replication to the master server.        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>Refresh log</a>        </p>        <div id=\"replicationLog\"></div>");
     $("a").button();
     return this.update();
   };
@@ -30,8 +35,7 @@ SyncView = (function(_super) {
     var _this = this;
     return this.sync.fetch({
       success: function() {
-        $(".sync-sent-status").html(_this.sync.was_last_send_successful() ? _this.sync.last_send_time() : "" + (_this.sync.last_send_time()) + " - last attempt FAILED");
-        return $(".sync-get-status").html(_this.sync.was_last_get_successful() ? _this.sync.last_get_time() : "" + (_this.sync.last_get_time()) + " - last attempt FAILED");
+        return $("replicationLog").append(Coconut.replicationLog);
       },
       error: function() {
         console.log("synclog doesn't exist yet, create it and re-render");
@@ -39,6 +43,12 @@ SyncView = (function(_super) {
         return _.delay(_this.update, 1000);
       }
     });
+  };
+
+  SyncView.prototype.refreshLog = function() {
+    var now;
+    now = moment(new Date()).format(Coconut.config.get("date_format")) + "<br/>";
+    return $("#replicationLog").html(now + Coconut.replicationLog);
   };
 
   return SyncView;

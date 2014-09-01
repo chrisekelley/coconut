@@ -31,6 +31,10 @@ All of the backbone [models](http://documentcloud.github.com/backbone/#Model) an
 
 You can put json forms into the \_docs directory and they will be added to your couch when you do a couchapp push.
 
+## Starting the app
+
+The npm start task (see package.json) runs a small http server, launches a grunt handlebars watch script, and also a coffeescript watchr script.
+
 ## How do I add new libraries?
 
 Use [bower](bower.io). The following libs are already installed. The "-S" switch saves the lib to your bower.json.
@@ -60,15 +64,17 @@ Change the routing after a form is submitted in QuestionView:
             else
               Coconut.router.navigate("",true)
 
-## Templates
+## Compiling Templates
 
 The following grunt task will monitor _attachments/templates and pre-compile your handlebars templates:
 
     grunt watch 
+    
+The npm start task (see package.json) runs this task for you.
 
 ## Setup
 
-Use pouch.watchr to compile your coffeescripts automatically.
+The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you.
 
 This app is designed to sync with a central server for configuration data. Create another couch called coconut-central. 
 Upload samplejson/coconut.config to it.

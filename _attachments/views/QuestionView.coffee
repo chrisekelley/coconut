@@ -458,11 +458,11 @@ class QuestionView extends Backbone.View
       
           if @result.complete()
             if @result.question() == 'Admin Registration'
-              Coconut.router.navigate("postUserRegistrationMenu",true)
+              Coconut.router.navigate("postAdminRegistrationMenu",true)
             else if @result.question() == 'Individual Registration'
               Coconut.router.navigate("postUserRegistrationMenu",true)
             else
-              Coconut.router.navigate("",true)
+              Coconut.router.navigate("displayClientRecords",true)
     , 1000)
 
   completeButton: ( value ) ->
