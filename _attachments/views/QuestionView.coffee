@@ -460,6 +460,7 @@ class QuestionView extends Backbone.View
             if @result.question() == 'Admin Registration'
               Coconut.router.navigate("postAdminRegistrationMenu",true)
             else if @result.question() == 'Individual Registration'
+              Coconut.currentClient = @result
               Coconut.router.navigate("postUserRegistrationMenu",true)
             else
               Coconut.router.navigate("displayClientRecords",true)

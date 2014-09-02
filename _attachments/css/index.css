@@ -1,6 +1,10 @@
 #header {
-    background-color: #8dc63f;
+    /*background-color: #8dc63f;*/
     overflow: hidden;
+    margin-top: 20px;
+    padding-right: 60px;
+    padding-left: 60px;
+    font-size: 20px;
 }
 #top-menu {
     /*background-color: #8dc63f;*/
@@ -47,7 +51,7 @@ p {
 
 #content {
     background-color: #ACD369;
-    margin-top: 50px;
+    margin-top: 10px;
 }
 
 .jumbotron {

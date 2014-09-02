@@ -73,3 +73,47 @@ Controller =
     Coconut.mainRegion.show staticView
     return
 
+  showDashboard: (user) ->
+    if Coconut.currentClient != null
+      staticView = new ClientDashboardView {model: Coconut.currentClient}
+      Coconut.dashboardRegion.show staticView
+    return
+
+  loadTestClient: () ->
+    $("#message").html ""
+    client = new Result
+      _id:'TestClient'
+    client.fetch
+      success: ->
+        console.log JSON.stringify  client
+        Coconut.currentClient = client
+        Coconut.router.navigate("displayClientRecords",true)
+      error: (model, err, cb) ->
+        console.log JSON.stringify err
+
+  displayClientRecords: () ->
+    viewOptions = {}
+    results = new SecondaryIndexCollection
+    results.fetch
+      fetch: 'query',
+      options:
+        include_docs: true,
+        query:
+          include_docs: true,
+#                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
+#                  key:'Individual Registration',
+          fun: 'question_complete_index'
+      success: =>
+        console.log JSON.stringify results
+        viewOptions =
+          collection : results
+        Coconut.mainRegion.show new HomeCompositeView viewOptions
+        dashboardLayout = new DashboardLayout();
+        Coconut.mainRegion.show dashboardLayout
+        #        if Coconut.currentClient != null
+        dashboardView = new ClientDashboardView {model: Coconut.currentClient}
+        dashboardLayout.dashboardRegion.show dashboardView
+        dashboardLayout.contentRegion.show(new HomeCompositeView viewOptions)
+
+error: (model, err, cb) ->
+        console.log JSON.stringify err

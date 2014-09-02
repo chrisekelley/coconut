@@ -38,6 +38,7 @@ class Router extends Backbone.Router
     "scanRetry/:user":	 "scanRetry"
     "users": "users"
     "displayClientRecords": "displayClientRecords"
+    "loadTestClient": "loadTestClient"
     "": "displayAdminScanner"
 
   route: (route, name, callback) ->
@@ -174,38 +175,14 @@ class Router extends Backbone.Router
   displayClientRecords: ->
     @userLoggedIn
       success: ->
-        viewOptions = {}
-        results = new SecondaryIndexCollection
-        results.fetch
-          fetch: 'query',
-          options:
-            include_docs: true,
-            query:
-              include_docs: true,
-#                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
-#                  key:'Individual Registration',
-              fun: 'question_complete_index'
-          success: =>
-            console.log JSON.stringify results
-            viewOptions =
-              collection : results
-            client = new Result
-              _id:'34409584-3922-1903-A2FC-954BF5552907'
-            client.fetch
-              success: ->
-                console.log JSON.stringify  client
-                Coconut.client = client
-#                Coconut.homeView.render()
-              error: (model, err, cb) ->
-                console.log JSON.stringify err
-#                Coconut.homeView.render()
-            Coconut.mainRegion.show new HomeCompositeView viewOptions
-          error: (model, err, cb) ->
-            console.log JSON.stringify err
-#            Coconut.homeView.render()
-#            Coconut.mainRegion.show Coconut.homeView
+#        Coconut.Controller.showDashboard()
+        Coconut.Controller.displayClientRecords()
 
-#            App.headerRegion.show new Header()
+  loadTestClient: ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.loadTestClient()
+
 
   alerts: ->
     @userLoggedIn
@@ -463,8 +440,10 @@ else
 Coconut.Controller = Controller
 Coconut.API = API
 Coconut.router = new Router()
+Coconut.currentClient = null;
 
 Coconut.addRegions mainRegion: "#content"
+Coconut.addRegions dashboardRegion: "#dashboard"
 
 Coconut.on "displayReportMenu", ->
   Coconut.router.navigate("displayReportMenu")
@@ -489,6 +468,11 @@ Coconut.on "displayAdminRegistrationForm", ->
 Coconut.on "displayUserRegistrationForm", ->
   Coconut.router.navigate "displayRegistration"
   Coconut.Controller.displayRegistration "user"
+
+Coconut.on "displayClientRecords", ->
+  Coconut.router.navigate "displayClientRecords"
+  Coconut.Controller.displayClientRecords()
+#  Coconut.Controller.showDashboard()
 
 Coconut.router.startApp()
 

@@ -45,6 +45,7 @@ var designDoc = createDesignDoc('question_complete_index', function (doc) {
     }
 });
 
+
 //Backbone.sync.defaults.db.get('_design/question_complete_index', function(err, doc) {
 //    Backbone.sync.defaults.db.remove(doc, function(err, response) { });
 //    console.log("doc deleted: " + err);

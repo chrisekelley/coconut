@@ -9,6 +9,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<script id=\"AdminUserRegistrationView\" type=\"text/x-handlebars-template\">\n    <admin-registration-form pouch = {PouchDB|s}></admin-registration-form>\n</script>\n\n\n";
   });
 
+this["JST"]["_attachments/templates/DashboardLayout.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"dashboard-region\"></div>\n<div id=\"content-region\"></div>\n\n\n";
+  });
+
 this["JST"]["_attachments/templates/HomeRecordItemView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -41,7 +50,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<h2>User, Test 1998</h2>\n<p>\n    <a data-role=\"button\" id=\"TrichiasisSurgery\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Trichiasis%20Surgery\">Trichiasis Surgery</a> &nbsp; <a data-role=\"button\" id=\"PostOperativeFollowup\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Post-Operative%20Followup\">Post-Operative Followup</a>\n</p>\n<table id=\"records\">\n    <thead><tr>\n        <th>Question</th>\n        <th>User</th>\n        <th>Last Modified</th>\n    </tr></thead>\n    <tbody></tbody>\n</table>";
+  return "<div id=\"dashboard\"></div>\n<p>\n    <a data-role=\"button\" id=\"TrichiasisSurgery\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Trichiasis%20Surgery\">Trichiasis Surgery</a> &nbsp; <a data-role=\"button\" id=\"PostOperativeFollowup\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Post-Operative%20Followup\">Post-Operative Followup</a>\n</p>\n<table id=\"records\">\n    <thead><tr>\n        <th>Question</th>\n        <th>User</th>\n        <th>Last Modified</th>\n    </tr></thead>\n    <tbody></tbody>\n</table>";
   });
 
 this["JST"]["_attachments/templates/PostAdminRegistrationMenuView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

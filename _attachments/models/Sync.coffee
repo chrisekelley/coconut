@@ -135,19 +135,19 @@ class Sync extends Backbone.Model
             Coconut.menuView.checkReplicationStatus()
 
   getFromDocs: (options) =>
-    fileList = ['admin_registration.json','individual_registration.json','post_operative_followup.json','trichiasis_surgery.json','user.admin.json']
+    fileList = ['admin_registration.js','individual_registration.js','post_operative_followup.js','trichiasis_surgery.js','user.admin.js', 'test_client.js']
     @loadJSON '/docs/'+file for file in fileList
 
   getFromJSs: (options) =>
-    fileList = [adminRegistrationForm,trichiasisForm,userAdminForm,individualRegistrationForm,postOperativeFollowupForm]
-    @saveJS file for file in fileList
+    list = [adminRegistrationForm,trichiasisForm,userAdminForm,individualRegistrationForm,postOperativeFollowupForm,testClient]
+    @saveJS item for item in list
 
   saveJS:(json) =>
     savedQuestion = new Result
     savedQuestion.collection = 'question'
     savedQuestion.save json,
       success: ->
-        console.log 'json saved'
+        console.log 'json saved for ' + savedQuestion.get("_id")
       error: (model, err, cb) ->
         console.log "Error: " + JSON.stringify err
         console.log new Error().stack

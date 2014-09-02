@@ -57,7 +57,6 @@ class LocalConfigView extends Backbone.View
                   sync.save null,
                     success: ->
                       $('#message').append "Updating application<br/>"
-#                      sync.getFromCloud
                       sync.getFromDocs
                         success: ->
                           Coconut.router.navigate("",false)

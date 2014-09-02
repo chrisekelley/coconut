@@ -400,6 +400,7 @@ QuestionView = (function(_super) {
           if (_this.result.question() === 'Admin Registration') {
             return Coconut.router.navigate("postAdminRegistrationMenu", true);
           } else if (_this.result.question() === 'Individual Registration') {
+            Coconut.currentClient = _this.result;
             return Coconut.router.navigate("postUserRegistrationMenu", true);
           } else {
             return Coconut.router.navigate("displayClientRecords", true);

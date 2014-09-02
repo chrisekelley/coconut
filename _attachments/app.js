@@ -50,6 +50,7 @@ Router = (function(_super) {
     "scanRetry/:user": "scanRetry",
     "users": "users",
     "displayClientRecords": "displayClientRecords",
+    "loadTestClient": "loadTestClient",
     "": "displayAdminScanner"
   };
 
@@ -244,43 +245,15 @@ Router = (function(_super) {
   Router.prototype.displayClientRecords = function() {
     return this.userLoggedIn({
       success: function() {
-        var results, viewOptions,
-          _this = this;
-        viewOptions = {};
-        results = new SecondaryIndexCollection;
-        return results.fetch({
-          fetch: 'query',
-          options: {
-            include_docs: true,
-            query: {
-              include_docs: true,
-              fun: 'question_complete_index'
-            }
-          },
-          success: function() {
-            var client;
-            console.log(JSON.stringify(results));
-            viewOptions = {
-              collection: results
-            };
-            client = new Result({
-              _id: '34409584-3922-1903-A2FC-954BF5552907'
-            });
-            client.fetch({
-              success: function() {
-                console.log(JSON.stringify(client));
-                return Coconut.client = client;
-              },
-              error: function(model, err, cb) {
-                return console.log(JSON.stringify(err));
-              }
-            });
-            return Coconut.mainRegion.show(new HomeCompositeView(viewOptions));
-          },
-          error: function(model, err, cb) {
-            return console.log(JSON.stringify(err));
-          }
-        });
+        return Coconut.Controller.displayClientRecords();
+      }
+    });
+  };
+
+  Router.prototype.loadTestClient = function() {
+    return this.userLoggedIn({
+      success: function() {
+        return Coconut.Controller.loadTestClient();
       }
     });
   };
@@ -619,8 +592,14 @@ Coconut.API = API;
 
 Coconut.router = new Router();
 
+Coconut.currentClient = null;
+
 Coconut.addRegions({
   mainRegion: "#content"
+});
+
+Coconut.addRegions({
+  dashboardRegion: "#dashboard"
 });
 
 Coconut.on("displayReportMenu", function() {
@@ -646,6 +625,11 @@ Coconut.on("displayAdminRegistrationForm", function() {
 Coconut.on("displayUserRegistrationForm", function() {
   Coconut.router.navigate("displayRegistration");
   return Coconut.Controller.displayRegistration("user");
+});
+
+Coconut.on("displayClientRecords", function() {
+  Coconut.router.navigate("displayClientRecords");
+  return Coconut.Controller.displayClientRecords();
 });
 
 Coconut.router.startApp();

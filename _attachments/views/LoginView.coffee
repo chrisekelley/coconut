@@ -34,8 +34,8 @@ class LoginView extends Backbone.View
         </form>
       </div>
     "
-    $("input[type=text],input[type=password]").textinput()
-    $("input[type=submit]").button()
+#    $("input[type=text],input[type=password]").textinput()
+#    $("input[type=submit]").button()
 
   events:
     "submit form#login_form": "login"

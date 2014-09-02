@@ -9,7 +9,4 @@ class ClientDashboardView extends Backbone.View
 #    <td>#{@model.get "YearofBirth"}</td>
 #            "
   render: =>
-    @$el.html "
-    <td>Male</td>
-    <td>1997</td>
-            "
+    @$el.html "<p>#{@model.get "Gender"} #{@model.get "DOB"}</p>"

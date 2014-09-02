@@ -16,7 +16,7 @@ ClientDashboardView = (function(_super) {
   ClientDashboardView.prototype.tagName = 'tr';
 
   ClientDashboardView.prototype.render = function() {
-    return this.$el.html("    <td>Male</td>    <td>1997</td>            ");
+    return this.$el.html("<p>" + (this.model.get("Gender")) + " " + (this.model.get("DOB")) + "</p>");
   };
 
   return ClientDashboardView;

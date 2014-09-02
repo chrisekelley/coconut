@@ -211,7 +211,7 @@ Sync = (function(_super) {
 
   Sync.prototype.getFromDocs = function(options) {
     var file, fileList, _i, _len, _results;
-    fileList = ['admin_registration.json', 'individual_registration.json', 'post_operative_followup.json', 'trichiasis_surgery.json', 'user.admin.json'];
+    fileList = ['admin_registration.js', 'individual_registration.js', 'post_operative_followup.js', 'trichiasis_surgery.js', 'user.admin.js', 'test_client.js'];
     _results = [];
     for (_i = 0, _len = fileList.length; _i < _len; _i++) {
       file = fileList[_i];
@@ -221,12 +221,12 @@ Sync = (function(_super) {
   };
 
   Sync.prototype.getFromJSs = function(options) {
-    var file, fileList, _i, _len, _results;
-    fileList = [adminRegistrationForm, trichiasisForm, userAdminForm, individualRegistrationForm, postOperativeFollowupForm];
+    var item, list, _i, _len, _results;
+    list = [adminRegistrationForm, trichiasisForm, userAdminForm, individualRegistrationForm, postOperativeFollowupForm, testClient];
     _results = [];
-    for (_i = 0, _len = fileList.length; _i < _len; _i++) {
-      file = fileList[_i];
-      _results.push(this.saveJS(file));
+    for (_i = 0, _len = list.length; _i < _len; _i++) {
+      item = list[_i];
+      _results.push(this.saveJS(item));
     }
     return _results;
   };
@@ -237,7 +237,7 @@ Sync = (function(_super) {
     savedQuestion.collection = 'question';
     return savedQuestion.save(json, {
       success: function() {
-        return console.log('json saved');
+        return console.log('json saved for ' + savedQuestion.get("_id"));
       },
       error: function(model, err, cb) {
         console.log("Error: " + JSON.stringify(err));
