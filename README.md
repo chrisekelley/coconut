@@ -86,6 +86,24 @@ The first time the app runs, enter the url to coconut-central.
 To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly, 
 it may have already sync'd these users over. If not, well here you go.
 
+## What are the important record identifiers
+
+ - clientId = Coconut.currentClient.get("_id")
+ 
+## How do I add the Dashboard to a page?
+ 
+The Dashboard displays the gender and birthdate of the current client. It is rendered using a 
+[Marionette LayoutView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.layoutview.md).
+
+Place your view in dashboardLayout.contentRegion. 
+
+    dashboardLayout = new DashboardLayout();
+    Coconut.mainRegion.show dashboardLayout
+    dashboardView = new ClientDashboardView {model: Coconut.currentClient}
+    dashboardLayout.dashboardRegion.show dashboardView
+    staticView = new StaticView(template: JST["_attachments/templates/PostUserRegistrationMenuView.handlebars"])
+    dashboardLayout.contentRegion.show(staticView)
+
 ## How do I customise page flow?
 
 app.js constructs the Backbone.Router. List the routes in the routes method:

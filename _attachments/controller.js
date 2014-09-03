@@ -33,12 +33,18 @@ Controller = {
     Coconut.mainRegion.show(staticView);
   },
   postUserRegistrationMenu: function() {
-    var staticView;
+    var dashboardLayout, dashboardView, staticView;
     $("#message").html("");
+    dashboardLayout = new DashboardLayout();
+    Coconut.mainRegion.show(dashboardLayout);
+    dashboardView = new ClientDashboardView({
+      model: Coconut.currentClient
+    });
+    dashboardLayout.dashboardRegion.show(dashboardView);
     staticView = new StaticView({
       template: JST["_attachments/templates/PostUserRegistrationMenuView.handlebars"]
     });
-    Coconut.mainRegion.show(staticView);
+    dashboardLayout.contentRegion.show(staticView);
   },
   postAdminRegistrationMenu: function() {
     var staticView;
@@ -126,7 +132,6 @@ Controller = {
         viewOptions = {
           collection: results
         };
-        Coconut.mainRegion.show(new HomeCompositeView(viewOptions));
         dashboardLayout = new DashboardLayout();
         Coconut.mainRegion.show(dashboardLayout);
         dashboardView = new ClientDashboardView({

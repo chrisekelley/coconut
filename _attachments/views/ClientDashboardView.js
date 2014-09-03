@@ -13,10 +13,14 @@ ClientDashboardView = (function(_super) {
     return _ref;
   }
 
-  ClientDashboardView.prototype.tagName = 'tr';
+  ClientDashboardView.prototype.tagName = 'p';
 
   ClientDashboardView.prototype.render = function() {
-    return this.$el.html("<p>" + (this.model.get("Gender")) + " " + (this.model.get("DOB")) + "</p>");
+    if (!this.model) {
+      return this.$el.html("No client loaded.");
+    } else {
+      return this.$el.html("" + (this.model.get("Gender")) + " " + (this.model.get("DOB")));
+    }
   };
 
   return ClientDashboardView;

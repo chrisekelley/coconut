@@ -33,9 +33,6 @@
 #records th {
     background-color: #C85D47;
 }
-#content {
-    background-color: #fff;
-}
 table.tablesorter {
     background-color: #5a4a42;
 }
@@ -51,7 +48,7 @@ p {
 
 #content {
     background-color: #ACD369;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .jumbotron {
@@ -99,3 +96,7 @@ body {
     padding: 40px 15px;
     text-align: center;
 }
+#dashboard-region p {
+     font-size: 28px;
+     font-weight: 500;
+ }

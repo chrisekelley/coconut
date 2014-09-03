@@ -1,4 +1,4 @@
-//    PouchDB 3.0.1
+//    PouchDB 3.0.3
 //    
 //    (c) 2012-2014 Dale Harvey and the PouchDB team
 //    PouchDB may be freely distributed under the Apache license, version 2.0.
@@ -108,7 +108,8 @@ function AbstractPouchDB() {
   var self = this;
   EventEmitter.call(this);
   self.autoCompact = function (callback) {
-    if (!self.auto_compaction) {
+    // http doesn't have auto-compaction
+    if (!self.auto_compaction || self.type() === 'http') {
       return callback;
     }
     return function (err, res) {
@@ -122,6 +123,9 @@ function AbstractPouchDB() {
             callback(null, res);
           }
         };
+        if (!res.length) {
+          return callback(null, res);
+        }
         res.forEach(function (doc) {
           if (doc.ok && doc.id) { // if no id, then it was a local doc
             // TODO: we need better error handling
@@ -410,7 +414,7 @@ AbstractPouchDB.prototype.revsDiff =
 // by compacting we mean removing all revisions which
 // are further from the leaf in revision tree than max_height
 AbstractPouchDB.prototype.compactDocument =
-  function (docId, max_height, callback) {
+  utils.adapterFun('compactDocument', function (docId, max_height, callback) {
   var self = this;
   this._getRevisionTree(docId, function (err, rev_tree) {
     if (err) {
@@ -434,7 +438,7 @@ AbstractPouchDB.prototype.compactDocument =
     });
     self._doCompaction(docId, rev_tree, revs, callback);
   });
-};
+});
 
 // compact the whole database using single document
 // compaction
@@ -906,6 +910,7 @@ function HttpPouch(opts, callback) {
   var dbUrl = genDBUrl(host, '');
 
   api.getUrl = function () {return dbUrl; };
+  api.getHeaders = function () {return utils.clone(host.headers); };
 
   var ajaxOpts = opts.ajax || {};
   opts = utils.clone(opts);
@@ -2782,10 +2787,11 @@ function init(api, opts, callback) {
       callback = opts;
       opts = {};
     }
+    delete doc._revisions; // ignore this, trust the rev
     var oldRev = doc._rev;
     var id = doc._id;
     if (!oldRev) {
-      doc._rev = '0-0';
+      doc._rev = '0-1';
     } else {
       doc._rev = '0-' + (parseInt(oldRev.split('-')[1], 10) + 1);
     }
@@ -4231,11 +4237,12 @@ function WebSqlPouch(opts, callback) {
       callback = opts;
       opts = {};
     }
+    delete doc._revisions; // ignore this, trust the rev
     var oldRev = doc._rev;
     var id = doc._id;
     var newRev;
     if (!oldRev) {
-      newRev = doc._rev = '0-0';
+      newRev = doc._rev = '0-1';
     } else {
       newRev = doc._rev = '0-' + (parseInt(oldRev.split('-')[1], 10) + 1);
     }
@@ -5795,6 +5802,8 @@ var utils = _dereq_('./utils');
 var Pouch = _dereq_('./index');
 var EE = _dereq_('events').EventEmitter;
 
+var MAX_SIMULTANEOUS_REVS = 50;
+
 // We create a basic promise so the caller can cancel the replication possibly
 // before we have actually started listening to changes etc
 utils.inherits(Replication, EE);
@@ -5853,22 +5862,26 @@ function genReplicationId(src, target, opts) {
 }
 
 
-function updateCheckpoint(db, id, checkpoint) {
+function updateCheckpoint(db, id, checkpoint, returnValue) {
     return db.get(id)["catch"](function (err) {
       if (err.status === 404) {
         return {_id: id};
       }
       throw err;
     }).then(function (doc) {
+      if (returnValue.cancelled) {
+        return;
+      }
       doc.last_seq = checkpoint;
       return db.put(doc);
     });
   }
 
-function Checkpointer(src, target, id) {
+function Checkpointer(src, target, id, returnValue) {
   this.src = src;
   this.target = target;
   this.id = id;
+  this.returnValue = returnValue;
 }
 
 Checkpointer.prototype.writeCheckpoint = function (checkpoint) {
@@ -5878,14 +5891,15 @@ Checkpointer.prototype.writeCheckpoint = function (checkpoint) {
   });
 };
 Checkpointer.prototype.updateTarget = function (checkpoint) {
-  return updateCheckpoint(this.target, this.id, checkpoint);
+  return updateCheckpoint(this.target, this.id, checkpoint, this.returnValue);
 };
 Checkpointer.prototype.updateSource = function (checkpoint) {
   var self = this;
   if (this.readOnlySource) {
     return utils.Promise.resolve(true);
   }
-  return updateCheckpoint(this.src, this.id, checkpoint)["catch"](function (err) {
+  return updateCheckpoint(this.src, this.id, checkpoint, this.returnValue)[
+    "catch"](function (err) {
     var isForbidden = typeof err.status === 'number' &&
       Math.floor(err.status / 100) === 4;
     if (isForbidden) {
@@ -5945,7 +5959,7 @@ function replicate(repId, src, target, opts, returnValue) {
   var changesPending = false;     // true while src.changes is running
   var changesCount = 0; // number of changes received since calling src.changes
   var doc_ids = opts.doc_ids;
-  var checkpointer = new Checkpointer(src, target, repId);
+  var checkpointer = new Checkpointer(src, target, repId, returnValue);
   var result = {
     ok: true,
     start_time: new Date(),
@@ -5991,66 +6005,79 @@ function replicate(repId, src, target, opts, returnValue) {
     });
   }
 
-  function getDocs() {
-    var docIds = Object.keys(currentBatch.diffs);
-    if (!docIds.length) {
+
+  function getNextDoc() {
+    var diffs = currentBatch.diffs;
+    var id = Object.keys(diffs)[0];
+    var allMissing = diffs[id].missing;
+    // avoid url too long error by batching
+    var missingBatches = [];
+    for (var i = 0; i < allMissing.length; i += MAX_SIMULTANEOUS_REVS) {
+      missingBatches.push(allMissing.slice(i, Math.min(allMissing.length,
+        i + MAX_SIMULTANEOUS_REVS)));
+    }
+
+    return utils.Promise.all(missingBatches.map(function (missing) {
+      return src.get(id, {revs: true, open_revs: missing, attachments: true})
+        .then(function (docs) {
+          docs.forEach(function (doc) {
+            if (returnValue.cancelled) {
+              return completeReplication();
+            }
+            if (doc.ok) {
+              result.docs_read++;
+              currentBatch.pendingRevs++;
+              currentBatch.docs.push(doc.ok);
+              delete diffs[doc.ok._id];
+            }
+          });
+        });
+    }));
+  }
+
+  function getAllDocs() {
+    if (Object.keys(currentBatch.diffs).length > 0) {
+      return getNextDoc().then(getAllDocs);
+    } else {
       return utils.Promise.resolve();
     }
-    var idsToDocs = new utils.Map();
-    currentBatch.changes.forEach(function (change) {
-      idsToDocs.set(change.id, change.doc);
+  }
+
+
+  function getRevisionOneDocs() {
+    // filter out the generation 1 docs and get them
+    // leaving the non-generation one docs to be got otherwise
+    var ids = Object.keys(currentBatch.diffs).filter(function (id) {
+      var missing = currentBatch.diffs[id].missing;
+      return missing.length === 1 && missing[0].slice(0, 2) === '1-';
     });
-    return utils.Promise.all(docIds.map(function (docId) {
-      return mapToDocWithOpenRevs(docId, idsToDocs.get(docId));
-    })).then(function (docLists) {
-      docLists.forEach(function (docs) {
-        docs.forEach(processSourceDoc);
+    return src.allDocs({
+      keys: ids,
+      include_docs: true
+    }).then(function (res) {
+      if (returnValue.cancelled) {
+        completeReplication();
+        throw (new Error('cancelled'));
+      }
+      res.rows.forEach(function (row) {
+        if (row.doc && !row.deleted &&
+          row.value.rev.slice(0, 2) === '1-' && (
+            !row.doc._attachments ||
+            Object.keys(row.doc._attachments).length === 0
+          )
+        ) {
+          result.docs_read++;
+          currentBatch.pendingRevs++;
+          currentBatch.docs.push(row.doc);
+          delete currentBatch.diffs[row.id];
+        }
       });
     });
   }
 
-  function mapToDocWithOpenRevs(docId, doc) {
-    // as an optimization, we optimistically try to fetch all the open
-    // revs using just the docs returned from changes()
-    // if that's not possible, we do separate GETs for the open_revs
-    if (doc._deleted) {
-      return [{ok: doc}];
-    }
-    var diffs = currentBatch.diffs;
-    var missing = diffs[docId].missing;
-    var needAttachments = doc._attachments;
-    var needOtherRevs = missing.length > 1 || missing[0] !== doc._rev;
-    if (needAttachments || needOtherRevs) {
-      // fetch individually (slower)
-      return src.get(docId, {
-        revs: true,
-        open_revs: "all", // avoid url too long error, don't send revs array
-        attachments: true
-      }).then(function (results) {
-        var missingMap = {};
-        missing.forEach(function (missingRev) {
-          missingMap[missingRev] = true;
-        });
-        return results.filter(function (res) {
-          var rev = res.ok ? res.ok._rev : res.missing;
-          return missingMap[rev];
-        });
-      });
-    }
-    return [{ok: doc}];
-  }
 
-  function processSourceDoc(doc) {
-    var diffs = currentBatch.diffs;
-    if (returnValue.cancelled) {
-      return completeReplication();
-    }
-    if (doc.ok) {
-      result.docs_read++;
-      currentBatch.pendingRevs++;
-      currentBatch.docs.push(doc.ok);
-      delete diffs[doc.ok._id];
-    }
+  function getDocs() {
+    return getRevisionOneDocs().then(getAllDocs);
   }
 
 
@@ -6237,18 +6264,27 @@ function replicate(repId, src, target, opts, returnValue) {
 
 
   function getChanges() {
-    if (
+    if (!(
       !changesPending &&
       !changesCompleted &&
       batches.length < batches_limit
-    ) {
-      changesPending = true;
-      changesCount = 0;
-      src.changes(changesOpts)
-      .on('change', onChange)
-      .then(onChangesComplete)[
-      "catch"](onChangesError);
+    )) {
+      return;
     }
+    changesPending = true;
+    changesCount = 0;
+    function abortChanges() {
+      changes.cancel();
+    }
+    function removeListener() {
+      returnValue.removeListener('cancel', abortChanges);
+    }
+    returnValue.once('cancel', abortChanges);
+    var changes = src.changes(changesOpts)
+    .on('change', onChange);
+    changes.then(removeListener, removeListener);
+    changes.then(onChangesComplete)[
+    "catch"](onChangesError);
   }
 
 
@@ -6261,8 +6297,7 @@ function replicate(repId, src, target, opts, returnValue) {
         batch_size: batch_size,
         style: 'all_docs',
         doc_ids: doc_ids,
-        returnDocs: false,
-        include_docs: true
+        returnDocs: false
       };
       if (opts.filter) {
         changesOpts.filter = opts.filter;
@@ -7004,7 +7039,6 @@ exports.parseDoc = function (doc, newEdits) {
 
   exports.invalidIdError(doc._id);
 
-  doc._id = decodeURIComponent(doc._id);
   doc._rev = [nRevNum, newRevId].join('-');
 
   var result = {metadata : {}, data : {}};
@@ -7352,7 +7386,7 @@ exports.cancellableFun = function (fun, self, opts) {
 exports.MD5 = exports.toPromise(_dereq_('./deps/md5'));
 }).call(this,_dereq_("/Users/nolan/workspace/pouchdb/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./deps/ajax":8,"./deps/blob":9,"./deps/buffer":26,"./deps/collections":10,"./deps/errors":11,"./deps/md5":12,"./deps/uuid":14,"./merge":18,"/Users/nolan/workspace/pouchdb/node_modules/browserify/node_modules/insert-module-globals/node_modules/process/browser.js":28,"argsarray":25,"bluebird":33,"events":27,"inherits":29,"pouchdb-extend":47}],24:[function(_dereq_,module,exports){
-module.exports = "3.0.1";
+module.exports = "3.0.3";
 
 },{}],25:[function(_dereq_,module,exports){
 'use strict';
@@ -7436,10 +7470,8 @@ EventEmitter.prototype.emit = function(type) {
       er = arguments[1];
       if (er instanceof Error) {
         throw er; // Unhandled 'error' event
-      } else {
-        throw TypeError('Uncaught, unspecified "error" event.');
       }
-      return false;
+      throw TypeError('Uncaught, unspecified "error" event.');
     }
   }
 
@@ -8263,7 +8295,9 @@ function extend() {
     target = arguments[0] || {},
     i = 1,
     length = arguments.length,
-    deep = false;
+    deep = false,
+    numericStringRegex = /\d+/,
+    optionsIsArray;
 
   // Handle a deep copy situation
   if (typeof target === "boolean") {
@@ -8288,10 +8322,14 @@ function extend() {
   for (; i < length; i++) {
     // Only deal with non-null/undefined values
     if ((options = arguments[i]) != null) {
+      optionsIsArray = isArray(options);
       // Extend the base object
       for (name in options) {
         //if (options.hasOwnProperty(name)) {
         if (!(name in Object.prototype)) {
+          if (optionsIsArray && !numericStringRegex.test(name)) {
+            continue;
+          }
 
           src = target[name];
           copy = options[name];
@@ -9288,6 +9326,138 @@ exports.toIndexableString = function (key) {
   var zero = '\u0000';
   key = exports.normalizeKey(key);
   return collationIndex(key) + SEP + indexify(key) + zero;
+};
+
+function parseNumber(str, i) {
+  var originalIdx = i;
+  var num;
+  var zero = str[i] === '1';
+  if (zero) {
+    num = 0;
+    i++;
+  } else {
+    var neg = str[i] === '0';
+    i++;
+    var numAsString = '';
+    var magAsString = str.substring(i, i + MAGNITUDE_DIGITS);
+    var magnitude = parseInt(magAsString, 10) + MIN_MAGNITUDE;
+    if (neg) {
+      magnitude = -magnitude;
+    }
+    i += MAGNITUDE_DIGITS;
+    while (true) {
+      var ch = str[i];
+      if (ch === '\u0000') {
+        break;
+      } else {
+        numAsString += ch;
+      }
+      i++;
+    }
+    numAsString = numAsString.split('.');
+    if (numAsString.length === 1) {
+      num = parseInt(numAsString, 10);
+    } else {
+      num = parseFloat(numAsString[0] + '.' + numAsString[1]);
+    }
+    if (neg) {
+      num = num - 10;
+    }
+    if (magnitude !== 0) {
+      // parseFloat is more reliable than pow due to rounding errors
+      // e.g. Number.MAX_VALUE would return Infinity if we did
+      // num * Math.pow(10, magnitude);
+      num = parseFloat(num + 'e' + magnitude);
+    }
+  }
+  return {num: num, length : i - originalIdx};
+}
+
+// move up the stack while parsing
+// this function moved outside of parseIndexableString for performance
+function pop(stack, metaStack) {
+  var obj = stack.pop();
+
+  if (metaStack.length) {
+    var lastMetaElement = metaStack[metaStack.length - 1];
+    if (obj === lastMetaElement.element) {
+      // popping a meta-element, e.g. an object whose value is another object
+      metaStack.pop();
+      lastMetaElement = metaStack[metaStack.length - 1];
+    }
+    var element = lastMetaElement.element;
+    var lastElementIndex = lastMetaElement.index;
+    if (Array.isArray(element)) {
+      element.push(obj);
+    } else if (lastElementIndex === stack.length - 2) { // obj with key+value
+      var key = stack.pop();
+      element[key] = obj;
+    } else {
+      stack.push(obj); // obj with key only
+    }
+  }
+}
+
+exports.parseIndexableString = function (str) {
+  var stack = [];
+  var metaStack = []; // stack for arrays and objects
+  var i = 0;
+
+  while (true) {
+    var collationIndex = str[i++];
+    if (collationIndex === '\u0000') {
+      if (stack.length === 1) {
+        return stack.pop();
+      } else {
+        pop(stack, metaStack);
+        continue;
+      }
+    }
+    switch (collationIndex) {
+      case '1':
+        stack.push(null);
+        break;
+      case '2':
+        stack.push(str[i] === '1');
+        i++;
+        break;
+      case '3':
+        var parsedNum = parseNumber(str, i);
+        stack.push(parsedNum.num);
+        i += parsedNum.length;
+        break;
+      case '4':
+        var parsedStr = '';
+        while (true) {
+          var ch = str[i];
+          if (ch === '\u0000') {
+            break;
+          }
+          parsedStr += ch;
+          i++;
+        }
+        // perform the reverse of the order-preserving replacement
+        // algorithm (see above)
+        parsedStr = parsedStr.replace(/\u0001\u0001/g, '\u0000')
+          .replace(/\u0001\u0002/g, '\u0001')
+          .replace(/\u0002\u0002/g, '\u0002');
+        stack.push(parsedStr);
+        break;
+      case '5':
+        var arrayElement = { element: [], index: stack.length };
+        stack.push(arrayElement.element);
+        metaStack.push(arrayElement);
+        break;
+      case '6':
+        var objElement = { element: {}, index: stack.length };
+        stack.push(objElement.element);
+        metaStack.push(objElement);
+        break;
+      default:
+        throw new Error(
+          'bad collationIndex or unexpectedly reached end of input: ' + collationIndex);
+    }
+  }
 };
 
 function arrayCollate(a, b) {

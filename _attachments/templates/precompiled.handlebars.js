@@ -50,7 +50,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<div id=\"dashboard\"></div>\n<p>\n    <a data-role=\"button\" id=\"TrichiasisSurgery\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Trichiasis%20Surgery\">Trichiasis Surgery</a> &nbsp; <a data-role=\"button\" id=\"PostOperativeFollowup\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Post-Operative%20Followup\">Post-Operative Followup</a>\n</p>\n<table id=\"records\">\n    <thead><tr>\n        <th>Question</th>\n        <th>User</th>\n        <th>Last Modified</th>\n    </tr></thead>\n    <tbody></tbody>\n</table>";
+  return "<p>\n    <a data-role=\"button\" id=\"TrichiasisSurgery\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Trichiasis%20Surgery\">Trichiasis Surgery</a> &nbsp; <a data-role=\"button\" id=\"PostOperativeFollowup\" class=\"btn btn-primary btn-sm\" href=\"#new/result/Post-Operative%20Followup\">Post-Operative Followup</a>\n</p>\n<table id=\"records\">\n    <thead><tr>\n        <th>Question</th>\n        <th>User</th>\n        <th>Last Modified</th>\n    </tr></thead>\n    <tbody></tbody>\n</table>";
   });
 
 this["JST"]["_attachments/templates/PostAdminRegistrationMenuView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

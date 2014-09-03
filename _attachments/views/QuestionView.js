@@ -391,6 +391,9 @@ QuestionView = (function(_super) {
     });
     currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get("datetime_format"));
     currentData.savedBy = $.cookie('current_user');
+    if (Coconut.currentClient !== null) {
+      currentData.clientId = Coconut.currentClient.get("_id");
+    }
     return this.result.save(currentData, {
       success: function(model) {
         $("#messageText").slideDown().fadeOut();

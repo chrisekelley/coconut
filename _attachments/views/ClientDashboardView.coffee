@@ -1,7 +1,7 @@
 class ClientDashboardView extends Backbone.View
 #  el: '#content table tbody'
 #  el: ''
-  tagName: 'tr'
+  tagName: 'p'
 
 #  render: =>
 #    @$el.html "
@@ -9,4 +9,7 @@ class ClientDashboardView extends Backbone.View
 #    <td>#{@model.get "YearofBirth"}</td>
 #            "
   render: =>
-    @$el.html "<p>#{@model.get "Gender"} #{@model.get "DOB"}</p>"
+    if !@model
+      @$el.html "No client loaded."
+    else
+      @$el.html "#{@model.get "Gender"} #{@model.get "DOB"}"

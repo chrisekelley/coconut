@@ -300,6 +300,7 @@ function LevelPouch(opts, callback) {
       callback(null, data);
     });
   };
+
   api.lock = function (id) {
     if (db._locks.has(id)) {
       return false;
@@ -373,13 +374,15 @@ function LevelPouch(opts, callback) {
         });
         return;
       }
+
+      if (!api.lock(currentDoc.metadata.id)) {
+        results[index] = makeErr(errors.REV_CONFLICT,
+                                 'someobody else is accessing this');
+        inProgress--;
+        return processDocs();
+      }
+
       stores.docStore.get(currentDoc.metadata.id, function (err, oldDoc) {
-        if (!api.lock(currentDoc.metadata.id)) {
-          results[index] = makeErr(errors.REV_CONFLICT,
-            'someobody else is accessing this');
-          inProgress--;
-          return processDocs();
-        }
         if (err) {
           if (err.name === 'NotFoundError') {
             insertDoc(currentDoc, index, function () {
@@ -402,6 +405,7 @@ function LevelPouch(opts, callback) {
           });
         }
       });
+
       if (newEdits) {
         processDocs();
       }
@@ -918,7 +922,7 @@ function LevelPouch(opts, callback) {
       var seqs = metadata.rev_map; // map from rev to seq
       metadata.rev_tree = rev_tree;
       if (!revs.length) {
-        callback();
+        return callback();
       }
       var batch = [];
       batch.push({
@@ -954,6 +958,7 @@ function LevelPouch(opts, callback) {
   };
 
   api._putLocal = function (doc, callback) {
+    delete doc._revisions; // ignore this, trust the rev
     var oldRev = doc._rev;
     var id = doc._id;
     stores.localStore.get(id, function (err, resp) {
@@ -966,7 +971,7 @@ function LevelPouch(opts, callback) {
         return callback(errors.REV_CONFLICT);
       }
       if (!oldRev) {
-        doc._rev = '0-0';
+        doc._rev = '0-1';
       } else {
         doc._rev = '0-' + (parseInt(oldRev.split('-')[1], 10) + 1);
       }
