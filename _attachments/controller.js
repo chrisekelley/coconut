@@ -113,39 +113,47 @@ Controller = {
     });
   },
   displayClientRecords: function() {
-    var results, viewOptions,
+    var clientId, dashboardLayout, dashboardView, results, viewOptions,
       _this = this;
-    viewOptions = {};
-    results = new SecondaryIndexCollection;
-    return results.fetch({
-      fetch: 'query',
-      options: {
-        include_docs: true,
-        query: {
-          include_docs: true,
-          fun: 'question_complete_index'
+    if (Coconut.currentClient) {
+      clientId = Coconut.currentClient.get("_id");
+      viewOptions = {};
+      results = new SecondaryIndexCollection;
+      return results.fetch({
+        fetch: 'query',
+        options: {
+          query: {
+            key: clientId,
+            include_docs: true,
+            fun: 'by_clientId'
+          }
+        },
+        success: function() {
+          var dashboardLayout, dashboardView;
+          console.log(JSON.stringify(results));
+          viewOptions = {
+            collection: results
+          };
+          dashboardLayout = new DashboardLayout();
+          Coconut.mainRegion.show(dashboardLayout);
+          dashboardView = new ClientDashboardView({
+            model: Coconut.currentClient
+          });
+          dashboardLayout.dashboardRegion.show(dashboardView);
+          return dashboardLayout.contentRegion.show(new HomeCompositeView(viewOptions));
+        },
+        error: function(model, err, cb) {
+          return console.log(JSON.stringify(err));
         }
-      },
-      success: function() {
-        var dashboardLayout, dashboardView;
-        console.log(JSON.stringify(results));
-        viewOptions = {
-          collection: results
-        };
-        dashboardLayout = new DashboardLayout();
-        Coconut.mainRegion.show(dashboardLayout);
-        dashboardView = new ClientDashboardView({
-          model: Coconut.currentClient
-        });
-        dashboardLayout.dashboardRegion.show(dashboardView);
-        return dashboardLayout.contentRegion.show(new HomeCompositeView(viewOptions));
-      }
-    });
+      });
+    } else {
+      dashboardLayout = new DashboardLayout();
+      Coconut.mainRegion.show(dashboardLayout);
+      dashboardView = new ClientDashboardView({
+        model: Coconut.currentClient
+      });
+      dashboardLayout.dashboardRegion.show(dashboardView);
+      return dashboardLayout.contentRegion.show(new HomeCompositeView(viewOptions));
+    }
   }
 };
-
-({
-  error: function(model, err, cb) {
-    return console.log(JSON.stringify(err));
-  }
-});

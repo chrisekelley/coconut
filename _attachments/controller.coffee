@@ -96,28 +96,36 @@ Controller =
         console.log JSON.stringify err
 
   displayClientRecords: () ->
-    viewOptions = {}
-    results = new SecondaryIndexCollection
-    results.fetch
-      fetch: 'query',
-      options:
-        include_docs: true,
-        query:
-          include_docs: true,
-#                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
-#                  key:'Individual Registration',
-          fun: 'question_complete_index'
-      success: =>
-        console.log JSON.stringify results
-        viewOptions =
-          collection : results
-#        Coconut.mainRegion.show new HomeCompositeView viewOptions
-        dashboardLayout = new DashboardLayout();
-        Coconut.mainRegion.show dashboardLayout
-        #        if Coconut.currentClient != null
-        dashboardView = new ClientDashboardView {model: Coconut.currentClient}
-        dashboardLayout.dashboardRegion.show dashboardView
-        dashboardLayout.contentRegion.show(new HomeCompositeView viewOptions)
-
-error: (model, err, cb) ->
-        console.log JSON.stringify err
+    if Coconut.currentClient
+      clientId = Coconut.currentClient.get("_id")
+      viewOptions = {}
+      results = new SecondaryIndexCollection
+      results.fetch
+        fetch: 'query',
+        options:
+          query:
+            key: clientId,
+            include_docs: true,
+  #                  fun:QUERIES.resultsByQuestionAndComplete(question.id, complete)
+  #                  key:'Individual Registration',
+            fun: 'by_clientId'
+        success: =>
+          console.log JSON.stringify results
+          viewOptions =
+            collection : results
+  #        Coconut.mainRegion.show new HomeCompositeView viewOptions
+          dashboardLayout = new DashboardLayout();
+          Coconut.mainRegion.show dashboardLayout
+          #        if Coconut.currentClient != null
+          dashboardView = new ClientDashboardView {model: Coconut.currentClient}
+          dashboardLayout.dashboardRegion.show dashboardView
+          dashboardLayout.contentRegion.show(new HomeCompositeView viewOptions)
+        error: (model, err, cb) ->
+                console.log JSON.stringify err
+    else
+      dashboardLayout = new DashboardLayout();
+      Coconut.mainRegion.show dashboardLayout
+      #        if Coconut.currentClient != null
+      dashboardView = new ClientDashboardView {model: Coconut.currentClient}
+      dashboardLayout.dashboardRegion.show dashboardView
+      dashboardLayout.contentRegion.show(new HomeCompositeView viewOptions)
