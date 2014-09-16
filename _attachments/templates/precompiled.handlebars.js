@@ -86,7 +86,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<p>To identify or register an individual, please place thumb on the scanner and press the \"Scan\" button.</p>\n<p>\n<a data-role=\"button\" id=\"scan\" class=\"btn btn-primary btn-lg\">Scan</a>\n</p>\n\n<style shim-shadowdom>\n\n    paper-progress::shadow #progressContainer {\n        height:200%;\n        width:200%;\n    }\n\n</style>\n\n<paper-progress id=\"scan-progress\"></paper-progress>";
+  return "<p>To identify or register an individual, please place thumb on the scanner and press the \"Scan\" button.</p>\n<p>\n<a data-role=\"button\" id=\"scan\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n<!--<style shim-shadowdom>-->\n\n    <!--paper-progress::shadow #progressContainer {-->\n        <!--height:200%;-->\n        <!--width:200%;-->\n    <!--}-->\n\n<!--</style>-->\n\n<!--<paper-progress id=\"scan-progress\"></paper-progress>-->";
   });
 
 this["JST"]["_attachments/templates/StatcView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -122,5 +122,5 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<p>To start please verify Administrator Identification by placing thumb on the scanner and pressing the \"Scan\" button.</p>\n<p>\n    <a data-role=\"button\" id=\"verify\" class=\"btn btn-primary btn-lg\">Scan</a>\n</p>\n\n<style shim-shadowdom>\n    paper-progress::shadow #progressContainer {\n        height:200%;\n        width:200%;\n    }\n</style>\n\n<paper-progress id=\"scan-progress\"></paper-progress>\n";
+  return "<p>To start please verify Administrator Identification by placing thumb on the scanner and pressing the \"Scan\" button.</p>\n<p>\n    <a data-role=\"button\" id=\"verify\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n\n<!--<style shim-shadowdom>-->\n    <!--paper-progress::shadow #progressContainer {-->\n        <!--height:200%;-->\n        <!--width:200%;-->\n    <!--}-->\n<!--</style>-->\n\n<!--<paper-progress id=\"scan-progress\"></paper-progress>-->\n";
   });

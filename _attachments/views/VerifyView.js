@@ -11,18 +11,24 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #verifyNo": "displayNewUserRegistration"
   },
   nextUrl: null,
-  initialize: function() {},
+  hasCordova: true,
+  initialize: function() {
+    if (typeof cordova === "undefined") {
+      console.log("cordova is not defined.");
+      return this.hasCordova = false;
+    }
+  },
   displayNewUserRegistration: function() {
     Coconut.router.navigate("userRegistration", true);
   },
   diplayNewReportMenu: function() {},
-  scanNewIndividual: function() {
-    this.scan("userRegistration");
+  scanNewIndividual: function(e) {
+    this.scan(e, "userRegistration");
   },
-  scan: function(next, sliderId) {
+  scan: function(event, sliderId) {
     var display, revealSlider,
       _this = this;
-    this.nextUrl = this.nextUrl;
+    this.eventUrl = this.nextUrl;
     display = function(message) {
       var label, lineBreak;
       console.log("display message: " + message);
@@ -32,27 +38,56 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       display.appendChild(lineBreak);
       display.appendChild(label);
     };
-    revealSlider = function(next, sliderId) {
-      var button, maxRepeat, nextProgress, progress, repeat, startProgress, thisSliderId;
-      nextProgress = function() {
-        if (progress.value < progress.max) {
-          progress.value += progress.step || 1;
-          requestAnimationFrame(nextProgress);
-        } else {
-          window.setTimeout((function() {
-            if (_this.nextUrl != null) {
-              Coconut.router.navigate(_this.nextUrl, true);
-            } else {
-              Coconut.router.navigate("registration", true);
+    revealSlider = function(event, sliderId) {
+      var button, maxRepeat, progress, repeat, startLadda, thisSliderId;
+      startLadda = function(e) {
+        var i, interval, l;
+        l = Ladda.create(e.currentTarget);
+        l.start();
+        if (_this.hasCordova) {
+          cordova.plugins.SecugenPlugin.register(function(results) {
+            var info1, info2, resultsArray;
+            console.log("SecugenPlugin.register: " + results);
+            l.stop();
+            resultsArray = results.split(" ");
+            if (resultsArray.length > 2) {
+              info1 = resultsArray[0];
+              info2 = resultsArray[1];
+              if (info2 === "NoMatch") {
+                $("#message").html("No match - you must register.");
+                if (_this.nextUrl != null) {
+                  return Coconut.router.navigate(_this.nextUrl, true);
+                } else {
+                  return Coconut.router.navigate("registration", true);
+                }
+              } else if (info2 === "Match") {
+                info2 = resultsArray[1];
+                l.stop();
+                return $("#message").html(results);
+              } else {
+                l.stop();
+                return $("#message").html(results);
+              }
             }
-          }), 500);
+          });
+        } else {
+          i = 1;
+          interval = setInterval(function() {
+            if (i === 50) {
+              console.log("Go to next page.");
+              $("#message").html("Scanning complete!");
+              l.stop();
+              if (_this.nextUrl != null) {
+                Coconut.router.navigate(_this.nextUrl, true);
+              } else {
+                Coconut.router.navigate("registration", true);
+              }
+              clearInterval(interval);
+            }
+            return i++;
+          }, 50);
         }
-      };
-      startProgress = function() {
-        var repeat;
-        repeat = 0;
-        progress.value = progress.min;
-        nextProgress();
+        return false;
       };
       console.log("revealSlider");
       progress = document.querySelector("paper-progress");
@@ -60,24 +95,11 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       if (typeof sliderId !== "undefined") {
         thisSliderId = sliderId;
       }
-      startProgress();
+      startLadda(event);
       repeat = void 0;
-      maxRepeat = 5;
-      addEventListener("polymer-ready", function() {
-        startProgress();
-      });
+      return maxRepeat = 5;
     };
-    if (!typeof cordova === "undefined") {
-      cordova.plugins.SecugenPlugin.register((function(results) {
-        $("#message").html(results);
-      }), function(e) {
-        console.log("Error: " + e);
-        $("#message").html("Error:" + results);
-      });
-    } else {
-      console.log("Cordova is not initialised. Plugins will not work.");
-      revealSlider(next, sliderId);
-    }
+    return revealSlider(event, sliderId);
   },
   display: function(message) {
     var display, label, lineBreak;

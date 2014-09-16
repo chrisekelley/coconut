@@ -418,66 +418,86 @@ class Router extends Backbone.Router
         Coconut.localConfigView ?= new LocalConfigView()
         Coconut.localConfigView.render()
 
-window.Coconut = new Marionette.Application()
-matchResults = document.location.pathname.match(/^\/(.*)\/_design\/(.*?)\//)
-if matchResults == null
-  console.log 'Configuring for Pouchdb'
-  Coconut.db_name = 'coconut'
-  Coconut.ddoc_name = 'coconut'
-else
-  Coconut.db_name = matchResults[1]
-  Coconut.ddoc_name = matchResults[2]
-#Backbone.sync = BackbonePouch.sync({
-#  db: PouchDB(Coconut.db_name)
-#});
+$(() =>
+  onDeviceReady = () =>
+    if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+      console.log("Init Secugen: this wheel is on fire.")
+      cordova.plugins.SecugenPlugin.requestPermission (results) ->
+        console.log "SecugenPlugin register: " + results
 
-#Coconut.adminRegistrationForm = new Result(adminRegistrationForm);
-#Coconut.trichiasisForm = new Result(trichiasisForm);
-#Coconut.userAdminForm = new Result(userAdminForm);
-#Coconut.individualRegistrationForm = new Result(individualRegistrationForm);
-#Coconut.postOperativeFollowupForm = new Result(postOperativeFollowupForm);
+    window.Coconut = new Marionette.Application()
+    matchResults = document.location.pathname.match(/^\/(.*)\/_design\/(.*?)\//)
+    if matchResults == null
+      console.log 'Configuring for Pouchdb'
+      Coconut.db_name = 'coconut'
+      Coconut.ddoc_name = 'coconut'
+    else
+      Coconut.db_name = matchResults[1]
+      Coconut.ddoc_name = matchResults[2]
+    #Backbone.sync = BackbonePouch.sync({
+    #  db: PouchDB(Coconut.db_name)
+    #});
 
-Coconut.Controller = Controller
-Coconut.API = API
-Coconut.router = new Router()
-Coconut.currentClient = null;
+    #Coconut.adminRegistrationForm = new Result(adminRegistrationForm);
+    #Coconut.trichiasisForm = new Result(trichiasisForm);
+    #Coconut.userAdminForm = new Result(userAdminForm);
+    #Coconut.individualRegistrationForm = new Result(individualRegistrationForm);
+    #Coconut.postOperativeFollowupForm = new Result(postOperativeFollowupForm);
 
-Coconut.addRegions mainRegion: "#content"
-Coconut.addRegions dashboardRegion: "#dashboard"
+    Coconut.Controller = Controller
+    Coconut.API = API
+    Coconut.router = new Router()
+    Coconut.currentClient = null;
+    Coconut.currentAdmin = null;
 
-Coconut.on "displayReportMenu", ->
-  Coconut.router.navigate("displayReportMenu")
-  Coconut.Controller.displayReportMenu()
+    Coconut.addRegions mainRegion: "#content"
+    Coconut.addRegions dashboardRegion: "#dashboard"
 
-#Coconut.on "userScan", ->
-#  Coconut.router.navigate "userScan"
-#  Coconut.API.userScan "user"
+    Coconut.on "displayReportMenu", ->
+      Coconut.router.navigate("displayReportMenu")
+      Coconut.Controller.displayReportMenu()
 
-Coconut.on "displayAdminScanner", ->
-  Coconut.router.navigate "displayAdminScanner"
-  Coconut.Controller.displayAdminScanner()
+    #Coconut.on "userScan", ->
+    #  Coconut.router.navigate "userScan"
+    #  Coconut.API.userScan "user"
 
-Coconut.on "displayUserScanner", ->
-  Coconut.router.navigate "displayUserScanner"
-  Coconut.Controller.displayUserScanner()
+    Coconut.on "displayAdminScanner", ->
+      Coconut.router.navigate "displayAdminScanner"
+      Coconut.Controller.displayAdminScanner()
 
-Coconut.on "displayAdminRegistrationForm", ->
-  Coconut.router.navigate "displayRegistration"
-  Coconut.Controller.displayRegistration()
+    Coconut.on "displayUserScanner", ->
+      Coconut.router.navigate "displayUserScanner"
+      Coconut.Controller.displayUserScanner()
 
-Coconut.on "displayUserRegistrationForm", ->
-  Coconut.router.navigate "displayRegistration"
-  Coconut.Controller.displayRegistration "user"
+    Coconut.on "displayAdminRegistrationForm", ->
+      Coconut.router.navigate "displayRegistration"
+      Coconut.Controller.displayRegistration()
 
-Coconut.on "displayClientRecords", ->
-  Coconut.router.navigate "displayClientRecords"
-  Coconut.Controller.displayClientRecords()
-#  Coconut.Controller.showDashboard()
+    Coconut.on "displayUserRegistrationForm", ->
+      Coconut.router.navigate "displayRegistration"
+      Coconut.Controller.displayRegistration "user"
 
-Coconut.router.startApp()
+    Coconut.on "displayClientRecords", ->
+      Coconut.router.navigate "displayClientRecords"
+      Coconut.Controller.displayClientRecords()
+    #  Coconut.Controller.showDashboard()
 
-Coconut.debug = (string) ->
-  console.log string
-  Coconut.replicationLog = "" unless Coconut.replicationLog?
-  Coconut.replicationLog += string
-#  $("#log").append string + "<br/>"
+    Coconut.router.startApp()
+
+    Coconut.debug = (string) ->
+      console.log string
+      Coconut.replicationLog = "" unless Coconut.replicationLog?
+      Coconut.replicationLog += string
+  #  $("#log").append string + "<br/>"
+
+
+  if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+    console.log("listening for deviceready event.")
+    document.addEventListener("deviceready", onDeviceReady, false);
+  else
+    onDeviceReady()
+
+  console.log("test")
+
+
+)
