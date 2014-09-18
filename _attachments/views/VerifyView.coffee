@@ -84,7 +84,12 @@ VerifyView = Backbone.Marionette.ItemView.extend
             i=1
             interval = setInterval =>
               if i == 50
-                console.log("Go to next page.")
+                uuid = coconutUtils.uuidGenerator(30)
+                serviceUuid = coconutUtils.uuidGenerator(30)
+                console.log("Go to next page. Generated UUID: " + uuid)
+                Coconut.currentClient = new Result
+                  _id:uuid
+                  serviceUuid:serviceUuid
                 $( "#message").html("Scanning complete!")
                 l.stop()
                 if  @nextUrl?

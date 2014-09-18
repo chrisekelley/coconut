@@ -46,7 +46,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
         l.start();
         if (_this.hasCordova) {
           cordova.plugins.SecugenPlugin.register(function(results) {
-            var info1, info2, resultsArray;
+            var info1, info2, match, probe, resultsArray, score;
             console.log("SecugenPlugin.register: " + results);
             l.stop();
             resultsArray = results.split(" ");
@@ -61,11 +61,11 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   return Coconut.router.navigate("registration", true);
                 }
               } else if (info2 === "Match") {
-                info2 = resultsArray[1];
-                l.stop();
+                probe = resultsArray[2];
+                match = resultsArray[4];
+                score = resultsArray[6];
                 return $("#message").html(results);
               } else {
-                l.stop();
                 return $("#message").html(results);
               }
             }
@@ -73,8 +73,15 @@ VerifyView = Backbone.Marionette.ItemView.extend({
         } else {
           i = 1;
           interval = setInterval(function() {
+            var serviceUuid, uuid;
             if (i === 50) {
-              console.log("Go to next page.");
+              uuid = coconutUtils.uuidGenerator(30);
+              serviceUuid = coconutUtils.uuidGenerator(30);
+              console.log("Go to next page. Generated UUID: " + uuid);
+              Coconut.currentClient = new Result({
+                _id: uuid,
+                serviceUuid: serviceUuid
+              });
               $("#message").html("Scanning complete!");
               l.stop();
               if (_this.nextUrl != null) {

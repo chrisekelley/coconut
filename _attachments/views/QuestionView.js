@@ -390,9 +390,20 @@ QuestionView = (function(_super) {
       skipEmpty: false
     });
     currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get("datetime_format"));
-    currentData.savedBy = $.cookie('current_user');
+    if (Coconut.currentAdmin !== null) {
+      currentData.savedBy = Coconut.currentAdmin.id;
+    } else {
+      currentData.savedBy = $.cookie('current_user');
+    }
     if (Coconut.currentClient !== null) {
       currentData.clientId = Coconut.currentClient.get("_id");
+      currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
+      if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
+        currentData._id = Coconut.currentClient.get("_id");
+      }
+      if (this.result.question() === 'Admin Registration') {
+        Coconut.currentAdmin = Coconut.currentClient;
+      }
     }
     return this.result.save(currentData, {
       success: function(model) {

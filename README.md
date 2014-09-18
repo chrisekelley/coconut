@@ -90,6 +90,13 @@ it may have already sync'd these users over. If not, well here you go.
 
  - clientId = Coconut.currentClient.get("_id")
  
+## App flow
+
+### Identification: 
+
+If a client is not identified, the id service provides a service-specific uuid (serviceUuid). The app also generates a uuid, 
+which is used to identify the client.
+ 
 ## How do I add the Dashboard to a page?
  
 The Dashboard displays the gender and birthdate of the current client. It is rendered using a 

@@ -443,9 +443,17 @@ class QuestionView extends Backbone.View
 
       # Make sure lastModifiedAt is always updated on save
       currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get "datetime_format")
-      currentData.savedBy = $.cookie('current_user')
+      if Coconut.currentAdmin != null
+        currentData.savedBy = Coconut.currentAdmin.id
+      else
+        currentData.savedBy = $.cookie('current_user')
       if Coconut.currentClient != null
         currentData.clientId = Coconut.currentClient.get("_id")
+        currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
+        if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
+          currentData._id = Coconut.currentClient.get("_id")
+        if @result.question() == 'Admin Registration'
+          Coconut.currentAdmin = Coconut.currentClient
 
 #      thisId = @model.safeLabel() + '_' + currentData.savedBy + '_' + new Date().toJSON()
 #      currentData.id = thisId
