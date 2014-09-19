@@ -12,7 +12,7 @@ StaticView = Backbone.Marionette.ItemView.extend
   events:
     "click #scanRetry": "scanRetry"
     "click #register": "register"
-    "click #registrationLink": "submitRegistration"
+    "click #registrationLink": "displayUserScanner"
     "click #newReportLink": "newReportLink"
 
   initialize: ->
@@ -27,6 +27,11 @@ StaticView = Backbone.Marionette.ItemView.extend
       Coconut.trigger "displayUserScanner"
     else
       Coconut.trigger "displayAdminScanner"
+    return
+
+  displayUserScanner: ->
+    console.log "displayUserScanner"
+    Coconut.trigger "displayUserScanner"
     return
 
   register: ->

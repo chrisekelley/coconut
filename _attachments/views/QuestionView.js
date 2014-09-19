@@ -472,6 +472,9 @@ QuestionView = (function(_super) {
         } else if (question.type() === 'spacer') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
           label = "<p>&nbsp</p>";
+        } else if (question.type() === 'instructions') {
+          div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+          label = "<p>" + (question.instructions()) + " </p>";
         } else {
           div = "<div          " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + "          data-required='" + (question.required()) + "'          class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'          data-question-name='" + name + "'          data-question-id='" + question_id + "'          data-action_on_change='" + (_.escape(question.actionOnChange())) + "'          >";
           label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + (question.label()) + " <span></span></label>";
@@ -539,6 +542,8 @@ QuestionView = (function(_super) {
             case "subheader":
               return "";
             case "spacer":
+              return "";
+            case "instructions":
               return "";
             default:
               return "<div class='form-group'><input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='Enter " + name + "'></div>";

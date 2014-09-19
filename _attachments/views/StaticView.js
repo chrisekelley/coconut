@@ -9,7 +9,7 @@ StaticView = Backbone.Marionette.ItemView.extend({
   events: {
     "click #scanRetry": "scanRetry",
     "click #register": "register",
-    "click #registrationLink": "submitRegistration",
+    "click #registrationLink": "displayUserScanner",
     "click #newReportLink": "newReportLink"
   },
   initialize: function() {},
@@ -20,6 +20,10 @@ StaticView = Backbone.Marionette.ItemView.extend({
     } else {
       Coconut.trigger("displayAdminScanner");
     }
+  },
+  displayUserScanner: function() {
+    console.log("displayUserScanner");
+    Coconut.trigger("displayUserScanner");
   },
   register: function() {
     console.log("register");

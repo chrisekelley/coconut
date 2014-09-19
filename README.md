@@ -63,6 +63,12 @@ Change the routing after a form is submitted in QuestionView:
               Coconut.router.navigate("postUserRegistrationMenu",true)
             else
               Coconut.router.navigate("",true)
+              
+## Adding new form element types
+
+If you need to add a new element to the form builder, modify :
+- DesignView.coffee questionTypes 
+- QuestionView.coffee 
 
 ## Compiling Templates
 
@@ -74,7 +80,8 @@ The npm start task (see package.json) runs this task for you.
 
 ## Setup
 
-The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you.
+The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you. 
+See the Pouch watchr section below for details and dependencies.
 
 This app is designed to sync with a central server for configuration data. Create another couch called coconut-central. 
 Upload samplejson/coconut.config to it.
@@ -134,7 +141,9 @@ and create a method for each route:
         },
 
            
-## Other useful info
+## Watchr script
+
+The npm start script launches the pouch.watchr script. Here is some info about it and its dependencies:
 
 It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a little [watchr](http://rubygems.org/gems/watchr) 
 script that watches for changes to any relevant files and then automatically pushes them into your couch. 

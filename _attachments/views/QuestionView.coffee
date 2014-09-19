@@ -508,6 +508,9 @@ class QuestionView extends Backbone.View
         else if question.type() == 'spacer'
           div = "<div class='question #{question.type?() or ''}'>"
           label = "<p>&nbsp</p>"
+        else if question.type() == 'instructions'
+          div = "<div class='question #{question.type?() or ''}'>"
+          label = "<p>#{question.label()} </p>"
         else
           div = "<div
           #{
@@ -635,6 +638,8 @@ class QuestionView extends Backbone.View
                 ""
               when "spacer"
                 ""
+              when "instructions"
+                "<p>#{text}</p>"
               else
 #                "<input name='#{name}' id='#{question_id}' type='#{question.type()}' value='#{question.value()}'></input>"
                  "<div class='form-group'><input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='Enter #{name}'></div>"
