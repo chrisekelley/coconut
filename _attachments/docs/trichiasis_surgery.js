@@ -16,6 +16,26 @@ trichiasisForm =
             "safeLabel": "DateTime"
         },
         {
+            "id": "134",
+            "_id": "134",
+            "label": "Refused Surgery",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "RefusedSurgery"
+        },
+        {
+            "id": "135",
+            "_id": "135",
+            "label": "Provided consultation on epilation",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ProvidedEpilationConsultation"
+        },
+        {
             "id": "765",
             "_id": "765",
             "label": "Left eye",
