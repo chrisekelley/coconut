@@ -45,28 +45,21 @@ VerifyView = Backbone.Marionette.ItemView.extend({
         l = Ladda.create(e.currentTarget);
         l.start();
         if (_this.hasCordova) {
-          cordova.plugins.SecugenPlugin.register(function(results) {
-            var info1, info2, match, probe, resultsArray, score;
-            console.log("SecugenPlugin.register: " + results);
+          cordova.plugins.SecugenPlugin.identify(function(results) {
+            var obj, statusCode;
+            console.log("SecugenPlugin.identify: " + results);
+            $("#message").html(results);
             l.stop();
-            resultsArray = results.split(" ");
-            if (resultsArray.length > 2) {
-              info1 = resultsArray[0];
-              info2 = resultsArray[1];
-              if (info2 === "NoMatch") {
-                $("#message").html("No match - you must register.");
-                if (_this.nextUrl != null) {
-                  return Coconut.router.navigate(_this.nextUrl, true);
-                } else {
-                  return Coconut.router.navigate("registration", true);
-                }
-              } else if (info2 === "Match") {
-                probe = resultsArray[2];
-                match = resultsArray[4];
-                score = resultsArray[6];
-                return $("#message").html(results);
+            obj = JSON.parse(results);
+            statusCode = obj.StatusCode;
+            if (statusCode === 1) {
+              return Coconut.router.navigate("displayUserScanner", true);
+            } else {
+              $("#message").html("No match - you must register.");
+              if (_this.nextUrl != null) {
+                return Coconut.router.navigate(_this.nextUrl, true);
               } else {
-                return $("#message").html(results);
+                return Coconut.router.navigate("registration", true);
               }
             }
           });

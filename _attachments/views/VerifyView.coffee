@@ -44,8 +44,9 @@ VerifyView = Backbone.Marionette.ItemView.extend
           l.start()
 #          if not typeof cordova is "undefined"
           if @hasCordova
-            cordova.plugins.SecugenPlugin.register (results) =>
-              console.log "SecugenPlugin.register: " + results
+            cordova.plugins.SecugenPlugin.identify (results) =>
+              console.log "SecugenPlugin.identify: " + results
+              $( "#message").html(results)
               l.stop()
               #              Uploaded: b174ef51-d685-4a6b-a4ec-44b65670447d matches 3977ee73-fe47-4310-95bf-f6fee71c4346 Score: 46.6485
               #              "Error: " + uploadMessage + " Error: " + e
@@ -54,32 +55,16 @@ VerifyView = Backbone.Marionette.ItemView.extend
               #					     message = "Match: " + probe.Name + " matches " + match.Name + " Score: " + score;
               #              newUuid = resultsArray[0]
               #              matchUuid = resultsArray[1]
-              resultsArray = results.split(" ")
-              if (resultsArray.length > 2)
-                info1 = resultsArray[0]
-                info2 = resultsArray[1]
-                if info2 == "NoMatch"
-                  $( "#message").html("No match - you must register.")
-                  if  @nextUrl?
-                    Coconut.router.navigate @nextUrl, true
-                  else
-                    Coconut.router.navigate "registration", true
-                else if info2 == "Match"
-                  probe = resultsArray[2]
-                  match = resultsArray[4]
-                  score = resultsArray[6]
-#                  l.stop()
-                  $( "#message").html(results)
+              obj = JSON.parse(results)
+              statusCode = obj.StatusCode
+              if statusCode == 1
+                Coconut.router.navigate "displayUserScanner", true
+              else
+                $( "#message").html("No match - you must register.")
+                if  @nextUrl?
+                  Coconut.router.navigate @nextUrl, true
                 else
-#                  l.stop()
-                  $( "#message").html(results)
-
-#          $.post("your-url",
-#            { data : data },
-#            function(response){
-#            console.log(response);
-#          }, "json")
-#          .always(function() { l.stop(); });
+                  Coconut.router.navigate "registration", true
           else
             i=1
             interval = setInterval =>
