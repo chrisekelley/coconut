@@ -5,7 +5,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   template: JST["_attachments/templates/VerifyView.handlebars"](),
   className: "itemView",
   events: {
-    "click #verify": "scan",
+    "click #verify": "identify",
     "click #scan": "scanNewIndividual",
     "click #verifyYes": "displayNewUserRegistration",
     "click #verifyNo": "displayNewUserRegistration"
@@ -23,9 +23,15 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   },
   diplayNewReportMenu: function() {},
   scanNewIndividual: function(e) {
-    this.scan(e, "userRegistration");
+    this.scan(e, "Enroll");
   },
-  scan: function(event, sliderId) {
+  register: function(e) {
+    this.scan(e, "Enroll");
+  },
+  identify: function(e) {
+    this.scan(e, "Identify");
+  },
+  scan: function(event, method) {
     var display, revealSlider,
       _this = this;
     this.eventUrl = this.nextUrl;
@@ -38,31 +44,51 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       display.appendChild(lineBreak);
       display.appendChild(label);
     };
-    revealSlider = function(event, sliderId) {
-      var button, maxRepeat, progress, repeat, startLadda, thisSliderId;
+    revealSlider = function(event, method) {
+      var button, maxRepeat, progress, repeat, startLadda;
       startLadda = function(e) {
-        var i, interval, l;
+        var i, interval, l, obj, statusCode;
         l = Ladda.create(e.currentTarget);
         l.start();
         if (_this.hasCordova) {
-          cordova.plugins.SecugenPlugin.identify(function(results) {
-            var obj, statusCode;
-            console.log("SecugenPlugin.identify: " + results);
+          console.log("method: " + method);
+          if (method === "Identify") {
+            cordova.plugins.SecugenPlugin.identify(function(results) {
+              var obj, statusCode;
+              console.log("SecugenPlugin.identify: " + results);
+              $("#message").html(results);
+              l.stop();
+              obj = JSON.parse(results);
+              statusCode = obj.StatusCode;
+              if (statusCode === 1) {
+                return Coconut.router.navigate("displayUserScanner", true);
+              } else {
+                $("#message").html("No match - you must register.");
+                if (_this.nextUrl != null) {
+                  return Coconut.router.navigate(_this.nextUrl, true);
+                } else {
+                  return Coconut.router.navigate("registration", true);
+                }
+              }
+            });
+          } else {
+            cordova.plugins.SecugenPlugin.register(function(results) {});
+            console.log("SecugenPlugin.register: " + results);
             $("#message").html(results);
             l.stop();
             obj = JSON.parse(results);
             statusCode = obj.StatusCode;
             if (statusCode === 1) {
-              return Coconut.router.navigate("displayUserScanner", true);
+              Coconut.router.navigate("displayUserScanner", true);
             } else {
               $("#message").html("No match - you must register.");
               if (_this.nextUrl != null) {
-                return Coconut.router.navigate(_this.nextUrl, true);
+                Coconut.router.navigate(_this.nextUrl, true);
               } else {
-                return Coconut.router.navigate("registration", true);
+                Coconut.router.navigate("registration", true);
               }
             }
-          });
+          }
         } else {
           i = 1;
           interval = setInterval(function() {
@@ -92,14 +118,11 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       console.log("revealSlider");
       progress = document.querySelector("paper-progress");
       button = document.querySelector("paper-button");
-      if (typeof sliderId !== "undefined") {
-        thisSliderId = sliderId;
-      }
       startLadda(event);
       repeat = void 0;
       return maxRepeat = 5;
     };
-    return revealSlider(event, sliderId);
+    return revealSlider(event, method);
   },
   display: function(message) {
     var display, label, lineBreak;

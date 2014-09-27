@@ -3,7 +3,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
     template: JST["_attachments/templates/VerifyView.handlebars"]()
     className: "itemView" # this class will be added to the wrapping div when you render the view
     events:
-      "click #verify": "scan"
+      "click #verify": "identify"
       "click #scan": "scanNewIndividual"
       "click #verifyYes": "displayNewUserRegistration"
       "click #verifyNo": "displayNewUserRegistration"
@@ -24,10 +24,19 @@ VerifyView = Backbone.Marionette.ItemView.extend
     diplayNewReportMenu: ->
 
     scanNewIndividual:(e) ->
-      @scan e, "userRegistration"
+#      @scan e, "userRegistration"
+      @scan e, "Enroll"
       return
 
-    scan: (event, sliderId) ->
+    register:(e) ->
+      @scan e, "Enroll"
+      return
+
+    identify:(e) ->
+      @scan e, "Identify"
+      return
+
+    scan: (event, method) ->
       this.eventUrl = @nextUrl
       display = (message) ->
         console.log "display message: " + message
@@ -38,23 +47,33 @@ VerifyView = Backbone.Marionette.ItemView.extend
         display.appendChild label # add the message node
         return
 
-      revealSlider = (event, sliderId) =>
+      revealSlider = (event, method) =>
         startLadda = (e) =>
           l = Ladda.create(e.currentTarget)
           l.start()
 #          if not typeof cordova is "undefined"
           if @hasCordova
-            cordova.plugins.SecugenPlugin.identify (results) =>
-              console.log "SecugenPlugin.identify: " + results
+            console.log "method: " + method
+            if (method == "Identify")
+              cordova.plugins.SecugenPlugin.identify (results) =>
+                console.log "SecugenPlugin.identify: " + results
+                $( "#message").html(results)
+                l.stop()
+                obj = JSON.parse(results)
+                statusCode = obj.StatusCode
+                if statusCode == 1
+                  Coconut.router.navigate "displayUserScanner", true
+                else
+                  $( "#message").html("No match - you must register.")
+                  if  @nextUrl?
+                    Coconut.router.navigate @nextUrl, true
+                  else
+                    Coconut.router.navigate "registration", true
+            else
+              cordova.plugins.SecugenPlugin.register (results) =>
+              console.log "SecugenPlugin.register: " + results
               $( "#message").html(results)
               l.stop()
-              #              Uploaded: b174ef51-d685-4a6b-a4ec-44b65670447d matches 3977ee73-fe47-4310-95bf-f6fee71c4346 Score: 46.6485
-              #              "Error: " + uploadMessage + " Error: " + e
-              #              callbackContext.success("Uploaded: " + uploadMessage);
-              #              message = "NoMatch";
-              #					     message = "Match: " + probe.Name + " matches " + match.Name + " Score: " + score;
-              #              newUuid = resultsArray[0]
-              #              matchUuid = resultsArray[1]
               obj = JSON.parse(results)
               statusCode = obj.StatusCode
               if statusCode == 1
@@ -91,7 +110,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
         console.log "revealSlider"
         progress = document.querySelector("paper-progress")
         button = document.querySelector("paper-button")
-        thisSliderId = sliderId  if typeof sliderId isnt "undefined"
+#        thisSliderId = sliderId  if typeof sliderId isnt "undefined"
 #        startProgress()
         startLadda(event)
         repeat = undefined
@@ -101,7 +120,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
 #          return
 
 #        return
-      revealSlider event, sliderId
+      revealSlider event, method
 
 
         #      if not typeof cordova is "undefined"
@@ -121,7 +140,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
 #      #                display("Error: " + e);
 #      else
 #        console.log "Cordova is not initialised. Plugins will not work."
-#        revealSlider event, sliderId
+#        revealSlider event, method
 #      return
 
     
