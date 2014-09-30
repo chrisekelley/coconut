@@ -39,6 +39,8 @@ class Router extends Backbone.Router
     "users": "users"
     "displayClientRecords": "displayClientRecords"
     "loadTestClient": "loadTestClient"
+    "enroll": "enroll"
+    "enroll/:user": "enroll"
     "": "displayAdminScanner"
 
   route: (route, name, callback) ->
@@ -111,6 +113,15 @@ class Router extends Backbone.Router
       success: ->
         Coconut.Controller.postAdminRegistrationMenu()
     )
+
+  enroll: (user) ->
+    @userLoggedIn
+      success: ->
+        if user == 'user'
+          Coconut.Controller.enrollUser()
+        else
+          Coconut.Controller.enrollAdmin()
+    return
 
   displayReportMenu: ->
     @userLoggedIn
@@ -476,6 +487,14 @@ $(() =>
     Coconut.on "displayUserRegistrationForm", ->
       Coconut.router.navigate "displayRegistration"
       Coconut.Controller.displayRegistration "user"
+
+    Coconut.on "displayEnrollUser", ->
+      Coconut.router.navigate "enroll/user"
+      Coconut.Controller.enrollUser()
+
+    Coconut.on "displayEnrollAdmin", ->
+      Coconut.router.navigate "enroll/admin"
+      Coconut.Controller.enrollAdmin()
 
     Coconut.on "displayClientRecords", ->
       Coconut.router.navigate "displayClientRecords"

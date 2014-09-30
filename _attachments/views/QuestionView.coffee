@@ -170,6 +170,10 @@ class QuestionView extends Backbone.View
         @autoscroll autocompeteElement
     $('input, textarea').attr("readonly", "true") if @readonly
 
+    if @result.question() == 'Admin Registration'
+      if typeof Coconut.scannerPayload != 'undefined'
+        console.log 'Display the payload' + JSON.stringify Coconut.scannerPayload
+
   events:
     "change #question-view input"    : "onChange"
     "change #question-view select"   : "onChange"
@@ -452,8 +456,9 @@ class QuestionView extends Backbone.View
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
       if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
         console.log "currentClient: " + JSON.stringify Coconut.currentClient
-        console.log "currentData: " + JSON.stringify currentData
         currentData._id = currentData.clientId
+        currentData.Template = Coconut.currentClient.get("Template")
+        console.log "currentData: " + JSON.stringify currentData
       if @result.question() == 'Admin Registration'
         Coconut.currentAdmin = Coconut.currentClient
     @result.save currentData,

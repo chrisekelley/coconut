@@ -54,6 +54,24 @@ Controller = {
     });
     Coconut.mainRegion.show(staticView);
   },
+  enrollUser: function() {
+    var staticView;
+    $("#message").html("");
+    staticView = new StaticView({
+      template: JST["_attachments/templates/Enroll.handlebars"]
+    });
+    staticView.user = 'user';
+    Coconut.mainRegion.show(staticView);
+  },
+  enrollAdmin: function() {
+    var staticView;
+    $("#message").html("");
+    staticView = new StaticView({
+      template: JST["_attachments/templates/Enroll.handlebars"]
+    });
+    staticView.user = 'admin';
+    Coconut.mainRegion.show(staticView);
+  },
   displayReportMenu: function() {
     var staticView;
     $("#message").html("");

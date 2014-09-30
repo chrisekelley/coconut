@@ -18,6 +18,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<div id=\"dashboard-region\"></div>\n<div id=\"content-region\"></div>\n\n\n";
   });
 
+this["JST"]["_attachments/templates/Enroll.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<p>Click the button to Enroll your fingerprint to the Simprints server.</p>\n<p><a data-role=\"button\" id=\"enroll\" class=\"btn btn-primary btn-lg\">Enroll</a></p>\n<div id=\"enrollResults\"></div>\n";
+  });
+
 this["JST"]["_attachments/templates/HomeRecordItemView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -77,7 +86,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<p>The system was unable to identify this person.</p>\n<p><a data-role=\"button\" id=\"scanRetry\" class=\"btn btn-primary btn-lg\">Scan again</a></p>\n<p><a data-role=\"button\" id=\"register\" class=\"btn btn-primary btn-lg\">Register</a></p>";
+  return "<p>The system was unable to identify this person.</p>\n<p><a data-role=\"button\" id=\"scanRetry\" class=\"btn btn-primary btn-lg\">Scan again</a></p>\n<!--<p><a data-role=\"button\" id=\"displayEnroll\" class=\"btn btn-primary btn-lg\">Enroll</a></p>-->\n<p>Click the button to Enroll your fingerprint to the Simprints server.</p>\n<p><a data-role=\"button\" id=\"enroll\" class=\"btn btn-primary btn-lg\">Enroll</a></p>\n<div id=\"enrollResults\"></div>";
   });
 
 this["JST"]["_attachments/templates/ScanVerifyView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
@@ -86,7 +95,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<h2>Instructions</h2>\n<p><i>Please read the following text to the client:</i>\n    <br/>\n    <br/>\n    We want you to know that the fingerprint scan is only used to verify your identity. We will only associate your gender and age with your fingerprint.\n    No other information will be stored about you.\n    <br/>\n    <br/>\n    <strong>Do you consent to having your fingerprint scanned?</strong>\n    <br/>\n    <br/>\n    Nós queremos que você saiba que a digitalização de impressões digitais só é usado para verificar a sua identidade.\n    Nós só vai associar o seu sexo e idade com sua impressão digital. Nenhuma outra informação será armazenada sobre você.\n    <br/>\n    <br/>\n    <strong>Você aceita que as suas impressões digitais digitalizadas?</strong>\n</p>\n<h2>If the client has consented, please proceed.</h2>\n<p>To identify or register an individual, please place thumb on the scanner and press the \"Scan\" button.</p>\n<p>\n<a data-role=\"button\" id=\"identifyIndividual\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n<!--<style shim-shadowdom>-->\n\n    <!--paper-progress::shadow #progressContainer {-->\n        <!--height:200%;-->\n        <!--width:200%;-->\n    <!--}-->\n\n<!--</style>-->\n\n<!--<paper-progress id=\"scan-progress\"></paper-progress>-->";
+  return "<h2>Instructions</h2>\n<p><i>Please read the following text to the client:</i>\n    We want you to know that the fingerprint scan is only used to verify your identity. We will only associate your gender and age with your fingerprint.\n    No other information will be stored about you.<p>\n    <p>\n    <strong>Do you consent to having your fingerprint scanned?</strong>\n    </p>\n    <p>\n    Nós queremos que você saiba que a digitalização de impressões digitais só é usado para verificar a sua identidade.\n    Nós só vai associar o seu sexo e idade com sua impressão digital. Nenhuma outra informação será armazenada sobre você.\n    </p>\n    <p>\n    <strong>Você aceita que as suas impressões digitais digitalizadas?</strong>\n    </p>\n<h3>If the client has consented, please proceed.</h3>\n<p>To identify or register an individual, please place thumb on the scanner and press the \"Scan\" button.</p>\n<p>\n<a data-role=\"button\" id=\"identifyIndividual\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n<!--<style shim-shadowdom>-->\n\n    <!--paper-progress::shadow #progressContainer {-->\n        <!--height:200%;-->\n        <!--width:200%;-->\n    <!--}-->\n\n<!--</style>-->\n\n<!--<paper-progress id=\"scan-progress\"></paper-progress>-->";
   });
 
 this["JST"]["_attachments/templates/StatcView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

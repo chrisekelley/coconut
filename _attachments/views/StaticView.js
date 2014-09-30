@@ -10,7 +10,9 @@ StaticView = Backbone.Marionette.ItemView.extend({
     "click #scanRetry": "scanRetry",
     "click #register": "register",
     "click #registrationLink": "displayUserScanner",
-    "click #newReportLink": "newReportLink"
+    "click #newReportLink": "newReportLink",
+    "click #displayEnroll": "displayEnroll",
+    "click #enroll": "enroll"
   },
   initialize: function() {},
   scanRetry: function() {
@@ -24,6 +26,45 @@ StaticView = Backbone.Marionette.ItemView.extend({
   displayUserScanner: function() {
     console.log("displayUserScanner");
     Coconut.trigger("displayUserScanner");
+  },
+  displayEnroll: function() {
+    console.log("displayEnroll");
+    if (this.user !== null) {
+      Coconut.trigger("displayEnrollUser");
+    } else {
+      Coconut.trigger("displayEnrollAdmin");
+    }
+  },
+  enroll: function() {
+    var _this = this;
+    console.log("enroll");
+    if (typeof Coconut.scannerPayload !== 'undefined') {
+      console.log('we got Coconut.scannerPayload: ' + JSON.stringify(Coconut.scannerPayload));
+      $.post("http://simfant.simprints.com/api/Person/Enroll", Coconut.scannerPayload, function(result) {
+        var serviceUuid, statusCode;
+        console.log("response from service: " + JSON.stringify(result));
+        statusCode = result.StatusCode;
+        serviceUuid = result.UID;
+        console.log("statusCode: " + statusCode);
+        if (statusCode !== null) {
+          if (statusCode === 1) {
+            $("#enrollResults").html('Success!');
+            Coconut.currentClient = new Result({
+              serviceUuid: serviceUuid,
+              Template: Coconut.scannerPayload.Template
+            });
+            if (typeof _this.user !== 'undefined' && _this.user !== null && _this.user === 'user') {
+              return Coconut.trigger("displayUserRegistrationForm");
+            } else {
+              return Coconut.trigger("displayAdminRegistrationForm");
+            }
+          } else {
+            $("#enrollResults").html('Problem.');
+            return Coconut.trigger("displayEnroll");
+          }
+        }
+      }, "json");
+    }
   },
   register: function() {
     console.log("register");

@@ -50,6 +50,20 @@ Controller =
     Coconut.mainRegion.show staticView
     return
 
+  enrollUser: ->
+    $("#message").html ""
+    staticView = new StaticView(template: JST["_attachments/templates/Enroll.handlebars"])
+    staticView.user = 'user'
+    Coconut.mainRegion.show staticView
+    return
+
+  enrollAdmin: ->
+    $("#message").html ""
+    staticView = new StaticView(template: JST["_attachments/templates/Enroll.handlebars"])
+    staticView.user = 'admin'
+    Coconut.mainRegion.show staticView
+    return
+
   displayReportMenu: ->
     $("#message").html ""
     staticView = new UserFormView(template: JST["_attachments/templates/UserReportMenu.handlebars"])

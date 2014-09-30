@@ -52,6 +52,8 @@ Router = (function(_super) {
     "users": "users",
     "displayClientRecords": "displayClientRecords",
     "loadTestClient": "loadTestClient",
+    "enroll": "enroll",
+    "enroll/:user": "enroll",
     "": "displayAdminScanner"
   };
 
@@ -150,6 +152,18 @@ Router = (function(_super) {
     return this.userLoggedIn({
       success: function() {
         return Coconut.Controller.postAdminRegistrationMenu();
+      }
+    });
+  };
+
+  Router.prototype.enroll = function(user) {
+    this.userLoggedIn({
+      success: function() {
+        if (user === 'user') {
+          return Coconut.Controller.enrollUser();
+        } else {
+          return Coconut.Controller.enrollAdmin();
+        }
       }
     });
   };
@@ -624,6 +638,14 @@ $(function() {
     Coconut.on("displayUserRegistrationForm", function() {
       Coconut.router.navigate("displayRegistration");
       return Coconut.Controller.displayRegistration("user");
+    });
+    Coconut.on("displayEnrollUser", function() {
+      Coconut.router.navigate("enroll/user");
+      return Coconut.Controller.enrollUser();
+    });
+    Coconut.on("displayEnrollAdmin", function() {
+      Coconut.router.navigate("enroll/admin");
+      return Coconut.Controller.enrollAdmin();
     });
     Coconut.on("displayClientRecords", function() {
       Coconut.router.navigate("displayClientRecords");

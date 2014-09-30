@@ -111,7 +111,12 @@ QuestionView = (function(_super) {
       });
     });
     if (this.readonly) {
-      return $('input, textarea').attr("readonly", "true");
+      $('input, textarea').attr("readonly", "true");
+    }
+    if (this.result.question() === 'Admin Registration') {
+      if (typeof Coconut.scannerPayload !== 'undefined') {
+        return console.log('Display the payload' + JSON.stringify(Coconut.scannerPayload));
+      }
     }
   };
 
@@ -400,8 +405,9 @@ QuestionView = (function(_super) {
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
         console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
-        console.log("currentData: " + JSON.stringify(currentData));
         currentData._id = currentData.clientId;
+        currentData.Template = Coconut.currentClient.get("Template");
+        console.log("currentData: " + JSON.stringify(currentData));
       }
       if (this.result.question() === 'Admin Registration') {
         Coconut.currentAdmin = Coconut.currentClient;
