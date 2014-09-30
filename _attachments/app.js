@@ -640,9 +640,8 @@ $(function() {
   };
   if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
     console.log("listening for deviceready event.");
-    document.addEventListener("deviceready", onDeviceReady, false);
+    return document.addEventListener("deviceready", onDeviceReady, false);
   } else {
-    onDeviceReady();
+    return onDeviceReady();
   }
-  return console.log("test");
 });

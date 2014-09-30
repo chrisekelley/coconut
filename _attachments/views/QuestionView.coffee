@@ -439,27 +439,24 @@ class QuestionView extends Backbone.View
   # We throttle to limit how fast save can be repeatedly called
   save: _.throttle( ->
       
-      currentData = $('form').toObject(skipEmpty: false)
+    currentData = $('form').toObject(skipEmpty: false)
 
-      # Make sure lastModifiedAt is always updated on save
-      currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get "datetime_format")
-      if Coconut.currentAdmin != null
-        currentData.savedBy = Coconut.currentAdmin.id
-      else
-        currentData.savedBy = $.cookie('current_user')
-      if Coconut.currentClient != null
-        currentData.clientId = Coconut.currentClient.get("_id")
-        currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
-        if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
-          currentData._id = Coconut.currentClient.get("_id")
-        if @result.question() == 'Admin Registration'
-          Coconut.currentAdmin = Coconut.currentClient
-
-#      thisId = @model.safeLabel() + '_' + currentData.savedBy + '_' + new Date().toJSON()
-#      currentData.id = thisId
-#      currentData._id = thisId
-
-      @result.save currentData,
+    # Make sure lastModifiedAt is always updated on save
+    currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get "datetime_format")
+    if Coconut.currentAdmin != null
+      currentData.savedBy = Coconut.currentAdmin.id
+    else
+      currentData.savedBy = $.cookie('current_user')
+    if Coconut.currentClient != null
+      currentData.clientId = Coconut.currentClient.get("_id")
+      currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
+      if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
+        console.log "currentClient: " + JSON.stringify Coconut.currentClient
+        console.log "currentData: " + JSON.stringify currentData
+        currentData._id = currentData.clientId
+      if @result.question() == 'Admin Registration'
+        Coconut.currentAdmin = Coconut.currentClient
+    @result.save currentData,
         success: (model) =>
           $("#messageText").slideDown().fadeOut()
           Coconut.router.navigate("edit/result/#{model.id}",false)

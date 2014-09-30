@@ -3,7 +3,8 @@ VerifyView = Backbone.Marionette.ItemView.extend
     template: JST["_attachments/templates/VerifyView.handlebars"]()
     className: "itemView" # this class will be added to the wrapping div when you render the view
     events:
-      "click #verify": "identify"
+      "click #identifyIndividual": "identifyIndividual"
+      "click #identifyAdmin": "identifyAdmin"
       "click #scan": "scanNewIndividual"
       "click #verifyYes": "displayNewUserRegistration"
       "click #verifyNo": "displayNewUserRegistration"
@@ -32,11 +33,15 @@ VerifyView = Backbone.Marionette.ItemView.extend
       @scan e, "Enroll"
       return
 
-    identify:(e) ->
-      @scan e, "Identify"
+    identifyIndividual:(e) ->
+      @scan e, "Identify", "Individual"
       return
 
-    scan: (event, method) ->
+    identifyAdmin:(e) ->
+      @scan e, "Identify", "Admin"
+      return
+
+    scan: (event, method, user) ->
       this.eventUrl = @nextUrl
       display = (message) ->
         console.log "display message: " + message
@@ -47,7 +52,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
         display.appendChild label # add the message node
         return
 
-      revealSlider = (event, method) =>
+      revealSlider = (event, method, user) =>
         startLadda = (e) =>
           l = Ladda.create(e.currentTarget)
           l.start()
@@ -61,8 +66,30 @@ VerifyView = Backbone.Marionette.ItemView.extend
                 l.stop()
                 obj = JSON.parse(results)
                 statusCode = obj.StatusCode
+                serviceUuid = obj.UID
                 if statusCode == 1
-                  Coconut.router.navigate "displayUserScanner", true
+                  viewOptions = {}
+                  users = new SecondaryIndexCollection
+                  users.fetch
+                    fetch: 'query',
+                    options:
+                      query:
+                        key: serviceUuid,
+                        include_docs: true,
+                        fun: 'by_serviceUuid'
+                    success: =>
+                      console.log JSON.stringify users
+                      if users.length > 0
+                        if user == "Admin"
+                          adminUser = users[0]
+                          console.log JSON.stringify adminUser
+                          Coconut.currentAdmin = adminUser
+                          Coconut.router.navigate "displayUserScanner", true
+                        else
+                          user = users[0]
+                          console.log JSON.stringify user
+                          Coconut.currentClient = user
+                          Coconut.router.navigate "displayClientRecords", true
                 else
                   $( "#message").html("No match - you must register.")
                   if  @nextUrl?
@@ -76,14 +103,20 @@ VerifyView = Backbone.Marionette.ItemView.extend
               l.stop()
               obj = JSON.parse(results)
               statusCode = obj.StatusCode
+              serviceUuid = obj.UID
               if statusCode == 1
-                Coconut.router.navigate "displayUserScanner", true
-              else
+                uuid = coconutUtils.uuidGenerator(30)
+                Coconut.currentClient = new Result
+                  _id:uuid
+                  serviceUuid:serviceUuid
+                console.log "currentClient: " + JSON.stringify Coconut.currentClient
                 $( "#message").html("No match - you must register.")
                 if  @nextUrl?
                   Coconut.router.navigate @nextUrl, true
                 else
                   Coconut.router.navigate "registration", true
+              else
+                Coconut.router.navigate "displayAdminScanner", true
           else
             i=1
             interval = setInterval =>
@@ -120,7 +153,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
 #          return
 
 #        return
-      revealSlider event, method
+      revealSlider event, method, user
 
 
         #      if not typeof cordova is "undefined"

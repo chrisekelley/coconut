@@ -399,7 +399,9 @@ QuestionView = (function(_super) {
       currentData.clientId = Coconut.currentClient.get("_id");
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
-        currentData._id = Coconut.currentClient.get("_id");
+        console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
+        console.log("currentData: " + JSON.stringify(currentData));
+        currentData._id = currentData.clientId;
       }
       if (this.result.question() === 'Admin Registration') {
         Coconut.currentAdmin = Coconut.currentClient;
@@ -421,8 +423,8 @@ QuestionView = (function(_super) {
           }
         }
       }
-    });
-  }, 1000);
+    }, 1000);
+  });
 
   QuestionView.prototype.completeButton = function(value) {
     this.changedComplete = true;
@@ -474,7 +476,7 @@ QuestionView = (function(_super) {
           label = "<p>&nbsp</p>";
         } else if (question.type() === 'instructions') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
-          label = "<p>" + (question.instructions()) + " </p>";
+          label = "<p>" + (question.label()) + " </p>";
         } else {
           div = "<div          " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + "          data-required='" + (question.required()) + "'          class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'          data-question-name='" + name + "'          data-question-id='" + question_id + "'          data-action_on_change='" + (_.escape(question.actionOnChange())) + "'          >";
           label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + (question.label()) + " <span></span></label>";
@@ -544,7 +546,7 @@ QuestionView = (function(_super) {
             case "spacer":
               return "";
             case "instructions":
-              return "";
+              return "<p>" + text + "</p>";
             default:
               return "<div class='form-group'><input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='Enter " + name + "'></div>";
           }

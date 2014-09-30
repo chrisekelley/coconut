@@ -45,9 +45,15 @@ var designDocOld = createDesignDoc('by_clientId', function (doc) {
 //    }
 });
 
-var designDoc = createDesignDoc('by_clientId', function (doc) {
+var byClientIdDesignDoc = createDesignDoc('by_clientId', function (doc) {
     if (doc.clientId) {
         emit(doc.clientId);
+    }
+});
+
+var byServiceUuidDesignDoc = createDesignDoc('by_serviceUuid', function (doc) {
+    if (doc.serviceUuid) {
+        emit(doc.serviceUuid);
     }
 });
 
@@ -56,7 +62,7 @@ var designDoc = createDesignDoc('by_clientId', function (doc) {
 //    console.log("doc deleted: " + err);
 //});
 
-Backbone.sync.defaults.db.put(designDoc).then(function (doc) {
+Backbone.sync.defaults.db.put(byClientIdDesignDoc).then(function (doc) {
     // design doc created!
     console.log("by_clientId created")
     Backbone.sync.defaults.db.query('by_clientId', {stale: 'update_after'})
@@ -64,6 +70,17 @@ Backbone.sync.defaults.db.put(designDoc).then(function (doc) {
 }).catch(function (err) {
     if (err.name === 'conflict') {
         console.log("by_clientId exists.")
+    }
+});
+
+Backbone.sync.defaults.db.put(byServiceUuidDesignDoc).then(function (doc) {
+    // design doc created!
+    console.log("by_serviceUuid created")
+    Backbone.sync.defaults.db.query('by_serviceUuid', {stale: 'update_after'})
+//    Backbone.sync.defaults.db.viewCleanup()
+}).catch(function (err) {
+    if (err.name === 'conflict') {
+        console.log("by_serviceUuid exists.")
     }
 });
 

@@ -5,7 +5,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   template: JST["_attachments/templates/VerifyView.handlebars"](),
   className: "itemView",
   events: {
-    "click #verify": "identify",
+    "click #identifyIndividual": "identifyIndividual",
+    "click #identifyAdmin": "identifyAdmin",
     "click #scan": "scanNewIndividual",
     "click #verifyYes": "displayNewUserRegistration",
     "click #verifyNo": "displayNewUserRegistration"
@@ -28,10 +29,13 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   register: function(e) {
     this.scan(e, "Enroll");
   },
-  identify: function(e) {
-    this.scan(e, "Identify");
+  identifyIndividual: function(e) {
+    this.scan(e, "Identify", "Individual");
   },
-  scan: function(event, method) {
+  identifyAdmin: function(e) {
+    this.scan(e, "Identify", "Admin");
+  },
+  scan: function(event, method, user) {
     var display, revealSlider,
       _this = this;
     this.eventUrl = this.nextUrl;
@@ -44,24 +48,53 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       display.appendChild(lineBreak);
       display.appendChild(label);
     };
-    revealSlider = function(event, method) {
+    revealSlider = function(event, method, user) {
       var button, maxRepeat, progress, repeat, startLadda;
       startLadda = function(e) {
-        var i, interval, l, obj, statusCode;
+        var i, interval, l, obj, serviceUuid, statusCode, uuid;
         l = Ladda.create(e.currentTarget);
         l.start();
         if (_this.hasCordova) {
           console.log("method: " + method);
           if (method === "Identify") {
             cordova.plugins.SecugenPlugin.identify(function(results) {
-              var obj, statusCode;
+              var obj, serviceUuid, statusCode, users, viewOptions;
               console.log("SecugenPlugin.identify: " + results);
               $("#message").html(results);
               l.stop();
               obj = JSON.parse(results);
               statusCode = obj.StatusCode;
+              serviceUuid = obj.UID;
               if (statusCode === 1) {
-                return Coconut.router.navigate("displayUserScanner", true);
+                viewOptions = {};
+                users = new SecondaryIndexCollection;
+                return users.fetch({
+                  fetch: 'query',
+                  options: {
+                    query: {
+                      key: serviceUuid,
+                      include_docs: true,
+                      fun: 'by_serviceUuid'
+                    }
+                  },
+                  success: function() {
+                    var adminUser;
+                    console.log(JSON.stringify(users));
+                    if (users.length > 0) {
+                      if (user === "Admin") {
+                        adminUser = users[0];
+                        console.log(JSON.stringify(adminUser));
+                        Coconut.currentAdmin = adminUser;
+                        return Coconut.router.navigate("displayUserScanner", true);
+                      } else {
+                        user = users[0];
+                        console.log(JSON.stringify(user));
+                        Coconut.currentClient = user;
+                        return Coconut.router.navigate("displayClientRecords", true);
+                      }
+                    }
+                  }
+                });
               } else {
                 $("#message").html("No match - you must register.");
                 if (_this.nextUrl != null) {
@@ -78,21 +111,27 @@ VerifyView = Backbone.Marionette.ItemView.extend({
             l.stop();
             obj = JSON.parse(results);
             statusCode = obj.StatusCode;
+            serviceUuid = obj.UID;
             if (statusCode === 1) {
-              Coconut.router.navigate("displayUserScanner", true);
-            } else {
+              uuid = coconutUtils.uuidGenerator(30);
+              Coconut.currentClient = new Result({
+                _id: uuid,
+                serviceUuid: serviceUuid
+              });
+              console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
               $("#message").html("No match - you must register.");
               if (_this.nextUrl != null) {
                 Coconut.router.navigate(_this.nextUrl, true);
               } else {
                 Coconut.router.navigate("registration", true);
               }
+            } else {
+              Coconut.router.navigate("displayAdminScanner", true);
             }
           }
         } else {
           i = 1;
           interval = setInterval(function() {
-            var serviceUuid, uuid;
             if (i === 50) {
               uuid = coconutUtils.uuidGenerator(30);
               serviceUuid = coconutUtils.uuidGenerator(30);
@@ -122,7 +161,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       repeat = void 0;
       return maxRepeat = 5;
     };
-    return revealSlider(event, method);
+    return revealSlider(event, method, user);
   },
   display: function(message) {
     var display, label, lineBreak;
