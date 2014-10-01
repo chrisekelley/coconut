@@ -395,12 +395,12 @@ QuestionView = (function(_super) {
       skipEmpty: false
     });
     currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get("datetime_format"));
-    if (Coconut.currentAdmin !== null) {
+    if (typeof Coconut.currentAdmin !== 'undefined' && Coconut.currentAdmin !== null) {
       currentData.savedBy = Coconut.currentAdmin.id;
     } else {
       currentData.savedBy = $.cookie('current_user');
     }
-    if (Coconut.currentClient !== null) {
+    if (typeof Coconut.currentClient !== 'undefined' && Coconut.currentClient !== null) {
       currentData.clientId = Coconut.currentClient.get("_id");
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {

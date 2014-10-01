@@ -52,7 +52,7 @@ var byClientIdDesignDoc = createDesignDoc('by_clientId', function (doc) {
 });
 
 var byServiceUuidDesignDoc = createDesignDoc('by_serviceUuid', function (doc) {
-    if (doc.serviceUuid) {
+    if (doc.serviceUuid && (doc.question == 'Individual Registration' || doc.question == 'Admin Registration')) {
         emit(doc.serviceUuid);
     }
 });

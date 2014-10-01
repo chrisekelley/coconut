@@ -631,6 +631,7 @@ $(function() {
       Coconut.router.navigate("displayUserScanner");
       return Coconut.Controller.displayUserScanner();
     });
+    Coconut.on("displayAdminRegistrationForm", function() {});
     Coconut.on("displayAdminRegistrationForm", function() {
       Coconut.router.navigate("displayRegistration");
       return Coconut.Controller.displayRegistration();

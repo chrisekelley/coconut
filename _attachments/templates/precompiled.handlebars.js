@@ -68,7 +68,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   
 
 
-  return "<h1>ID verification Confirmed</h1>\n\n<p>You have been registered to use this device.</p>\n\n<p>\n    Do you want to:\n</p>\n<p><a data-role=\"button\" id=\"registrationLink\" class=\"btn btn-primary btn-lg\">Register a new individual</a></p>\n<p><a data-role=\"button\" id=\"newReportLink\" class=\"btn btn-primary btn-lg\">Enter a new report</a></p>\n<p><a data-role=\"button\" id=\"logoutLink\" class=\"btn btn-primary btn-lg\">Log out</a></p>\n\n";
+  return "<h1>ID verification Confirmed</h1>\n\n<p>You have been registered to use this device.</p>\n\n<p>\n    Do you want to:\n</p>\n<p><a data-role=\"button\" id=\"registrationLink\" class=\"btn btn-primary btn-lg\">Register a new individual</a></p>\n<p><a data-role=\"button\" id=\"newReportLink\" class=\"btn btn-primary btn-lg\">Enter a new report</a></p>\n";
   });
 
 this["JST"]["_attachments/templates/PostUserRegistrationMenuView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {

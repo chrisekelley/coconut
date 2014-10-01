@@ -69,6 +69,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
                 serviceMessage = serviceResponse.serviceMessage
                 statusCode = serviceMessage.StatusCode
                 serviceUuid = serviceMessage.UID
+                console.log 'query for serviceUuid: ' + serviceUuid
                 if statusCode == 1
                   viewOptions = {}
                   users = new SecondaryIndexCollection
@@ -83,22 +84,28 @@ VerifyView = Backbone.Marionette.ItemView.extend
                       console.log 'by_serviceUuid returned: ' + JSON.stringify users
                       if users.length > 0
                         if user == "Admin"
-                          adminUser = users[0]
-                          console.log JSON.stringify adminUser
+                          adminUser = users.first()
+                          console.log 'Coconut.currentAdmin: ' + JSON.stringify adminUser
                           Coconut.currentAdmin = adminUser
                           Coconut.router.navigate "displayUserScanner", true
                         else
-                          user = users[0]
-                          console.log JSON.stringify user
+                          user = users.first()
+                          console.log 'Coconut.currentAdmin: ' + JSON.stringify user
                           Coconut.currentClient = user
                           Coconut.router.navigate "displayClientRecords", true
                       else
-                        console.log 'This user is not registered.'
+                        console.log 'Strange. This user was identified but is not registered.'
+                        uuid = coconutUtils.uuidGenerator(30)
+                        Coconut.currentClient = new Result
+                          _id:uuid
+                          serviceUuid:serviceUuid
+                          Template: scannerPayload.Template
+                        console.log "currentClient: " + JSON.stringify Coconut.currentClient
                         Coconut.scannerPayload = scannerPayload
-                        if  @nextUrl?
-                          Coconut.router.navigate @nextUrl, true
+                        if user == "Admin"
+                          Coconut.trigger "displayAdminRegistrationForm"
                         else
-                          Coconut.router.navigate "registration", true
+                          Coconut.trigger "displayUserRegistrationForm"
                 else
                   $( "#message").html("No match - you must register.")
                   Coconut.scannerPayload = scannerPayload

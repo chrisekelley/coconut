@@ -481,6 +481,7 @@ $(() =>
       Coconut.Controller.displayUserScanner()
 
     Coconut.on "displayAdminRegistrationForm", ->
+    Coconut.on "displayAdminRegistrationForm", ->
       Coconut.router.navigate "displayRegistration"
       Coconut.Controller.displayRegistration()
 
