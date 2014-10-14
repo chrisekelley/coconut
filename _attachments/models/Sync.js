@@ -327,9 +327,9 @@ Sync = (function(_super) {
       withCredentials: true,
       complete: function(result) {
         if (typeof result !== 'undefined' && result.ok) {
-          return Coconut.debug("onComplete: Replication is fine. ");
+          return Coconut.debug("replicateFromServer - onComplete: Replication is fine. ");
         } else {
-          return Coconut.debug("onComplete: Replication message: " + JSON.stringify(result));
+          return Coconut.debug("replicateFromServer - onComplete: Replication message: " + JSON.stringify(result));
         }
       },
       error: function(result) {
@@ -364,9 +364,9 @@ Sync = (function(_super) {
       withCredentials: true,
       complete: function(result) {
         if (typeof result !== 'undefined' && result.ok) {
-          return Coconut.debug("onComplete: Replication is fine. ");
+          return Coconut.debug("replicateToServer - onComplete: Replication is fine. ");
         } else {
-          return Coconut.debug("onComplete: Replication message: " + JSON.stringify(result));
+          return Coconut.debug("replicateToServer - onComplete: Replication message: " + JSON.stringify(result));
         }
       },
       error: function(result) {

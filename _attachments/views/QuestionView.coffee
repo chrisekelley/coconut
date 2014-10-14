@@ -470,6 +470,7 @@ class QuestionView extends Backbone.View
           Coconut.menuView.update()
       
           if @result.complete()
+            Coconut.syncView.sync.replicateToServer()
             if @result.question() == 'Admin Registration'
               Coconut.router.navigate("postAdminRegistrationMenu",true)
             else if @result.question() == 'Individual Registration'

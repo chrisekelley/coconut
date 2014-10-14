@@ -51,7 +51,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     revealSlider = function(event, method, user) {
       var button, maxRepeat, progress, repeat, startLadda;
       startLadda = function(e) {
-        var i, interval, l, obj, serviceUuid, statusCode, uuid;
+        var i, interval, l;
         l = Ladda.create(e.currentTarget);
         l.start();
         if (_this.hasCordova) {
@@ -124,33 +124,36 @@ VerifyView = Backbone.Marionette.ItemView.extend({
               }
             });
           } else {
-            cordova.plugins.SecugenPlugin.register(function(results) {});
-            console.log("SecugenPlugin.register: " + results);
-            $("#message").html(results);
-            l.stop();
-            obj = JSON.parse(results);
-            statusCode = obj.StatusCode;
-            serviceUuid = obj.UID;
-            if (statusCode === 1) {
-              uuid = coconutUtils.uuidGenerator(30);
-              Coconut.currentClient = new Result({
-                _id: uuid,
-                serviceUuid: serviceUuid
-              });
-              console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
-              $("#message").html("No match - you must register.");
-              if (_this.nextUrl != null) {
-                Coconut.router.navigate(_this.nextUrl, true);
+            cordova.plugins.SecugenPlugin.register(function(results) {
+              var obj, serviceUuid, statusCode, uuid;
+              console.log("SecugenPlugin.register: " + results);
+              $("#message").html(results);
+              l.stop();
+              obj = JSON.parse(results);
+              statusCode = obj.StatusCode;
+              serviceUuid = obj.UID;
+              if (statusCode === 1) {
+                uuid = coconutUtils.uuidGenerator(30);
+                Coconut.currentClient = new Result({
+                  _id: uuid,
+                  serviceUuid: serviceUuid
+                });
+                console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
+                $("#message").html("No match - you must register.");
+                if (_this.nextUrl != null) {
+                  return Coconut.router.navigate(_this.nextUrl, true);
+                } else {
+                  return Coconut.router.navigate("registration", true);
+                }
               } else {
-                Coconut.router.navigate("registration", true);
+                return Coconut.router.navigate("displayAdminScanner", true);
               }
-            } else {
-              Coconut.router.navigate("displayAdminScanner", true);
-            }
+            });
           }
         } else {
           i = 1;
           interval = setInterval(function() {
+            var serviceUuid, uuid;
             if (i === 50) {
               uuid = coconutUtils.uuidGenerator(30);
               serviceUuid = coconutUtils.uuidGenerator(30);

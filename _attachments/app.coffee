@@ -288,6 +288,9 @@ class Router extends Backbone.Router
         Coconut.syncView.sync.replicateToServer
           success: ->
               Coconut.syncView.refreshLog()
+        Coconut.syncView.sync.replicateFromServer
+          success: ->
+              Coconut.syncView.refreshLog()
 
   syncGet: (action) ->
     Coconut.router.navigate("",false)
@@ -421,6 +424,7 @@ class Router extends Backbone.Router
         Coconut.menuView = new MenuView()
         Coconut.syncView = new SyncView()
         Coconut.syncView.sync.replicateToServer()
+        Coconut.syncView.sync.replicateFromServer()
         #        Coconut.menuView.render()
 
         Coconut.syncView.update()
@@ -507,6 +511,7 @@ $(() =>
     Coconut.debug = (string) ->
       console.log string
       Coconut.replicationLog = "" unless Coconut.replicationLog?
+      Coconut.replicationLog += "<br/>"
       Coconut.replicationLog += string
   #  $("#log").append string + "<br/>"
 

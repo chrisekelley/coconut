@@ -239,9 +239,9 @@ class Sync extends Backbone.Model
 #        password:account.password
       complete: (result) ->
         if typeof result != 'undefined' && result.ok
-          Coconut.debug "onComplete: Replication is fine. "
+          Coconut.debug "replicateFromServer - onComplete: Replication is fine. "
         else
-          Coconut.debug "onComplete: Replication message: " + JSON.stringify result
+          Coconut.debug "replicateFromServer - onComplete: Replication message: " + JSON.stringify result
       error: (result) ->
           Coconut.debug "error: Replication error: " + JSON.stringify result
       timeout: 60000
@@ -272,9 +272,9 @@ class Sync extends Backbone.Model
 #        password:account.password
       complete: (result) ->
         if typeof result != 'undefined' && result.ok
-          Coconut.debug "onComplete: Replication is fine. "
+          Coconut.debug "replicateToServer - onComplete: Replication is fine. "
         else
-          Coconut.debug "onComplete: Replication message: " + JSON.stringify result
+          Coconut.debug "replicateToServer - onComplete: Replication message: " + JSON.stringify result
       error: (result) ->
         Coconut.debug "error: Replication error: " + JSON.stringify result
       timeout: 60000

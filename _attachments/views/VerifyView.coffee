@@ -115,25 +115,25 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     Coconut.router.navigate "registration", true
             else
               cordova.plugins.SecugenPlugin.register (results) =>
-              console.log "SecugenPlugin.register: " + results
-              $( "#message").html(results)
-              l.stop()
-              obj = JSON.parse(results)
-              statusCode = obj.StatusCode
-              serviceUuid = obj.UID
-              if statusCode == 1
-                uuid = coconutUtils.uuidGenerator(30)
-                Coconut.currentClient = new Result
-                  _id:uuid
-                  serviceUuid:serviceUuid
-                console.log "currentClient: " + JSON.stringify Coconut.currentClient
-                $( "#message").html("No match - you must register.")
-                if  @nextUrl?
-                  Coconut.router.navigate @nextUrl, true
+                console.log "SecugenPlugin.register: " + results
+                $( "#message").html(results)
+                l.stop()
+                obj = JSON.parse(results)
+                statusCode = obj.StatusCode
+                serviceUuid = obj.UID
+                if statusCode == 1
+                  uuid = coconutUtils.uuidGenerator(30)
+                  Coconut.currentClient = new Result
+                    _id:uuid
+                    serviceUuid:serviceUuid
+                  console.log "currentClient: " + JSON.stringify Coconut.currentClient
+                  $( "#message").html("No match - you must register.")
+                  if  @nextUrl?
+                    Coconut.router.navigate @nextUrl, true
+                  else
+                    Coconut.router.navigate "registration", true
                 else
-                  Coconut.router.navigate "registration", true
-              else
-                Coconut.router.navigate "displayAdminScanner", true
+                  Coconut.router.navigate "displayAdminScanner", true
           else
             i=1
             interval = setInterval =>

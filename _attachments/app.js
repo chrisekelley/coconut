@@ -396,7 +396,12 @@ Router = (function(_super) {
     Coconut.router.navigate("sync", false);
     return this.userLoggedIn({
       success: function() {
-        return Coconut.syncView.sync.replicateToServer({
+        Coconut.syncView.sync.replicateToServer({
+          success: function() {
+            return Coconut.syncView.refreshLog();
+          }
+        });
+        return Coconut.syncView.sync.replicateFromServer({
           success: function() {
             return Coconut.syncView.refreshLog();
           }
@@ -572,6 +577,7 @@ Router = (function(_super) {
         Coconut.menuView = new MenuView();
         Coconut.syncView = new SyncView();
         Coconut.syncView.sync.replicateToServer();
+        Coconut.syncView.sync.replicateFromServer();
         Coconut.syncView.update();
         return Backbone.history.start();
       },
@@ -658,6 +664,7 @@ $(function() {
       if (Coconut.replicationLog == null) {
         Coconut.replicationLog = "";
       }
+      Coconut.replicationLog += "<br/>";
       return Coconut.replicationLog += string;
     };
   };
