@@ -20,7 +20,7 @@ individualRegistrationForm =
             "id": "20",
             "_id": "20",
             "label": "DOB",
-            "type": "text",
+            "type": "date-only",
             "repeatable": "false",
             "validation": "",
             "required": "false",

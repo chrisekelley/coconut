@@ -11,7 +11,7 @@ postOperativeFollowupForm =
             "label": "Name of procedure being followed",
             "type": "select",
             "repeatable": "false",
-            "select-options": "Hydrocele",
+            "select-options": "Hydrocele,Trichiasis",
             "validation": "",
             "required": "true",
             "safeLabel": "Nameofprocedurebeingfollowed"

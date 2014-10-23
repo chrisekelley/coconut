@@ -9,7 +9,7 @@ trichiasisForm =
             "id": "345",
             "_id": "345",
             "label": "Date/Time",
-            "type": "datetime",
+            "type": "date-time",
             "repeatable": "false",
             "validation": "",
             "required": "true",
@@ -198,6 +198,36 @@ trichiasisForm =
             "validation": "",
             "required": "true",
             "safeLabel": "GlobePunctureR"
+        },
+        {
+            "id": "324",
+            "_id": "324",
+            "label": "Post-Surgical Treatments",
+            "type": "subheader",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ComplicationsR"
+        },
+        {
+            "id": "325",
+            "_id": "325",
+            "label": "Azithromycin",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "azithromycinR"
+        },
+        {
+            "id": "326",
+            "_id": "326",
+            "label": "Tetracycline eye ointment",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "tetracyclineEyeOintmentR"
         }
     ],
     "collection": "question"

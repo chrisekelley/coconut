@@ -601,7 +601,7 @@ $(function() {
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
       console.log("Init Secugen: this wheel is on fire.");
       cordova.plugins.SecugenPlugin.requestPermission(function(results) {
-        return console.log("SecugenPlugin register: " + results);
+        return console.log("SecugenPlugin requestPermission: " + results);
       });
     }
     window.Coconut = new Marionette.Application();

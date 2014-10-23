@@ -23,6 +23,13 @@ StaticView = Backbone.Marionette.ItemView.extend
   #                $(":checkbox").checkbox();
   #            });
 
+  hasCordova:true
+
+  initialize: ->
+    if typeof cordova is "undefined"
+      console.log "cordova is not defined."
+      @hasCordova = false
+
   scanRetry: ->
     console.log "scanRetry"
     if @user != null
@@ -46,29 +53,39 @@ StaticView = Backbone.Marionette.ItemView.extend
 
   enroll: ->
     console.log "enroll"
-    if typeof Coconut.scannerPayload != 'undefined'
-      console.log 'we got Coconut.scannerPayload: ' + JSON.stringify Coconut.scannerPayload
-      $.post("http://simfant.simprints.com/api/Person/Enroll", Coconut.scannerPayload,
-      (result) =>
-        console.log "response from service: " + JSON.stringify result
-        statusCode = result.StatusCode
-        serviceUuid = result.UID
-        console.log "statusCode: " + statusCode
-        if statusCode != null
-          if statusCode == 1
-            $( "#enrollResults" ).html( 'Success!' );
-            Coconut.currentClient = new Result
-              serviceUuid:serviceUuid
-              Template: Coconut.scannerPayload.Template
-            if typeof @user != 'undefined' && @user != null && @user == 'user'
-              Coconut.trigger "displayUserRegistrationForm"
+    if @hasCordova
+      if typeof Coconut.scannerPayload != 'undefined'
+        console.log 'we got Coconut.scannerPayload: ' + JSON.stringify Coconut.scannerPayload
+        $.post("http://simfant.simprints.com/api/Person/Enroll", Coconut.scannerPayload,
+        (result) =>
+          console.log "response from service: " + JSON.stringify result
+          statusCode = result.StatusCode
+          serviceUuid = result.UID
+          console.log "statusCode: " + statusCode
+          if statusCode != null
+            if statusCode == 1
+              $( "#enrollResults" ).html( 'Success!' );
+              Coconut.currentClient = new Result
+                serviceUuid:serviceUuid
+                Template: Coconut.scannerPayload.Template
+              if typeof @user != 'undefined' && @user != null && @user == 'user'
+                Coconut.trigger "displayUserRegistrationForm"
+              else
+                Coconut.trigger "displayAdminRegistrationForm"
             else
-              Coconut.trigger "displayAdminRegistrationForm"
-          else
-            $( "#enrollResults" ).html( 'Problem.' );
-            Coconut.trigger "displayEnroll"
-      , "json")
-    return
+              $( "#enrollResults" ).html( 'Problem.' );
+              Coconut.trigger "displayEnroll"
+        , "json")
+      return
+    else
+      console.log("Using canned user.")
+      Coconut.currentClient = new Result
+        serviceUuid:Coconut.currentClient.serviceUuid
+        Template: Coconut.scannerPayload.Template
+      if typeof @user != 'undefined' && @user != null && @user == 'user'
+        Coconut.trigger "displayUserRegistrationForm"
+      else
+        Coconut.trigger "displayAdminRegistrationForm"
 
   register: ->
       console.log "register"

@@ -15,6 +15,13 @@ StaticView = Backbone.Marionette.ItemView.extend({
     "click #enroll": "enroll"
   },
   initialize: function() {},
+  hasCordova: true,
+  initialize: function() {
+    if (typeof cordova === "undefined") {
+      console.log("cordova is not defined.");
+      return this.hasCordova = false;
+    }
+  },
   scanRetry: function() {
     console.log("scanRetry");
     if (this.user !== null) {
@@ -38,32 +45,45 @@ StaticView = Backbone.Marionette.ItemView.extend({
   enroll: function() {
     var _this = this;
     console.log("enroll");
-    if (typeof Coconut.scannerPayload !== 'undefined') {
-      console.log('we got Coconut.scannerPayload: ' + JSON.stringify(Coconut.scannerPayload));
-      $.post("http://simfant.simprints.com/api/Person/Enroll", Coconut.scannerPayload, function(result) {
-        var serviceUuid, statusCode;
-        console.log("response from service: " + JSON.stringify(result));
-        statusCode = result.StatusCode;
-        serviceUuid = result.UID;
-        console.log("statusCode: " + statusCode);
-        if (statusCode !== null) {
-          if (statusCode === 1) {
-            $("#enrollResults").html('Success!');
-            Coconut.currentClient = new Result({
-              serviceUuid: serviceUuid,
-              Template: Coconut.scannerPayload.Template
-            });
-            if (typeof _this.user !== 'undefined' && _this.user !== null && _this.user === 'user') {
-              return Coconut.trigger("displayUserRegistrationForm");
+    if (this.hasCordova) {
+      if (typeof Coconut.scannerPayload !== 'undefined') {
+        console.log('we got Coconut.scannerPayload: ' + JSON.stringify(Coconut.scannerPayload));
+        $.post("http://simfant.simprints.com/api/Person/Enroll", Coconut.scannerPayload, function(result) {
+          var serviceUuid, statusCode;
+          console.log("response from service: " + JSON.stringify(result));
+          statusCode = result.StatusCode;
+          serviceUuid = result.UID;
+          console.log("statusCode: " + statusCode);
+          if (statusCode !== null) {
+            if (statusCode === 1) {
+              $("#enrollResults").html('Success!');
+              Coconut.currentClient = new Result({
+                serviceUuid: serviceUuid,
+                Template: Coconut.scannerPayload.Template
+              });
+              if (typeof _this.user !== 'undefined' && _this.user !== null && _this.user === 'user') {
+                return Coconut.trigger("displayUserRegistrationForm");
+              } else {
+                return Coconut.trigger("displayAdminRegistrationForm");
+              }
             } else {
-              return Coconut.trigger("displayAdminRegistrationForm");
+              $("#enrollResults").html('Problem.');
+              return Coconut.trigger("displayEnroll");
             }
-          } else {
-            $("#enrollResults").html('Problem.');
-            return Coconut.trigger("displayEnroll");
           }
-        }
-      }, "json");
+        }, "json");
+      }
+    } else {
+      console.log("Using canned user.");
+      Coconut.currentClient = new Result({
+        serviceUuid: Coconut.currentClient.serviceUuid,
+        Template: Coconut.scannerPayload.Template
+      });
+      if (typeof this.user !== 'undefined' && this.user !== null && this.user === 'user') {
+        return Coconut.trigger("displayUserRegistrationForm");
+      } else {
+        return Coconut.trigger("displayAdminRegistrationForm");
+      }
     }
   },
   register: function() {

@@ -419,6 +419,7 @@ QuestionView = (function(_super) {
         Coconut.router.navigate("edit/result/" + model.id, false);
         Coconut.menuView.update();
         if (_this.result.complete()) {
+          Coconut.syncView.sync.replicateToServer();
           if (_this.result.question() === 'Admin Registration') {
             return Coconut.router.navigate("postAdminRegistrationMenu", true);
           } else if (_this.result.question() === 'Individual Registration') {
@@ -553,6 +554,10 @@ QuestionView = (function(_super) {
               return "";
             case "instructions":
               return "<p>" + text + "</p>";
+            case "date-only":
+              return "<div class='form-group'>\n                  <div class='input-group date' id='datetimepicker1'>\n                    <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' data-date-showToday='false' placeholder='Enter " + name + "'/>\n                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>                    </span>\n                  </div>\n                </div>\n                 <script type=\"text/javascript\">\n                  $(function () {\n                  $('#" + question_id + "').datetimepicker({\n                                    pickTime: false,\n                                    showToday: false\n                                });\n                });\n                </script>\n";
+            case "date-time":
+              return "<div class='form-group'>                  <div class='input-group date' id='datetimepicker1'>                    <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='Enter " + name + "'/>                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>                    </span>                  </div>                </div>                 <script type=\"text/javascript\">                  $(function () {                  $('#" + question_id + "').datetimepicker();                });                </script>";
             default:
               return "<div class='form-group'><input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='Enter " + name + "'></div>";
           }

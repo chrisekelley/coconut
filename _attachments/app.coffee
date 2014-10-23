@@ -370,7 +370,7 @@ class Router extends Backbone.Router
                     "padding":"10px"
                   $("#content form label").css
                     "color":"white"
-                    
+
 
   design: ->
     @userLoggedIn
@@ -438,7 +438,7 @@ $(() =>
     if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
       console.log("Init Secugen: this wheel is on fire.")
       cordova.plugins.SecugenPlugin.requestPermission (results) ->
-        console.log "SecugenPlugin register: " + results
+        console.log "SecugenPlugin requestPermission: " + results
 
     window.Coconut = new Marionette.Application()
     matchResults = document.location.pathname.match(/^\/(.*)\/_design\/(.*?)\//)
