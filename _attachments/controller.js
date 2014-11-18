@@ -2,6 +2,13 @@
 var Controller;
 
 Controller = {
+  displaySiteNav: function() {
+    var staticView;
+    staticView = new SiteNavView({
+      template: JST["_attachments/templates/SiteNavView.handlebars"]
+    });
+    Coconut.siteNav.show(staticView);
+  },
   displayUserScanner: function() {
     var staticView;
     staticView = new VerifyView({

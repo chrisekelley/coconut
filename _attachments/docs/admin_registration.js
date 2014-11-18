@@ -4,6 +4,7 @@ adminRegistrationForm =
     "id": "Admin Registration",
     "enabled": "true",
     "required": "false",
+    "safeLabel": "AdminRegistration",
     "questions": [
         {
             "id": "19",

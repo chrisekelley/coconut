@@ -418,6 +418,7 @@ class Router extends Backbone.Router
 #        "
 #        $("[data-role=footer]").navbar()
         $('#application-title').html Coconut.config.title()
+        Controller.displaySiteNav()
         Coconut.loginView = new LoginView()
         Coconut.questions = new QuestionCollection()
         Coconut.questionView = new QuestionView()
@@ -429,6 +430,7 @@ class Router extends Backbone.Router
 
         Coconut.syncView.update()
         Backbone.history.start()
+        coconutUtils.checkVersion()
       error: ->
         Coconut.localConfigView ?= new LocalConfigView()
         Coconut.localConfigView.render()
@@ -465,6 +467,7 @@ $(() =>
     Coconut.currentClient = null;
     Coconut.currentAdmin = null;
 
+    Coconut.addRegions siteNav: "#siteNav"
     Coconut.addRegions mainRegion: "#content"
     Coconut.addRegions dashboardRegion: "#dashboard"
 

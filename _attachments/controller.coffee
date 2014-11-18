@@ -1,4 +1,9 @@
 Controller =
+  displaySiteNav: () ->
+    staticView = new SiteNavView(template: JST["_attachments/templates/SiteNavView.handlebars"])
+    Coconut.siteNav.show staticView
+    return
+
   displayUserScanner: () ->
     staticView = new VerifyView(template: JST["_attachments/templates/ScanVerifyView.handlebars"])
     staticView.nextUrl = "#scanRetry/user"
@@ -143,3 +148,4 @@ Controller =
       dashboardView = new ClientDashboardView {model: Coconut.currentClient}
       dashboardLayout.dashboardRegion.show dashboardView
       dashboardLayout.contentRegion.show(new HomeCompositeView viewOptions)
+

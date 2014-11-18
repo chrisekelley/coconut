@@ -48,32 +48,41 @@
 
   coconutUtils.checkVersion = function () {
     console.log("Checking for new version of app.");
-    $.ajax({ type: "GET", url: "https://dl.dropboxusercontent.com/s/nxvrvdtpvmqomxd/version.xml?token_hash=AAHFO2PaE2L6pTZQoDYYU1PVAKS6qMK6__PZgU3LYzUgGg&dl=1", dataType: "xml",
-      success: function(xml) {
-        console.log("xml: " + xml);
-        $(xml).find('version').each(function(){
-          var vcode = $(this).find('v_code').text(); //get the v_code in the xml file
-          console.log("Remote version: " + vcode);
-          window.plugins.version.getVersionCode(
-            function(version_code) {
+    var url = Coconut.config.cloud_url() + "/version";
+    $.ajax(url, { type: 'GET', dataType: 'json',
+      success: function(data) {
+        console.log("data: " + JSON.stringify(data));
+        var remoteVersion = data.version;
+        coconutUtils.remoteUrl = data.url;
+        console.log("Remote version: " + remoteVersion);
+        window.plugins.version.getVersionCode(
+          function(version_code) {
               console.log("Installed version: " + version_code);
-              if(version_code != vcode){
-                console.log("Upgrade app!");
-                navigator.notification.beep(3);
-                navigator.notification.vibrate(2000);
-                navigator.notification.confirm(
-                  'A new version is out! Get it now!',  // message
-                  onVersion,            // callback to invoke with index of button pressed
-                  'Update available',                 // title
-                  ['Update now!', 'Maybe later']     // buttonLabels
-                );
+              if(version_code != remoteVersion){
+                  console.log("Upgrade app!");
+                  navigator.notification.beep(3);
+                  navigator.notification.vibrate(2000);
+                  navigator.notification.confirm(
+                      'A new version is out! Get it now!',  // message
+                      coconutUtils.onVersion,            // callback to invoke with index of button pressed
+                      'Update available',                 // title
+                      ['Update now!', 'Maybe later']     // buttonLabels
+                  );
+                  var log = new Log();
+                  log.save({message: "local version != remote version.", localVersion:version_code, remoteVersion: remoteVersion}, {
+                      success: function() {
+                          console.log("Saved log about update.");
+                      },
+                      error: function(model, err, cb) {
+                          return console.log(JSON.stringify(err));
+                      }
+                  });
               }
-            },
-            function(errorMessage) {
+          },
+          function(errorMessage) {
               console.log("Error while downloading update: " + errorMessage);
-            }
-          );
-        });
+          }
+        );
       }
     });
   }
@@ -81,12 +90,33 @@
   coconutUtils.onVersion = function (button) {
     if(button == 1){
       //window.open('https://dl.dropbox.com/s/o1kur0w2skwx7a3/Olutindo-debug.apk?dl=1','_blank');
-      downloadFile()
+        coconutUtils.downloadFile()
     }
   }
 
-//kudos: http://stackoverflow.com/questions/11455323/how-to-download-apk-within-phonegap-app
-//http://www.raymondcamden.com/index.cfm/2013/5/1/Using-the-Progress-event-in-PhoneGap-file-transfers
+
+  coconutUtils.saveLog = function(log, title, message, success, error) {
+      if (log == null) {
+          log = new Log();
+      }
+      if (success == null) {
+          success = function() {
+              console.log("Saved log about " + title);
+          };
+      }
+      if (error == null) {
+          error = function() {
+              return console.log(JSON.stringify(err));
+          };
+      }
+      log.save({message: message}, null, {
+          success: success,
+          error: error
+      });
+  };
+
+  //kudos: http://stackoverflow.com/questions/11455323/how-to-download-apk-within-phonegap-app
+  //http://www.raymondcamden.com/index.cfm/2013/5/1/Using-the-Progress-event-in-PhoneGap-file-transfers
   coconutUtils.downloadFile = function (){
     var fileSystem;
     console.log("downloading file.")
@@ -95,8 +125,12 @@
       function(fs) {
         fileSystem = fs;
         var ft = new FileTransfer();
-        var uri = encodeURI("https://dl.dropbox.com/s/o1kur0w2skwx7a3/Olutindo-debug.apk?dl=1");
-        var downloadPath = fileSystem.root.fullPath + "/Olutindo-debug.apk";
+        //var uri = encodeURI("https://dl.dropbox.com/s/o1kur0w2skwx7a3/Olutindo-debug.apk?dl=1");
+        console.log("coconutUtils.remoteUrl: " + coconutUtils.remoteUrl);
+        var uri = encodeURI(coconutUtils.remoteUrl);
+        //var downloadPath = fileSystem.root.fullPath + "/Olutindo-debug.apk";
+        var store = cordova.file.externalRootDirectory;
+        var downloadPath = store + "kiwi.apk";
         navigator.notification.progressStart("Application Update", "Initiating download...");
         ft.onprogress = function(progressEvent) {
           if (progressEvent.lengthComputable) {
@@ -109,25 +143,44 @@
           function(theFile) {
             navigator.notification.progressStop();
             console.log("download complete: " + theFile.toURL());
+            coconutUtils.saveLog(null, "Download complete", "File downloaded to " + theFile.toURL());
             window.plugins.webintent.startActivity({
                 action: window.plugins.webintent.ACTION_VIEW,
-                url: 'file://' + theFile.fullPath,
+                //url: 'file://' + theFile.fullPath,
+                url: downloadPath,
                 type: 'application/vnd.android.package-archive'
               },
-              function() {},
               function() {
-                alert('Failed to open URL via Android Intent.');
-                console.log("Failed to open URL via Android Intent. URL: " + theFile.fullPath)
+                var log = new Log();
+                log.save({message: "New app update install has begun "}, {
+                  success: function() {
+                      console.log("Saved log about New app update install has begun.");
+                      Coconut.syncView.sync.replicateToServer
+                  },
+                  error: function(model, err, cb) {
+                      return console.log(JSON.stringify(err));
+                  }
+                });
+              },
+              function(e) {
+                var message = 'Failed to open URL via Android Intent. URL: ' + theFile;
+                alert(message);
+                console.log(message);
+                coconutUtils.saveLog(null, "Install problem: ", message);
               }
             );
           },
           function(error) {
-            alert("download error: " + JSON.stringify(e));
-            console.log("download error: " + JSON.stringify(e));
+            var message = "download error: " + JSON.stringify(e);
+            alert(message);
+            console.log(message);
+            coconutUtils.saveLog(null, "download error: ", message);
           });
       }, function(e) {
-        alert('failed to get fs: ' + JSON.stringify(e));
-        console.log("failed to get fs: " + JSON.stringify(e));
+        var message = 'failed to get fs: ' + JSON.stringify(e);
+        alert(message);
+        console.log(message);
+        coconutUtils.saveLog(null, "FileTransfer error: ", message);
       });
   }
 

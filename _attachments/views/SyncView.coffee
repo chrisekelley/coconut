@@ -9,11 +9,12 @@ class SyncView extends Backbone.View
 
   render: =>
       @$el.html "
-        <h2>Cloud Server: <span class='sync-target'>#{@sync.target()}</span></h2>
-        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>Send data</a>
-        <h2>Replication Log</h2>
-        <p>The replication log displays the result of replication to the master server.
-        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>Refresh log</a>
+        <h2>" + polyglot.t("server") + "</h2>
+        <p><span class='sync-target'>#{@sync.target()}</span></p>
+        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>" + polyglot.t("sendData") + "</a>
+        <h2>" + polyglot.t("replicationLog") + "</h2>
+        <p>" + polyglot.t("replicationLogDescription") + "
+        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>
         </p>
         <div id=\"replicationLog\"></div>"
       $("a").button()

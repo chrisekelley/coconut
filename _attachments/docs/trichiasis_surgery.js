@@ -4,6 +4,7 @@ trichiasisForm =
     "id": "Trichiasis Surgery",
     "enabled": "true",
     "required": "false",
+    "safeLabel": "trichiasisSurgery",
     "questions": [
         {
             "id": "345",
@@ -62,7 +63,7 @@ trichiasisForm =
             "label": "Suture Type",
             "type": "select",
             "repeatable": "false",
-            "select-options": "Silk, Absorable",
+            "select-options": "Silk, Absorbable",
             "validation": "",
             "required": "true",
             "safeLabel": "SutureTypeL"
@@ -144,7 +145,7 @@ trichiasisForm =
             "label": "Suture Type",
             "type": "select",
             "repeatable": "false",
-            "select-options": "Silk, Absorable",
+            "select-options": "Silk, Absorbable",
             "validation": "",
             "required": "true",
             "safeLabel": "SutureTypeR"
@@ -207,7 +208,7 @@ trichiasisForm =
             "repeatable": "false",
             "validation": "",
             "required": "true",
-            "safeLabel": "ComplicationsR"
+            "safeLabel": "PostSurgicalTreatments"
         },
         {
             "id": "325",

@@ -68,9 +68,14 @@ QuestionView = (function(_super) {
   };
 
   QuestionView.prototype.render = function() {
-    var autocompleteElements, skipperList,
+    var autocompleteElements, formNameText, i18nFormNameText, skipperList,
       _this = this;
-    this.$el.html("    <style>      .message      {        color: grey;        font-weight: bold;        padding: 10px;        border: 1px yellow dotted;        background: yellow;        display: none;      }      label.radio {        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      input[type='radio']:checked + label {        background-color:#ddd;        background: #5393c5;        background-image: -webkit-gradient(linear,left top,left bottom,from(#5393c5),to(#6facd5));        background-image: -webkit-linear-gradient(#5393c5,#6facd5);        background-image: -moz-linear-gradient(#5393c5,#6facd5);        background-image: -ms-linear-gradient(#5393c5,#6facd5);        background-image: -o-linear-gradient(#5393c5,#6facd5);        background-image: linear-gradient(#5393c5,#6facd5);      }      input[type='radio']{        height: 0px;      }      div.question.radio{        padding-top: 8px;        padding-bottom: 8px;      }      .tt-hint{        display:none      }      .tt-dropdown-menu{        width: 100%;        background-color: lightgray;      }      .tt-suggestion{        background-color: white;        border-radius:20px;           display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      .tt-suggestion .{      }    </style>      <!--      <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>        <a href='#help/" + this.model.id + "'>Help</a>      </div>      -->      <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>        Saving...      </div>      <h1>" + this.model.id + "</h1>      <div id='question-view'>        <form onsubmit=\"return false;\">          " + (this.toHTMLForm(this.model)) + "            <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">    <span class=\"ui-btn-inner ui-btn-corner-all\">    <span class=\"ui-btn-text\">Submit</span></span>    <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>    <input type=\"hidden\" id=\"complete\" name=\"complete\"/>    </div>    </form>      </div>    ");
+    formNameText = this.model.id;
+    i18nFormNameText = polyglot.t(formNameText);
+    if (i18nFormNameText) {
+      formNameText = i18nFormNameText;
+    }
+    this.$el.html("    <style>      .message      {        color: grey;        font-weight: bold;        padding: 10px;        border: 1px yellow dotted;        background: yellow;        display: none;      }      label.radio {        border-radius:20px;        display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      input[type='radio']:checked + label {        background-color:#ddd;        background: #5393c5;        background-image: -webkit-gradient(linear,left top,left bottom,from(#5393c5),to(#6facd5));        background-image: -webkit-linear-gradient(#5393c5,#6facd5);        background-image: -moz-linear-gradient(#5393c5,#6facd5);        background-image: -ms-linear-gradient(#5393c5,#6facd5);        background-image: -o-linear-gradient(#5393c5,#6facd5);        background-image: linear-gradient(#5393c5,#6facd5);      }      input[type='radio']{        height: 0px;      }      div.question.radio{        padding-top: 8px;        padding-bottom: 8px;      }      .tt-hint{        display:none      }      .tt-dropdown-menu{        width: 100%;        background-color: lightgray;      }      .tt-suggestion{        background-color: white;        border-radius:20px;        display:block;        padding:4px 11px;        border: 1px solid black;        cursor: pointer;        text-decoration: none;      }      .tt-suggestion .{      }    </style>      <!--      <div style='position:fixed; right:5px; color:white; padding:20px; z-index:5' id='messageText'>        <a href='#help/" + this.model.id + "'>Help</a>      </div>      -->      <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>        Saving...      </div>      <h1>" + formNameText + "</h1>      <div id='question-view'>        <form onsubmit=\"return false;\">          " + (this.toHTMLForm(this.model)) + "            <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">    <span class=\"ui-btn-inner ui-btn-corner-all\">    <span class=\"ui-btn-text\">Submit</span></span>    <button type=\"submit\" data-theme=\"c\" id=\"submitButton\" name=\"submit\" value=\"true\" class=\"ui-btn-hidden\" aria-disabled=\"false\">Submit</button>    <input type=\"hidden\" id=\"complete\" name=\"complete\"/>    </div>    </form>      </div>    ");
     this.updateCache();
     this.updateSkipLogic();
     skipperList = [];
@@ -450,7 +455,7 @@ QuestionView = (function(_super) {
       questions = [questions];
     }
     return _.map(questions, function(question) {
-      var div, html, index, label, name, newGroupId, option, options, question_id, repeatable;
+      var div, html, i18nKey, i18nLabelText, i18nOptionText, index, label, labelText, name, newGroupId, option, optionText, options, question_id, repeatable;
       if (question.repeatable() === "true") {
         repeatable = "<button>+</button>";
       } else {
@@ -461,6 +466,12 @@ QuestionView = (function(_super) {
         if (name === null) {
           name = question.safeLabel();
         }
+        labelText = question.label();
+        i18nLabelText = polyglot.t(question.get('safeLabel'));
+        if (i18nLabelText) {
+          labelText = i18nLabelText;
+        }
+        console.log("labelText:" + labelText);
         window.skipLogicCache[name] = question.skipLogic() !== '' ? CoffeeScript.compile(question.skipLogic(), {
           bare: true
         }) : '';
@@ -474,19 +485,19 @@ QuestionView = (function(_super) {
         }
         if (question.type() === 'header') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
-          label = "<h2>" + (question.label()) + " </h2>";
+          label = "<h2>" + labelText + " </h2>";
         } else if (question.type() === 'subheader') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
-          label = "<h3>" + (question.label()) + " </h3>";
+          label = "<h3>" + labelText + " </h3>";
         } else if (question.type() === 'spacer') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
           label = "<p>&nbsp</p>";
         } else if (question.type() === 'instructions') {
           div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
-          label = "<p>" + (question.label()) + " </p>";
+          label = "<p>" + labelText + " </p>";
         } else {
           div = "<div          " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + "          data-required='" + (question.required()) + "'          class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'          data-question-name='" + name + "'          data-question-id='" + question_id + "'          data-action_on_change='" + (_.escape(question.actionOnChange())) + "'          >";
-          label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + (question.label()) + " <span></span></label>";
+          label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + labelText + " <span></span></label>";
         }
         return "          " + div + "          " + ((function() {
           switch (question.type()) {
@@ -506,11 +517,18 @@ QuestionView = (function(_super) {
               if (this.readonly) {
                 return question.value();
               } else {
-                html = "<div class='form-group'><select name='" + name + "' id='" + question_id + "' class='form-control'><option value=''> -- Select One -- </option>";
+                html = ("<div class='form-group'><select name='" + name + "' id='" + question_id + "' class='form-control'><option value=''> -- ") + polyglot.t("SelectOne") + " -- </option>";
                 _ref1 = question.get("select-options").split(/, */);
                 for (index = _i = 0, _len = _ref1.length; _i < _len; index = ++_i) {
                   option = _ref1[index];
-                  html += "<option name='" + name + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + option + "</option>";
+                  optionText = option;
+                  i18nKey = question.get('safeLabel') + "::" + optionText;
+                  i18nOptionText = polyglot.t(i18nKey);
+                  if (i18nOptionText !== null) {
+                    optionText = i18nOptionText;
+                  }
+                  console.log("labelText: " + labelText + " optionText: " + optionText);
+                  html += "<option name='" + name + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + optionText + "</option>";
                 }
                 return html += "</select></div>";
               }
@@ -529,7 +547,7 @@ QuestionView = (function(_super) {
               if (this.readonly) {
                 return "<div class='form-group'><input class='form-control' name='" + name + "' type='text' id='" + question_id + "' value='" + (_.escape(question.value())) + "'></input></div>";
               } else {
-                return "<div class='form-group'><input  class='form-control' name='" + name + "' id='" + question_id + "' type='checkbox' value='true'></input>                    <label class= 'checkbox-label' type='" + (question.type()) + "' for='" + question_id + "'>" + (question.label()) + " <span></span></label>                   </div>";
+                return "<div class='form-group'>                    <input  class='form-control' name='" + name + "' id='" + question_id + "' type='checkbox' value='true'></input>                    <label class= 'checkbox-label' type='" + (question.type()) + "' for='" + question_id + "'>" + labelText + " <span></span></label>                   </div>";
               }
               break;
             case "autocomplete from list":
@@ -555,11 +573,11 @@ QuestionView = (function(_super) {
             case "instructions":
               return "<p>" + text + "</p>";
             case "date-only":
-              return "<div class='form-group'>\n                  <div class='input-group date' id='datetimepicker1'>\n                    <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' data-date-showToday='false' placeholder='Enter " + name + "'/>\n                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>                    </span>\n                  </div>\n                </div>\n                 <script type=\"text/javascript\">\n                  $(function () {\n                  $('#" + question_id + "').datetimepicker({\n                                    pickTime: false,\n                                    showToday: false\n                                });\n                });\n                </script>\n";
+              return ("<div class='form-group'>\n                  <div class='input-group date' id='datetimepicker1'>\n                    <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' data-date-showToday='false' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'/>\n                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>                    </span>\n                  </div>\n                </div>\n                 <script type=\"text/javascript\">\n                  $(function () {\n                  $('#" + question_id + "').datetimepicker({\n                                    pickTime: false,\n                                    showToday: false\n                                });\n                });\n                </script>\n");
             case "date-time":
-              return "<div class='form-group'>                  <div class='input-group date' id='datetimepicker1'>                    <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='Enter " + name + "'/>                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>                    </span>                  </div>                </div>                 <script type=\"text/javascript\">                  $(function () {                  $('#" + question_id + "').datetimepicker();                });                </script>";
+              return ("<div class='form-group'>                  <div class='input-group date' id='datetimepicker1'>                    <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'/>                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>                    </span>                  </div>                </div>                 <script type=\"text/javascript\">                  $(function () {                  $('#" + question_id + "').datetimepicker();                });                </script>");
             default:
-              return "<div class='form-group'><input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='Enter " + name + "'></div>";
+              return ("<div class='form-group'><input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'></div>");
           }
         }).call(_this)) + "          </div>          " + repeatable + "        ";
       } else {

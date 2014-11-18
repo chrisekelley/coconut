@@ -40,13 +40,13 @@ The npm start task (see package.json) runs a small http server, launches a grunt
 Use [bower](bower.io). The following libs are already installed. The "-S" switch saves the lib to your bower.json.
 
     bower install -S pouchdb
-    bower install -S https://raw.githubusercontent.com/jo/backbone-pouch/master/backbone-pouch.js  
+    bower install -S https://raw.githubusercontent.com/jo/backbone-pouch/master/backbone-pouch.js
 
 ## Form building tips
 
 Login as admin to create/edit forms. See the Setup instructions for creating the admin user.
 
-Add a complete checkbox at the bottom of the form to make it easy to view the results. 
+Add a complete checkbox at the bottom of the form to make it easy to view the results.
 
 Change the routing after a form is submitted in QuestionView:
 
@@ -57,59 +57,95 @@ Change the routing after a form is submitted in QuestionView:
 
           # Update the menu
           Coconut.menuView.update()
-      
+
           if @result.complete()
             if @result.question == 'Admin Registration'
               Coconut.router.navigate("postUserRegistrationMenu",true)
             else
               Coconut.router.navigate("",true)
-              
+
 ## Adding new form element types
 
 If you need to add a new element to the form builder, modify :
-- DesignView.coffee questionTypes 
-- QuestionView.coffee 
+- DesignView.coffee questionTypes
+- QuestionView.coffee
 
 ## Compiling Templates
 
 The following grunt task will monitor _attachments/templates and pre-compile your handlebars templates:
 
-    grunt watch 
-    
+    grunt watch
+
 The npm start task (see package.json) runs this task for you.
 
 ## Setup
 
-The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you. 
+The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you.
 See the Pouch watchr section below for details and dependencies.
 
-This app is designed to sync with a central server for configuration data. Create another couch called coconut-central. 
+This app is designed to sync with a central server for configuration data. Create another couch called coconut-central.
 Upload samplejson/coconut.config to it.
 
 You can also create another couch to sync data to it. See the name for synchronization_target in samplejson/coconut.config.
 
 The first time the app runs, enter the url to coconut-central.
 
-To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly, 
+To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly,
 it may have already sync'd these users over. If not, well here you go.
 
 ## What are the important record identifiers
 
  - clientId = Coconut.currentClient.get("_id")
- 
+
+## How do I handle application updates?
+
+Increment android:versionCode="1" in AndroidManifest.xml. Edit version on the CouchDB server
+
+    {"_id":"version","_rev":"3-e79c2920983393d26fd0c1d919358cf4","version":"1.1","url":"http://internet.org/kiwi.apk"}
+
+## Internationalization (i18n)
+
+Kiwi uses the [node-polyglot](https://www.npmjs.org/package/node-polyglot) lib to handle multiple languages. Place your language files in the 18n directory.
+
+Use the following syntax in your coffee file:
+
+    polyglot = new Polyglot()
+    polyglot.extend({
+        "Home": "Home"
+        "Sync": "Sync"
+        "SutureTypeL": "Suture Type"
+        "SutureTypeL::Silk": "Silk"
+        "SutureTypeL::Absorbable": "Absorbable"
+    })
+
+Text for dropdowns uses two semi-colons between the field identifier and the dropdown key.
+
+You may wish to register a handlebars helper (for use in templates) at the end of your file:
+
+    Handlebars.registerHelper   'polyglot', (phrase)->
+        polyglot.t(phrase)
+
+In your handlebars template, use the following syntax:
+
+    {{{polyglot "Home" }}}
+
+If you need to use polyglot in your js/coffee files:
+
+    polyglot.t("replicationLogDescription")
+
 ## App flow
 
-### Identification: 
+### Identification:
 
-If a client is not identified, the id service provides a service-specific uuid (serviceUuid). The app also generates a uuid, 
+If a client is not identified, the id service provides a service-specific uuid (serviceUuid). The app also generates a uuid,
 which is used to identify the client.
- 
+
 ## How do I add the Dashboard to a page?
- 
-The Dashboard displays the gender and birthdate of the current client. It is rendered using a 
+
+The Dashboard displays the gender and birthdate of the current client. It is rendered using a
 [Marionette LayoutView](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.layoutview.md).
 
-Place your view in dashboardLayout.contentRegion. 
+Place your view in dashboardLayout.contentRegion.
 
     dashboardLayout = new DashboardLayout();
     Coconut.mainRegion.show dashboardLayout
@@ -121,37 +157,37 @@ Place your view in dashboardLayout.contentRegion.
 ## How do I customise page flow?
 
 app.js constructs the Backbone.Router. List the routes in the routes method:
-    
+
     routes: {
         	"home":                 "home",    // #home
         	"newPatient":                 "newPatient",    // #newPatient
         	"arrestDocket":                 "arrestDocket",    // #arrestDocket
             "*actions": "defaultRoute" // matches http://example.com/#anything-here
         }
-     
+
 and create a method for each route:
-    
+
         newPatient: function () {
         	registration = new Form({_id: "PatientRegistration"});
         	registration.fetch({
         		success: function(model){
-        			(new FormView({model: model})).render(); 
+        			(new FormView({model: model})).render();
         		}
         	});
         },
 
-           
+
 ## Watchr script
 
 The npm start script launches the pouch.watchr script. Here is some info about it and its dependencies:
 
-It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a little [watchr](http://rubygems.org/gems/watchr) 
-script that watches for changes to any relevant files and then automatically pushes them into your couch. 
+It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a little [watchr](http://rubygems.org/gems/watchr)
+script that watches for changes to any relevant files and then automatically pushes them into your couch.
 To get it you need to install rubygems and watchr:
 
     apt-get install rubygems
     gem install watchr
-    watchr pouch.watchr 
+    watchr pouch.watchr
 
 ## Help!
 

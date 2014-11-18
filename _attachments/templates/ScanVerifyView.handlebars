@@ -1,24 +1,18 @@
-<h2>Instructions</h2>
-<p><i>Please read the following text to the client:</i>
-    We want you to know that the fingerprint scan is only used to verify your identity. We will only associate your gender and age with your fingerprint.
-    No other information will be stored about you.<p>
+<h2>{{{polyglot "Instructions" }}}</h2>
+<p><i>{{{polyglot "clientInstructions" }}}</i>
+    {{{polyglot "clientText" }}}<p>
     <p>
-    <strong>Do you consent to having your fingerprint scanned?</strong>
+    <strong>{{{polyglot "consentQuestion" }}}</strong>
     </p>
-    <p>
-    Nós queremos que você saiba que a digitalização de impressões digitais só é usado para verificar a sua identidade.
-    Nós só vai associar o seu sexo e idade com sua impressão digital. Nenhuma outra informação será armazenada sobre você.
-    </p>
-    <p>
-    <strong>Você aceita que as suas impressões digitais digitalizadas?</strong>
-    </p>
-<h3>If the client has consented, please proceed.</h3>
-<p>To identify or register an individual, please place thumb on the scanner and press the "Scan" button.</p>
+<h3>{{{polyglot "consentProceed" }}}</h3>
+<p>{{{polyglot "scanInstructions" }}}</p>
 <p>
 <a data-role="button" id="identifyIndividual" class="btn btn-primary btn-lg ladda-button" data-style="expand-right"><span class="ladda-label">Scan</span></a>
 </p>
 
-<div id="message"></div>
+<div id="results">
+    <p id="message"></p>
+</div>
 <!--<style shim-shadowdom>-->
 
     <!--paper-progress::shadow #progressContainer {-->

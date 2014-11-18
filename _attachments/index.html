@@ -64,6 +64,11 @@
       <!--<script type="text/javascript" src="js-libraries/sha1.js"></script>-->
       <!--<script type="text/javascript" src="js-libraries/coffee-script.js"></script>-->
 
+      <!-- i18n library -->
+      <!--<script type="text/javascript" src="bower_components/polyglot/lib/polyglot.js"></script>-->
+      <script type="text/javascript" src="js-libraries/polyglot.js"></script>
+      <script type="text/javascript" src="i18n/language_chooser.js"></script>
+      <!--<script type="text/javascript" src="i18n/pt_PT.js"></script>-->
 
       <!-- The app itself - note that if new models/views are added they need to be added here-->
       <script type="text/javascript" src="templates/precompiled.handlebars.js"></script>
@@ -79,9 +84,11 @@
       <script type="text/javascript" src="models/SecondaryIndexCollection.js"></script>
       <script type="text/javascript" src="models/Sync.js"></script>
       <script type="text/javascript" src="models/LocalConfig.js"></script>
+      <script type="text/javascript" src="models/Log.js"></script>
       <script type="text/javascript" src="models/Message.js"></script>
       <script type="text/javascript" src="models/MessageCollection.js"></script>
       <script type="text/javascript" src="models/Help.js"></script>
+      <script type="text/javascript" src="views/SiteNavView.js"></script>
       <script type="text/javascript" src="views/LoginView.js"></script>
       <script type="text/javascript" src="views/DesignView.js"></script>
       <script type="text/javascript" src="views/QuestionView.js"></script>
@@ -136,25 +143,7 @@
       <link href="css/index.css" type="text/css" rel="stylesheet" />
   </head>
   <body>
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-      <div class="container">
-          <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-              <a href="#"><img src="images/Kiwi-Logo-150.png" height="80"/></a>
-          </div>
-          <div class="collapse navbar-collapse">
-              <ul class="nav navbar-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#sync">Sync</a></li>
-                  <li><a href="#displayUserScanner">Scanner</a></li>
-              </ul>
-          </div><!--/.nav-collapse -->
-      </div>
+  <div data-role='siteNav' class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="siteNav">
   </div>
     <div class="container" data-role='page'>
     <!--<div id="content" >-->

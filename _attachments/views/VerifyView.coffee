@@ -8,6 +8,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
       "click #scan": "scanNewIndividual"
       "click #verifyYes": "displayNewUserRegistration"
       "click #verifyNo": "displayNewUserRegistration"
+      "click #refresh": "refresh"
 
     nextUrl:null
 
@@ -61,16 +62,22 @@ VerifyView = Backbone.Marionette.ItemView.extend
             console.log "method: " + method
             if (method == "Identify")
               cordova.plugins.SecugenPlugin.identify (results) =>
-                console.log "SecugenPlugin.identify: " + results
-                $( "#message").html(results)
+                message = results
+                if results == "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app."
+                  message = polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a>'
+                  $("#message").html message
+                console.log "SecugenPlugin.identify: " + message
                 l.stop()
-                serviceResponse = JSON.parse(results);
-                scannerPayload = serviceResponse.scannerPayload
-                serviceMessage = serviceResponse.serviceMessage
-                statusCode = serviceMessage.StatusCode
-                serviceUuid = serviceMessage.UID
-                console.log 'query for serviceUuid: ' + serviceUuid
-                if statusCode == 1
+                try
+                  serviceResponse = JSON.parse  results
+                  scannerPayload = serviceResponse.scannerPayload
+                  serviceMessage = serviceResponse.serviceMessage
+                  statusCode = serviceMessage.StatusCode
+                  serviceUuid = serviceMessage.UID
+                  console.log 'query for serviceUuid: ' + serviceUuid
+                catch error
+                    console.log error
+                if statusCode != null && statusCode == 1
                   viewOptions = {}
                   users = new SecondaryIndexCollection
                   users.fetch
@@ -198,7 +205,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
 #        revealSlider event, method
 #      return
 
-    
+
     #        revealSlider: function(e) {
     #            console.log("click scan.")
     #
@@ -224,10 +231,10 @@ VerifyView = Backbone.Marionette.ItemView.extend
     #                i++;
     #            },50);
     #        },
-    
+
     #
     #         appends @message to the message div:
-    #         
+    #
     display: (message) ->
       console.log "display message."
       display = document.getElementById("message") # the message div
@@ -237,7 +244,9 @@ VerifyView = Backbone.Marionette.ItemView.extend
       display.appendChild label # add the message node
       return
 
-
+    refresh: ->
+        Coconut.router.navigate("",false)
+        location.reload()
 
 #        initSlider: function () {
 #            $('<input>').appendTo('[ data-role="content"]').attr({'name':'slider','id':'slider','data-highlight':'true','min':'0','max':'100','value':'50','type':'range'}).slider({
@@ -261,3 +270,4 @@ VerifyView = Backbone.Marionette.ItemView.extend
 #                i++;
 #            },100);
 #        }
+

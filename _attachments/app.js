@@ -571,6 +571,7 @@ Router = (function(_super) {
     return Coconut.config.fetch({
       success: function() {
         $('#application-title').html(Coconut.config.title());
+        Controller.displaySiteNav();
         Coconut.loginView = new LoginView();
         Coconut.questions = new QuestionCollection();
         Coconut.questionView = new QuestionView();
@@ -579,7 +580,8 @@ Router = (function(_super) {
         Coconut.syncView.sync.replicateToServer();
         Coconut.syncView.sync.replicateFromServer();
         Coconut.syncView.update();
-        return Backbone.history.start();
+        Backbone.history.start();
+        return coconutUtils.checkVersion();
       },
       error: function() {
         if (Coconut.localConfigView == null) {
@@ -619,6 +621,9 @@ $(function() {
     Coconut.router = new Router();
     Coconut.currentClient = null;
     Coconut.currentAdmin = null;
+    Coconut.addRegions({
+      siteNav: "#siteNav"
+    });
     Coconut.addRegions({
       mainRegion: "#content"
     });

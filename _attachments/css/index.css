@@ -23,15 +23,17 @@
     width:100%
 }
 
-#records td{
-    font-size:16pt;
-}
+/*#records td{*/
+    /*font-size:20pt;*/
+/*}*/
 /*5a4a42*/
 #records td {
     background-color: #ACD369;
+    padding: 10px;
 }
 #records th {
     background-color: #C85D47;
+    font-size:20pt;
 }
 table.tablesorter {
     background-color: #5a4a42;
@@ -99,4 +101,13 @@ body {
 #dashboard-region p {
      font-size: 28px;
      font-weight: 500;
- }
+}
+.siteNav {
+    font-size: 28px;
+}
+.recordName {
+    font-size: 24px;
+}
+.recordTs {
+    font-size: 16px;
+}

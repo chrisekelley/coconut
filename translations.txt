@@ -1,0 +1,164 @@
+top nav strip:
+
+Home
+Sync
+Scanner
+
+------
+
+(Home page)
+
+To start please verify Administrator Identification by placing thumb on the scanner and pressing the "Scan" button.
+Scan (button)
+
+The system was unable to identify this person.
+Scan again (button)
+
+Click the button to Enroll your fingerprint to the Simprints server.
+Enroll (button)
+
+------
+
+(admin submit results)
+
+ID verification Confirmed
+You have been registered to use this device.
+
+Do you want to:
+
+Register a new individual (button)
+Enter a new report (button)
+------
+
+(new report page)
+
+New Report
+Click the name of the form you wish to use:
+
+Trichiasis Surgery
+Post-operative Followup
+
+------
+
+(Trichiasis form)
+
+Trichiasis Surgery
+Date/Time
+
+Refused Surgery
+Provided consultation on epilation
+Left eye
+Type of Operation
+
+Suture Type
+
+Clamp used
+Complications
+Excess bleeding
+Margin fragmant severed
+Globe Puncture
+Right eye
+Type of Operation
+
+Suture Type
+
+Clamp used
+Complications
+Excess bleeding
+Margin fragmant severed
+Globe Puncture
+Post-Surgical Treatments
+Azithromycin
+Tetracycline eye ointment
+Submit
+
+------
+
+(Post-Operative Followup form)
+
+Post-Operative Followup
+Name of procedure being followed
+Select One
+Hydrocele
+Trichiasis Surgery
+
+Followup date
+1 week
+2 weeks
+1 month
+6 months
+1 year
+
+Recurrence
+Complications - refer to clinic/hospital
+Continue monitoring
+Complete
+Submit
+Submit
+
+------
+
+(Admin reg. form)
+
+Admin Registration
+Name
+(Enter name)
+Profession
+
+Association
+
+District
+
+------
+
+(Indiv. reg form)
+
+Individual registration
+Gender
+Male
+Female
+DOB (date of birth)
+
+------
+
+(Scanner page)
+
+Instructions
+Please read the following text to the client: We want you to know that the fingerprint scan is only used to verify your identity. We will only associate your gender and age with your fingerprint. No other identifiable information will be stored about you.
+
+Do you consent to having your fingerprint scanned?
+
+If the client has consented, please proceed.
+To identify or register an individual, please place thumb on the scanner and press the "Scan" button.
+
+------
+
+(Sync page)
+Send data (button)
+
+Replication Log
+The replication log displays the result of replication to the master server.
+
+Refresh log (button)
+
+------
+
+Patient record listing
+
+Male
+Female
+
+Date of birth
+
+Question
+User
+Date Modified
+
+
+_______
+
+(scan error)
+
+Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app.
+
+

@@ -9,7 +9,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #identifyAdmin": "identifyAdmin",
     "click #scan": "scanNewIndividual",
     "click #verifyYes": "displayNewUserRegistration",
-    "click #verifyNo": "displayNewUserRegistration"
+    "click #verifyNo": "displayNewUserRegistration",
+    "click #refresh": "refresh"
   },
   nextUrl: null,
   hasCordova: true,
@@ -58,17 +59,26 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           console.log("method: " + method);
           if (method === "Identify") {
             cordova.plugins.SecugenPlugin.identify(function(results) {
-              var scannerPayload, serviceMessage, serviceResponse, serviceUuid, statusCode, users, viewOptions;
-              console.log("SecugenPlugin.identify: " + results);
-              $("#message").html(results);
+              var error, message, scannerPayload, serviceMessage, serviceResponse, serviceUuid, statusCode, users, viewOptions;
+              message = results;
+              if (results === "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app.") {
+                message = polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a>';
+                $("#message").html(message);
+              }
+              console.log("SecugenPlugin.identify: " + message);
               l.stop();
-              serviceResponse = JSON.parse(results);
-              scannerPayload = serviceResponse.scannerPayload;
-              serviceMessage = serviceResponse.serviceMessage;
-              statusCode = serviceMessage.StatusCode;
-              serviceUuid = serviceMessage.UID;
-              console.log('query for serviceUuid: ' + serviceUuid);
-              if (statusCode === 1) {
+              try {
+                serviceResponse = JSON.parse(results);
+                scannerPayload = serviceResponse.scannerPayload;
+                serviceMessage = serviceResponse.serviceMessage;
+                statusCode = serviceMessage.StatusCode;
+                serviceUuid = serviceMessage.UID;
+                console.log('query for serviceUuid: ' + serviceUuid);
+              } catch (_error) {
+                error = _error;
+                console.log(error);
+              }
+              if (statusCode !== null && statusCode === 1) {
                 viewOptions = {};
                 users = new SecondaryIndexCollection;
                 return users.fetch({
@@ -199,5 +209,9 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     label = document.createTextNode(message);
     display.appendChild(lineBreak);
     display.appendChild(label);
+  },
+  refresh: function() {
+    Coconut.router.navigate("", false);
+    return location.reload();
   }
 });

@@ -10,6 +10,6 @@ class ClientDashboardView extends Backbone.View
 #            "
   render: =>
     if !@model
-      @$el.html "No client loaded."
+      @$el.html polyglot.t("Error") + ": " + polyglot.t("NoClientLoaded") + "."
     else
       @$el.html "#{@model.get "Gender"} #{@model.get "DOB"}"

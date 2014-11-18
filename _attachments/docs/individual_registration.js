@@ -4,6 +4,7 @@ individualRegistrationForm =
     "id": "Individual Registration",
     "required": "false",
     "enabled": "true",
+    "safeLabel": "Individualregistration",
     "questions": [
         {
             "id": "200",

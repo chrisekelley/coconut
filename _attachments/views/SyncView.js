@@ -26,7 +26,7 @@ SyncView = (function(_super) {
   };
 
   SyncView.prototype.render = function() {
-    this.$el.html("        <h2>Cloud Server: <span class='sync-target'>" + (this.sync.target()) + "</span></h2>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>Send data</a>        <h2>Replication Log</h2>        <p>The replication log displays the result of replication to the master server.        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>Refresh log</a>        </p>        <div id=\"replicationLog\"></div>");
+    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
     $("a").button();
     return this.update();
   };

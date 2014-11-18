@@ -31,6 +31,10 @@ class QuestionView extends Backbone.View
         @actionOnChange event
 
   render: =>
+    formNameText = @model.id
+    i18nFormNameText = polyglot.t(formNameText)
+    if i18nFormNameText
+        formNameText = i18nFormNameText
 
     @$el.html "
     <style>
@@ -46,7 +50,7 @@ class QuestionView extends Backbone.View
 
 
       label.radio {
-        border-radius:20px;   
+        border-radius:20px;
         display:block;
         padding:4px 11px;
         border: 1px solid black;
@@ -80,7 +84,7 @@ class QuestionView extends Backbone.View
       }
       .tt-suggestion{
         background-color: white;
-        border-radius:20px;   
+        border-radius:20px;
         display:block;
         padding:4px 11px;
         border: 1px solid black;
@@ -99,7 +103,7 @@ class QuestionView extends Backbone.View
       <div style='position:fixed; right:5px; color:white; background-color: #333; padding:20px; display:none; z-index:10' id='messageText'>
         Saving...
       </div>
-      <h1>#{@model.id}</h1>
+      <h1>#{formNameText}</h1>
       <div id='question-view'>
         <form onsubmit=\"return false;\">
           #{@toHTMLForm(@model)}
@@ -122,15 +126,15 @@ class QuestionView extends Backbone.View
 
     # for first run
     @updateSkipLogic()
-    
+
     # skipperList is a list of questions that use skip logic in their action on change events
     skipperList = []
 
     $(@model.get("questions")).each (index, question) =>
 
-      # remember which questions have skip logic in their actionOnChange code 
+      # remember which questions have skip logic in their actionOnChange code
       skipperList.push(question.safeLabel()) if question.actionOnChange().match(/skip/i)
-      
+
       if question.get("action_on_questions_loaded")? and question.get("action_on_questions_loaded") isnt ""
         CoffeeScript.eval question.get "action_on_questions_loaded"
 
@@ -306,14 +310,14 @@ class QuestionView extends Backbone.View
     result = []
 
     questionWrapper = window.questionCache[question_id]
-    
+
     # early exit, don't validate labels
     return "" if questionWrapper.hasClass("label")
 
     question        = $("[name=#{question_id}]", questionWrapper)
 
     type            = $(questionWrapper.find("input").get(0)).attr("type")
-    labelText       = 
+    labelText       =
       if type is "radio"
         $("label[for=#{question.attr("id").split("-")[0]}]", questionWrapper).text() || ""
       else
@@ -442,7 +446,7 @@ class QuestionView extends Backbone.View
 
   # We throttle to limit how fast save can be repeatedly called
   save: _.throttle( ->
-      
+
     currentData = $('form').toObject(skipEmpty: false)
 
     # Make sure lastModifiedAt is always updated on save
@@ -468,7 +472,7 @@ class QuestionView extends Backbone.View
 
           # Update the menu
           Coconut.menuView.update()
-      
+
           if @result.complete()
             Coconut.syncView.sync.replicateToServer()
             if @result.question() == 'Admin Registration'
@@ -495,6 +499,11 @@ class QuestionView extends Backbone.View
         name = question.get('safeLabel')
         if (name == null)
           name = question.safeLabel()
+        labelText = question.label()
+        i18nLabelText = polyglot.t(question.get('safeLabel'))
+        if i18nLabelText
+            labelText = i18nLabelText
+        console.log "labelText:" + labelText
         window.skipLogicCache[name] = if question.skipLogic() isnt '' then CoffeeScript.compile(question.skipLogic(),bare:true) else ''
         question_id = question.get("id")
         if question.repeatable() == "true"
@@ -504,16 +513,16 @@ class QuestionView extends Backbone.View
           name = "group.#{groupId}.#{name}"
         if question.type() == 'header'
           div = "<div class='question #{question.type?() or ''}'>"
-          label = "<h2>#{question.label()} </h2>"
+          label = "<h2>#{labelText} </h2>"
         else if question.type() == 'subheader'
           div = "<div class='question #{question.type?() or ''}'>"
-          label = "<h3>#{question.label()} </h3>"
+          label = "<h3>#{labelText} </h3>"
         else if question.type() == 'spacer'
           div = "<div class='question #{question.type?() or ''}'>"
           label = "<p>&nbsp</p>"
         else if question.type() == 'instructions'
           div = "<div class='question #{question.type?() or ''}'>"
-          label = "<p>#{question.label()} </p>"
+          label = "<p>#{labelText} </p>"
         else
           div = "<div
           #{
@@ -529,7 +538,8 @@ class QuestionView extends Backbone.View
           data-action_on_change='#{_.escape(question.actionOnChange())}'
 
           >"
-          label = "<label type='#{question.type()}' for='#{question_id}'>#{question.label()} <span></span></label>"
+#          label = "<label type='#{question.type()}' for='#{question_id}'>#{question.label()} <span></span></label>"
+          label = "<label type='#{question.type()}' for='#{question_id}'>#{labelText} <span></span></label>"
         return "
           #{
           div
@@ -564,9 +574,16 @@ class QuestionView extends Backbone.View
                 if @readonly
                   question.value()
                 else
-                  html = "<div class='form-group'><select name='#{name}' id='#{question_id}' class='form-control'><option value=''> -- Select One -- </option>"
+                  html = "<div class='form-group'><select name='#{name}' id='#{question_id}' class='form-control'><option value=''> -- " + polyglot.t("SelectOne") + " -- </option>"
                   for option, index in question.get("select-options").split(/, */)
-                    html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{option}</option>"
+#                    html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{option}</option>"
+                     optionText = option
+                     i18nKey = question.get('safeLabel') + "::" + optionText
+                     i18nOptionText = polyglot.t(i18nKey)
+                     if i18nOptionText !=null
+                        optionText = i18nOptionText
+                     console.log "labelText: " + labelText + " optionText: " + optionText
+                     html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{optionText}</option>"
                   html += "</select></div>"
               when "radio"
                 if @readonly
@@ -599,8 +616,9 @@ class QuestionView extends Backbone.View
                   "<div class='form-group'><input class='form-control' name='#{name}' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input></div>"
                 else
 #                  "<input style='display:none' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>"
-                  "<div class='form-group'><input  class='form-control' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>
-                    <label class= 'checkbox-label' type='#{question.type()}' for='#{question_id}'>#{question.label()} <span></span></label>
+                  "<div class='form-group'>
+                    <input  class='form-control' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>
+                    <label class= 'checkbox-label' type='#{question.type()}' for='#{question_id}'>#{labelText} <span></span></label>
                    </div>"
               when "autocomplete from list", "autocomplete from previous entries", "autocomplete from code"
                 "
@@ -646,7 +664,7 @@ class QuestionView extends Backbone.View
               when "date-only"
                 "<div class='form-group'>\n
                   <div class='input-group date' id='datetimepicker1'>\n
-                    <input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' data-date-showToday='false' placeholder='Enter #{name}'/>\n
+                    <input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' data-date-showToday='false' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'/>\n
                     <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>
                     </span>\n
                   </div>\n
@@ -662,7 +680,7 @@ class QuestionView extends Backbone.View
               when "date-time"
                 "<div class='form-group'>
                   <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='Enter #{name}'/>
+                    <input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'/>
                     <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>
                     </span>
                   </div>
@@ -674,7 +692,7 @@ class QuestionView extends Backbone.View
                 </script>"
               else
 #                "<input name='#{name}' id='#{question_id}' type='#{question.type()}' value='#{question.value()}'></input>"
-                 "<div class='form-group'><input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='Enter #{name}'></div>"
+                 "<div class='form-group'><input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'></div>"
           }
           </div>
           #{repeatable}
@@ -695,7 +713,7 @@ class QuestionView extends Backbone.View
       if name? and name isnt ""
         accessorFunction = {}
         window.questionCache[name] = $(question)
-        
+
 
         # cache accessor function
         $qC = window.questionCache[name] # questionContext
@@ -782,6 +800,5 @@ class QuestionView extends Backbone.View
       return $.trim( @val() || '' )
     else
       return null
-
 
 )($)

@@ -17,7 +17,7 @@ ClientDashboardView = (function(_super) {
 
   ClientDashboardView.prototype.render = function() {
     if (!this.model) {
-      return this.$el.html("No client loaded.");
+      return this.$el.html(polyglot.t("Error") + ": " + polyglot.t("NoClientLoaded") + ".");
     } else {
       return this.$el.html("" + (this.model.get("Gender")) + " " + (this.model.get("DOB")));
     }

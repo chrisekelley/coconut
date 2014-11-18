@@ -2,6 +2,7 @@ postOperativeFollowupForm =
 {
     "_id": "Post-Operative Followup",
     "id": "Post-Operative Followup",
+    "safeLabel": "Post-OperativeFollowup",
     "enabled": "true",
     "required": "false",
     "questions": [
@@ -22,7 +23,7 @@ postOperativeFollowupForm =
             "label": "Followup date",
             "type": "select",
             "repeatable": "false",
-            "select-options": "1 week,2 weeks,1 month,6 month,1 year",
+            "select-options": "1 week,2 weeks,1 month,6 months,1 year",
             "validation": "",
             "required": "true",
             "safeLabel": "Followupdate"
