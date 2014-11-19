@@ -99,13 +99,20 @@ it may have already sync'd these users over. If not, well here you go.
 
 ## How do I handle application updates?
 
+The app uses [org.apache.cordova.plugin.version](https://github.com/chrisekelley/Version) to manage updates.
+
 Increment android:versionCode="1" in AndroidManifest.xml. Edit version on the CouchDB server
 
     {"_id":"version","_rev":"3-e79c2920983393d26fd0c1d919358cf4","version":"1.1","url":"http://internet.org/kiwi.apk"}
 
+Within the Cordova container, you can set parameters to wipe the app cache, which will completely reset the app. See its
+[README](https://github.com/chrisekelley/kiwi-cordova/blob/master/README.md#updates) for more info.
+
 ## Internationalization (i18n)
 
-Kiwi uses the [node-polyglot](https://www.npmjs.org/package/node-polyglot) lib to handle multiple languages. Place your language files in the 18n directory.
+Kiwi uses the [node-polyglot](https://www.npmjs.org/package/node-polyglot) lib to handle multiple languages. Place your
+language files in the 18n directory according to [locale](https://developer.chrome.com/webstore/i18n#localeTable). Portuguese
+is currently hardcoded; however, you can unset that in i18n/language_chooser.coffee.
 
 Use the following syntax in your coffee file:
 
