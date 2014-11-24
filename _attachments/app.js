@@ -604,6 +604,13 @@ $(function() {
       console.log("Init Secugen: this wheel is on fire.");
       cordova.plugins.SecugenPlugin.requestPermission(function(results) {
         return console.log("SecugenPlugin requestPermission: " + results);
+      }, function(error) {
+        var message;
+        console.log(error);
+        if (error === 'Error: Either a fingerprint device is not attached or the attached fingerprint device is not supported.') {
+          message = polyglot.t("deviceError");
+          return alert(message);
+        }
       });
     }
     window.Coconut = new Marionette.Application();

@@ -17,6 +17,16 @@ adminRegistrationForm =
             "safeLabel": "Name"
         },
         {
+            "id": "25",
+            "_id": "25",
+            "label": "E-mail",
+            "type": "text",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "email"
+        },
+        {
             "id": "946",
             "_id": "946",
             "label": "Profession",

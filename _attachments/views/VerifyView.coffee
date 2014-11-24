@@ -63,11 +63,6 @@ VerifyView = Backbone.Marionette.ItemView.extend
             if (method == "Identify")
               cordova.plugins.SecugenPlugin.identify (results) =>
                 message = results
-                if results == "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app."
-                  message = polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a>'
-                  $("#message").html message
-                console.log "SecugenPlugin.identify: " + message
-                l.stop()
                 try
                   serviceResponse = JSON.parse  results
                   scannerPayload = serviceResponse.scannerPayload
@@ -89,6 +84,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
                         fun: 'by_serviceUuid'
                     success: =>
                       console.log 'by_serviceUuid returned: ' + JSON.stringify users
+                      l.stop()
                       if users.length > 0
                         if user == "Admin"
                           adminUser = users.first()
@@ -114,12 +110,21 @@ VerifyView = Backbone.Marionette.ItemView.extend
                         else
                           Coconut.trigger "displayUserRegistrationForm"
                 else
+                  l.stop()
                   $( "#message").html("No match - you must register.")
                   Coconut.scannerPayload = scannerPayload
                   if  @nextUrl?
                     Coconut.router.navigate @nextUrl, true
                   else
                     Coconut.router.navigate "registration", true
+              , (error) ->
+                  console.log("Error: " + error)
+                  message = error
+                  if error == "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app."
+                      message = '<p>' + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>'
+                      $("#message").html message
+                  console.log "SecugenPlugin.identify: " + message
+                  l.stop()
             else
               cordova.plugins.SecugenPlugin.register (results) =>
                 console.log "SecugenPlugin.register: " + results

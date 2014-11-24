@@ -61,12 +61,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
             cordova.plugins.SecugenPlugin.identify(function(results) {
               var error, message, scannerPayload, serviceMessage, serviceResponse, serviceUuid, statusCode, users, viewOptions;
               message = results;
-              if (results === "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app.") {
-                message = polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a>';
-                $("#message").html(message);
-              }
-              console.log("SecugenPlugin.identify: " + message);
-              l.stop();
               try {
                 serviceResponse = JSON.parse(results);
                 scannerPayload = serviceResponse.scannerPayload;
@@ -93,6 +87,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   success: function() {
                     var adminUser, uuid;
                     console.log('by_serviceUuid returned: ' + JSON.stringify(users));
+                    l.stop();
                     if (users.length > 0) {
                       if (user === "Admin") {
                         adminUser = users.first();
@@ -124,6 +119,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   }
                 });
               } else {
+                l.stop();
                 $("#message").html("No match - you must register.");
                 Coconut.scannerPayload = scannerPayload;
                 if (_this.nextUrl != null) {
@@ -132,6 +128,16 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   return Coconut.router.navigate("registration", true);
                 }
               }
+            }, function(error) {
+              var message;
+              console.log("Error: " + error);
+              message = error;
+              if (error === "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app.") {
+                message = '<p>' + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>';
+                $("#message").html(message);
+              }
+              console.log("SecugenPlugin.identify: " + message);
+              return l.stop();
             });
           } else {
             cordova.plugins.SecugenPlugin.register(function(results) {

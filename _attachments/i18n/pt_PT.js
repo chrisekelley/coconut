@@ -111,7 +111,9 @@ polyglot.extend({
   "RegistrationComplete": "Inscrição completo",
   "NoClientLoaded": "Nenhum cliente é identificado",
   "Error": "Erro",
-  "Enter": "Escrever"
+  "Enter": "Escrever",
+  "email": "Email",
+  "deviceError": "Erro: ou um digitalizador não está ligada ou o digitalizador conectado não é suportado.  Favor de fechar o pacote no 'Task Manager',  conecte o digitalizador,  e renicie novamente."
 });
 
 Handlebars.registerHelper('polyglot', function(phrase) {
