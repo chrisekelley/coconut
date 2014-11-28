@@ -85,11 +85,20 @@ p {
     margin-top: 1em;
 }
 
-.radio label, .checkbox label {
+.radio label {
     padding-left: 0px;
     margin-bottom: 1em;
     font-weight: 700;
 }
+
+.checkbox label {
+    margin-bottom: 1em;
+    font-weight: 700;
+    /* margin-top: 5px; */
+    vertical-align: middle;
+}
+
+label {}
 
 body {
     padding-top: 50px;
@@ -130,4 +139,7 @@ body {
 #local-config button {
     font-size: 36px;
     width: 500px;
+}
+.checkbox {
+    margin-bottom: 20px;
 }

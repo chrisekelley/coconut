@@ -616,9 +616,10 @@ class QuestionView extends Backbone.View
                   "<div class='form-group'><input class='form-control' name='#{name}' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input></div>"
                 else
 #                  "<input style='display:none' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>"
-                  "<div class='form-group'>
-                    <input  class='form-control' name='#{name}' id='#{question_id}' type='checkbox' value='true'></input>
-                    <label class= 'checkbox-label' type='#{question.type()}' for='#{question_id}'>#{labelText} <span></span></label>
+                  "<div class='checkbox'>
+                    <label for='#{question_id}'>
+                        <input name='#{name}' id='#{question_id}' type='checkbox' value='true'>#{labelText} <span></span></input>
+                    </label>
                    </div>"
               when "autocomplete from list", "autocomplete from previous entries", "autocomplete from code"
                 "

@@ -547,7 +547,7 @@ QuestionView = (function(_super) {
               if (this.readonly) {
                 return "<div class='form-group'><input class='form-control' name='" + name + "' type='text' id='" + question_id + "' value='" + (_.escape(question.value())) + "'></input></div>";
               } else {
-                return "<div class='form-group'>                    <input  class='form-control' name='" + name + "' id='" + question_id + "' type='checkbox' value='true'></input>                    <label class= 'checkbox-label' type='" + (question.type()) + "' for='" + question_id + "'>" + labelText + " <span></span></label>                   </div>";
+                return "<div class='checkbox'>                    <label for='" + question_id + "'>                        <input name='" + name + "' id='" + question_id + "' type='checkbox' value='true'>" + labelText + " <span></span></input>                    </label>                   </div>";
               }
               break;
             case "autocomplete from list":
