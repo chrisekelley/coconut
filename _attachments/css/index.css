@@ -111,3 +111,23 @@ body {
 .recordTs {
     font-size: 16px;
 }
+#local-config label {
+    font-size: 18px;
+    padding-bottom: 5px;
+}
+.localConfigCols {
+    font-size: 18px;
+    padding-right: 10px;
+    padding-bottom: 5px;
+    width:150px;
+}
+#local-config label, #local-config input {
+    display:inline-block;
+}
+#local-config input {
+    font-size:22px;
+}
+#local-config button {
+    font-size: 36px;
+    width: 500px;
+}

@@ -15,7 +15,7 @@ class Config extends Backbone.Model
       error:->
         options.error?()
 
-  
+
   url: "/configuration"
 
   title: -> @get("title") || "Coconut"
@@ -30,5 +30,10 @@ class Config extends Backbone.Model
     "#{@get "synchronization_target"}"
 
   cloud_url_with_credentials: ->
-    @cloud_url().replace(/http:\/\//,"http://#{@get "cloud_credentials"}@")
+    @cloud_url().replace(/https:\/\//,"https://#{@get "cloud_credentials"}@")
 
+  coconut_central_url: ->
+      "#{@get "coconut_central_url"}"
+
+  coconut_central_url_with_credentials: ->
+      @coconut_central_url().replace(/https:\/\//,"https://#{@get "cloud_credentials"}@")

@@ -11,6 +11,7 @@ class SyncView extends Backbone.View
       @$el.html "
         <h2>" + polyglot.t("server") + "</h2>
         <p><span class='sync-target'>#{@sync.target()}</span></p>
+        <p>#{polyglot.t("version")}: #{Coconut.version_code}</p>
         <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>" + polyglot.t("sendData") + "</a>
         <h2>" + polyglot.t("replicationLog") + "</h2>
         <p>" + polyglot.t("replicationLogDescription") + "

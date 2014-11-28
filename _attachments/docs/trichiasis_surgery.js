@@ -119,6 +119,26 @@ trichiasisForm =
             "safeLabel": "GlobePunctureL"
         },
         {
+            "id": "152",
+            "_id": "152",
+            "label": "Referred to hospital because of complication",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ComplicationsReferralL"
+        },
+        {
+            "id": "153",
+            "_id": "153",
+            "label": "Referral Hospital",
+            "type": "input",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ReferralHospitalL"
+        },
+        {
             "id": "734",
             "_id": "734",
             "label": "Right eye",
@@ -199,6 +219,26 @@ trichiasisForm =
             "validation": "",
             "required": "true",
             "safeLabel": "GlobePunctureR"
+        },
+        {
+            "id": "175",
+            "_id": "175",
+            "label": "Referred to hospital because of complication",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ComplicationsReferralR"
+        },
+        {
+            "id": "176",
+            "_id": "176",
+            "label": "Referral Hospital",
+            "type": "input",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ReferralHospitalR"
         },
         {
             "id": "324",

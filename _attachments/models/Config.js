@@ -55,7 +55,15 @@ Config = (function(_super) {
   };
 
   Config.prototype.cloud_url_with_credentials = function() {
-    return this.cloud_url().replace(/http:\/\//, "http://" + (this.get("cloud_credentials")) + "@");
+    return this.cloud_url().replace(/https:\/\//, "https://" + (this.get("cloud_credentials")) + "@");
+  };
+
+  Config.prototype.coconut_central_url = function() {
+    return "" + (this.get("coconut_central_url"));
+  };
+
+  Config.prototype.coconut_central_url_with_credentials = function() {
+    return this.coconut_central_url().replace(/https:\/\//, "https://" + (this.get("cloud_credentials")) + "@");
   };
 
   return Config;

@@ -673,7 +673,8 @@ class QuestionView extends Backbone.View
                   $(function () {\n
                   $('##{question_id}').datetimepicker({\n
                                     pickTime: false,\n
-                                    showToday: false\n
+                                    showToday: false,\n
+                                    language: 'pt'\n
                                 });\n
                 });\n
                 </script>\n"
@@ -687,7 +688,7 @@ class QuestionView extends Backbone.View
                 </div>
                  <script type=\"text/javascript\">
                   $(function () {
-                  $('##{question_id}').datetimepicker();
+                  $('##{question_id}').datetimepicker({\nlanguage: 'pt'\n});
                 });
                 </script>"
               else

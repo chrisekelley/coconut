@@ -101,9 +101,11 @@ it may have already sync'd these users over. If not, well here you go.
 
 The app uses [org.apache.cordova.plugin.version](https://github.com/chrisekelley/Version) to manage updates.
 
-Increment android:versionCode="1" in AndroidManifest.xml. Edit version on the CouchDB server
+Increment android:versionCode="1" in config.xml. NOTE: Don't bother trying to update AndroidManifest.xml - it will get wiped out by the cordova build process.
 
-    {"_id":"version","_rev":"3-e79c2920983393d26fd0c1d919358cf4","version":"1.1","url":"http://internet.org/kiwi.apk"}
+Edit version on the CouchDB server
+
+    {"_id":"version","_rev":"3-e79c2920983393d26fd0c1d919358cf4","version":"3","url":"http://internet.org/kiwi.apk"}
 
 Within the Cordova container, you can set parameters to wipe the app cache, which will completely reset the app. See its
 [README](https://github.com/chrisekelley/kiwi-cordova/blob/master/README.md#updates) for more info.

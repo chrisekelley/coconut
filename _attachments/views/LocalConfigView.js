@@ -15,7 +15,7 @@ LocalConfigView = (function(_super) {
 
   LocalConfigView.prototype.render = function() {
     var _ref1;
-    this.$el.html("      <form id='local-config'>        <h1>Configure your Coconut system</h1>        <label>Coconut Cloud URL</label>        <input type='text' name='coconut-cloud' size='60' value='https://kiwicentral.org:6984/coconut-central/'></input>        <fieldset id='mode-fieldset'>          <legend>Mode</legend>            <label for='cloud'>Cloud (reporting system)</label>            <input id='cloud' name='mode' type='radio' value='cloud'></input>            <label for='mobile'>Mobile (data collection, probably on a tablet)</label>            <input id='mobile' name='mode' type='radio' value='mobile'></input>        </fieldset>        <button>Save</button>        <div id='message'></div>      </form>    ");
+    this.$el.html("      <form id='local-config'>        <h1>Configure your Coconut system</h1>        <label for='coconut-cloud' >Coconut Cloud URL</label>        <input type='text' name='coconut-cloud' size='35' value='https://kiwicentral.org/coconut-central'></input>        <br/>        <br/>        <label for='username' class='localConfigCols'>Username</label>        <input type='text' name='username' size='15'></input><br/>        <label for='password' class='localConfigCols'>Password</label>        <input type='password' name='password' size='15'></input>        <fieldset id='mode-fieldset'>          <legend>Mode</legend>            <label for='cloud'>Cloud (reporting system)</label>            <input id='cloud' name='mode' type='radio' value='cloud'></input>            <label for='mobile'>Mobile (data collection, probably on a tablet)</label>            <input id='mobile' name='mode' type='radio' value='mobile'></input>        </fieldset>        <br/>        <br/>        <button>Save</button>        <div id='message'></div>      </form>    ");
     if (Coconut.config.get("mode") == null) {
       $("#mode-fieldset").hide();
       $("#mobile").prop("checked", true);
@@ -31,28 +31,38 @@ LocalConfigView = (function(_super) {
   };
 
   LocalConfigView.prototype.events = {
-    "click #local-config button": "saveLocal"
+    "click #local-config button": "save"
   };
 
   LocalConfigView.prototype.save = function() {
-    var coconutCloud, coconutCloudConfigURL, localConfig;
+    var coconutCloud, coconutCloudConfigURL, coconutCloudConfigURLCreds, localConfig, password, replacement, username;
     localConfig = $('#local-config').toObject();
     coconutCloud = $("input[name=coconut-cloud]").val();
+    username = localConfig.username;
+    password = localConfig.password;
     coconutCloudConfigURL = "" + coconutCloud + "/coconut.config";
+    replacement = 'https://' + username + ':' + password + '@';
+    coconutCloudConfigURLCreds = coconutCloudConfigURL.replace(/https:\/\//, replacement);
     if (localConfig.mode && (coconutCloud != null)) {
       $('#message').html("Downloading configuration file from " + coconutCloudConfigURL + "<br/>");
       $.ajax({
-        url: coconutCloudConfigURL,
+        url: coconutCloudConfigURLCreds,
+        username: username,
+        password: password,
         dataType: "jsonp",
-        success: function(cloudConfig) {
+        success: function(cloudConfig, text) {
           $('#message').append("Saving configuration file<br/>");
           delete cloudConfig["_rev"];
           return Coconut.config.save(cloudConfig, {
             success: function() {
+              var cloud_credentials;
               $('#message').append("Creating local configuration file<br/>");
-              localConfig = new LocalConfig();
-              return localConfig.save({
-                _id: "coconut.config.local"
+              cloud_credentials = cloudConfig.cloud_credentials;
+              Coconut.config.local = new LocalConfig();
+              return Coconut.config.local.save({
+                _id: "coconut.config.local",
+                coconutCloud: coconutCloud,
+                cloud_credentials: cloud_credentials
               }, {
                 success: function() {
                   var sync;
@@ -60,16 +70,16 @@ LocalConfigView = (function(_super) {
                   sync = new Sync();
                   return sync.save(null, {
                     success: function() {
-                      $('#message').append("Updating application<br/>");
-                      return sync.getFromDocs({
-                        success: function() {
-                          Coconut.router.navigate("", false);
-                          return location.reload();
-                        },
-                        error: function(model, err, cb) {
-                          return console.log(JSON.stringify(err));
-                        }
-                      });
+                      $('#message').append("5 second delay before reloading home.<br/>");
+                      _.delay(function() {
+                        Coconut.router.navigate("", false);
+                        return document.location.reload();
+                      }, 5000);
+                      $('#message').append("Loading local form definitions<br/>");
+                      sync.getFromJSs();
+                      Coconut.syncView = new SyncView();
+                      Coconut.syncView.sync.replicateFromServer();
+                      return Coconut.syncView.sync.replicateToServer();
                     },
                     error: function(model, err, cb) {
                       return console.log(JSON.stringify(err));
@@ -83,8 +93,11 @@ LocalConfigView = (function(_super) {
             }
           });
         },
-        error: function(error) {
-          return console.log("Couldn't find config file at " + coconutCloudConfigURL);
+        error: function(error, text, errorThrown) {
+          var message;
+          message = ("Couldn't find config file at " + coconutCloudConfigURL + ". Error: ") + JSON.stringify(error);
+          console.log(message);
+          return alert(message);
         }
       });
       return false;
@@ -106,11 +119,11 @@ LocalConfigView = (function(_super) {
       "cloud": "localhost:5984",
       "local_couchdb_admin_username": "admin",
       "local_couchdb_admin_password": "password",
-      "cloud_credentials": "coco:blond4eva!",
+      "cloud_credentials": "user:pass",
       "date_format": "YYYY-MM-DD",
       "datetime_format": "YYYY-MM-DD HH:mm:ss",
       "sync_mode": "couchdb-sync",
-      "synchronization_target": "https://kiwicentral.org:6984/coconut-moz-2014/"
+      "synchronization_target": "https://kiwicentral.org/projectdb/"
     };
     Coconut.config.save(cloudConfig, {
       success: function() {

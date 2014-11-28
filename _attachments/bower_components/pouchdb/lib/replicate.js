@@ -1,10 +1,68 @@
 'use strict';
 
 var utils = require('./utils');
-var Pouch = require('./index');
 var EE = require('events').EventEmitter;
-
+var Checkpointer = require('./checkpointer');
 var MAX_SIMULTANEOUS_REVS = 50;
+
+function randomNumber(min, max) {
+  min = parseInt(min, 10);
+  max = parseInt(max, 10);
+  if (min !== min) {
+    min = 0;
+  }
+  if (max !== max || max <= min) {
+    max = (min || 1) << 1; //doubling
+  } else {
+    max = max + 1;
+  }
+  var ratio = Math.random();
+  var range = max - min;
+
+  return ~~(range * ratio + min); // ~~ coerces to an int, but fast.
+}
+
+function defaultBackOff(min) {
+  var max = 0;
+  if (!min) {
+    max = 2000;
+  }
+  return randomNumber(min, max);
+}
+
+function backOff(repId, src, target, opts, returnValue, result, error) {
+  if (opts.retry === false) {
+    returnValue.emit('error', error);
+    returnValue.removeAllListeners();
+    return;
+  }
+  opts.default_back_off = opts.default_back_off || 0;
+  opts.retries = opts.retries || 0;
+  if (typeof opts.back_off_function !== 'function') {
+    opts.back_off_function = defaultBackOff;
+  }
+  opts.retries++;
+  if (opts.max_retries && opts.retries > opts.max_retries) {
+    returnValue.emit('error', new Error('tried ' +
+      opts.retries + ' times but replication failed'));
+    returnValue.removeAllListeners();
+    return;
+  }
+  returnValue.emit('requestError', error);
+  if (returnValue.state === 'active') {
+    returnValue.emit('syncStopped');
+    returnValue.state = 'stopped';
+    returnValue.once('syncRestarted', function () {
+      opts.current_back_off = opts.default_back_off;
+    });
+  }
+
+  opts.current_back_off = opts.current_back_off || opts.default_back_off;
+  opts.current_back_off = opts.back_off_function(opts.current_back_off);
+  setTimeout(function () {
+    replicate(repId, src, target, opts, returnValue);
+  }, opts.current_back_off);
+}
 
 // We create a basic promise so the caller can cancel the replication possibly
 // before we have actually started listening to changes etc
@@ -12,6 +70,7 @@ utils.inherits(Replication, EE);
 function Replication(opts) {
   EE.call(this);
   this.cancelled = false;
+  this.state = 'pending';
   var self = this;
   var promise = new utils.Promise(function (fulfill, reject) {
     self.once('complete', fulfill);
@@ -26,15 +85,26 @@ function Replication(opts) {
   // As we allow error handling via "error" event as well,
   // put a stub in here so that rejecting never throws UnhandledError.
   self.catch(function (err) {});
+
 }
 
 Replication.prototype.cancel = function () {
   this.cancelled = true;
+  this.state = 'cancelled';
   this.emit('cancel');
 };
 
 Replication.prototype.ready = function (src, target) {
   var self = this;
+  this.once('change', function () {
+    if (this.state === 'pending') {
+      self.state = 'active';
+      self.emit('syncStarted');
+    } else if (self.state === 'stopped') {
+      self.state = 'active';
+      self.emit('syncRestarted');
+    }
+  });
   function onDestroy() {
     self.cancel();
   }
@@ -57,93 +127,17 @@ function genReplicationId(src, target, opts) {
       var queryData = src_id + target_id + filterFun +
         JSON.stringify(opts.query_params) + opts.doc_ids;
       return utils.MD5(queryData).then(function (md5) {
+        // can't use straight-up md5 alphabet, because
+        // the char '/' is interpreted as being for attachments,
+        // and + is also not url-safe
+        md5 = md5.replace(/\//g, '.').replace(/\+/g, '_');
         return '_local/' + md5;
       });
     });
   });
 }
 
-
-function updateCheckpoint(db, id, checkpoint, returnValue) {
-    return db.get(id).catch(function (err) {
-      if (err.status === 404) {
-        return {_id: id};
-      }
-      throw err;
-    }).then(function (doc) {
-      if (returnValue.cancelled) {
-        return;
-      }
-      doc.last_seq = checkpoint;
-      return db.put(doc);
-    });
-  }
-
-function Checkpointer(src, target, id, returnValue) {
-  this.src = src;
-  this.target = target;
-  this.id = id;
-  this.returnValue = returnValue;
-}
-
-Checkpointer.prototype.writeCheckpoint = function (checkpoint) {
-  var self = this;
-  return this.updateTarget(checkpoint).then(function () {
-    return self.updateSource(checkpoint);
-  });
-};
-Checkpointer.prototype.updateTarget = function (checkpoint) {
-  return updateCheckpoint(this.target, this.id, checkpoint, this.returnValue);
-};
-Checkpointer.prototype.updateSource = function (checkpoint) {
-  var self = this;
-  if (this.readOnlySource) {
-    return utils.Promise.resolve(true);
-  }
-  return updateCheckpoint(this.src, this.id, checkpoint, this.returnValue)
-    .catch(function (err) {
-    var isForbidden = typeof err.status === 'number' &&
-      Math.floor(err.status / 100) === 4;
-    if (isForbidden) {
-      self.readOnlySource = true;
-      return true;
-    }
-    throw err;
-  });
-};
-Checkpointer.prototype.getCheckpoint = function () {
-  var self = this;
-  return self.target.get(self.id).then(function (targetDoc) {
-    return self.src.get(self.id).then(function (sourceDoc) {
-      if (targetDoc.last_seq === sourceDoc.last_seq) {
-        return sourceDoc.last_seq;
-      }
-      return 0;
-    }, function (err) {
-      if (err.status === 404 && targetDoc.last_seq) {
-        return self.src.put({
-          _id: self.id,
-          last_seq: 0
-        }).then(function () {
-          return 0;
-        }, function (err) {
-          if (err.status === 401) {
-            self.readOnlySource = true;
-            return targetDoc.last_seq;
-          }
-          return 0;
-        });
-      }
-      throw err;
-    });
-  }).catch(function (err) {
-    if (err.status !== 404) {
-      throw err;
-    }
-    return 0;
-  });
-};
-function replicate(repId, src, target, opts, returnValue) {
+function replicate(repId, src, target, opts, returnValue, result) {
   var batches = [];               // list of batches to be processed
   var currentBatch;               // the batch currently being processed
   var pendingBatch = {
@@ -159,10 +153,12 @@ function replicate(repId, src, target, opts, returnValue) {
   var batch_size = opts.batch_size || 100;
   var batches_limit = opts.batches_limit || 10;
   var changesPending = false;     // true while src.changes is running
-  var changesCount = 0; // number of changes received since calling src.changes
   var doc_ids = opts.doc_ids;
-  var checkpointer = new Checkpointer(src, target, repId, returnValue);
-  var result = {
+  var state = {
+    cancelled: false
+  };
+  var checkpointer = new Checkpointer(src, target, repId, state);
+  result = result || {
     ok: true,
     start_time: new Date(),
     docs_read: 0,
@@ -172,7 +168,6 @@ function replicate(repId, src, target, opts, returnValue) {
   };
   var changesOpts = {};
   returnValue.ready(src, target);
-
 
   function writeDocs() {
     if (currentBatch.docs.length === 0) {
@@ -184,18 +179,25 @@ function replicate(repId, src, target, opts, returnValue) {
     }, {
       new_edits: false
     }).then(function (res) {
-      if (returnValue.cancelled) {
+      if (state.cancelled) {
         completeReplication();
         throw new Error('cancelled');
       }
       var errors = [];
       res.forEach(function (res) {
-        if (!res.ok) {
+        if (res.error) {
           result.doc_write_failures++;
-          errors.push(new Error(res.reason || res.message || 'Unknown reason'));
+          var error = new Error(res.reason || res.message || 'Unknown reason');
+          error.name = res.name || res.error;
+          errors.push(error);
         }
       });
-      if (errors.length > 0) {
+      result.errors = result.errors.concat(errors);
+      result.docs_written += currentBatch.docs.length - errors.length;
+      var non403s = errors.filter(function (error) {
+        return error.name !== 'unauthorized' && error.name !== 'forbidden';
+      });
+      if (non403s.length > 0) {
         var error = new Error('bulkDocs error');
         error.other_errors = errors;
         abortReplication('target.bulkDocs failed to write docs', error);
@@ -223,16 +225,16 @@ function replicate(repId, src, target, opts, returnValue) {
       return src.get(id, {revs: true, open_revs: missing, attachments: true})
         .then(function (docs) {
           docs.forEach(function (doc) {
-            if (returnValue.cancelled) {
+            if (state.cancelled) {
               return completeReplication();
             }
             if (doc.ok) {
               result.docs_read++;
               currentBatch.pendingRevs++;
               currentBatch.docs.push(doc.ok);
-              delete diffs[doc.ok._id];
             }
           });
+          delete diffs[id];
         });
     }));
   }
@@ -257,7 +259,7 @@ function replicate(repId, src, target, opts, returnValue) {
       keys: ids,
       include_docs: true
     }).then(function (res) {
-      if (returnValue.cancelled) {
+      if (state.cancelled) {
         completeReplication();
         throw (new Error('cancelled'));
       }
@@ -289,12 +291,11 @@ function replicate(repId, src, target, opts, returnValue) {
       currentBatch.seq
     ).then(function (res) {
       writingCheckpoint = false;
-      if (returnValue.cancelled) {
+      if (state.cancelled) {
         completeReplication();
         throw new Error('cancelled');
       }
       result.last_seq = last_seq = currentBatch.seq;
-      result.docs_written += currentBatch.docs.length;
       returnValue.emit('change', utils.clone(result));
       currentBatch = undefined;
       getChanges();
@@ -314,7 +315,7 @@ function replicate(repId, src, target, opts, returnValue) {
       });
     });
     return target.revsDiff(diff).then(function (diffs) {
-      if (returnValue.cancelled) {
+      if (state.cancelled) {
         completeReplication();
         throw new Error('cancelled');
       }
@@ -326,7 +327,7 @@ function replicate(repId, src, target, opts, returnValue) {
 
 
   function startNextBatch() {
-    if (returnValue.cancelled || currentBatch) {
+    if (state.cancelled || currentBatch) {
       return;
     }
     if (batches.length === 0) {
@@ -378,7 +379,7 @@ function replicate(repId, src, target, opts, returnValue) {
       return;
     }
     result.ok = false;
-    result.status = 'aborted';
+    result.status = 'aborting';
     result.errors.push(err);
     batches = [];
     pendingBatch = {
@@ -394,7 +395,7 @@ function replicate(repId, src, target, opts, returnValue) {
     if (replicationCompleted) {
       return;
     }
-    if (returnValue.cancelled) {
+    if (state.cancelled) {
       result.status = 'cancelled';
       if (writingCheckpoint) {
         return;
@@ -403,26 +404,28 @@ function replicate(repId, src, target, opts, returnValue) {
     result.status = result.status || 'complete';
     result.end_time = new Date();
     result.last_seq = last_seq;
-    replicationCompleted = returnValue.cancelled = true;
-    if (result.errors.length > 0) {
+    replicationCompleted = state.cancelled = true;
+    var non403s = result.errors.filter(function (error) {
+      return error.name !== 'unauthorized' && error.name !== 'forbidden';
+    });
+    if (non403s.length > 0) {
       var error = result.errors.pop();
       if (result.errors.length > 0) {
         error.other_errors = result.errors;
       }
       error.result = result;
-      returnValue.emit('error', error);
+      backOff(repId, src, target, opts, returnValue, result, error);
     } else {
       returnValue.emit('complete', result);
+      returnValue.removeAllListeners();
     }
-    returnValue.removeAllListeners();
   }
 
 
   function onChange(change) {
-    if (returnValue.cancelled) {
+    if (state.cancelled) {
       return completeReplication();
     }
-    changesCount++;
     if (
       pendingBatch.changes.length === 0 &&
       batches.length === 0 &&
@@ -438,10 +441,10 @@ function replicate(repId, src, target, opts, returnValue) {
 
   function onChangesComplete(changes) {
     changesPending = false;
-    if (returnValue.cancelled) {
+    if (state.cancelled) {
       return completeReplication();
     }
-    if (changesCount > 0) {
+    if (changesOpts.since < changes.last_seq) {
       changesOpts.since = changes.last_seq;
       getChanges();
     } else {
@@ -458,7 +461,7 @@ function replicate(repId, src, target, opts, returnValue) {
 
   function onChangesError(err) {
     changesPending = false;
-    if (returnValue.cancelled) {
+    if (state.cancelled) {
       return completeReplication();
     }
     abortReplication('changes rejected', err);
@@ -474,7 +477,6 @@ function replicate(repId, src, target, opts, returnValue) {
       return;
     }
     changesPending = true;
-    changesCount = 0;
     function abortChanges() {
       changes.cancel();
     }
@@ -533,7 +535,7 @@ function replicate(repId, src, target, opts, returnValue) {
     writingCheckpoint = true;
     checkpointer.writeCheckpoint(opts.since).then(function (res) {
       writingCheckpoint = false;
-      if (returnValue.cancelled) {
+      if (state.cancelled) {
         completeReplication();
         return;
       }
@@ -547,8 +549,9 @@ function replicate(repId, src, target, opts, returnValue) {
   }
 }
 
-
-function toPouch(db, PouchConstructor) {
+exports.toPouch = toPouch;
+function toPouch(db, opts) {
+  var PouchConstructor = opts.PouchConstructor;
   if (typeof db === 'string') {
     return new PouchConstructor(db);
   } else if (db.then) {
@@ -559,6 +562,7 @@ function toPouch(db, PouchConstructor) {
 }
 
 
+exports.replicate = replicateWrapper;
 function replicateWrapper(src, target, opts, callback) {
   if (typeof opts === 'function') {
     callback = opts;
@@ -572,10 +576,12 @@ function replicateWrapper(src, target, opts, callback) {
   }
   opts = utils.clone(opts);
   opts.continuous = opts.continuous || opts.live;
+  opts.retry = opts.retry || false;
+  /*jshint validthis:true */
+  opts.PouchConstructor = opts.PouchConstructor || this;
   var replicateRet = new Replication(opts);
-  var PouchConstructor = opts.pouchConstructor || Pouch;
-  toPouch(src, PouchConstructor).then(function (src) {
-    return toPouch(target, PouchConstructor).then(function (target) {
+  toPouch(src, opts).then(function (src) {
+    return toPouch(target, opts).then(function (target) {
       return genReplicationId(src, target, opts).then(function (repId) {
         replicate(repId, src, target, opts, replicateRet);
       });
@@ -586,5 +592,3 @@ function replicateWrapper(src, target, opts, callback) {
   });
   return replicateRet;
 }
-
-exports.replicate = replicateWrapper;

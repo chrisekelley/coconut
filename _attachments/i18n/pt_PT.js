@@ -28,7 +28,7 @@ polyglot.extend({
   "DateTime": "Data / Hora",
   "RefusedSurgery": "Cirurgia Refusado",
   "ProvidedEpilationConsultation": "Forneceu consulta sobre depilação",
-  "Lefteye": "Tipo de operação",
+  "Lefteye": "Olho esquerdo",
   "TypeofOperationL": "Tipo de operação",
   "TypeofOperationL::BTRP": "BTRP",
   "TypeofOperationL::Trabut": "Trabut",
@@ -40,6 +40,8 @@ polyglot.extend({
   "ExcessbleedingL": "Sangramento excessivo",
   "MarginfragmantseveredL": "Fragmento da margem cortada",
   "GlobePunctureL": "Punção de globo ocular ",
+  "ComplicationsReferralL": "Complicações referidas ao Hospital",
+  "ReferralHospitalL": "Nome do hospital",
   "Righteye": "Olho direito",
   "TypeofOperationR": "Tipo de operação",
   "TypeofOperationR::BTRP": "BTRP",
@@ -52,6 +54,8 @@ polyglot.extend({
   "ExcessbleedingR": "Sangramento excessivo",
   "MarginfragmantseveredR": "Fragmento da margem cortada",
   "GlobePunctureR": "Punção de globo ocular ",
+  "ComplicationsReferralR": "Complicações referidas ao Hospital",
+  "ReferralHospitalR": "Nome do hospital",
   "PostSurgicalTreatments": "Tratamento pos-cirurgia",
   "azithromycinR": "Azitromicina",
   "tetracyclineEyeOintmentR": "Pomada ocular de Tetraciclina",
@@ -113,7 +117,8 @@ polyglot.extend({
   "Error": "Erro",
   "Enter": "Escrever",
   "email": "Email",
-  "deviceError": "Erro: ou um digitalizador não está ligada ou o digitalizador conectado não é suportado.  Favor de fechar o pacote no 'Task Manager',  conecte o digitalizador,  e renicie novamente."
+  "deviceError": "Erro: ou um digitalizador não está ligada ou o digitalizador conectado não é suportado.  Favor de fechar o pacote no 'Task Manager',  conecte o digitalizador,  e renicie novamente.",
+  "version": "Versão"
 });
 
 Handlebars.registerHelper('polyglot', function(phrase) {

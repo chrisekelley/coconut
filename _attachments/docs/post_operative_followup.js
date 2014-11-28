@@ -59,6 +59,26 @@ postOperativeFollowupForm =
             "safeLabel": "Continuemonitoring"
         },
         {
+            "id": "193",
+            "_id": "193",
+            "label": "Referred to hospital because of complication",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ComplicationsReferralR"
+        },
+        {
+            "id": "194",
+            "_id": "194",
+            "label": "Referral Hospital",
+            "type": "input",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ReferralHospitalR"
+        },
+        {
             "id": "915",
             "_id": "915",
             "label": "Complete",

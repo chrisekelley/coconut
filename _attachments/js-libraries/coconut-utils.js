@@ -48,7 +48,7 @@
 
   coconutUtils.checkVersion = function () {
     console.log("Checking for new version of app.");
-    var url = Coconut.config.cloud_url() + "/version";
+    var url = Coconut.config.coconut_central_url_with_credentials() + "/version";
     $.ajax(url, { type: 'GET', dataType: 'json',
       success: function(data) {
         console.log("data: " + JSON.stringify(data));
@@ -58,6 +58,7 @@
         window.plugins.version.getVersionCode(
           function(version_code) {
               console.log("Installed version: " + version_code);
+              Coconut.version_code = version_code
               if(version_code != remoteVersion){
                   console.log("Upgrade app!");
                   navigator.notification.beep(3);

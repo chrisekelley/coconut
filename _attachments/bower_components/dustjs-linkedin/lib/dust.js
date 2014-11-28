@@ -10,26 +10,9 @@
       EMPTY_FUNC = function() {},
       logger = {},
       originalLog,
-      loggerContext,
-      hasOwnProperty = Object.prototype.hasOwnProperty,
-      getResult;
+      loggerContext;
 
   dust.debugLevel = NONE;
-
-  /**
-   * Given an object and a key, return the value. Use this instead of obj[key] in order to:
-   *     prevent looking up the prototype chain
-   *     fail nicely when the object is falsy
-   * @param {Object} obj the object to inspect
-   * @param {String} key the name of the property to resolve
-   * @return {*} the resolved value
-   */
-  getResult = function(obj, key) {
-    if (obj && hasOwnProperty.call(obj, key)) {
-      return obj[key];
-    }
-  };
-
 
   // Try to find the console in global scope
   if (root && root.console && root.console.log) {
@@ -325,7 +308,7 @@
         while (ctx) {
           if (ctx.isObject) {
             ctxThis = ctx.head;
-            value = getResult(ctx.head, first);
+            value = ctx.head[first];
             if (value !== undefined) {
               break;
             }
@@ -336,16 +319,21 @@
         if (value !== undefined) {
           ctx = value;
         } else {
-          ctx = getResult(this.global, first);
+          ctx = this.global ? this.global[first] : undefined;
         }
       } else if (ctx) {
         // if scope is limited by a leading dot, don't search up the tree
-        ctx = getResult(ctx.head, first);
+        if(ctx.head) {
+          ctx = ctx.head[first];
+        } else {
+          //context's head is empty, value we are searching for is not defined
+          ctx = undefined;
+        }
       }
 
       while (ctx && i < len) {
         ctxThis = ctx;
-        ctx = getResult(ctx, down[i]);
+        ctx = ctx[down[i]];
         i++;
       }
     }
@@ -356,7 +344,8 @@
         try {
           return ctx.apply(ctxThis, arguments);
         } catch (err) {
-          return dust.log(err, ERROR);
+          dust.log(err, ERROR);
+          throw err;
         }
       };
     } else {
@@ -574,7 +563,12 @@
 
     this.next = branch;
     this.flushable = true;
-    callback(branch);
+    try {
+      callback(branch);
+    } catch(e) {
+      dust.log(e, ERROR);
+      branch.setError(e);
+    }
     return cursor;
   };
 
@@ -617,7 +611,12 @@
   Chunk.prototype.section = function(elem, context, bodies, params) {
     // anonymous functions
     if (typeof elem === 'function') {
-      elem = elem.apply(context.current(), [this, context, bodies, params]);
+      try {
+        elem = elem.apply(context.current(), [this, context, bodies, params]);
+      } catch(e) {
+        dust.log(e, ERROR);
+        return this.setError(e);
+      }
       // functions that return chunks are assumed to have handled the body and/or have modified the chunk
       // use that return value as the current chunk and go to the next method in the chain
       if (elem instanceof Chunk) {
@@ -764,15 +763,15 @@
   Chunk.prototype.helper = function(name, context, bodies, params) {
     var chunk = this;
     // handle invalid helpers, similar to invalid filters
-    try {
-      if(dust.helpers[name]) {
+    if(dust.helpers[name]) {
+      try {
         return dust.helpers[name](chunk, context, bodies, params);
-      } else {
-        dust.log('Invalid helper [' + name + ']', WARN);
-        return chunk;
+      } catch(e) {
+        dust.log('Error in ' + name + ' helper: ' + e, ERROR);
+        return chunk.setError(e);
       }
-    } catch (err) {
-      chunk.setError(err);
+    } else {
+      dust.log('Invalid helper [' + name + ']', WARN);
       return chunk;
     }
   };
