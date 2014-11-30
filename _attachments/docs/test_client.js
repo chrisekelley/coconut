@@ -2,6 +2,7 @@ testClient =
 {
   "_id": "TestClient",
   "id": "TestClient",
+  "noClientPush": "true",
   "question": "Individual Registration",
   "collection": "result",
   "createdAt": "2014-08-28",

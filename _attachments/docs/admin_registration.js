@@ -3,6 +3,7 @@ adminRegistrationForm =
     "_id": "Admin Registration",
     "id": "Admin Registration",
     "enabled": "true",
+    "noClientPush": "true",
     "required": "false",
     "safeLabel": "AdminRegistration",
     "questions": [

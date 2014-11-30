@@ -2,6 +2,7 @@ postOperativeFollowupForm =
 {
     "_id": "Post-Operative Followup",
     "id": "Post-Operative Followup",
+    "noClientPush": "true",
     "safeLabel": "Post-OperativeFollowup",
     "enabled": "true",
     "required": "false",

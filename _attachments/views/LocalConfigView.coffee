@@ -52,62 +52,38 @@ class LocalConfigView extends Backbone.View
     coconutCloudConfigURLCreds = coconutCloudConfigURL.replace(/https:\/\//,replacement)
     if localConfig.mode and coconutCloud?
       $('#message').html "Downloading configuration file from #{coconutCloudConfigURL}<br/>"
-      $.ajax
+      request = $.ajax
         url: coconutCloudConfigURLCreds
-        username: username
-        password: password
         dataType: "jsonp"
-        success: (cloudConfig, text) ->
+      request.done (cloudConfig) ->
           $('#message').append "Saving configuration file<br/>"
           delete cloudConfig["_rev"]
           Coconut.config.save cloudConfig,
-            success: ->
-              $('#message').append "Creating local configuration file<br/>"
-              cloud_credentials = cloudConfig.cloud_credentials
-              Coconut.config.local = new LocalConfig()
-              Coconut.config.local.save {_id: "coconut.config.local", coconutCloud: coconutCloud, cloud_credentials: cloud_credentials},
-                success: ->
-                  $('#message').append "Local configuration file saved<br/>"
+              success: ->
+                  $('#message').append "Creating local configuration file<br/>"
+                  cloud_credentials = cloudConfig.cloud_credentials
+                  Coconut.config.local = new LocalConfig()
+                  Coconut.config.local.save {_id: "coconut.config.local", coconutCloud: coconutCloud, cloud_credentials: cloud_credentials},
+                      $('#message').append "5 second delay before reloading home.<br/>"
+                  _.delay ->
+                      Coconut.router.navigate("",false)
+                      document.location.reload()
+                  , 5000
+                  #  TODO: make getFromJSs deferred
+                  $('#message').append "Loading local form definitions<br/>"
                   sync = new Sync()
-                  sync.save null,
-                    success: ->
-                        #  sync.getFromCloud
-                        $('#message').append "5 second delay before reloading home.<br/>"
-                        _.delay ->
-                            Coconut.router.navigate("",false)
-                            document.location.reload()
-                        , 5000
-                        #  TODO: make getFromJSs deferred
-                        $('#message').append "Loading local form definitions<br/>"
-                        sync.getFromJSs()
-                        Coconut.syncView = new SyncView()
-                        Coconut.syncView.sync.replicateFromServer()
-                        Coconut.syncView.sync.replicateToServer()
-#                        replicateToServerOpts =
-#                            success: ->
-#                                MoreOpts =
-#                                    success: ->
-#                                        Coconut.router.navigate("",false)
-#                                        location.reload()
-#                                    error: (model, err, cb) ->
-#                                        console.log JSON.stringify err
-#                                Coconut.syncView.sync.replicateToServer(MoreOpts)
-#                            error: (model, err, cb) ->
-#                                console.log JSON.stringify err
-#                        Coconut.syncView = new SyncView()
-#                        Coconut.syncView.sync.replicateFromServer(replicateToServerOpts)
-#                        Coconut.syncView = new SyncView()
-#                        Coconut.syncView.sync.replicateToServer()
-#                        Coconut.syncView.sync.replicateFromServer()
-                    error: (model, err, cb) ->
-                      console.log JSON.stringify err
-                error: (model, err, cb) ->
+                  sync.getFromJSs()
+                  Coconut.syncView = new SyncView()
+                  Coconut.syncView.sync.replicateFromServer()
+                  Coconut.syncView.sync.replicateToServer()
+              error: (model, err, cb) ->
                   console.log JSON.stringify err
-        error: (error, text, errorThrown) ->
-          message = "Couldn't find config file at #{coconutCloudConfigURL}. Error: " + JSON.stringify(error)
-          console.log message
-          alert(message)
-
+      request.fail (jqXHR, textStatus, errorThrown) ->
+        # NOTE: error won't be called because the server is not returning proper JSONP response. Sorry.
+        message = "Couldn't find config file at #{coconutCloudConfigURL}. Message: "  + textStatus + " Error Thrown: " + JSON.stringify(errorThrown)
+        console.log message
+        $('#message').append message
+        alert( "Error:" + message)
       return false
     else
       $('#message').html "Fields incomplete"

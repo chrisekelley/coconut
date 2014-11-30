@@ -2,6 +2,7 @@ trichiasisForm =
 {
     "_id": "Trichiasis Surgery",
     "id": "Trichiasis Surgery",
+    "noClientPush": "true",
     "enabled": "true",
     "required": "false",
     "safeLabel": "trichiasisSurgery",

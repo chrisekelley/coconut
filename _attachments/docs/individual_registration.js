@@ -2,6 +2,7 @@ individualRegistrationForm =
 {
     "_id": "Individual Registration",
     "id": "Individual Registration",
+    "noClientPush": "true",
     "required": "false",
     "enabled": "true",
     "safeLabel": "Individualregistration",

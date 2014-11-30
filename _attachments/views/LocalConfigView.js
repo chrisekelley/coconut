@@ -35,7 +35,7 @@ LocalConfigView = (function(_super) {
   };
 
   LocalConfigView.prototype.save = function() {
-    var coconutCloud, coconutCloudConfigURL, coconutCloudConfigURLCreds, localConfig, password, replacement, username;
+    var coconutCloud, coconutCloudConfigURL, coconutCloudConfigURLCreds, localConfig, password, replacement, request, username;
     localConfig = $('#local-config').toObject();
     coconutCloud = $("input[name=coconut-cloud]").val();
     username = localConfig.username;
@@ -45,60 +45,46 @@ LocalConfigView = (function(_super) {
     coconutCloudConfigURLCreds = coconutCloudConfigURL.replace(/https:\/\//, replacement);
     if (localConfig.mode && (coconutCloud != null)) {
       $('#message').html("Downloading configuration file from " + coconutCloudConfigURL + "<br/>");
-      $.ajax({
+      request = $.ajax({
         url: coconutCloudConfigURLCreds,
-        username: username,
-        password: password,
-        dataType: "jsonp",
-        success: function(cloudConfig, text) {
-          $('#message').append("Saving configuration file<br/>");
-          delete cloudConfig["_rev"];
-          return Coconut.config.save(cloudConfig, {
-            success: function() {
-              var cloud_credentials;
-              $('#message').append("Creating local configuration file<br/>");
-              cloud_credentials = cloudConfig.cloud_credentials;
-              Coconut.config.local = new LocalConfig();
-              return Coconut.config.local.save({
-                _id: "coconut.config.local",
-                coconutCloud: coconutCloud,
-                cloud_credentials: cloud_credentials
-              }, {
-                success: function() {
-                  var sync;
-                  $('#message').append("Local configuration file saved<br/>");
-                  sync = new Sync();
-                  return sync.save(null, {
-                    success: function() {
-                      $('#message').append("5 second delay before reloading home.<br/>");
-                      _.delay(function() {
-                        Coconut.router.navigate("", false);
-                        return document.location.reload();
-                      }, 5000);
-                      $('#message').append("Loading local form definitions<br/>");
-                      sync.getFromJSs();
-                      Coconut.syncView = new SyncView();
-                      Coconut.syncView.sync.replicateFromServer();
-                      return Coconut.syncView.sync.replicateToServer();
-                    },
-                    error: function(model, err, cb) {
-                      return console.log(JSON.stringify(err));
-                    }
-                  });
-                },
-                error: function(model, err, cb) {
-                  return console.log(JSON.stringify(err));
-                }
-              });
-            }
-          });
-        },
-        error: function(error, text, errorThrown) {
-          var message;
-          message = ("Couldn't find config file at " + coconutCloudConfigURL + ". Error: ") + JSON.stringify(error);
-          console.log(message);
-          return alert(message);
-        }
+        dataType: "jsonp"
+      });
+      request.done(function(cloudConfig) {
+        $('#message').append("Saving configuration file<br/>");
+        delete cloudConfig["_rev"];
+        return Coconut.config.save(cloudConfig, {
+          success: function() {
+            var cloud_credentials, sync;
+            $('#message').append("Creating local configuration file<br/>");
+            cloud_credentials = cloudConfig.cloud_credentials;
+            Coconut.config.local = new LocalConfig();
+            Coconut.config.local.save({
+              _id: "coconut.config.local",
+              coconutCloud: coconutCloud,
+              cloud_credentials: cloud_credentials
+            }, $('#message').append("5 second delay before reloading home.<br/>"));
+            _.delay(function() {
+              Coconut.router.navigate("", false);
+              return document.location.reload();
+            }, 5000);
+            $('#message').append("Loading local form definitions<br/>");
+            sync = new Sync();
+            sync.getFromJSs();
+            Coconut.syncView = new SyncView();
+            Coconut.syncView.sync.replicateFromServer();
+            return Coconut.syncView.sync.replicateToServer();
+          },
+          error: function(model, err, cb) {
+            return console.log(JSON.stringify(err));
+          }
+        });
+      });
+      request.fail(function(jqXHR, textStatus, errorThrown) {
+        var message;
+        message = ("Couldn't find config file at " + coconutCloudConfigURL + ". Message: ") + textStatus + " Error Thrown: " + JSON.stringify(errorThrown);
+        console.log(message);
+        $('#message').append(message);
+        return alert("Error:" + message);
       });
       return false;
     } else {

@@ -258,13 +258,17 @@ class Sync extends Backbone.Model
         )
 #    Coconut.menuView.checkReplicationStatus();
 
-
   replicateToServer: (options) ->
     options = {} if !options
+    filter = (doc) ->
+      if doc._id != "_design/by_clientId" && doc._id != "_design/by_serviceUuid" && doc._id != "SyncLog" && doc._id != "coconut.config" && doc._id != "coconut.config.local" && doc._id != "version" && doc.noClientPush != "true"
+          return doc
+
     opts =
       live:true
       continuous: true
       batch_size:5
+      filter: filter
 #      batches_limit:1
       withCredentials:true
 #      auth:

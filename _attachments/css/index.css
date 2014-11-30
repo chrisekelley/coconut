@@ -138,7 +138,7 @@ body {
 }
 #local-config button {
     font-size: 36px;
-    width: 500px;
+    width: 100%;
 }
 .checkbox {
     margin-bottom: 20px;
