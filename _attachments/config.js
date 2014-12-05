@@ -21,6 +21,8 @@ if (matchResults === null) {
     Coconut.ddoc_name = matchResults[2];
 }
 
+Coconut.languages = ["en","pt"]
+
 Backbone.sync = BackbonePouch.sync({
     db: PouchDB(Coconut.db_name)
 });

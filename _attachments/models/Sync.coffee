@@ -229,9 +229,12 @@ class Sync extends Backbone.Model
 
   replicateFromServer: (options) ->
     options = {} if !options
+    filter = (doc) ->
+      if doc._id != "_design/by_clientId" && doc._id != "_design/by_serviceUuid" && doc._id != "SyncLog" && doc._id != "coconut.config" && doc._id != "coconut.config.local" && doc._id != "version" && doc.noClientPush != "true"
+          return doc
     opts =
       live:true
-      batch_size:5
+      filter:filter
 #      batches_limit:1
       withCredentials:true
 #      auth:
@@ -258,6 +261,31 @@ class Sync extends Backbone.Model
         )
 #    Coconut.menuView.checkReplicationStatus();
 
+  replicateForms: (options) ->
+    options = {} if !options
+    opts =
+        live:true
+        withCredentials:true
+        complete: (result) ->
+            if typeof result != 'undefined' && result.ok
+              Coconut.debug "replicateFromServer - onComplete: Replication is fine. "
+            else
+              Coconut.debug "replicateFromServer - onComplete: Replication message: " + JSON.stringify result
+        error: (result) ->
+          Coconut.debug "error: Replication error: " + JSON.stringify result
+        timeout: 60000
+    _.extend options, opts
+    Backbone.sync.defaults.db.replicate.from(Coconut.config.coconut_forms_url_with_credentials(), options).on('uptodate', (result) ->
+      if typeof result != 'undefined' && result.ok
+        console.log "uptodate: Form Replication is fine. "
+        options.success()
+      else
+        console.log "uptodate: Form Replication error: " + JSON.stringify result).on('change', (info)->
+          Coconut.debug "Form Replication Change: " + JSON.stringify info
+        ).on('complete', (info)->
+          Coconut.debug "Form Replication Complete: " + JSON.stringify info
+        )
+
   replicateToServer: (options) ->
     options = {} if !options
     filter = (doc) ->
@@ -267,7 +295,7 @@ class Sync extends Backbone.Model
     opts =
       live:true
       continuous: true
-      batch_size:5
+#      batch_size:5
       filter: filter
 #      batches_limit:1
       withCredentials:true
@@ -316,4 +344,5 @@ class Sync extends Backbone.Model
         @replicateFromServer _.extend options,
           replicationArguments:
             doc_ids: doc_ids
+
 

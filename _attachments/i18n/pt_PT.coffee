@@ -22,7 +22,7 @@ polyglot.extend({
     "postOperativeFollowupAbbrev": "Visita pos-cirurgia"
     "Post-Operative Followup": "Visita de acompanhamento pos-cirurgia"
     "DateTime": "Data / Hora"
-    "RefusedSurgery": "Cirurgia Refusado"
+    "RefusedSurgery": "Cirurgia Recusada"
     "ProvidedEpilationConsultation": "Forneceu consulta sobre depilação"
     "Lefteye": "Olho esquerdo"
     "TypeofOperationL": "Tipo de operação"
@@ -115,7 +115,9 @@ polyglot.extend({
     "email": "Email"
     "deviceError": "Erro: ou um digitalizador não está ligada ou o digitalizador conectado não é suportado.  Favor de fechar o pacote no 'Task Manager',  conecte o digitalizador,  e renicie novamente."
     "version": "Versão"
+    "updateForms": "Atualize as formas"
 })
 
 Handlebars.registerHelper   'polyglot', (phrase)->
     polyglot.t(phrase)
+

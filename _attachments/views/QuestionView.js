@@ -421,8 +421,12 @@ QuestionView = (function(_super) {
     return this.result.save(currentData, {
       success: function(model) {
         $("#messageText").slideDown().fadeOut();
+        if (Coconut.currentAdmin !== null) {
+          _.extend(Coconut.currentAdmin, currentData);
+        }
         Coconut.router.navigate("edit/result/" + model.id, false);
         Coconut.menuView.update();
+        Controller.displaySiteNav();
         if (_this.result.complete()) {
           Coconut.syncView.sync.replicateToServer();
           if (_this.result.question() === 'Admin Registration') {
@@ -471,7 +475,6 @@ QuestionView = (function(_super) {
         if (i18nLabelText) {
           labelText = i18nLabelText;
         }
-        console.log("labelText:" + labelText);
         window.skipLogicCache[name] = question.skipLogic() !== '' ? CoffeeScript.compile(question.skipLogic(), {
           bare: true
         }) : '';

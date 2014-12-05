@@ -37,3 +37,12 @@ class Config extends Backbone.Model
 
   coconut_central_url_with_credentials: ->
       @coconut_central_url().replace(/https:\/\//,"https://#{@get "cloud_credentials"}@")
+
+  coconut_forms_url: ->
+      "#{@get "coconut_forms_url"}"
+
+  coconut_forms_url_with_credentials: ->
+      if !@coconut_forms_url
+          alert("Please tell Chris that the coconut_forms_url is missing.")
+          @coconut_forms_url = "https://kiwicentral.org/coconut-forms/"
+      @coconut_forms_url().replace(/https:\/\//,"https://#{@get "cloud_credentials"}@")

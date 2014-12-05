@@ -422,6 +422,9 @@ class Router extends Backbone.Router
 #          </center>
 #        "
 #        $("[data-role=footer]").navbar()
+
+#Coconut.fetchTranslation language for language in Coconut.languages
+
         $('#application-title').html Coconut.config.title()
         Controller.displaySiteNav()
         Coconut.loginView = new LoginView()
@@ -434,6 +437,7 @@ class Router extends Backbone.Router
         #        Coconut.menuView.render()
 
         Coconut.syncView.update()
+
         Backbone.history.start()
         if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
             coconutUtils.checkVersion()
@@ -519,7 +523,6 @@ $(() =>
       Coconut.router.navigate "displayClientRecords"
       Coconut.Controller.displayClientRecords()
     #  Coconut.Controller.showDashboard()
-
     Coconut.router.startApp()
 
     Coconut.debug = (string) ->
@@ -529,9 +532,30 @@ $(() =>
       Coconut.replicationLog += string
   #  $("#log").append string + "<br/>"
 
+  Coconut.fetchTranslation = (languge) ->
+    deferred = $.Deferred();
+    Coconut.translation = {} if !Coconut.translation
+    Coconut.translation[languge] = new Translation {id: languge}
+    Coconut.translation[languge].fetch
+        success: ->
+            polyglot = new Polyglot()
+            polyglot.extend()
+            Handlebars.registerHelper   'polyglot', (phrase)->
+                polyglot.t(phrase)
+            deferred.resolve()
+
+        error: (error) ->
+            console.log("Unable to fetch translation for " + " languge:" + languge + " error:" + JSON.stringify(error))
+    return deferred.promise()
+
+#  deferred = Coconut.fetchTranslation "pt"
+#  deferred.done ->
   if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
     console.log("listening for deviceready event.")
     document.addEventListener("deviceready", onDeviceReady, false);
   else
     onDeviceReady()
+
 )
+
+

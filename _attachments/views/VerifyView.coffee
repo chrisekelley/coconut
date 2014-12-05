@@ -16,7 +16,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
 
     initialize: ->
       if typeof cordova is "undefined"
-        console.log "cordova is not defined."
+#        console.log "cordova is not defined."
         @hasCordova = false
 
     displayNewUserRegistration: ->
@@ -85,6 +85,8 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     success: =>
                       console.log 'by_serviceUuid returned: ' + JSON.stringify users
                       l.stop()
+                      # Update the top nav strip
+                      Controller.displaySiteNav()
                       if users.length > 0
                         if user == "Admin"
                           adminUser = users.first()

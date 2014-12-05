@@ -1,6 +1,9 @@
 Controller =
   displaySiteNav: () ->
-    staticView = new SiteNavView(template: JST["_attachments/templates/SiteNavView.handlebars"])
+    Coconut.siteNav.empty()
+    if Coconut.currentAdmin != null
+        model = Coconut.currentAdmin
+    staticView = new SiteNavView(template: JST["_attachments/templates/SiteNavView.handlebars"], model:model)
     Coconut.siteNav.show staticView
     return
 

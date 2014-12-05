@@ -16,7 +16,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   hasCordova: true,
   initialize: function() {
     if (typeof cordova === "undefined") {
-      console.log("cordova is not defined.");
       return this.hasCordova = false;
     }
   },
@@ -88,6 +87,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                     var adminUser, uuid;
                     console.log('by_serviceUuid returned: ' + JSON.stringify(users));
                     l.stop();
+                    Coconut.siteNav.empty();
+                    Controller.displaySiteNav();
                     if (users.length > 0) {
                       if (user === "Admin") {
                         adminUser = users.first();

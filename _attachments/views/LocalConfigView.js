@@ -54,7 +54,7 @@ LocalConfigView = (function(_super) {
         delete cloudConfig["_rev"];
         return Coconut.config.save(cloudConfig, {
           success: function() {
-            var cloud_credentials, sync;
+            var cloud_credentials;
             $('#message').append("Creating local configuration file<br/>");
             cloud_credentials = cloudConfig.cloud_credentials;
             Coconut.config.local = new LocalConfig();
@@ -67,10 +67,9 @@ LocalConfigView = (function(_super) {
               Coconut.router.navigate("", false);
               return document.location.reload();
             }, 5000);
-            $('#message').append("Loading local form definitions<br/>");
-            sync = new Sync();
-            sync.getFromJSs();
+            $('#message').append("Replicating local form definitions and syncing with the server.<br/>");
             Coconut.syncView = new SyncView();
+            Coconut.syncView.sync.replicateForms();
             Coconut.syncView.sync.replicateFromServer();
             return Coconut.syncView.sync.replicateToServer();
           },
@@ -91,70 +90,6 @@ LocalConfigView = (function(_super) {
       $('#message').html("Fields incomplete");
       return false;
     }
-  };
-
-  LocalConfigView.prototype.saveLocal = function() {
-    var cloudConfig, coconutCloud, coconutCloudConfigURL, localConfig;
-    localConfig = $('#local-config').toObject();
-    coconutCloud = $("input[name=coconut-cloud]").val();
-    coconutCloudConfigURL = "" + coconutCloud + "/coconut.config";
-    cloudConfig = {
-      "_id": "coconut.config",
-      "_rev": "11-7b57beeb6ba84273897732a2a798b4b1",
-      "title": "Coconut Clinic",
-      "cloud": "localhost:5984",
-      "local_couchdb_admin_username": "admin",
-      "local_couchdb_admin_password": "password",
-      "cloud_credentials": "user:pass",
-      "date_format": "YYYY-MM-DD",
-      "datetime_format": "YYYY-MM-DD HH:mm:ss",
-      "sync_mode": "couchdb-sync",
-      "synchronization_target": "https://kiwicentral.org/projectdb/"
-    };
-    Coconut.config.save(cloudConfig, {
-      success: function() {
-        $('#message').append("Creating local configuration file<br/>");
-        Coconut.config.local = new LocalConfig();
-        return Coconut.config.local.save({
-          _id: "coconut.config.local",
-          coconutCloud: coconutCloud
-        }, {
-          success: function() {
-            var sync;
-            $('#message').append("Local configuration file saved<br/>");
-            sync = new Sync();
-            return sync.save(null, {
-              success: function() {
-                $('#message').append("Updating application<br/>");
-                _.delay(function() {
-                  return document.location.reload();
-                }, 3000);
-                return sync.getFromJSs({
-                  success: function() {
-                    Coconut.syncView.sync.replicateToServer();
-                    Coconut.router.navigate("", false);
-                    return location.reload();
-                  },
-                  error: function(model, err, cb) {
-                    return console.log(JSON.stringify(err));
-                  }
-                });
-              },
-              error: function(model, err, cb) {
-                return console.log(JSON.stringify(err));
-              }
-            });
-          },
-          error: function(model, err, cb) {
-            return console.log(JSON.stringify(err));
-          }
-        });
-      },
-      error: function(model, err, cb) {
-        return console.log(JSON.stringify(err));
-      }
-    });
-    return false;
   };
 
   return LocalConfigView;

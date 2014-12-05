@@ -6,6 +6,7 @@ class SyncView extends Backbone.View
 
   events:
     "click #refreshLog":  "refreshLog"
+    "click #updateForms":  "updateForms"
 
   render: =>
       @$el.html "
@@ -13,6 +14,7 @@ class SyncView extends Backbone.View
         <p><span class='sync-target'>#{@sync.target()}</span></p>
         <p>#{polyglot.t("version")}: #{Coconut.version_code}</p>
         <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>" + polyglot.t("sendData") + "</a>
+        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>
         <h2>" + polyglot.t("replicationLog") + "</h2>
         <p>" + polyglot.t("replicationLogDescription") + "
         <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>
@@ -37,3 +39,5 @@ class SyncView extends Backbone.View
     now = moment(new Date()).format(Coconut.config.get "date_format") + "<br/>"
     $("#replicationLog").html(now + Coconut.replicationLog)
 
+  updateForms: =>
+    @sync.replicateForms()

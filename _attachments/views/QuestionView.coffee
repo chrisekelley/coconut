@@ -468,11 +468,16 @@ class QuestionView extends Backbone.View
     @result.save currentData,
         success: (model) =>
           $("#messageText").slideDown().fadeOut()
+          if (Coconut.currentAdmin != null)
+              _.extend(Coconut.currentAdmin, currentData)
+
           Coconut.router.navigate("edit/result/#{model.id}",false)
 
           # Update the menu
           Coconut.menuView.update()
 
+          # Update the top nav strip
+          Controller.displaySiteNav()
           if @result.complete()
             Coconut.syncView.sync.replicateToServer()
             if @result.question() == 'Admin Registration'
@@ -503,7 +508,7 @@ class QuestionView extends Backbone.View
         i18nLabelText = polyglot.t(question.get('safeLabel'))
         if i18nLabelText
             labelText = i18nLabelText
-        console.log "labelText:" + labelText
+#        console.log "labelText:" + labelText
         window.skipLogicCache[name] = if question.skipLogic() isnt '' then CoffeeScript.compile(question.skipLogic(),bare:true) else ''
         question_id = question.get("id")
         if question.repeatable() == "true"

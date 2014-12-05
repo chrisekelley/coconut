@@ -18,7 +18,6 @@ StaticView = Backbone.Marionette.ItemView.extend({
   hasCordova: true,
   initialize: function() {
     if (typeof cordova === "undefined") {
-      console.log("cordova is not defined.");
       return this.hasCordova = false;
     }
   },

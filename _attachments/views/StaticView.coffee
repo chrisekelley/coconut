@@ -27,7 +27,7 @@ StaticView = Backbone.Marionette.ItemView.extend
 
   initialize: ->
     if typeof cordova is "undefined"
-      console.log "cordova is not defined."
+#      console.log "cordova is not defined."
       @hasCordova = false
 
   scanRetry: ->

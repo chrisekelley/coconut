@@ -317,13 +317,18 @@ Sync = (function(_super) {
   };
 
   Sync.prototype.replicateFromServer = function(options) {
-    var opts;
+    var filter, opts;
     if (!options) {
       options = {};
     }
+    filter = function(doc) {
+      if (doc._id !== "_design/by_clientId" && doc._id !== "_design/by_serviceUuid" && doc._id !== "SyncLog" && doc._id !== "coconut.config" && doc._id !== "coconut.config.local" && doc._id !== "version" && doc.noClientPush !== "true") {
+        return doc;
+      }
+    };
     opts = {
       live: true,
-      batch_size: 5,
+      filter: filter,
       withCredentials: true,
       complete: function(result) {
         if (typeof result !== 'undefined' && result.ok) {
@@ -352,6 +357,41 @@ Sync = (function(_super) {
     });
   };
 
+  Sync.prototype.replicateForms = function(options) {
+    var opts;
+    if (!options) {
+      options = {};
+    }
+    opts = {
+      live: true,
+      withCredentials: true,
+      complete: function(result) {
+        if (typeof result !== 'undefined' && result.ok) {
+          return Coconut.debug("replicateFromServer - onComplete: Replication is fine. ");
+        } else {
+          return Coconut.debug("replicateFromServer - onComplete: Replication message: " + JSON.stringify(result));
+        }
+      },
+      error: function(result) {
+        return Coconut.debug("error: Replication error: " + JSON.stringify(result));
+      },
+      timeout: 60000
+    };
+    _.extend(options, opts);
+    return Backbone.sync.defaults.db.replicate.from(Coconut.config.coconut_forms_url_with_credentials(), options).on('uptodate', function(result) {
+      if (typeof result !== 'undefined' && result.ok) {
+        console.log("uptodate: Form Replication is fine. ");
+        return options.success();
+      } else {
+        return console.log("uptodate: Form Replication error: " + JSON.stringify(result));
+      }
+    }).on('change', function(info) {
+      return Coconut.debug("Form Replication Change: " + JSON.stringify(info));
+    }).on('complete', function(info) {
+      return Coconut.debug("Form Replication Complete: " + JSON.stringify(info));
+    });
+  };
+
   Sync.prototype.replicateToServer = function(options) {
     var filter, opts;
     if (!options) {
@@ -365,7 +405,6 @@ Sync = (function(_super) {
     opts = {
       live: true,
       continuous: true,
-      batch_size: 5,
       filter: filter,
       withCredentials: true,
       complete: function(result) {

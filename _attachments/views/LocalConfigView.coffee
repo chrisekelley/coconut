@@ -69,11 +69,9 @@ class LocalConfigView extends Backbone.View
                       Coconut.router.navigate("",false)
                       document.location.reload()
                   , 5000
-                  #  TODO: make getFromJSs deferred
-                  $('#message').append "Loading local form definitions<br/>"
-                  sync = new Sync()
-                  sync.getFromJSs()
+                  $('#message').append "Replicating local form definitions and syncing with the server.<br/>"
                   Coconut.syncView = new SyncView()
+                  Coconut.syncView.sync.replicateForms()
                   Coconut.syncView.sync.replicateFromServer()
                   Coconut.syncView.sync.replicateToServer()
               error: (model, err, cb) ->
@@ -88,50 +86,3 @@ class LocalConfigView extends Backbone.View
     else
       $('#message').html "Fields incomplete"
       return false
-
-  saveLocal: ->
-    localConfig = $('#local-config').toObject()
-    coconutCloud = $("input[name=coconut-cloud]").val()
-    coconutCloudConfigURL = "#{coconutCloud}/coconut.config"
-    cloudConfig =
-      "_id": "coconut.config",
-      "_rev": "11-7b57beeb6ba84273897732a2a798b4b1",
-      "title": "Coconut Clinic",
-      "cloud": "localhost:5984",
-      "local_couchdb_admin_username": "admin",
-      "local_couchdb_admin_password": "password",
-      "cloud_credentials": "user:pass",
-      "date_format": "YYYY-MM-DD",
-      "datetime_format": "YYYY-MM-DD HH:mm:ss",
-      "sync_mode": "couchdb-sync",
-      "synchronization_target": "https://kiwicentral.org/projectdb/"
-    Coconut.config.save cloudConfig,
-      success: ->
-        $('#message').append "Creating local configuration file<br/>"
-        Coconut.config.local = new LocalConfig()
-        Coconut.config.local.save {_id: "coconut.config.local", coconutCloud: coconutCloud},
-          success: ->
-            $('#message').append "Local configuration file saved<br/>"
-            sync = new Sync()
-            sync.save null,
-              success: ->
-                $('#message').append "Updating application<br/>"
-#                TODO: make getFromDocs deferred
-                _.delay ->
-                  document.location.reload()
-                , 3000
-                #                      sync.getFromCloud
-                sync.getFromJSs
-                  success: ->
-                    Coconut.syncView.sync.replicateToServer()
-                    Coconut.router.navigate("",false)
-                    location.reload()
-                  error: (model, err, cb) ->
-                    console.log JSON.stringify err
-              error: (model, err, cb) ->
-                console.log JSON.stringify err
-          error: (model, err, cb) ->
-            console.log JSON.stringify err
-      error: (model, err, cb) ->
-        console.log JSON.stringify err
-    return false

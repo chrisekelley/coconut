@@ -66,6 +66,18 @@ Config = (function(_super) {
     return this.coconut_central_url().replace(/https:\/\//, "https://" + (this.get("cloud_credentials")) + "@");
   };
 
+  Config.prototype.coconut_forms_url = function() {
+    return "" + (this.get("coconut_forms_url"));
+  };
+
+  Config.prototype.coconut_forms_url_with_credentials = function() {
+    if (!this.coconut_forms_url) {
+      alert("Please tell Chris that the coconut_forms_url is missing.");
+      this.coconut_forms_url = "https://kiwicentral.org/coconut-forms/";
+    }
+    return this.coconut_forms_url().replace(/https:\/\//, "https://" + (this.get("cloud_credentials")) + "@");
+  };
+
   return Config;
 
 })(Backbone.Model);

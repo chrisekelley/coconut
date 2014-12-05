@@ -8,6 +8,7 @@ SyncView = (function(_super) {
   __extends(SyncView, _super);
 
   function SyncView() {
+    this.updateForms = __bind(this.updateForms, this);
     this.refreshLog = __bind(this.refreshLog, this);
     this.update = __bind(this.update, this);
     this.render = __bind(this.render, this);
@@ -22,11 +23,12 @@ SyncView = (function(_super) {
   SyncView.prototype.el = '#content';
 
   SyncView.prototype.events = {
-    "click #refreshLog": "refreshLog"
+    "click #refreshLog": "refreshLog",
+    "click #updateForms": "updateForms"
   };
 
   SyncView.prototype.render = function() {
-    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
+    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
     $("a").button();
     return this.update();
   };
@@ -49,6 +51,10 @@ SyncView = (function(_super) {
     var now;
     now = moment(new Date()).format(Coconut.config.get("date_format")) + "<br/>";
     return $("#replicationLog").html(now + Coconut.replicationLog);
+  };
+
+  SyncView.prototype.updateForms = function() {
+    return this.sync.replicateForms();
   };
 
   return SyncView;

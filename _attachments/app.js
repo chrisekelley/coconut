@@ -681,6 +681,31 @@ $(function() {
       return Coconut.replicationLog += string;
     };
   };
+  Coconut.fetchTranslation = function(languge) {
+    var deferred;
+    deferred = $.Deferred();
+    if (!Coconut.translation) {
+      Coconut.translation = {};
+    }
+    Coconut.translation[languge] = new Translation({
+      id: languge
+    });
+    Coconut.translation[languge].fetch({
+      success: function() {
+        var polyglot;
+        polyglot = new Polyglot();
+        polyglot.extend();
+        Handlebars.registerHelper('polyglot', function(phrase) {
+          return polyglot.t(phrase);
+        });
+        return deferred.resolve();
+      },
+      error: function(error) {
+        return console.log("Unable to fetch translation for " + " languge:" + languge + " error:" + JSON.stringify(error));
+      }
+    });
+    return deferred.promise();
+  };
   if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
     console.log("listening for deviceready event.");
     return document.addEventListener("deviceready", onDeviceReady, false);
