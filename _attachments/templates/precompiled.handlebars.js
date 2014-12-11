@@ -174,28 +174,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["JST"]["_attachments/templates/SiteNavView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, helperMissing=helpers.helperMissing, self=this;
+  var buffer = "", stack1, helper, options, helperMissing=helpers.helperMissing;
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, helper, options;
-  buffer += "\n            <li class=\"siteNav\"><a href=\"#sync\">";
+
+  buffer += "<div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a href=\"#\"><img src=\"images/Kiwi-Logo-150.png\" height=\"80\"/></a>\n    </div>\n    <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n            <!--<li class=\"siteNav\"><a href=\"#\">";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Home", options) : helperMissing.call(depth0, "polyglot", "Home", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a></li>-->\n            <li class=\"siteNav\"><a href=\"#sync\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Sync", options) : helperMissing.call(depth0, "polyglot", "Sync", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a></li>\n            <li class=\"siteNav\"><a href=\"#displayUserScanner\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Scanner", options) : helperMissing.call(depth0, "polyglot", "Scanner", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a></li>\n            ";
-  return buffer;
-  }
-
-  buffer += "<div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a href=\"#\"><img src=\"images/Kiwi-Logo-150.png\" height=\"80\"/></a>\n    </div>\n    <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n            <!--<li class=\"siteNav\"><a href=\"#\">";
-  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Home", options) : helperMissing.call(depth0, "polyglot", "Home", options));
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a></li>-->\n            ";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.Name), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n        </ul>\n    </div><!--/.nav-collapse -->\n</div>\n";
+  buffer += "</a></li>\n        </ul>\n    </div><!--/.nav-collapse -->\n</div>\n";
   return buffer;
   });
 

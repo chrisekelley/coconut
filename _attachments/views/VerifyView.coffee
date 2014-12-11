@@ -86,7 +86,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
                       console.log 'by_serviceUuid returned: ' + JSON.stringify users
                       l.stop()
                       # Update the top nav strip
-                      Controller.displaySiteNav()
+#                      Controller.displaySiteNav()
                       if users.length > 0
                         if user == "Admin"
                           adminUser = users.first()
@@ -120,12 +120,11 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   else
                     Coconut.router.navigate "registration", true
               , (error) ->
-                  console.log("Error: " + error)
+                  console.log("SecugenPlugin.identify error: " + error)
                   message = error
                   if error == "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app."
                       message = '<p>' + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>'
-                      $("#message").html message
-                  console.log "SecugenPlugin.identify: " + message
+                  $("#message").html message
                   l.stop()
             else
               cordova.plugins.SecugenPlugin.register (results) =>

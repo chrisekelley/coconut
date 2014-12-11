@@ -87,8 +87,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                     var adminUser, uuid;
                     console.log('by_serviceUuid returned: ' + JSON.stringify(users));
                     l.stop();
-                    Coconut.siteNav.empty();
-                    Controller.displaySiteNav();
                     if (users.length > 0) {
                       if (user === "Admin") {
                         adminUser = users.first();
@@ -131,13 +129,12 @@ VerifyView = Backbone.Marionette.ItemView.extend({
               }
             }, function(error) {
               var message;
-              console.log("Error: " + error);
+              console.log("SecugenPlugin.identify error: " + error);
               message = error;
               if (error === "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app.") {
                 message = '<p>' + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>';
-                $("#message").html(message);
               }
-              console.log("SecugenPlugin.identify: " + message);
+              $("#message").html(message);
               return l.stop();
             });
           } else {

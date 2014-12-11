@@ -7,6 +7,7 @@ class SyncView extends Backbone.View
   events:
     "click #refreshLog":  "refreshLog"
     "click #updateForms":  "updateForms"
+    "click #sendLogs":  "sendLogs"
 
   render: =>
       @$el.html "
@@ -15,6 +16,7 @@ class SyncView extends Backbone.View
         <p>#{polyglot.t("version")}: #{Coconut.version_code}</p>
         <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>" + polyglot.t("sendData") + "</a>
         <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>
+        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>
         <h2>" + polyglot.t("replicationLog") + "</h2>
         <p>" + polyglot.t("replicationLogDescription") + "
         <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>
@@ -41,3 +43,9 @@ class SyncView extends Backbone.View
 
   updateForms: =>
     @sync.replicateForms()
+
+  sendLogs: =>
+    logger.getLogs null, 100, (log) =>
+        console.log("Generated logs")
+        coconutUtils.saveLog(null,"Logcat log", log)
+

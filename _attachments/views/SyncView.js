@@ -8,6 +8,7 @@ SyncView = (function(_super) {
   __extends(SyncView, _super);
 
   function SyncView() {
+    this.sendLogs = __bind(this.sendLogs, this);
     this.updateForms = __bind(this.updateForms, this);
     this.refreshLog = __bind(this.refreshLog, this);
     this.update = __bind(this.update, this);
@@ -24,11 +25,12 @@ SyncView = (function(_super) {
 
   SyncView.prototype.events = {
     "click #refreshLog": "refreshLog",
-    "click #updateForms": "updateForms"
+    "click #updateForms": "updateForms",
+    "click #sendLogs": "sendLogs"
   };
 
   SyncView.prototype.render = function() {
-    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
+    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
     $("a").button();
     return this.update();
   };
@@ -55,6 +57,14 @@ SyncView = (function(_super) {
 
   SyncView.prototype.updateForms = function() {
     return this.sync.replicateForms();
+  };
+
+  SyncView.prototype.sendLogs = function() {
+    var _this = this;
+    return logger.getLogs(null, 100, function(log) {
+      console.log("Generated logs");
+      return coconutUtils.saveLog(null, "Logcat log", log);
+    });
   };
 
   return SyncView;

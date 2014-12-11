@@ -477,7 +477,7 @@ class QuestionView extends Backbone.View
           Coconut.menuView.update()
 
           # Update the top nav strip
-          Controller.displaySiteNav()
+#          Controller.displaySiteNav()
           if @result.complete()
             Coconut.syncView.sync.replicateToServer()
             if @result.question() == 'Admin Registration'

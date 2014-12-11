@@ -110,7 +110,7 @@
               return console.log(JSON.stringify(err));
           };
       }
-      log.save({message: message}, null, {
+      log.save({title:title, message: message}, null, {
           success: success,
           error: error
       });

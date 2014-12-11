@@ -426,7 +426,6 @@ QuestionView = (function(_super) {
         }
         Coconut.router.navigate("edit/result/" + model.id, false);
         Coconut.menuView.update();
-        Controller.displaySiteNav();
         if (_this.result.complete()) {
           Coconut.syncView.sync.replicateToServer();
           if (_this.result.question() === 'Admin Registration') {
