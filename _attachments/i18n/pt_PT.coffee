@@ -116,6 +116,13 @@ polyglot.extend({
     "deviceError": "Erro: ou um digitalizador não está ligada ou o digitalizador conectado não é suportado.  Favor de fechar o pacote no 'Task Manager',  conecte o digitalizador,  e renicie novamente."
     "version": "Versão"
     "updateForms": "Atualize as formas"
+    "sendLogs": "Enviar Logs"
+    "Login": "Login"
+    "PatientEncounters": "Patient Encounters"
+    "SetLanguage": "Set Language"
+    "LangChoice": "Language set to: "
+    "Settings": "Settings"
+
 })
 
 Handlebars.registerHelper   'polyglot', (phrase)->

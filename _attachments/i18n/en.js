@@ -119,7 +119,13 @@ polyglot.extend({
   "email": "E-mail address",
   "deviceError": "Error: Either a fingerprint device is not attached or the attached fingerprint device is not supported.  Please kill the app in the Task Manager, connect the device, and restart the app.",
   "version": "Version",
-  "updateForms": "Update forms"
+  "updateForms": "Update forms",
+  "sendLogs": "Send Logs",
+  "Login": "Login",
+  "PatientEncounters": "Patient Encounters",
+  "SetLanguage": "Set Language",
+  "LangChoice": "Language set to: ",
+  "Settings": "Settings"
 });
 
 Handlebars.registerHelper('polyglot', function(phrase) {

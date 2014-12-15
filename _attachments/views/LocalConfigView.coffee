@@ -62,18 +62,21 @@ class LocalConfigView extends Backbone.View
               success: ->
                   $('#message').append "Creating local configuration file<br/>"
                   cloud_credentials = cloudConfig.cloud_credentials
+                  Coconut.syncView = new SyncView()
+                  $('#message').append "Replicating local form definitions and syncing with the server.<br/>"
+                  opts =
+                      success: ->
+                          Coconut.syncView.sync.replicateFromServer()
+                          Coconut.syncView.sync.replicateToServer()
+                          $('#message').append "5 second delay before reloading home.<br/>"
+                          _.delay ->
+                              Coconut.router.navigate("",false)
+                              document.location.reload()
+                          , 5000
                   Coconut.config.local = new LocalConfig()
                   Coconut.config.local.save {_id: "coconut.config.local", coconutCloud: coconutCloud, cloud_credentials: cloud_credentials},
-                      $('#message').append "5 second delay before reloading home.<br/>"
-                  _.delay ->
-                      Coconut.router.navigate("",false)
-                      document.location.reload()
-                  , 5000
-                  $('#message').append "Replicating local form definitions and syncing with the server.<br/>"
-                  Coconut.syncView = new SyncView()
-                  Coconut.syncView.sync.replicateForms()
-                  Coconut.syncView.sync.replicateFromServer()
-                  Coconut.syncView.sync.replicateToServer()
+                      Coconut.syncView.sync.replicateForms(opts)
+
               error: (model, err, cb) ->
                   console.log JSON.stringify err
       request.fail (jqXHR, textStatus, errorThrown) ->

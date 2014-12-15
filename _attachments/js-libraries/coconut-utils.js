@@ -482,3 +482,16 @@
   function sendTo(url) {
       window.location.href=url;
   }
+
+   coconutUtils.setSession = function(name, value) {
+       var date = new Date();
+       console.log("Current date: " + date.toUTCString());
+       date.setTime(date.getTime() + (30 * 60 * 1000));
+       var expires =  date.toUTCString();
+       console.log("Setting expiry to " + expires);
+       if (Coconut.session == null) {
+           Coconut.session = {}
+       }
+       Coconut.session[name] = date
+       //$.cookie(name, value, { expires: date });
+  }

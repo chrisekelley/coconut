@@ -54,24 +54,28 @@ LocalConfigView = (function(_super) {
         delete cloudConfig["_rev"];
         return Coconut.config.save(cloudConfig, {
           success: function() {
-            var cloud_credentials;
+            var cloud_credentials, opts;
             $('#message').append("Creating local configuration file<br/>");
             cloud_credentials = cloudConfig.cloud_credentials;
+            Coconut.syncView = new SyncView();
+            $('#message').append("Replicating local form definitions and syncing with the server.<br/>");
+            opts = {
+              success: function() {
+                Coconut.syncView.sync.replicateFromServer();
+                Coconut.syncView.sync.replicateToServer();
+                $('#message').append("5 second delay before reloading home.<br/>");
+                return _.delay(function() {
+                  Coconut.router.navigate("", false);
+                  return document.location.reload();
+                }, 5000);
+              }
+            };
             Coconut.config.local = new LocalConfig();
-            Coconut.config.local.save({
+            return Coconut.config.local.save({
               _id: "coconut.config.local",
               coconutCloud: coconutCloud,
               cloud_credentials: cloud_credentials
-            }, $('#message').append("5 second delay before reloading home.<br/>"));
-            _.delay(function() {
-              Coconut.router.navigate("", false);
-              return document.location.reload();
-            }, 5000);
-            $('#message').append("Replicating local form definitions and syncing with the server.<br/>");
-            Coconut.syncView = new SyncView();
-            Coconut.syncView.sync.replicateForms();
-            Coconut.syncView.sync.replicateFromServer();
-            return Coconut.syncView.sync.replicateToServer();
+            }, Coconut.syncView.sync.replicateForms(opts));
           },
           error: function(model, err, cb) {
             return console.log(JSON.stringify(err));

@@ -224,11 +224,26 @@ Router = (function(_super) {
   };
 
   Router.prototype.userLoggedIn = function(callback) {
-    var user;
+    var expires, now, user;
     user = new User({
       _id: "user.admin"
     });
-    return callback.success(user);
+    if (!Coconut.session) {
+      Coconut.session = {};
+    }
+    expires = Coconut.session['currentAdmin'];
+    if (expires) {
+      now = new Date();
+      if (now < expires) {
+        return callback.success(user);
+      } else {
+        console.log('No currentAdmin');
+        return Coconut.trigger("displayAdminScanner");
+      }
+    } else {
+      console.log('No currentAdmin');
+      return Coconut.trigger("displayAdminScanner");
+    }
   };
 
   Router.prototype.adminLoggedIn = function(callback) {
@@ -656,7 +671,6 @@ $(function() {
     });
     Coconut.on("displayUserRegistrationForm", function() {
       Coconut.router.navigate("displayRegistration");
-      Coconut.Controller.displaySiteNav();
       return Coconut.Controller.displayRegistration("user");
     });
     Coconut.on("displayEnrollUser", function() {
@@ -671,6 +685,10 @@ $(function() {
       Coconut.router.navigate("displayClientRecords");
       return Coconut.Controller.displayClientRecords();
     });
+    Coconut.on("displaySync", function() {
+      Coconut.router.navigate("sync");
+      return Coconut.Controller.displaySync();
+    });
     Coconut.router.startApp();
     return Coconut.debug = function(string) {
       console.log(string);
@@ -680,31 +698,6 @@ $(function() {
       Coconut.replicationLog += "<br/>";
       return Coconut.replicationLog += string;
     };
-  };
-  Coconut.fetchTranslation = function(languge) {
-    var deferred;
-    deferred = $.Deferred();
-    if (!Coconut.translation) {
-      Coconut.translation = {};
-    }
-    Coconut.translation[languge] = new Translation({
-      id: languge
-    });
-    Coconut.translation[languge].fetch({
-      success: function() {
-        var polyglot;
-        polyglot = new Polyglot();
-        polyglot.extend();
-        Handlebars.registerHelper('polyglot', function(phrase) {
-          return polyglot.t(phrase);
-        });
-        return deferred.resolve();
-      },
-      error: function(error) {
-        return console.log("Unable to fetch translation for " + " languge:" + languge + " error:" + JSON.stringify(error));
-      }
-    });
-    return deferred.promise();
   };
   if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
     console.log("listening for deviceready event.");

@@ -1,6 +1,7 @@
 class SyncView extends Backbone.View
   initialize: ->
     @sync = new Sync()
+    langChoice = $.cookie('langChoice');
 
   el: '#content'
 
@@ -8,6 +9,7 @@ class SyncView extends Backbone.View
     "click #refreshLog":  "refreshLog"
     "click #updateForms":  "updateForms"
     "click #sendLogs":  "sendLogs"
+    "change #langChoice": "changeLanguage"
 
   render: =>
       @$el.html "
@@ -17,9 +19,18 @@ class SyncView extends Backbone.View
         <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>" + polyglot.t("sendData") + "</a>
         <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>
         <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>
+        <h2>" + polyglot.t("SetLanguage") + "</h2>
+        <p>
+            " + polyglot.t("LangChoice") +  "&nbsp;<span id='langCurrently'>" + $.cookie('langChoice') + "</span><br/>" +
+        "<select id='langChoice'>
+                <option value=''>--Select --</option>
+                <option value='en'>en</option>
+                <option value='pt'>pt</option>
+            </select>
+        </p>
         <h2>" + polyglot.t("replicationLog") + "</h2>
         <p>" + polyglot.t("replicationLogDescription") + "
-        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>
+        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>
         </p>
         <div id=\"replicationLog\"></div>"
       $("a").button()
@@ -48,4 +59,27 @@ class SyncView extends Backbone.View
     logger.getLogs null, 100, (log) =>
         console.log("Generated logs")
         coconutUtils.saveLog(null,"Logcat log", log)
+
+  changeLanguage: =>
+      langChoice = $('#langChoice').val();
+      console.log("langChoice: " + langChoice)
+      if (langChoice != '')
+#        $.cookie('langChoice', langChoice);
+        user = new User
+            _id: "user.admin"
+        user.fetch
+            success: ->
+                langChoice = user.get('langChoice')
+                console.log("langChoice from doc: " + user.get('langChoice'))
+                user.set('langChoice',langChoice)
+                user.save
+                    success: ->
+                        console.log("langChoice saved: " + user.get('langChoice'))
+                    error: (json, msg) ->
+                        console.log("Error saving langChoice  " + msg)
+
+
+        fetchTranslation langChoice
+        Coconut.trigger "displaySync"
+
 

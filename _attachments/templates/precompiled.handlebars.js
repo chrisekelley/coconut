@@ -180,11 +180,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   buffer += "<div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a href=\"#\"><img src=\"images/Kiwi-Logo-150.png\" height=\"80\"/></a>\n    </div>\n    <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n            <!--<li class=\"siteNav\"><a href=\"#\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Home", options) : helperMissing.call(depth0, "polyglot", "Home", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a></li>-->\n            <li class=\"siteNav\"><a href=\"#sync\">";
-  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Sync", options) : helperMissing.call(depth0, "polyglot", "Sync", options));
+  buffer += "</a></li>-->\n            <li class=\"siteNav\"><a href=\"#\">";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Login", options) : helperMissing.call(depth0, "polyglot", "Login", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a></li>\n            <li class=\"siteNav\"><a href=\"#sync\">";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Settings", options) : helperMissing.call(depth0, "polyglot", "Settings", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a></li>\n            <li class=\"siteNav\"><a href=\"#displayUserScanner\">";
-  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Scanner", options) : helperMissing.call(depth0, "polyglot", "Scanner", options));
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "PatientEncounters", options) : helperMissing.call(depth0, "polyglot", "PatientEncounters", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a></li>\n        </ul>\n    </div><!--/.nav-collapse -->\n</div>\n";
   return buffer;

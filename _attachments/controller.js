@@ -125,6 +125,10 @@ Controller = {
       Coconut.dashboardRegion.show(staticView);
     }
   },
+  displaySync: function() {
+    Coconut.syncView = new SyncView();
+    Coconut.syncView.render();
+  },
   loadTestClient: function() {
     var client;
     $("#message").html("");

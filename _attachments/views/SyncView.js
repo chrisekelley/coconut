@@ -8,6 +8,7 @@ SyncView = (function(_super) {
   __extends(SyncView, _super);
 
   function SyncView() {
+    this.changeLanguage = __bind(this.changeLanguage, this);
     this.sendLogs = __bind(this.sendLogs, this);
     this.updateForms = __bind(this.updateForms, this);
     this.refreshLog = __bind(this.refreshLog, this);
@@ -18,7 +19,9 @@ SyncView = (function(_super) {
   }
 
   SyncView.prototype.initialize = function() {
-    return this.sync = new Sync();
+    var langChoice;
+    this.sync = new Sync();
+    return langChoice = $.cookie('langChoice');
   };
 
   SyncView.prototype.el = '#content';
@@ -26,11 +29,12 @@ SyncView = (function(_super) {
   SyncView.prototype.events = {
     "click #refreshLog": "refreshLog",
     "click #updateForms": "updateForms",
-    "click #sendLogs": "sendLogs"
+    "click #sendLogs": "sendLogs",
+    "change #langChoice": "changeLanguage"
   };
 
   SyncView.prototype.render = function() {
-    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
+    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>        <h2>" + polyglot.t("SetLanguage") + "</h2>        <p>            " + polyglot.t("LangChoice") + "&nbsp;<span id='langCurrently'>" + $.cookie('langChoice') + "</span><br/>" + "<select id='langChoice'>                <option value=''>--Select --</option>                <option value='en'>en</option>                <option value='pt'>pt</option>            </select>        </p>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
     $("a").button();
     return this.update();
   };
@@ -65,6 +69,34 @@ SyncView = (function(_super) {
       console.log("Generated logs");
       return coconutUtils.saveLog(null, "Logcat log", log);
     });
+  };
+
+  SyncView.prototype.changeLanguage = function() {
+    var langChoice, user;
+    langChoice = $('#langChoice').val();
+    console.log("langChoice: " + langChoice);
+    if (langChoice !== '') {
+      user = new User({
+        _id: "user.admin"
+      });
+      user.fetch({
+        success: function() {
+          langChoice = user.get('langChoice');
+          console.log("langChoice from doc: " + user.get('langChoice'));
+          user.set('langChoice', langChoice);
+          return user.save({
+            success: function() {
+              return console.log("langChoice saved: " + user.get('langChoice'));
+            },
+            error: function(json, msg) {
+              return console.log("Error saving langChoice  " + msg);
+            }
+          });
+        }
+      });
+      fetchTranslation(langChoice);
+      return Coconut.trigger("displaySync");
+    }
   };
 
   return SyncView;

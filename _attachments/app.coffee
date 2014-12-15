@@ -163,7 +163,21 @@ class Router extends Backbone.Router
   userLoggedIn: (callback) ->
       user = new User
         _id: "user.admin"
-      callback.success(user)
+#      currentAdmin = $.cookie('currentAdmin');
+#      console.log('currentAdmin: ' + currentAdmin)
+      if !Coconut.session
+        Coconut.session = {}
+      expires = Coconut.session['currentAdmin']
+      if expires
+        now = new Date();
+        if now < expires
+            callback.success(user)
+          else
+            console.log('No currentAdmin')
+            Coconut.trigger "displayAdminScanner"
+      else
+          console.log('No currentAdmin')
+          Coconut.trigger "displayAdminScanner"
 #    User.isAuthenticated
 #      success: (user) ->
 #        callback.success(user)
@@ -522,6 +536,11 @@ $(() =>
       Coconut.router.navigate "displayClientRecords"
       Coconut.Controller.displayClientRecords()
     #  Coconut.Controller.showDashboard()
+
+    Coconut.on "displaySync", ->
+      Coconut.router.navigate "sync"
+      Coconut.Controller.displaySync()
+
     Coconut.router.startApp()
 
     Coconut.debug = (string) ->
@@ -531,21 +550,21 @@ $(() =>
       Coconut.replicationLog += string
   #  $("#log").append string + "<br/>"
 
-  Coconut.fetchTranslation = (languge) ->
-    deferred = $.Deferred();
-    Coconut.translation = {} if !Coconut.translation
-    Coconut.translation[languge] = new Translation {id: languge}
-    Coconut.translation[languge].fetch
-        success: ->
-            polyglot = new Polyglot()
-            polyglot.extend()
-            Handlebars.registerHelper   'polyglot', (phrase)->
-                polyglot.t(phrase)
-            deferred.resolve()
-
-        error: (error) ->
-            console.log("Unable to fetch translation for " + " languge:" + languge + " error:" + JSON.stringify(error))
-    return deferred.promise()
+#  Coconut.fetchTranslation = (languge) ->
+#    deferred = $.Deferred();
+#    Coconut.translation = {} if !Coconut.translation
+#    Coconut.translation[languge] = new Translation {id: languge}
+#    Coconut.translation[languge].fetch
+#        success: ->
+#            polyglot = new Polyglot()
+#            polyglot.extend()
+#            Handlebars.registerHelper   'polyglot', (phrase)->
+#                polyglot.t(phrase)
+#            deferred.resolve()
+#
+#        error: (error) ->
+#            console.log("Unable to fetch translation for " + " languge:" + languge + " error:" + JSON.stringify(error))
+#    return deferred.promise()
 
 #  deferred = Coconut.fetchTranslation "pt"
 #  deferred.done ->

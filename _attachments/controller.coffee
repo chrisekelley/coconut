@@ -105,6 +105,11 @@ Controller =
       Coconut.dashboardRegion.show staticView
     return
 
+  displaySync: () ->
+    Coconut.syncView = new SyncView()
+    Coconut.syncView.render()
+    return
+
   loadTestClient: () ->
     $("#message").html ""
     client = new Result
