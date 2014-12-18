@@ -25,6 +25,7 @@ class SettingsView extends Backbone.View
         <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>" + polyglot.t("sendData") + "</a>
         <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>
         <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>
+        <span id='progress'></span>
         <h2>" + polyglot.t("SetLanguage") + "</h2>
         <p>
             " + polyglot.t("LangChoice") +  "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" +
@@ -59,7 +60,17 @@ class SettingsView extends Backbone.View
     $("#replicationLog").html(now + Coconut.replicationLog)
 
   updateForms: =>
-    @sync.replicateForms()
+    opts =
+      success: ->
+          $('#progress').append "<br/>Downloaded form definitions with the server.<br/>"
+          langId = polyglot.t("id")
+          $('#progress').append "Refreshing the current language: " + langId + "<br/>"
+          deferred = CoconutUtils.fetchTranslation langId
+          deferred.done ->
+              console.log("Refreshed translation.")
+      error: ->
+          $('#progress').append "Error while trying to download form definitions with the server.<br/>"
+    @sync.replicateForms(opts)
 
   sendLogs: =>
     logger.getLogs null, 100, (log) =>
