@@ -580,24 +580,11 @@ Router = (function(_super) {
     });
   };
 
-  Router.prototype.startApp = function() {
+  Router.prototype.bootstrapApp = function() {
     Coconut.config = new Config();
     return Coconut.config.fetch({
       success: function() {
-        $('#application-title').html(Coconut.config.title());
-        Controller.displaySiteNav();
-        Coconut.loginView = new LoginView();
-        Coconut.questions = new QuestionCollection();
-        Coconut.questionView = new QuestionView();
-        Coconut.menuView = new MenuView();
-        Coconut.syncView = new SyncView();
-        Coconut.syncView.sync.replicateToServer();
-        Coconut.syncView.sync.replicateFromServer();
-        Coconut.syncView.update();
-        Backbone.history.start();
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
-          return coconutUtils.checkVersion();
-        }
+        return Coconut.router.fetchUserAndStartAppUI();
       },
       error: function() {
         if (Coconut.localConfigView == null) {
@@ -606,6 +593,63 @@ Router = (function(_super) {
         return Coconut.localConfigView.render();
       }
     });
+  };
+
+  Router.prototype.fetchUserAndStartAppUI = function() {
+    var user;
+    user = new User({
+      _id: "user.admin"
+    });
+    return user.fetch({
+      success: function() {
+        var deferred, langChoice;
+        langChoice = user.get('langChoice');
+        console.log("langChoice from doc: " + user.get('langChoice'));
+        if (!langChoice) {
+          langChoice = 'pt';
+          user.set('langChoice', langChoice);
+          return user.save(null, {
+            success: function() {
+              var deferred;
+              console.log("langChoice saved: " + langChoice);
+              deferred = CoconutUtils.fetchTranslation(langChoice);
+              return deferred.done(function() {
+                console.log("Got translation. Starting app");
+                return Coconut.router.startAppUI();
+              });
+            },
+            error: function(json, msg) {
+              return console.log("Error saving langChoice  " + msg);
+            }
+          });
+        } else {
+          deferred = CoconutUtils.fetchTranslation(langChoice);
+          return deferred.done(function() {
+            console.log("Got translation. Starting app");
+            return Coconut.router.startAppUI();
+          });
+        }
+      },
+      error: function() {
+        return console.log("Error: user.admin should be in the local db.");
+      }
+    });
+  };
+
+  Router.prototype.startAppUI = function() {
+    $('#application-title').html(Coconut.config.title());
+    Controller.displaySiteNav();
+    Coconut.loginView = new LoginView();
+    Coconut.questions = new QuestionCollection();
+    Coconut.questionView = new QuestionView();
+    Coconut.menuView = new MenuView();
+    Coconut.syncView = new SyncView();
+    Coconut.syncView.sync.replicateToServer();
+    Coconut.syncView.sync.replicateFromServer();
+    Backbone.history.start();
+    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+      return CoconutUtils.checkVersion();
+    }
   };
 
   return Router;
@@ -689,7 +733,7 @@ $(function() {
       Coconut.router.navigate("sync");
       return Coconut.Controller.displaySync();
     });
-    Coconut.router.startApp();
+    Coconut.router.bootstrapApp();
     return Coconut.debug = function(string) {
       console.log(string);
       if (Coconut.replicationLog == null) {

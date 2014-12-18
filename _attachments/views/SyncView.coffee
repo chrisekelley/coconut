@@ -1,9 +1,15 @@
 class SyncView extends Backbone.View
   initialize: ->
     @sync = new Sync()
-    langChoice = $.cookie('langChoice');
-
+    user = new User
+      _id: "user.admin"
+    user.fetch
+      success: ->
+          langChoice = user.get('langChoice')
+          this.langChoice = langChoice
+          console.log("langChoice from doc: " + langChoice)
   el: '#content'
+  langChoice:''
 
   events:
     "click #refreshLog":  "refreshLog"
@@ -21,7 +27,7 @@ class SyncView extends Backbone.View
         <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>
         <h2>" + polyglot.t("SetLanguage") + "</h2>
         <p>
-            " + polyglot.t("LangChoice") +  "&nbsp;<span id='langCurrently'>" + $.cookie('langChoice') + "</span><br/>" +
+            " + polyglot.t("LangChoice") +  "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" +
         "<select id='langChoice'>
                 <option value=''>--Select --</option>
                 <option value='en'>en</option>
@@ -34,19 +40,19 @@ class SyncView extends Backbone.View
         </p>
         <div id=\"replicationLog\"></div>"
       $("a").button()
-      @update()
+#      @update()
 
-  update: =>
-    @sync.fetch
-      success: =>
-#        $(".sync-sent-status").html if @sync.was_last_send_successful() then @sync.last_send_time() else "#{@sync.last_send_time()} - last attempt FAILED"
-#        $(".sync-get-status").html if @sync.was_last_get_successful() then @sync.last_get_time() else "#{@sync.last_get_time()} - last attempt FAILED"
-#        console.log "Coconut.replicationLog: " + Coconut.replicationLog
-        $("replicationLog").append(Coconut.replicationLog)
-      error: =>
-        console.log "synclog doesn't exist yet, create it and re-render"
-        @sync.save()
-        _.delay(@update,1000)
+#  update: =>
+#    @sync.fetch
+#      success: =>
+##        $(".sync-sent-status").html if @sync.was_last_send_successful() then @sync.last_send_time() else "#{@sync.last_send_time()} - last attempt FAILED"
+##        $(".sync-get-status").html if @sync.was_last_get_successful() then @sync.last_get_time() else "#{@sync.last_get_time()} - last attempt FAILED"
+##        console.log "Coconut.replicationLog: " + Coconut.replicationLog
+#        $("replicationLog").append(Coconut.replicationLog)
+#      error: (json,msg)=>
+#        console.log "synclog doesn't exist yet, create it and re-render" + msg
+#        @sync.save()
+#        _.delay(@update,1000)
 
   refreshLog: =>
     now = moment(new Date()).format(Coconut.config.get "date_format") + "<br/>"
@@ -58,7 +64,7 @@ class SyncView extends Backbone.View
   sendLogs: =>
     logger.getLogs null, 100, (log) =>
         console.log("Generated logs")
-        coconutUtils.saveLog(null,"Logcat log", log)
+        CoconutUtils.saveLog(null,"Logcat log", log)
 
   changeLanguage: =>
       langChoice = $('#langChoice').val();
@@ -69,17 +75,21 @@ class SyncView extends Backbone.View
             _id: "user.admin"
         user.fetch
             success: ->
-                langChoice = user.get('langChoice')
-                console.log("langChoice from doc: " + user.get('langChoice'))
+                docLangChoice = user.get('langChoice')
+                console.log("langChoice from doc: " + docLangChoice)
                 user.set('langChoice',langChoice)
-                user.save
+                user.save null,
                     success: ->
                         console.log("langChoice saved: " + user.get('langChoice'))
+                        deferred = CoconutUtils.fetchTranslation langChoice
+                        deferred.done ->
+                          console.log("Got translation for" + langChoice)
+                          Coconut.router.navigate("",false)
+                          location.reload()
                     error: (json, msg) ->
                         console.log("Error saving langChoice  " + msg)
-
-
-        fetchTranslation langChoice
-        Coconut.trigger "displaySync"
-
-
+#        _.delay ->
+##            Coconut.trigger "displayUserScanner"
+#            Coconut.router.navigate("",false)
+#            location.reload()
+#        , 2000

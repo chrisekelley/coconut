@@ -35,7 +35,7 @@ LocalConfigView = (function(_super) {
   };
 
   LocalConfigView.prototype.save = function() {
-    var coconutCloud, coconutCloudConfigURL, coconutCloudConfigURLCreds, localConfig, password, replacement, request, username;
+    var coconutCloud, coconutCloudConfigURL, coconutCloudConfigURLCreds, localConfig, options, password, replacement, request, username;
     localConfig = $('#local-config').toObject();
     coconutCloud = $("input[name=coconut-cloud]").val();
     username = localConfig.username;
@@ -44,51 +44,85 @@ LocalConfigView = (function(_super) {
     replacement = 'https://' + username + ':' + password + '@';
     coconutCloudConfigURLCreds = coconutCloudConfigURL.replace(/https:\/\//, replacement);
     if (localConfig.mode && (coconutCloud != null)) {
-      $('#message').html("Downloading configuration file from " + coconutCloudConfigURL + "<br/>");
-      request = $.ajax({
+      options = {
         url: coconutCloudConfigURLCreds,
-        dataType: "jsonp"
-      });
-      request.done(function(cloudConfig) {
-        $('#message').append("Saving configuration file<br/>");
-        delete cloudConfig["_rev"];
-        return Coconut.config.save(cloudConfig, {
-          success: function() {
-            var cloud_credentials, opts;
-            $('#message').append("Creating local configuration file<br/>");
-            cloud_credentials = cloudConfig.cloud_credentials;
-            Coconut.syncView = new SyncView();
-            $('#message').append("Replicating local form definitions and syncing with the server.<br/>");
-            opts = {
-              success: function() {
-                Coconut.syncView.sync.replicateFromServer();
-                Coconut.syncView.sync.replicateToServer();
-                $('#message').append("5 second delay before reloading home.<br/>");
-                return _.delay(function() {
-                  Coconut.router.navigate("", false);
-                  return document.location.reload();
-                }, 5000);
-              }
-            };
-            Coconut.config.local = new LocalConfig();
-            return Coconut.config.local.save({
-              _id: "coconut.config.local",
-              coconutCloud: coconutCloud,
-              cloud_credentials: cloud_credentials
-            }, Coconut.syncView.sync.replicateForms(opts));
+        dataType: "jsonp",
+        username: username,
+        password: password,
+        error: function(xOptions, textStatus) {
+          return $('#message').append("There was an error - the username/password were probably incorrect. Error message: " + textStatus + "<br/>");
+        },
+        statusCode: {
+          404: function() {
+            return alert("page not found");
           },
-          error: function(model, err, cb) {
-            return console.log(JSON.stringify(err));
+          401: function() {
+            return alert("incorrect username/password");
           }
-        });
-      });
-      request.fail(function(jqXHR, textStatus, errorThrown) {
-        var message;
-        message = ("Couldn't find config file at " + coconutCloudConfigURL + ". Message: ") + textStatus + " Error Thrown: " + JSON.stringify(errorThrown);
-        console.log(message);
-        $('#message').append(message);
-        return alert("Error:" + message);
-      });
+        },
+        success: function(cloudConfig) {
+          $('#message').append("Saving configuration file<br/>");
+          delete cloudConfig["_rev"];
+          return Coconut.config.save(cloudConfig, {
+            success: function() {
+              var cloud_credentials, opts;
+              $('#message').html("Downloading configuration file from " + coconutCloudConfigURL + "<br/>");
+              $('#message').append("Creating local configuration file<br/>");
+              cloud_credentials = cloudConfig.cloud_credentials;
+              Coconut.syncView = new SyncView();
+              $('#message').append("Replicating local form definitions and syncing with the server.<br/>");
+              opts = {
+                success: function() {
+                  var repFromOpts;
+                  repFromOpts = {
+                    success: function() {
+                      var repToOpts;
+                      repToOpts = {
+                        success: function() {
+                          $('#message').append("Replication from app was successful. Finished with Config. Reloading app in 2 seconds.<br/>");
+                          return _.delay(function() {
+                            Coconut.router.navigate("", false);
+                            return document.location.reload();
+                          }, 2000);
+                        },
+                        error: function(obj, msg) {
+                          return $('#message').append("Replication Error:" + msg + "<br/>");
+                        }
+                      };
+                      $('#message').append("Replication to server was successful.<br/>");
+                      return Coconut.syncView.sync.replicateToServer(repToOpts);
+                    },
+                    error: function(obj, msg) {
+                      return $('#message').append("Replication Error:" + msg + "<br/>");
+                    }
+                  };
+                  return Coconut.syncView.sync.replicateFromServer(repFromOpts);
+                },
+                error: function(obj, msg) {
+                  return $('#message').append("Error fetching Forms. App will not function properly. Error:" + msg + "<br/>");
+                }
+              };
+              Coconut.config.local = new LocalConfig();
+              return Coconut.config.local.save({
+                _id: "coconut.config.local",
+                coconutCloud: coconutCloud,
+                cloud_credentials: cloud_credentials
+              }, Coconut.syncView.sync.replicateForms(opts));
+            },
+            error: function(model, err, cb) {
+              return console.log(JSON.stringify(err));
+            }
+          });
+        },
+        fail: function(jqXHR, textStatus, errorThrown) {
+          var message;
+          message = ("Couldn't find config file at " + coconutCloudConfigURL + ". Message: ") + textStatus + " Error Thrown: " + JSON.stringify(errorThrown);
+          console.log(message);
+          $('#message').append(message);
+          return alert("Error:" + message);
+        }
+      };
+      request = $.ajax(options);
       return false;
     } else {
       $('#message').html("Fields incomplete");

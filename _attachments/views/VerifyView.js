@@ -92,18 +92,18 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                         adminUser = users.first();
                         console.log('Coconut.currentAdmin: ' + JSON.stringify(adminUser));
                         Coconut.currentAdmin = adminUser;
-                        Coconut.router.navigate("displayUserScanner", true);
-                        return coconutUtils.setSession('currentAdmin', adminUser.get('email'));
+                        CoconutUtils.setSession('currentAdmin', adminUser.get('email'));
+                        return Coconut.router.navigate("displayUserScanner", true);
                       } else {
                         user = users.first();
                         console.log('Coconut.currentClient: ' + JSON.stringify(user));
                         Coconut.currentClient = user;
-                        Coconut.router.navigate("displayClientRecords", true);
-                        return coconutUtils.setSession('currentClient', true);
+                        CoconutUtils.setSession('currentClient', true);
+                        return Coconut.router.navigate("displayClientRecords", true);
                       }
                     } else {
                       console.log('Strange. This user was identified but is not registered.');
-                      uuid = coconutUtils.uuidGenerator(30);
+                      uuid = CoconutUtils.uuidGenerator(30);
                       Coconut.currentClient = new Result({
                         _id: uuid,
                         serviceUuid: serviceUuid,
@@ -149,7 +149,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
               statusCode = obj.StatusCode;
               serviceUuid = obj.UID;
               if (statusCode === 1) {
-                uuid = coconutUtils.uuidGenerator(30);
+                uuid = CoconutUtils.uuidGenerator(30);
                 Coconut.currentClient = new Result({
                   _id: uuid,
                   serviceUuid: serviceUuid
@@ -171,8 +171,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           interval = setInterval(function() {
             var serviceUuid, uuid;
             if (i === 50) {
-              uuid = coconutUtils.uuidGenerator(30);
-              serviceUuid = coconutUtils.uuidGenerator(30);
+              uuid = CoconutUtils.uuidGenerator(30);
+              serviceUuid = CoconutUtils.uuidGenerator(30);
               console.log("Go to next page. Generated UUID: " + uuid);
               Coconut.scannerPayload = {
                 "Template": "46 4D 52 00 20 32 30 00 00 00 00 F0 00 00 01 04 01 2C 00 C5 00 C5 01 00 00 00 00 23 40 83 00 40 71 00 40 52 00 53 75 00 80 33 00 6B 8A 00 80 A9 00 6C 72 00 40 5B 00 81 7D 00 80 93 00 87 71 00 40 28 00 99 91 00 40 17 00 A1 11 00 40 44 00 A9 8D 00 40 81 00 B8 78 00 40 1B 00 BA 10 00 40 73 00 C2 80 00 40 3F 00 C3 94 00 40 DF 00 C7 E8 00 80 4B 00 CE 11 00 40 32 00 D6 91 00 40 16 00 D8 14 00 80 3D 00 E0 10 00 40 1A 00 E2 11 00 40 A3 00 E3 EE 00 40 38 00 F3 94 00 40 9E 00 F5 73 00 40 6D 00 FB 00 00 40 56 00 FC 93 00 40 A8 00 FC E3 00 40 26 00 FC 11 00 40 40 00 FD 10 00 40 7C 01 01 F8 00 80 C9 01 03 EA 00 40 38 01 04 9A 00 80 6D 01 07 7F 00 40 9E 01 0E 6C 00 40 32 01 10 17 00 40 88 01 11 EE 00 80 88 01 23 72 00 00 00 ",
@@ -186,7 +186,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 serviceUuid: serviceUuid
               });
               $("#message").html("Scanning complete!");
-              coconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email);
+              CoconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email);
               l.stop();
               if (_this.nextUrl != null) {
                 Coconut.router.navigate(_this.nextUrl, true);

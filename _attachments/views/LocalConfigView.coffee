@@ -51,41 +51,67 @@ class LocalConfigView extends Backbone.View
     replacement = 'https://' + username + ':' + password + '@'
     coconutCloudConfigURLCreds = coconutCloudConfigURL.replace(/https:\/\//,replacement)
     if localConfig.mode and coconutCloud?
-      $('#message').html "Downloading configuration file from #{coconutCloudConfigURL}<br/>"
-      request = $.ajax
+      options =
         url: coconutCloudConfigURLCreds
         dataType: "jsonp"
-      request.done (cloudConfig) ->
+        username: username
+        password: password
+        error: (xOptions, textStatus) ->
+          $('#message').append "There was an error - the username/password were probably incorrect. Error message: " + textStatus + "<br/>"
+#        dataFilter: (json, type) ->
+#            return json;
+        statusCode:
+          404: ->
+            alert( "page not found" )
+          401: ->
+            alert( "incorrect username/password" )
+        success: (cloudConfig) ->
           $('#message').append "Saving configuration file<br/>"
           delete cloudConfig["_rev"]
           Coconut.config.save cloudConfig,
               success: ->
+                  $('#message').html "Downloading configuration file from #{coconutCloudConfigURL}<br/>"
                   $('#message').append "Creating local configuration file<br/>"
                   cloud_credentials = cloudConfig.cloud_credentials
                   Coconut.syncView = new SyncView()
                   $('#message').append "Replicating local form definitions and syncing with the server.<br/>"
                   opts =
                       success: ->
-                          Coconut.syncView.sync.replicateFromServer()
-                          Coconut.syncView.sync.replicateToServer()
-                          $('#message').append "5 second delay before reloading home.<br/>"
-                          _.delay ->
-                              Coconut.router.navigate("",false)
-                              document.location.reload()
-                          , 5000
+                          repFromOpts =
+                              success: ->
+                                repToOpts =
+                                    success: ->
+                                      $('#message').append "Replication from app was successful. Finished with Config. Reloading app in 2 seconds.<br/>"
+                                      _.delay ->
+                                          Coconut.router.navigate("",false)
+                                          document.location.reload()
+                                      , 2000
+                                    error: (obj, msg)->
+                                      $('#message').append "Replication Error:" + msg + "<br/>"
+                                $('#message').append "Replication to server was successful.<br/>"
+                                Coconut.syncView.sync.replicateToServer(repToOpts)
+                              error: (obj, msg)->
+                                $('#message').append "Replication Error:" + msg + "<br/>"
+                          Coconut.syncView.sync.replicateFromServer(repFromOpts)
+                      error: (obj, msg)->
+                          $('#message').append "Error fetching Forms. App will not function properly. Error:" + msg + "<br/>"
                   Coconut.config.local = new LocalConfig()
                   Coconut.config.local.save {_id: "coconut.config.local", coconutCloud: coconutCloud, cloud_credentials: cloud_credentials},
                       Coconut.syncView.sync.replicateForms(opts)
 
               error: (model, err, cb) ->
                   console.log JSON.stringify err
-      request.fail (jqXHR, textStatus, errorThrown) ->
-        # NOTE: error won't be called because the server is not returning proper JSONP response. Sorry.
-        message = "Couldn't find config file at #{coconutCloudConfigURL}. Message: "  + textStatus + " Error Thrown: " + JSON.stringify(errorThrown)
-        console.log message
-        $('#message').append message
-        alert( "Error:" + message)
+        fail: (jqXHR, textStatus, errorThrown) ->
+            # NOTE: error won't be called because the server is not returning proper JSONP response. Sorry.
+            message = "Couldn't find config file at #{coconutCloudConfigURL}. Message: "  + textStatus + " Error Thrown: " + JSON.stringify(errorThrown)
+            console.log message
+            $('#message').append message
+            alert( "Error:" + message)
+      request = $.ajax options
+#        url: coconutCloudConfigURLCreds
+        #        dataType: "jsonp"
       return false
     else
       $('#message').html "Fields incomplete"
       return false
+

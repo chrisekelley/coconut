@@ -414,50 +414,57 @@ class Router extends Backbone.Router
         Coconut.mapView ?= new MapView()
         Coconut.mapView.render()
 
-  startApp: ->
+  bootstrapApp: ->
     Coconut.config = new Config()
     Coconut.config.fetch
       success: ->
-#        $("#footer-menu").html "
-#          <center>
-#          <span style='font-size:75%;display:inline-block'>
-#            User:<br/> <span id='user'></span>
-#          </span>
-#          <a href='#login'>Login</a>
-#          <a href='#logout'>Logout</a>
-#          <a id='reports' href='#reports'>Reports</a>
-#          <a id='displayScanner' href='#displayScanner'>Scanner</a>
-#          <a id='manage-button' style='display:none' href='#manage'>Manage</a>
-#          &nbsp;
-#          <a href='#sync/send'>Send data (last done: <span class='sync-sent-status'></span>)</a>
-#          <a href='#sync/get'>Update (last done: <span class='sync-get-status'></span>)</a>
-#          <a href='#help'>Help</a>
-#          <span style='font-size:75%;display:inline-block'>Version<br/><span id='version'></span></span>
-#          </center>
-#        "
-#        $("[data-role=footer]").navbar()
-
-#Coconut.fetchTranslation language for language in Coconut.languages
-
-        $('#application-title').html Coconut.config.title()
-        Controller.displaySiteNav()
-        Coconut.loginView = new LoginView()
-        Coconut.questions = new QuestionCollection()
-        Coconut.questionView = new QuestionView()
-        Coconut.menuView = new MenuView()
-        Coconut.syncView = new SyncView()
-        Coconut.syncView.sync.replicateToServer()
-        Coconut.syncView.sync.replicateFromServer()
-        #        Coconut.menuView.render()
-
-        Coconut.syncView.update()
-
-        Backbone.history.start()
-        if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
-            coconutUtils.checkVersion()
+          Coconut.router.fetchUserAndStartAppUI()
       error: ->
         Coconut.localConfigView ?= new LocalConfigView()
         Coconut.localConfigView.render()
+
+  fetchUserAndStartAppUI: ->
+    user = new User
+        _id: "user.admin"
+    user.fetch
+        success: ->
+          langChoice = user.get('langChoice')
+          console.log("langChoice from doc: " + user.get('langChoice'))
+          if !langChoice
+            langChoice = 'pt'
+            user.set('langChoice',langChoice)
+            user.save null,
+              success: ->
+                  console.log("langChoice saved: " + langChoice)
+                  deferred = CoconutUtils.fetchTranslation langChoice
+                  deferred.done ->
+                      console.log("Got translation. Starting app")
+                      Coconut.router.startAppUI()
+              error: (json, msg) ->
+                  console.log("Error saving langChoice  " + msg)
+          else
+            deferred = CoconutUtils.fetchTranslation langChoice
+            deferred.done ->
+              console.log("Got translation. Starting app")
+              Coconut.router.startAppUI()
+        error: ->
+            console.log("Error: user.admin should be in the local db.")
+
+
+  startAppUI: ->
+    $('#application-title').html Coconut.config.title()
+    Controller.displaySiteNav()
+    Coconut.loginView = new LoginView()
+    Coconut.questions = new QuestionCollection()
+    Coconut.questionView = new QuestionView()
+    Coconut.menuView = new MenuView()
+    Coconut.syncView = new SyncView()
+    Coconut.syncView.sync.replicateToServer()
+    Coconut.syncView.sync.replicateFromServer()
+    #        Coconut.syncView.update()
+    Backbone.history.start()
+    if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+      CoconutUtils.checkVersion()
 
 $(() =>
   onDeviceReady = () =>
@@ -541,7 +548,7 @@ $(() =>
       Coconut.router.navigate "sync"
       Coconut.Controller.displaySync()
 
-    Coconut.router.startApp()
+    Coconut.router.bootstrapApp()
 
     Coconut.debug = (string) ->
       console.log string
@@ -573,7 +580,7 @@ $(() =>
     document.addEventListener("deviceready", onDeviceReady, false);
   else
     onDeviceReady()
-
 )
+
 
 

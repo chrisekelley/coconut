@@ -12,19 +12,30 @@ SyncView = (function(_super) {
     this.sendLogs = __bind(this.sendLogs, this);
     this.updateForms = __bind(this.updateForms, this);
     this.refreshLog = __bind(this.refreshLog, this);
-    this.update = __bind(this.update, this);
     this.render = __bind(this.render, this);
     _ref = SyncView.__super__.constructor.apply(this, arguments);
     return _ref;
   }
 
   SyncView.prototype.initialize = function() {
-    var langChoice;
+    var user;
     this.sync = new Sync();
-    return langChoice = $.cookie('langChoice');
+    user = new User({
+      _id: "user.admin"
+    });
+    return user.fetch({
+      success: function() {
+        var langChoice;
+        langChoice = user.get('langChoice');
+        this.langChoice = langChoice;
+        return console.log("langChoice from doc: " + langChoice);
+      }
+    });
   };
 
   SyncView.prototype.el = '#content';
+
+  SyncView.prototype.langChoice = '';
 
   SyncView.prototype.events = {
     "click #refreshLog": "refreshLog",
@@ -34,23 +45,8 @@ SyncView = (function(_super) {
   };
 
   SyncView.prototype.render = function() {
-    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>        <h2>" + polyglot.t("SetLanguage") + "</h2>        <p>            " + polyglot.t("LangChoice") + "&nbsp;<span id='langCurrently'>" + $.cookie('langChoice') + "</span><br/>" + "<select id='langChoice'>                <option value=''>--Select --</option>                <option value='en'>en</option>                <option value='pt'>pt</option>            </select>        </p>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
-    $("a").button();
-    return this.update();
-  };
-
-  SyncView.prototype.update = function() {
-    var _this = this;
-    return this.sync.fetch({
-      success: function() {
-        return $("replicationLog").append(Coconut.replicationLog);
-      },
-      error: function() {
-        console.log("synclog doesn't exist yet, create it and re-render");
-        _this.sync.save();
-        return _.delay(_this.update, 1000);
-      }
-    });
+    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>        <h2>" + polyglot.t("SetLanguage") + "</h2>        <p>            " + polyglot.t("LangChoice") + "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" + "<select id='langChoice'>                <option value=''>--Select --</option>                <option value='en'>en</option>                <option value='pt'>pt</option>            </select>        </p>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
+    return $("a").button();
   };
 
   SyncView.prototype.refreshLog = function() {
@@ -67,7 +63,7 @@ SyncView = (function(_super) {
     var _this = this;
     return logger.getLogs(null, 100, function(log) {
       console.log("Generated logs");
-      return coconutUtils.saveLog(null, "Logcat log", log);
+      return CoconutUtils.saveLog(null, "Logcat log", log);
     });
   };
 
@@ -79,14 +75,22 @@ SyncView = (function(_super) {
       user = new User({
         _id: "user.admin"
       });
-      user.fetch({
+      return user.fetch({
         success: function() {
-          langChoice = user.get('langChoice');
-          console.log("langChoice from doc: " + user.get('langChoice'));
+          var docLangChoice;
+          docLangChoice = user.get('langChoice');
+          console.log("langChoice from doc: " + docLangChoice);
           user.set('langChoice', langChoice);
-          return user.save({
+          return user.save(null, {
             success: function() {
-              return console.log("langChoice saved: " + user.get('langChoice'));
+              var deferred;
+              console.log("langChoice saved: " + user.get('langChoice'));
+              deferred = CoconutUtils.fetchTranslation(langChoice);
+              return deferred.done(function() {
+                console.log("Got translation for" + langChoice);
+                Coconut.router.navigate("", false);
+                return location.reload();
+              });
             },
             error: function(json, msg) {
               return console.log("Error saving langChoice  " + msg);
@@ -94,8 +98,6 @@ SyncView = (function(_super) {
           });
         }
       });
-      fetchTranslation(langChoice);
-      return Coconut.trigger("displaySync");
     }
   };
 

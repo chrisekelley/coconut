@@ -1,12 +1,13 @@
+if (typeof window.CoconutUtils === "undefined" || window.CoconutUtils === null) {
+    window.CoconutUtils = {};
+}
 
-  var coconutUtils = {};
-
-  coconutUtils.refreshChart = function (id, name) {
+CoconutUtils.refreshChart = function (id, name) {
     document.getElementById(id).innerHTML = name;
-  }
+}
 
 // kudos: http://snipplr.com/view/26338/cascading-select-boxes/  - Creative Commons Attribution-Share Alike 3.0 Unported License
-  coconutUtils.cascadeSelect = function (parent, child){
+  CoconutUtils.cascadeSelect = function (parent, child){
     var childOptions = child.find('option:not(.static)');
     //console.log("sorting");
     //childOptions.sort(sortBylabelAlpha);
@@ -16,7 +17,7 @@
       childOptions.remove();
       console.log("changing");
       var filteredData = child.data('options').filter('.sub_' + this.value);
-      var sortedFilteredData = filteredData.sort(coconutUtils.sortBylabelAlpha);
+      var sortedFilteredData = filteredData.sort(CoconutUtils.sortBylabelAlpha);
       //console.log("sortedFilteredData: " + JSON.stringify(sortedFilteredData));
       child
         .append(sortedFilteredData)
@@ -25,7 +26,7 @@
     childOptions.not('.static, .sub_' + parent.val()).remove();
   }
 
-  coconutUtils.sortBylabelAlpha = function (a,b) {
+  CoconutUtils.sortBylabelAlpha = function (a,b) {
     //var result = a.label.toLowerCase() > b.label.toLowerCase();
     //console.log(a.label.toLowerCase() + ":" + b.label.toLowerCase() + "= " + result);
     var nameA=a.label.toLowerCase(), nameB=b.label.toLowerCase()
@@ -37,23 +38,23 @@
     //return result;
   }
 
-  coconutUtils.loadCascadedSelects = function loadCascadedSelects(){
+  CoconutUtils.loadCascadedSelects = function loadCascadedSelects(){
     var cascadeForm = $('#theForm');
     var subcounty = cascadeForm.find('#subcounty');
     var village = cascadeForm.find('#village');
-    coconutUtils.cascadeSelect(subcounty, village);
+    CoconutUtils.cascadeSelect(subcounty, village);
   }
 
 //window.onload = loadCascadedSelects;
 
-  coconutUtils.checkVersion = function () {
+  CoconutUtils.checkVersion = function () {
     console.log("Checking for new version of app.");
     var url = Coconut.config.coconut_central_url_with_credentials() + "/version";
     $.ajax(url, { type: 'GET', dataType: 'json',
       success: function(data) {
         console.log("data: " + JSON.stringify(data));
         var remoteVersion = data.version;
-        coconutUtils.remoteUrl = data.url;
+        CoconutUtils.remoteUrl = data.url;
         console.log("Remote version: " + remoteVersion);
         window.plugins.version.getVersionCode(
           function(version_code) {
@@ -65,7 +66,7 @@
                   navigator.notification.vibrate(2000);
                   navigator.notification.confirm(
                       'A new version is out! Get it now!',  // message
-                      coconutUtils.onVersion,            // callback to invoke with index of button pressed
+                      CoconutUtils.onVersion,            // callback to invoke with index of button pressed
                       'Update available',                 // title
                       ['Update now!', 'Maybe later']     // buttonLabels
                   );
@@ -88,15 +89,15 @@
     });
   }
 
-  coconutUtils.onVersion = function (button) {
+  CoconutUtils.onVersion = function (button) {
     if(button == 1){
       //window.open('https://dl.dropbox.com/s/o1kur0w2skwx7a3/Olutindo-debug.apk?dl=1','_blank');
-        coconutUtils.downloadFile()
+        CoconutUtils.downloadFile()
     }
   }
 
 
-  coconutUtils.saveLog = function(log, title, message, success, error) {
+  CoconutUtils.saveLog = function(log, title, message, success, error) {
       if (log == null) {
           log = new Log();
       }
@@ -118,7 +119,7 @@
 
   //kudos: http://stackoverflow.com/questions/11455323/how-to-download-apk-within-phonegap-app
   //http://www.raymondcamden.com/index.cfm/2013/5/1/Using-the-Progress-event-in-PhoneGap-file-transfers
-  coconutUtils.downloadFile = function (){
+  CoconutUtils.downloadFile = function (){
     var fileSystem;
     console.log("downloading file.")
 
@@ -127,8 +128,8 @@
         fileSystem = fs;
         var ft = new FileTransfer();
         //var uri = encodeURI("https://dl.dropbox.com/s/o1kur0w2skwx7a3/Olutindo-debug.apk?dl=1");
-        console.log("coconutUtils.remoteUrl: " + coconutUtils.remoteUrl);
-        var uri = encodeURI(coconutUtils.remoteUrl);
+        console.log("CoconutUtils.remoteUrl: " + CoconutUtils.remoteUrl);
+        var uri = encodeURI(CoconutUtils.remoteUrl);
         //var downloadPath = fileSystem.root.fullPath + "/Olutindo-debug.apk";
         var store = cordova.file.externalRootDirectory;
         var downloadPath = store + "kiwi.apk";
@@ -144,7 +145,7 @@
           function(theFile) {
             navigator.notification.progressStop();
             console.log("download complete: " + theFile.toURL());
-            coconutUtils.saveLog(null, "Download complete", "File downloaded to " + theFile.toURL());
+            CoconutUtils.saveLog(null, "Download complete", "File downloaded to " + theFile.toURL());
             window.plugins.webintent.startActivity({
                 action: window.plugins.webintent.ACTION_VIEW,
                 //url: 'file://' + theFile.fullPath,
@@ -167,7 +168,7 @@
                 var message = 'Failed to open URL via Android Intent. URL: ' + theFile;
                 alert(message);
                 console.log(message);
-                coconutUtils.saveLog(null, "Install problem: ", message);
+                CoconutUtils.saveLog(null, "Install problem: ", message);
               }
             );
           },
@@ -175,17 +176,17 @@
             var message = "download error: " + JSON.stringify(e);
             alert(message);
             console.log(message);
-            coconutUtils.saveLog(null, "download error: ", message);
+            CoconutUtils.saveLog(null, "download error: ", message);
           });
       }, function(e) {
         var message = 'failed to get fs: ' + JSON.stringify(e);
         alert(message);
         console.log(message);
-        coconutUtils.saveLog(null, "FileTransfer error: ", message);
+        CoconutUtils.saveLog(null, "FileTransfer error: ", message);
       });
   }
 
-  coconutUtils.saveLoginPreferences = function (username, password, site, department) {
+  CoconutUtils.saveLoginPreferences = function (username, password, site, department) {
     console.log("Saving login prefs. username: " + username + " password: " + password + " site: "  + site + " department:" + department);
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
       window.applicationPreferences.set("username", username, function() {
@@ -217,7 +218,7 @@
     }
   }
 
-  coconutUtils.getLoginPreferences = function () {
+  CoconutUtils.getLoginPreferences = function () {
     var account = new Object();
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
       window.applicationPreferences.get("username", function(value) {
@@ -251,7 +252,7 @@
     return account;
   }
 
-  coconutUtils.StartReplication = function (account) {
+  CoconutUtils.StartReplication = function (account) {
     if (account != null && account.username != null) {
       var credentials = account.username + ":" + account.password;
       var couchdb =  "troubletickets_" +  account.site;
@@ -271,19 +272,19 @@
         withCredentials:true,
         //cookieAuth: {username:account.username, password:account.password},
         auth: {username:account.username, password:account.password},
-        complete: coconutUtils.onComplete,
+        complete: CoconutUtils.onComplete,
         timeout: 60000};
       //var opts = {continuous: true, withCredentials:true};
       //var opts = {continuous: true};
       //$("#alertMessage").html('<img src="../images/network_drive_connected_40.png"/>');
       FORMY.SyncStatus.html = '<img src="images/network_drive_connected_40.png"/>';
-      Backbone.sync.defaults.db.replicate.to(remoteCouch, opts, coconutUtils.ReplicationErrorLog);
+      Backbone.sync.defaults.db.replicate.to(remoteCouch, opts, CoconutUtils.ReplicationErrorLog);
       //localDB.replicate.from('http://relax.com/on-the-couch', {withCredentials:true, cookieAuth: {username:'admin', password:'pass'}}, function(){});
-      Backbone.sync.defaults.db.replicate.from(remoteCouch, opts, coconutUtils.ReplicationErrorLog);
+      Backbone.sync.defaults.db.replicate.from(remoteCouch, opts, CoconutUtils.ReplicationErrorLog);
     }
   }
 
-  coconutUtils.ReplicationErrorLog = function(err, result) {
+  CoconutUtils.ReplicationErrorLog = function(err, result) {
     if (result !=null && result.ok) {
       console.log("Replication is fine. ")
       //$("#alertMessage").html('<img src="../images/network_drive_connected_40.png"/>');
@@ -298,7 +299,7 @@
     }
   }
 
-  coconutUtils.UrbanAirshipRegistration = function (account) {
+  CoconutUtils.UrbanAirshipRegistration = function (account) {
 
     if (typeof window.plugins != 'undefined') {
       push = window.plugins.pushNotification;
@@ -335,7 +336,7 @@
 
 
 
-  coconutUtils.onComplete = function (err, result) {
+  CoconutUtils.onComplete = function (err, result) {
     if (result !== null && result.ok) {
       console.log("onComplete: Replication is fine. ")
     } else {
@@ -343,7 +344,7 @@
     }
   }
 
-  coconutUtils.uptodate = function (err, result) {
+  CoconutUtils.uptodate = function (err, result) {
     if (result !== null && result.ok) {
       console.log("uptodate: Replication is fine. ")
       Coconut.menuView.checkReplicationStatus();
@@ -352,14 +353,14 @@
     }
   }
 
-  coconutUtils.signIn = function() {
+  CoconutUtils.signIn = function() {
     //$form = $.modalForm({fields: [ 'username', 'password', 'site', 'department' ], submit: 'Sign in'})
     $.modalForm({fields: [ 'username', 'password', 'site', 'department' ], submit: 'Sign in'})
     //$form.on('submit', handleSignInSubmit( 'signin' ))
     //$form.on('submit', handleSignInSubmit());
   }
 
-  coconutUtils.handleSignInSubmit = function() {
+  CoconutUtils.handleSignInSubmit = function() {
     saveLoginPreferences($("#username").val(), $("#password").val(), $("#site-dropwdown").val(), $("#department-dropwdown").val());
     $("#SigninForm").hide();
 //  return function(event, inputs) {
@@ -376,7 +377,7 @@
 // This is borrowed from Hood.ie
 
 // helper to generate unique ids.
-  coconutUtils.uuidGenerator = function(len) {
+  CoconutUtils.uuidGenerator = function(len) {
     var chars, i, radix;
 
     // default uuid length to 7
@@ -483,7 +484,7 @@
       window.location.href=url;
   }
 
-   coconutUtils.setSession = function(name, value) {
+   CoconutUtils.setSession = function(name, value) {
        var date = new Date();
        console.log("Current date: " + date.toUTCString());
        date.setTime(date.getTime() + (30 * 60 * 1000));
