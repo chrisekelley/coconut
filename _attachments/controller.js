@@ -126,7 +126,7 @@ Controller = {
     }
   },
   displaySync: function() {
-    Coconut.syncView = new SyncView();
+    Coconut.syncView = new SettingsView();
     Coconut.syncView.render();
   },
   loadTestClient: function() {

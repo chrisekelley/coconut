@@ -396,7 +396,7 @@ Router = (function(_super) {
     return this.userLoggedIn({
       success: function() {
         if (Coconut.syncView == null) {
-          Coconut.syncView = new SyncView();
+          Coconut.syncView = new SettingsView();
         }
         return Coconut.syncView.render();
       }
@@ -426,7 +426,7 @@ Router = (function(_super) {
     return this.userLoggedIn({
       success: function() {
         if (Coconut.syncView == null) {
-          Coconut.syncView = new SyncView();
+          Coconut.syncView = new SettingsView();
         }
         return Coconut.syncView.sync.getFromCloud();
       }
@@ -643,7 +643,7 @@ Router = (function(_super) {
     Coconut.questions = new QuestionCollection();
     Coconut.questionView = new QuestionView();
     Coconut.menuView = new MenuView();
-    Coconut.syncView = new SyncView();
+    Coconut.syncView = new SettingsView();
     Coconut.syncView.sync.replicateToServer();
     Coconut.syncView.sync.replicateFromServer();
     Backbone.history.start();

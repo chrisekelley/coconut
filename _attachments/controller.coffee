@@ -106,7 +106,7 @@ Controller =
     return
 
   displaySync: () ->
-    Coconut.syncView = new SyncView()
+    Coconut.syncView = new SettingsView()
     Coconut.syncView.render()
     return
 

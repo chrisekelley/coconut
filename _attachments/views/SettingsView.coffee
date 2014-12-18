@@ -1,4 +1,4 @@
-class SyncView extends Backbone.View
+class SettingsView extends Backbone.View
   initialize: ->
     @sync = new Sync()
     user = new User

@@ -294,7 +294,7 @@ class Router extends Backbone.Router
   sync: (action) ->
     @userLoggedIn
       success: ->
-        Coconut.syncView ?= new SyncView()
+        Coconut.syncView ?= new SettingsView()
         Coconut.syncView.render()
 
   # TODO refactor these to not use view - just use the sync model
@@ -313,7 +313,7 @@ class Router extends Backbone.Router
     Coconut.router.navigate("",false)
     @userLoggedIn
       success: ->
-        Coconut.syncView ?= new SyncView()
+        Coconut.syncView ?= new SettingsView()
         Coconut.syncView.sync.getFromCloud()
 
   manage: ->
@@ -458,7 +458,7 @@ class Router extends Backbone.Router
     Coconut.questions = new QuestionCollection()
     Coconut.questionView = new QuestionView()
     Coconut.menuView = new MenuView()
-    Coconut.syncView = new SyncView()
+    Coconut.syncView = new SettingsView()
     Coconut.syncView.sync.replicateToServer()
     Coconut.syncView.sync.replicateFromServer()
     #        Coconut.syncView.update()

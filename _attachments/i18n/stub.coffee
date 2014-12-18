@@ -31,29 +31,3 @@ CoconutUtils.fetchTranslation = (languge) ->
             console.log("Unable to fetch translation for " + " languge:" + languge + " model:" + JSON.stringify(error) + " response: " + response)
     return deferred.promise()
 
-
-#langChoice = $.cookie('langChoice');
-#user = new User
-#    _id: "user.admin"
-#user.fetch
-#    success: ->
-#        langChoice = user.get('langChoice')
-#        console.log("langChoice from doc: " + user.get('langChoice'))
-#        if !langChoice
-#            langChoice = 'pt'
-#            user.set('langChoice',langChoice)
-#            user.save null,null,
-#                success: ->
-#                    console.log("langChoice saved: " + langChoice)
-#                error: (json, msg) ->
-#                    console.log("Error saving langChoice  " + msg)
-#        else
-#            deferred = fetchTranslation langChoice
-#            deferred.done ->
-#                console.log("Got translation.")
-#    error: ->
-#        console.log("Error: user.admin should be in the local db.")
-
-#if !langChoice
-#    langChoice = 'pt'
-#    $.cookie('langChoice', langChoice);

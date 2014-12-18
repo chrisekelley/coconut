@@ -69,7 +69,7 @@ LocalConfigView = (function(_super) {
               $('#message').html("Downloading configuration file from " + coconutCloudConfigURL + "<br/>");
               $('#message').append("Creating local configuration file<br/>");
               cloud_credentials = cloudConfig.cloud_credentials;
-              Coconut.syncView = new SyncView();
+              Coconut.syncView = new SettingsView();
               $('#message').append("Replicating local form definitions and syncing with the server.<br/>");
               opts = {
                 success: function() {
