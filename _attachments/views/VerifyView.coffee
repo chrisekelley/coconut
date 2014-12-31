@@ -9,12 +9,14 @@ VerifyView = Backbone.Marionette.ItemView.extend
       "click #verifyYes": "displayNewUserRegistration"
       "click #verifyNo": "displayNewUserRegistration"
       "click #refresh": "refresh"
+      "click #verifySendLogs":  "sendLogs"
 
     nextUrl:null
 
     hasCordova:true
 
     initialize: ->
+      @sync = new Sync()
       if typeof cordova is "undefined"
 #        console.log "cordova is not defined."
         @hasCordova = false
@@ -257,6 +259,9 @@ VerifyView = Backbone.Marionette.ItemView.extend
     refresh: ->
         Coconut.router.navigate("",false)
         location.reload()
+
+    sendLogs: ->
+        @sync.sendLogs('#progress')
 
 #        initSlider: function () {
 #            $('<input>').appendTo('[ data-role="content"]').attr({'name':'slider','id':'slider','data-highlight':'true','min':'0','max':'100','value':'50','type':'range'}).slider({

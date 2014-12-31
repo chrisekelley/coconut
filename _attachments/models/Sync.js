@@ -9,6 +9,8 @@ Sync = (function(_super) {
 
   function Sync() {
     this.replicateApplicationDocs = __bind(this.replicateApplicationDocs, this);
+    this.sendLogs = __bind(this.sendLogs, this);
+    this.replicate = __bind(this.replicate, this);
     this.getFromCloud = __bind(this.getFromCloud, this);
     this.loadJSON = __bind(this.loadJSON, this);
     this.saveJS = __bind(this.saveJS, this);
@@ -389,6 +391,38 @@ Sync = (function(_super) {
       return Coconut.debug("Form Replication Change: " + JSON.stringify(info));
     }).on('complete', function(info) {
       return Coconut.debug("Form Replication Complete: " + JSON.stringify(info));
+    });
+  };
+
+  Sync.prototype.replicate = function(messageId) {
+    return this.replicateToServer({
+      success: function() {
+        $(messageId).append("<br/>Data sent to the server.<br/>");
+        return this.sync.replicateFromServer({
+          success: function() {
+            return $(messageId).append("Data received from the server.<br/>");
+          },
+          error: function(json, error) {
+            return $(messageId).append("Error receiving data to the server. Error: " + error + "<br/>");
+          }
+        });
+      },
+      error: function(json, error) {
+        return $(messageId).append("Error sending data to the server. Error: " + error + "<br/>");
+      }
+    });
+  };
+
+  Sync.prototype.sendLogs = function(messageId) {
+    var _this = this;
+    return logger.getLogs(null, 100, function(log) {
+      var completeLog, versionText;
+      console.log("Generated logs");
+      versionText = "Kiwi App version: " + Coconut.version_code + ".\n";
+      completeLog = versionText.concat(log);
+      CoconutUtils.saveLog(null, "Logcat log", completeLog);
+      $('#progress').append("<br/>Logs saved. Data will now be replicated with the server.<br/>");
+      return _this.replicate(messageId);
     });
   };
 

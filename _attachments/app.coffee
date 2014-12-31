@@ -471,11 +471,14 @@ $(() =>
     if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
       console.log("Init Secugen: this wheel is on fire.")
       cordova.plugins.SecugenPlugin.requestPermission (results) ->
-        console.log "SecugenPlugin requestPermission: " + results
+          console.log "SecugenPlugin requestPermission: " + results
       , (error) ->
           console.log(error)
           if error == 'Error: Either a fingerprint device is not attached or the attached fingerprint device is not supported.'
-              message = polyglot.t("deviceError")
+              messagePt = "Erro: ou um digitalizador não está ligada ou o digitalizador conectado não é suportado.  Favor de fechar o pacote no 'Task Manager',  conecte o digitalizador,  e renicie novamente. \n"
+              messageEn = "Error: Either a fingerprint device is not attached or the attached fingerprint device is not supported.  Please kill the app in the Task Manager, connect the device, and restart the app."
+#              message = polyglot.t("deviceError")
+              message = messagePt.concat(messageEn)
               alert   message
 
     window.Coconut = new Marionette.Application()

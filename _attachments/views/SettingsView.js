@@ -9,9 +9,10 @@ SettingsView = (function(_super) {
 
   function SettingsView() {
     this.changeLanguage = __bind(this.changeLanguage, this);
-    this.sendLogs = __bind(this.sendLogs, this);
+    this.sendReplicateLogs = __bind(this.sendReplicateLogs, this);
     this.updateForms = __bind(this.updateForms, this);
     this.refreshLog = __bind(this.refreshLog, this);
+    this.replicate = __bind(this.replicate, this);
     this.render = __bind(this.render, this);
     _ref = SettingsView.__super__.constructor.apply(this, arguments);
     return _ref;
@@ -38,20 +39,44 @@ SettingsView = (function(_super) {
   SettingsView.prototype.langChoice = '';
 
   SettingsView.prototype.events = {
+    "click #replicate": "replicate",
     "click #refreshLog": "refreshLog",
     "click #updateForms": "updateForms",
-    "click #sendLogs": "sendLogs",
+    "click #sendReplicateLogs": "sendReplicateLogs",
     "change #langChoice": "changeLanguage"
   };
 
   SettingsView.prototype.render = function() {
-    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>        <span id='progress'></span>        <h2>" + polyglot.t("SetLanguage") + "</h2>        <p>            " + polyglot.t("LangChoice") + "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" + "<select id='langChoice'>                <option value=''>--Select --</option>                <option value='en'>en</option>                <option value='pt'>pt</option>            </select>        </p>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
+    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' id='replicate'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendReplicateLogs'>" + polyglot.t("sendLogs") + "</a>        <span id='progress'></span>        <h2>" + polyglot.t("SetLanguage") + "</h2>        <p>            " + polyglot.t("LangChoice") + "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" + "<select id='langChoice'>                <option value=''>--Select --</option>                <option value='en'>en</option>                <option value='pt'>pt</option>            </select>        </p>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
     return $("a").button();
+  };
+
+  SettingsView.prototype.replicate = function() {
+    return Coconut.syncView.sync.replicateToServer({
+      success: function() {
+        $('#progress').append("<br/>Data sent to the server.<br/>");
+        Coconut.syncView.refreshLog();
+        return Coconut.syncView.sync.replicateFromServer({
+          success: function() {
+            $('#progress').append("Data received from the server.<br/>");
+            return Coconut.syncView.refreshLog();
+          },
+          error: function(json, error) {
+            $('#progress').append("Error receiving data to the server. Error: " + error + "<br/>");
+            return Coconut.syncView.refreshLog();
+          }
+        });
+      },
+      error: function(json, error) {
+        $('#progress').append("Error sending data to the server. Error: " + error + "<br/>");
+        return Coconut.syncView.refreshLog();
+      }
+    });
   };
 
   SettingsView.prototype.refreshLog = function() {
     var now;
-    now = moment(new Date()).format(Coconut.config.get("date_format")) + "<br/>";
+    now = moment(new Date()).format(Coconut.config.get("datetime_format")) + "<br/>";
     return $("#replicationLog").html(now + Coconut.replicationLog);
   };
 
@@ -75,11 +100,16 @@ SettingsView = (function(_super) {
     return this.sync.replicateForms(opts);
   };
 
-  SettingsView.prototype.sendLogs = function() {
+  SettingsView.prototype.sendReplicateLogs = function() {
     var _this = this;
     return logger.getLogs(null, 100, function(log) {
+      var completeLog, versionText;
       console.log("Generated logs");
-      return CoconutUtils.saveLog(null, "Logcat log", log);
+      versionText = "Kiwi App version: " + Coconut.version_code + ".\n";
+      completeLog = versionText.concat(log);
+      CoconutUtils.saveLog(null, "Logcat log", completeLog);
+      $('#progress').append("<br/>Logs saved. Data will now be replicated with the server.<br/>");
+      return _this.replicate();
     });
   };
 

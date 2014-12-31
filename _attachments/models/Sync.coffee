@@ -286,6 +286,27 @@ class Sync extends Backbone.Model
           Coconut.debug "Form Replication Complete: " + JSON.stringify info
         )
 
+  replicate: (messageId)=>
+    @replicateToServer
+      success: ->
+          $(messageId).append "<br/>Data sent to the server.<br/>"
+          @sync.replicateFromServer
+              success: ->
+                  $(messageId).append "Data received from the server.<br/>"
+              error: (json, error)->
+                  $(messageId).append "Error receiving data to the server. Error: " + error + "<br/>"
+      error: (json, error)->
+          $(messageId).append "Error sending data to the server. Error: " + error + "<br/>"
+
+  sendLogs: (messageId) =>
+    logger.getLogs null, 100, (log) =>
+      console.log("Generated logs")
+      versionText = "Kiwi App version: " + Coconut.version_code + ".\n"
+      completeLog = versionText.concat(log)
+      CoconutUtils.saveLog(null,"Logcat log", completeLog)
+      $('#progress').append "<br/>Logs saved. Data will now be replicated with the server.<br/>"
+      @replicate(messageId)
+
   replicateToServer: (options) ->
     options = {} if !options
     filter = (doc) ->

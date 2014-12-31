@@ -10,11 +10,13 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #scan": "scanNewIndividual",
     "click #verifyYes": "displayNewUserRegistration",
     "click #verifyNo": "displayNewUserRegistration",
-    "click #refresh": "refresh"
+    "click #refresh": "refresh",
+    "click #verifySendLogs": "sendLogs"
   },
   nextUrl: null,
   hasCordova: true,
   initialize: function() {
+    this.sync = new Sync();
     if (typeof cordova === "undefined") {
       return this.hasCordova = false;
     }
@@ -221,5 +223,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   refresh: function() {
     Coconut.router.navigate("", false);
     return location.reload();
+  },
+  sendLogs: function() {
+    return this.sync.sendLogs('#progress');
   }
 });

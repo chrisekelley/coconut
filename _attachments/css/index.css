@@ -50,11 +50,11 @@ p {
 
 #content {
     background-color: #ACD369;
-    margin-top: 15px;
+    margin-top: 0px;
 }
 
 .jumbotron {
-    padding-top: 5px;
+    /*padding-top: 5px;*/
     padding-bottom: 48px;
 }
 
@@ -69,12 +69,12 @@ p {
     }
 
 .container>.navbar-header, .container-fluid>.navbar-header, .container>.navbar-collapse, .container-fluid>.navbar-collapse {
-    margin-right: 1em;
+    margin-right: .2em;
     margin-left: 0;
 }
 
 .navbar-nav {
-    margin: 15px;
+    margin-top: 20px;
 }
 
 .checkbox-label {

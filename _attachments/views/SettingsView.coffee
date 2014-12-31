@@ -12,9 +12,10 @@ class SettingsView extends Backbone.View
   langChoice:''
 
   events:
+    "click #replicate":  "replicate"
     "click #refreshLog":  "refreshLog"
     "click #updateForms":  "updateForms"
-    "click #sendLogs":  "sendLogs"
+    "click #sendReplicateLogs":  "sendReplicateLogs"
     "change #langChoice": "changeLanguage"
 
   render: =>
@@ -22,9 +23,9 @@ class SettingsView extends Backbone.View
         <h2>" + polyglot.t("server") + "</h2>
         <p><span class='sync-target'>#{@sync.target()}</span></p>
         <p>#{polyglot.t("version")}: #{Coconut.version_code}</p>
-        <a data-role='button' class='btn btn-primary btn-lg' href='#sync/send'>" + polyglot.t("sendData") + "</a>
+        <a data-role='button' class='btn btn-primary btn-lg' id='replicate'>" + polyglot.t("sendData") + "</a>
         <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>
-        <a data-role='button' class='btn btn-primary btn-lg' id='sendLogs'>" + polyglot.t("sendLogs") + "</a>
+        <a data-role='button' class='btn btn-primary btn-lg' id='sendReplicateLogs'>" + polyglot.t("sendLogs") + "</a>
         <span id='progress'></span>
         <h2>" + polyglot.t("SetLanguage") + "</h2>
         <p>
@@ -55,8 +56,25 @@ class SettingsView extends Backbone.View
 #        @sync.save()
 #        _.delay(@update,1000)
 
+
+  replicate: =>
+    Coconut.syncView.sync.replicateToServer
+        success: ->
+            $('#progress').append "<br/>Data sent to the server.<br/>"
+            Coconut.syncView.refreshLog()
+            Coconut.syncView.sync.replicateFromServer
+                success: ->
+                    $('#progress').append "Data received from the server.<br/>"
+                    Coconut.syncView.refreshLog()
+                error: (json, error)->
+                    $('#progress').append "Error receiving data to the server. Error: " + error + "<br/>"
+                    Coconut.syncView.refreshLog()
+        error: (json, error)->
+            $('#progress').append "Error sending data to the server. Error: " + error + "<br/>"
+            Coconut.syncView.refreshLog()
+
   refreshLog: =>
-    now = moment(new Date()).format(Coconut.config.get "date_format") + "<br/>"
+    now = moment(new Date()).format(Coconut.config.get "datetime_format") + "<br/>"
     $("#replicationLog").html(now + Coconut.replicationLog)
 
   updateForms: =>
@@ -72,10 +90,14 @@ class SettingsView extends Backbone.View
           $('#progress').append "Error while trying to download form definitions with the server.<br/>"
     @sync.replicateForms(opts)
 
-  sendLogs: =>
+  sendReplicateLogs: =>
     logger.getLogs null, 100, (log) =>
         console.log("Generated logs")
-        CoconutUtils.saveLog(null,"Logcat log", log)
+        versionText = "Kiwi App version: " + Coconut.version_code + ".\n"
+        completeLog = versionText.concat(log)
+        CoconutUtils.saveLog(null,"Logcat log", completeLog)
+        $('#progress').append "<br/>Logs saved. Data will now be replicated with the server.<br/>"
+        @replicate()
 
   changeLanguage: =>
       langChoice = $('#langChoice').val();

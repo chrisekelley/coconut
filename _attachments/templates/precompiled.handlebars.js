@@ -177,16 +177,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, options, helperMissing=helpers.helperMissing;
 
 
-  buffer += "<div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a href=\"#\"><img src=\"images/Kiwi-Logo-150.png\" height=\"80\"/></a>\n    </div>\n    <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n            <!--<li class=\"siteNav\"><a href=\"#\">";
+  buffer += "<div class=\"container\">\n    <div class=\"navbar-header\">\n        <button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\".navbar-collapse\">\n            <span class=\"sr-only\">Toggle navigation</span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n            <span class=\"icon-bar\"></span>\n        </button>\n        <a href=\"#\"><img src=\"images/KiwiPrints_black.png\"/></a>\n    </div>\n    <div class=\"collapse navbar-collapse\">\n        <ul class=\"nav navbar-nav\">\n            <!--<li class=\"siteNav\"><a href=\"#\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Home", options) : helperMissing.call(depth0, "polyglot", "Home", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a></li>-->\n            <li class=\"siteNav\"><a href=\"#\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Login", options) : helperMissing.call(depth0, "polyglot", "Login", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a></li>\n            <li class=\"siteNav\"><a href=\"#sync\">";
+  buffer += "</a></li>\n            <li class=\"siteNav\" id=\"settingsLink\"><a href=\"#sync\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Settings", options) : helperMissing.call(depth0, "polyglot", "Settings", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a></li>\n            <li class=\"siteNav\"><a href=\"#displayUserScanner\">";
+  buffer += "</a></li>\n            <li class=\"siteNav\" id=\"patientEncountersLink\"><a href=\"#displayUserScanner\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "PatientEncounters", options) : helperMissing.call(depth0, "polyglot", "PatientEncounters", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a></li>\n        </ul>\n    </div><!--/.nav-collapse -->\n</div>\n";
@@ -242,6 +242,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   buffer += "<p>";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "verifyAdmin", options) : helperMissing.call(depth0, "polyglot", "verifyAdmin", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</p>\n<p>\n    <a data-role=\"button\" id=\"identifyAdmin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n\n\n<!--<style shim-shadowdom>-->\n    <!--paper-progress::shadow #progressContainer {-->\n        <!--height:200%;-->\n        <!--width:200%;-->\n    <!--}-->\n<!--</style>-->\n\n<!--<paper-progress id=\"scan-progress\"></paper-progress>-->\n";
+  buffer += "</p>\n<p>\n    <a data-role=\"button\" id=\"identifyAdmin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n\n<p>";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "scanSendLogs", options) : helperMissing.call(depth0, "polyglot", "scanSendLogs", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "sendLogs", options) : helperMissing.call(depth0, "polyglot", "sendLogs", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a>\n</p>\n\n<div id=\"progress\"></div>\n\n\n<!--<style shim-shadowdom>-->\n    <!--paper-progress::shadow #progressContainer {-->\n        <!--height:200%;-->\n        <!--width:200%;-->\n    <!--}-->\n<!--</style>-->\n\n<!--<paper-progress id=\"scan-progress\"></paper-progress>-->\n";
   return buffer;
   });
