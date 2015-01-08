@@ -60,69 +60,113 @@ VerifyView = Backbone.Marionette.ItemView.extend
           l = Ladda.create(e.currentTarget)
           l.start()
 #          if not typeof cordova is "undefined"
+
+          findUserFromServiceUUID = (serviceUuid, scannerPayload) ->
+            viewOptions = {}
+            users = new SecondaryIndexCollection
+            users.fetch
+              fetch: 'query',
+              options:
+                query:
+                  key: serviceUuid,
+                  include_docs: true,
+                  fun: 'by_serviceUuid'
+              success: =>
+                console.log 'by_serviceUuid returned: ' + JSON.stringify users
+                l.stop()
+                # Update the top nav strip
+                #                      Controller.displaySiteNav()
+                if users.length > 0
+                  if user == "Admin"
+                    adminUser = users.first()
+                    console.log 'Coconut.currentAdmin: ' + JSON.stringify adminUser
+                    Coconut.currentAdmin = adminUser
+                    CoconutUtils.setSession('currentAdmin', adminUser.get('email'))
+                    Coconut.router.navigate "displayUserScanner", true
+                  else
+                    user = users.first()
+                    console.log 'Coconut.currentClient: ' + JSON.stringify user
+                    Coconut.currentClient = user
+                    CoconutUtils.setSession('currentClient', true)
+                    Coconut.router.navigate "displayClientRecords", true
+                else
+                  console.log 'Strange. This user was identified but is not registered.'
+                  uuid = CoconutUtils.uuidGenerator(30)
+                  Coconut.currentClient = new Result
+                    _id: uuid
+                    serviceUuid: serviceUuid
+                    Template: scannerPayload.Template
+                  console.log "currentClient: " + JSON.stringify Coconut.currentClient
+                  Coconut.scannerPayload = scannerPayload
+                  if user == "Admin"
+                    Coconut.trigger "displayAdminRegistrationForm"
+                  else
+                    Coconut.trigger "displayUserRegistrationForm"
+
           if @hasCordova
             console.log "method: " + method
             if (method == "Identify")
-              cordova.plugins.SecugenPlugin.identify (results) =>
-                message = results
-                try
-                  serviceResponse = JSON.parse  results
-                  scannerPayload = serviceResponse.scannerPayload
-                  serviceMessage = serviceResponse.serviceMessage
-                  statusCode = serviceMessage.StatusCode
-                  serviceUuid = serviceMessage.UID
-                  console.log 'query for serviceUuid: ' + serviceUuid
-                catch error
+              cordova.plugins.SecugenPlugin.scan (results) =>
+                finger = $('#Finger').val();
+                payload =  {}
+                payload["Key"] = Coconut.config.get("AfisServerKey")
+                payload["Name"] = Coconut.config.get("AfisProjectName")
+                payload["Template"] = results
+                payload["Finger"] = finger
+                console.log "payload: " + JSON.stringify payload
+                urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+                $.post(urlServer, payload,
+                (result) =>
+                  console.log "response from service: " + JSON.stringify result
+                  try
+                    scannerPayload = payload["Template"]
+                    statusCode = result.StatusCode
+                    serviceUuid = result.UID
+                    console.log 'query for serviceUuid: ' + serviceUuid
+                  catch error
                     console.log error
-                if statusCode != null && statusCode == 1
-                  viewOptions = {}
-                  users = new SecondaryIndexCollection
-                  users.fetch
-                    fetch: 'query',
-                    options:
-                      query:
-                        key: serviceUuid,
-                        include_docs: true,
-                        fun: 'by_serviceUuid'
-                    success: =>
-                      console.log 'by_serviceUuid returned: ' + JSON.stringify users
-                      l.stop()
-                      # Update the top nav strip
-#                      Controller.displaySiteNav()
-                      if users.length > 0
-                        if user == "Admin"
-                          adminUser = users.first()
-                          console.log 'Coconut.currentAdmin: ' + JSON.stringify adminUser
-                          Coconut.currentAdmin = adminUser
-                          CoconutUtils.setSession('currentAdmin', adminUser.get('email'))
-                          Coconut.router.navigate "displayUserScanner", true
-                        else
-                          user = users.first()
-                          console.log 'Coconut.currentClient: ' + JSON.stringify user
-                          Coconut.currentClient = user
-                          CoconutUtils.setSession('currentClient', true)
-                          Coconut.router.navigate "displayClientRecords", true
-                      else
-                        console.log 'Strange. This user was identified but is not registered.'
-                        uuid = CoconutUtils.uuidGenerator(30)
-                        Coconut.currentClient = new Result
-                          _id:uuid
-                          serviceUuid:serviceUuid
-                          Template: scannerPayload.Template
-                        console.log "currentClient: " + JSON.stringify Coconut.currentClient
-                        Coconut.scannerPayload = scannerPayload
-                        if user == "Admin"
-                          Coconut.trigger "displayAdminRegistrationForm"
-                        else
-                          Coconut.trigger "displayUserRegistrationForm"
-                else
-                  l.stop()
-                  $( "#message").html("No match - you must register.")
-                  Coconut.scannerPayload = scannerPayload
-                  if  @nextUrl?
-                    Coconut.router.navigate @nextUrl, true
+                    $('#progress').append "<br/>Error uploading scan: " + error
+                  if statusCode != null && statusCode == 1
+                    findUserFromServiceUUID(serviceUuid, scannerPayload)
+                  if statusCode != null && statusCode == 4
+#                    Status Code 4 = No Person found
+                    l.stop()
+                    if user == 'Admin'
+                      CoconutUtils.setSession('currentAdmin', null)
+                    else
+                      CoconutUtils.setSession('currentClient', true)
+                    $('#progress').append "<br/>Enrolling new fingerprint. "
+                    urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
+                    $.post(urlServer, payload,
+                      (result) =>
+                        console.log "response from service: " + JSON.stringify result
+                        statusCode = result.StatusCode
+                        serviceUuid = result.UID
+                        console.log "statusCode: " + statusCode
+                        if statusCode != null
+                          if statusCode == 1
+                            $( "#progress" ).html( 'Fingerprint enrolled. Success!' );
+                            Coconut.currentClient = new Result
+                              serviceUuid:serviceUuid
+                              Template: payload.Template
+                            if typeof user != 'undefined' && user != null && user == 'user'
+                              Coconut.trigger "displayUserRegistrationForm"
+                            else
+                              Coconut.trigger "displayAdminRegistrationForm"
+                          else
+                            $( "#progress" ).html( 'Problem enrolling fingerprint. StatusCode: ' +  statusCode);
+                            Coconut.trigger "displayEnroll"
+                    , "json")
+
                   else
-                    Coconut.router.navigate "registration", true
+                    l.stop()
+                    $( "#message").html("No match - you must register.")
+                    Coconut.scannerPayload = scannerPayload
+                    if  @nextUrl?
+                      Coconut.router.navigate @nextUrl, true
+                    else
+                      Coconut.router.navigate "registration", true
+                , "json")
               , (error) ->
                   console.log("SecugenPlugin.identify error: " + error)
                   message = error

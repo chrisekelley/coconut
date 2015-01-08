@@ -93,7 +93,7 @@ class Router extends Backbone.Router
   registration: (user) ->
     @userLoggedIn
       success: ->
-          Coconut.Controller.displayRegistration user
+        Coconut.Controller.displayRegistration user
 
   userRegistration: ->
     @userLoggedIn

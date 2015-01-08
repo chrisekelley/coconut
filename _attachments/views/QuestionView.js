@@ -416,6 +416,7 @@ QuestionView = (function(_super) {
       }
       if (this.result.question() === 'Admin Registration') {
         Coconut.currentAdmin = Coconut.currentClient;
+        CoconutUtils.setSession('currentAdmin', Coconut.currentAdmin.get('email'));
       }
     }
     return this.result.save(currentData, {
@@ -529,7 +530,6 @@ QuestionView = (function(_super) {
                   if (i18nOptionText !== null) {
                     optionText = i18nOptionText;
                   }
-                  console.log("labelText: " + labelText + " optionText: " + optionText);
                   html += "<option name='" + name + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + optionText + "</option>";
                 }
                 return html += "</select></div>";

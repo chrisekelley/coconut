@@ -242,7 +242,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   buffer += "<p>";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "verifyAdmin", options) : helperMissing.call(depth0, "polyglot", "verifyAdmin", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</p>\n<p>\n    <a data-role=\"button\" id=\"identifyAdmin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n\n<p>";
+  buffer += "</p>\n<p>\n    <label for=\"Finger\">";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Finger", options) : helperMissing.call(depth0, "polyglot", "Finger", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</label>\n    <select id=\"Finger\" name=\"Finger\">\n        <option selected=\"selected\" value=\"0\">Null</option>\n        <option value=\"1\">R1</option>\n        <option value=\"2\">R2</option>\n        <option value=\"3\">R3</option>\n        <option value=\"4\">R4</option>\n        <option value=\"5\">R5</option>\n        <option value=\"6\">L1</option>\n        <option value=\"7\">L2</option>\n        <option value=\"8\">L3</option>\n        <option value=\"9\">L4</option>\n        <option value=\"10\">L5</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyAdmin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n</p>\n\n<div id=\"message\"></div>\n\n<p>";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "scanSendLogs", options) : helperMissing.call(depth0, "polyglot", "scanSendLogs", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>";

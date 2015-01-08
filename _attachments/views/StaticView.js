@@ -42,12 +42,14 @@ StaticView = Backbone.Marionette.ItemView.extend({
     }
   },
   enroll: function() {
-    var _this = this;
+    var urlServer,
+      _this = this;
     console.log("enroll");
     if (this.hasCordova) {
       if (typeof Coconut.scannerPayload !== 'undefined') {
         console.log('we got Coconut.scannerPayload: ' + JSON.stringify(Coconut.scannerPayload));
-        $.post("http://simfant.simprints.com/api/Person/Enroll", Coconut.scannerPayload, function(result) {
+        urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
+        $.post(urlServer, Coconut.scannerPayload, function(result) {
           var serviceUuid, statusCode;
           console.log("response from service: " + JSON.stringify(result));
           statusCode = result.StatusCode;

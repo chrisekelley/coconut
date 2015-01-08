@@ -32,7 +32,7 @@ Controller = {
   },
   displayRegistration: function(user) {
     $("#message").html("");
-    if (typeof user !== "undefined") {
+    if (user !== null && typeof user !== "undefined") {
       return Coconut.router.navigate("#new/result/Individual%20Registration", true);
     } else {
       return Coconut.router.navigate("#new/result/Admin%20Registration", true);

@@ -465,6 +465,7 @@ class QuestionView extends Backbone.View
         console.log "currentData: " + JSON.stringify currentData
       if @result.question() == 'Admin Registration'
         Coconut.currentAdmin = Coconut.currentClient
+        CoconutUtils.setSession('currentAdmin', Coconut.currentAdmin.get('email'))
     @result.save currentData,
         success: (model) =>
           $("#messageText").slideDown().fadeOut()
@@ -587,7 +588,7 @@ class QuestionView extends Backbone.View
                      i18nOptionText = polyglot.t(i18nKey)
                      if i18nOptionText !=null
                         optionText = i18nOptionText
-                     console.log "labelText: " + labelText + " optionText: " + optionText
+#                     console.log "labelText: " + labelText + " optionText: " + optionText
                      html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{optionText}</option>"
                   html += "</select></div>"
               when "radio"

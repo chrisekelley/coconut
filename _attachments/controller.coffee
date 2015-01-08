@@ -23,7 +23,7 @@ Controller =
   displayRegistration: (user) ->
     $("#message").html ""
 #    staticView = undefined
-    if typeof user isnt "undefined"
+    if user != null && typeof user isnt "undefined"
 #      staticView = new UserRegistrationView(template: Handlebars.templates.UserRegistrationView)
 #      staticView = new UserRegistrationView(template: JST["_attachments/templates/UserRegistrationView.handlebars"]())
       Coconut.router.navigate("#new/result/Individual%20Registration",true)

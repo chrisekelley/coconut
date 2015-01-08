@@ -56,7 +56,8 @@ StaticView = Backbone.Marionette.ItemView.extend
     if @hasCordova
       if typeof Coconut.scannerPayload != 'undefined'
         console.log 'we got Coconut.scannerPayload: ' + JSON.stringify Coconut.scannerPayload
-        $.post("http://simfant.simprints.com/api/Person/Enroll", Coconut.scannerPayload,
+        urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
+        $.post(urlServer, Coconut.scannerPayload,
         (result) =>
           console.log "response from service: " + JSON.stringify result
           statusCode = result.StatusCode
