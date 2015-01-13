@@ -143,3 +143,15 @@ body {
 .checkbox {
     margin-bottom: 20px;
 }
+
+.nav>li {
+    text-align: right;
+}
+
+#statusIcons {
+    float: right;
+}
+
+#uploadFailed {
+    display: none;
+}

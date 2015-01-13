@@ -68,7 +68,7 @@ QuestionView = (function(_super) {
   };
 
   QuestionView.prototype.render = function() {
-    var autocompleteElements, formNameText, i18nFormNameText, skipperList,
+    var autocompleteElements, formNameText, i18nFormNameText, maximumAge, onCurrentPositionError, onCurrentPositionSuccess, skipperList,
       _this = this;
     formNameText = this.model.id;
     i18nFormNameText = polyglot.t(formNameText);
@@ -120,9 +120,31 @@ QuestionView = (function(_super) {
     }
     if (this.result.question() === 'Admin Registration') {
       if (typeof Coconut.scannerPayload !== 'undefined') {
-        return console.log('Display the payload' + JSON.stringify(Coconut.scannerPayload));
+        console.log('Display the payload' + JSON.stringify(Coconut.scannerPayload));
       }
     }
+    onCurrentPositionSuccess = function(position) {
+      var messageText;
+      Coconut.currentPositionError = null;
+      Coconut.currentPosition = position;
+      messageText = 'Gathered current location.';
+      console.log(messageText);
+      $("#messageText").html(messageText);
+      return $("#messageText").slideDown().fadeOut();
+    };
+    onCurrentPositionError = function(error) {
+      var messageText;
+      Coconut.currentPositionError = error;
+      messageText = 'code: ' + error.code + '\n' + 'message: ' + error.message + '\n';
+      console.log(messageText);
+      $("#messageText").html(messageText);
+      return $("#messageText").slideDown().fadeOut();
+    };
+    maximumAge = 1000 * 60 * 60;
+    return navigator.geolocation.getCurrentPosition(onCurrentPositionSuccess, onCurrentPositionError, {
+      maximumAge: maximumAge,
+      enableHighAccuracy: true
+    });
   };
 
   QuestionView.prototype.events = {
@@ -394,14 +416,43 @@ QuestionView = (function(_super) {
   };
 
   QuestionView.prototype.save = _.throttle(function() {
-    var currentData,
+    var coords, currentData, currentPosition, error,
       _this = this;
     currentData = $('form').toObject({
       skipEmpty: false
     });
+    currentPosition = {};
+    if (Coconut.currentPosition !== null) {
+      coords = {};
+      _.each(Coconut.currentPosition.coords, function(value, key) {
+        return coords[key] = value;
+      });
+      currentPosition.coords = coords;
+      currentPosition.timestamp = Coconut.currentPosition.timestamp;
+    }
+    if (Coconut.currentPositionError !== null) {
+      error = {};
+      error.code = Coconut.currentPositionError.code;
+      error.message = Coconut.currentPositionError.message;
+      currentData.currentPositionError = error;
+      if (Coconut.currentPosition !== null) {
+        currentData.lastRecordedPosition = currentPosition;
+      }
+    } else {
+      if (Coconut.currentPosition !== null) {
+        currentData.currentPosition = currentPosition;
+      }
+    }
     currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get("datetime_format"));
     if (typeof Coconut.currentAdmin !== 'undefined' && Coconut.currentAdmin !== null) {
       currentData.savedBy = Coconut.currentAdmin.id;
+      if (this.result.question() === 'Admin Registration') {
+        currentData.serviceUuid = Coconut.currentAdmin.get("serviceUuid");
+        currentData.Fingerprints = Coconut.currentAdmin.get("Fingerprints");
+      }
+      if (typeof Coconut.currentAdmin.createdOffline !== 'undefined' && Coconut.currentAdmin.createdOffline !== null) {
+        currentData.createdOffline = Coconut.currentAdmin.get("createdOffline");
+      }
     } else {
       currentData.savedBy = $.cookie('current_user');
     }
@@ -411,7 +462,7 @@ QuestionView = (function(_super) {
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
         console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
         currentData._id = currentData.clientId;
-        currentData.Template = Coconut.currentClient.get("Template");
+        currentData.Fingerprints = Coconut.currentClient.get("Fingerprints");
         console.log("currentData: " + JSON.stringify(currentData));
       }
       if (this.result.question() === 'Admin Registration') {
@@ -419,8 +470,14 @@ QuestionView = (function(_super) {
         CoconutUtils.setSession('currentAdmin', Coconut.currentAdmin.get('email'));
       }
     }
+    if (typeof Coconut.offlineUser !== 'undefined' && Coconut.offlineUser !== null) {
+      currentData.createdByOfflineUser = true;
+    }
     return this.result.save(currentData, {
       success: function(model) {
+        var messageText;
+        messageText = 'Saving...';
+        $("#messageText").html(messageText);
         $("#messageText").slideDown().fadeOut();
         if (Coconut.currentAdmin !== null) {
           _.extend(Coconut.currentAdmin, currentData);

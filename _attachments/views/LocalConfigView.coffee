@@ -6,7 +6,12 @@ class LocalConfigView extends Backbone.View
       <form id='local-config'>
         <h1>Configure your Coconut system</h1>
         <label for='coconut-cloud' >Coconut Cloud URL</label>
-        <input type='text' name='coconut-cloud' size='35' value='https://kiwicentral.org/coconut-central'></input>
+        <select name='coconut-cloud'>
+          <option value='https://kiwicentral.org/coconut-central'>https://kiwicentral.org/coconut-central</option>
+          <option value='http://192.168.16.101:5984/coconut-central'>http://192.168.16.101:5984/coconut-central</option>
+        </select>
+        <label for='coconut-cloud-custom' >Coconut Cloud URL: custom (Override the dropdown options.)</label>
+        <input type='text' name='coconut-cloud-custom' size='35' value=''></input>
         <br/>
         <br/>
         <label for='username' class='localConfigCols'>Username</label>
@@ -44,7 +49,12 @@ class LocalConfigView extends Backbone.View
 
   save: ->
     localConfig = $('#local-config').toObject()
-    coconutCloud = $("input[name=coconut-cloud]").val()
+#    coconutCloud = $("input[name=coconut-cloud]").val()
+    coconutCloudCustom = $("input[name=coconut-cloud-custom]").val()
+    if coconutCloudCustom != ''
+      coconutCloud = coconutCloudCustom
+    else
+      coconutCloud = $("select[name=coconut-cloud]").val()
     username = localConfig.username
     password = localConfig.password
     coconutCloudConfigURL = "#{coconutCloud}/coconut.config"
@@ -66,7 +76,7 @@ class LocalConfigView extends Backbone.View
           401: ->
             alert( "incorrect username/password" )
         success: (cloudConfig) ->
-          $('#message').append "Saving configuration file<br/>"
+          $('#message').append "Configuration downloaded. Saving configuration file.<br/>"
           delete cloudConfig["_rev"]
           Coconut.config.save cloudConfig,
               success: ->
@@ -74,21 +84,23 @@ class LocalConfigView extends Backbone.View
                   $('#message').append "Creating local configuration file<br/>"
                   cloud_credentials = cloudConfig.cloud_credentials
                   Coconut.syncView = new SettingsView()
-                  $('#message').append "Replicating local form definitions and syncing with the server.<br/>"
+                  $('#message').append "Replicating form definitions and syncing with the server.<br/>"
                   opts =
                       success: ->
+                          $('#message').append "Replication of form definitions was successful..<br/>"
                           repFromOpts =
                               success: ->
                                 repToOpts =
                                     success: ->
-                                      $('#message').append "Replication from app was successful. Finished with Config. Reloading app in 2 seconds.<br/>"
+                                      $('#message').append "Replication to server was successful. <br/>"
+                                      $('#message').append "Finished with Config. Reloading app in 2 seconds.<br/>"
                                       _.delay ->
                                           Coconut.router.navigate("",false)
                                           document.location.reload()
                                       , 2000
                                     error: (obj, msg)->
                                       $('#message').append "Replication Error:" + msg + "<br/>"
-                                $('#message').append "Replication to server was successful.<br/>"
+                                $('#message').append "Replication from server was successful.<br/>"
                                 Coconut.syncView.sync.replicateToServer(repToOpts)
                               error: (obj, msg)->
                                 $('#message').append "Replication Error:" + msg + "<br/>"
@@ -107,6 +119,7 @@ class LocalConfigView extends Backbone.View
             console.log message
             $('#message').append message
             alert( "Error:" + message)
+      $('#message').append 'Downloading configuration.'
       request = $.ajax options
 #        url: coconutCloudConfigURLCreds
         #        dataType: "jsonp"

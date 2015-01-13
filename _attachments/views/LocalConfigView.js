@@ -15,7 +15,7 @@ LocalConfigView = (function(_super) {
 
   LocalConfigView.prototype.render = function() {
     var _ref1;
-    this.$el.html("      <form id='local-config'>        <h1>Configure your Coconut system</h1>        <label for='coconut-cloud' >Coconut Cloud URL</label>        <input type='text' name='coconut-cloud' size='35' value='https://kiwicentral.org/coconut-central'></input>        <br/>        <br/>        <label for='username' class='localConfigCols'>Username</label>        <input type='text' name='username' size='15'></input><br/>        <label for='password' class='localConfigCols'>Password</label>        <input type='password' name='password' size='15'></input>        <fieldset id='mode-fieldset'>          <legend>Mode</legend>            <label for='cloud'>Cloud (reporting system)</label>            <input id='cloud' name='mode' type='radio' value='cloud'></input>            <label for='mobile'>Mobile (data collection, probably on a tablet)</label>            <input id='mobile' name='mode' type='radio' value='mobile'></input>        </fieldset>        <br/>        <br/>        <button>Save</button>        <div id='message'></div>      </form>    ");
+    this.$el.html("      <form id='local-config'>        <h1>Configure your Coconut system</h1>        <label for='coconut-cloud' >Coconut Cloud URL</label>        <select name='coconut-cloud'>          <option value='https://kiwicentral.org/coconut-central'>https://kiwicentral.org/coconut-central</option>          <option value='http://192.168.16.101:5984/coconut-central'>http://192.168.16.101:5984/coconut-central</option>        </select>        <label for='coconut-cloud-custom' >Coconut Cloud URL: custom (Override the dropdown options.)</label>        <input type='text' name='coconut-cloud-custom' size='35' value=''></input>        <br/>        <br/>        <label for='username' class='localConfigCols'>Username</label>        <input type='text' name='username' size='15'></input><br/>        <label for='password' class='localConfigCols'>Password</label>        <input type='password' name='password' size='15'></input>        <fieldset id='mode-fieldset'>          <legend>Mode</legend>            <label for='cloud'>Cloud (reporting system)</label>            <input id='cloud' name='mode' type='radio' value='cloud'></input>            <label for='mobile'>Mobile (data collection, probably on a tablet)</label>            <input id='mobile' name='mode' type='radio' value='mobile'></input>        </fieldset>        <br/>        <br/>        <button>Save</button>        <div id='message'></div>      </form>    ");
     if (Coconut.config.get("mode") == null) {
       $("#mode-fieldset").hide();
       $("#mobile").prop("checked", true);
@@ -35,9 +35,14 @@ LocalConfigView = (function(_super) {
   };
 
   LocalConfigView.prototype.save = function() {
-    var coconutCloud, coconutCloudConfigURL, coconutCloudConfigURLCreds, localConfig, options, password, replacement, request, username;
+    var coconutCloud, coconutCloudConfigURL, coconutCloudConfigURLCreds, coconutCloudCustom, localConfig, options, password, replacement, request, username;
     localConfig = $('#local-config').toObject();
-    coconutCloud = $("input[name=coconut-cloud]").val();
+    coconutCloudCustom = $("input[name=coconut-cloud-custom]").val();
+    if (coconutCloudCustom !== '') {
+      coconutCloud = coconutCloudCustom;
+    } else {
+      coconutCloud = $("select[name=coconut-cloud]").val();
+    }
     username = localConfig.username;
     password = localConfig.password;
     coconutCloudConfigURL = "" + coconutCloud + "/coconut.config";
@@ -61,7 +66,7 @@ LocalConfigView = (function(_super) {
           }
         },
         success: function(cloudConfig) {
-          $('#message').append("Saving configuration file<br/>");
+          $('#message').append("Configuration downloaded. Saving configuration file.<br/>");
           delete cloudConfig["_rev"];
           return Coconut.config.save(cloudConfig, {
             success: function() {
@@ -70,16 +75,18 @@ LocalConfigView = (function(_super) {
               $('#message').append("Creating local configuration file<br/>");
               cloud_credentials = cloudConfig.cloud_credentials;
               Coconut.syncView = new SettingsView();
-              $('#message').append("Replicating local form definitions and syncing with the server.<br/>");
+              $('#message').append("Replicating form definitions and syncing with the server.<br/>");
               opts = {
                 success: function() {
                   var repFromOpts;
+                  $('#message').append("Replication of form definitions was successful..<br/>");
                   repFromOpts = {
                     success: function() {
                       var repToOpts;
                       repToOpts = {
                         success: function() {
-                          $('#message').append("Replication from app was successful. Finished with Config. Reloading app in 2 seconds.<br/>");
+                          $('#message').append("Replication to server was successful. <br/>");
+                          $('#message').append("Finished with Config. Reloading app in 2 seconds.<br/>");
                           return _.delay(function() {
                             Coconut.router.navigate("", false);
                             return document.location.reload();
@@ -89,7 +96,7 @@ LocalConfigView = (function(_super) {
                           return $('#message').append("Replication Error:" + msg + "<br/>");
                         }
                       };
-                      $('#message').append("Replication to server was successful.<br/>");
+                      $('#message').append("Replication from server was successful.<br/>");
                       return Coconut.syncView.sync.replicateToServer(repToOpts);
                     },
                     error: function(obj, msg) {
@@ -122,6 +129,7 @@ LocalConfigView = (function(_super) {
           return alert("Error:" + message);
         }
       };
+      $('#message').append('Downloading configuration.');
       request = $.ajax(options);
       return false;
     } else {

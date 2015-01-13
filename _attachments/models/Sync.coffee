@@ -262,6 +262,7 @@ class Sync extends Backbone.Model
 #    Coconut.menuView.checkReplicationStatus();
 
   replicateForms: (options) ->
+    console.log("coconut_forms_url: " + Coconut.config.coconut_forms_url_with_credentials())
     options = {} if !options
     opts =
         live:true

@@ -581,6 +581,7 @@ Router = (function(_super) {
   };
 
   Router.prototype.bootstrapApp = function() {
+    Controller.displaySiteNav();
     Coconut.config = new Config();
     return Coconut.config.fetch({
       success: function() {
@@ -657,7 +658,21 @@ Router = (function(_super) {
 })(Backbone.Router);
 
 $(function() {
-  var onDeviceReady;
+  var onDeviceReady, onOffline, onOnline;
+  onOffline = function() {
+    var message;
+    message = 'Device is offline.';
+    console.log(message);
+    Coconut.connectionStatus = "offline";
+    return $("#statusIcons").html('<img src="images/connection-down.png"/>');
+  };
+  onOnline = function() {
+    var message;
+    message = 'Device is online.';
+    console.log(message);
+    Coconut.connectionStatus = "online";
+    return $("#statusIcons").html('<img src="images/connection-up.png"/>');
+  };
   onDeviceReady = function() {
     var matchResults;
     if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
@@ -690,6 +705,8 @@ $(function() {
     Coconut.router = new Router();
     Coconut.currentClient = null;
     Coconut.currentAdmin = null;
+    Coconut.currentPosition = null;
+    Coconut.currentPositionError = null;
     Coconut.addRegions({
       siteNav: "#siteNav"
     });
@@ -747,7 +764,9 @@ $(function() {
   };
   if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
     console.log("listening for deviceready event.");
-    return document.addEventListener("deviceready", onDeviceReady, false);
+    document.addEventListener("deviceready", onDeviceReady, false);
+    document.addEventListener("offline", onOffline, false);
+    return document.addEventListener("online", onOnline, false);
   } else {
     return onDeviceReady();
   }

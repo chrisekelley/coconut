@@ -11,10 +11,12 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #verifyYes": "displayNewUserRegistration",
     "click #verifyNo": "displayNewUserRegistration",
     "click #refresh": "refresh",
-    "click #verifySendLogs": "sendLogs"
+    "click #verifySendLogs": "sendLogs",
+    "click #continueAfterFail": "continueAfterFail"
   },
   nextUrl: null,
   hasCordova: true,
+  currentOfflineUser: null,
   initialize: function() {
     this.sync = new Sync();
     if (typeof cordova === "undefined") {
@@ -56,7 +58,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
         var findUserFromServiceUUID, i, interval, l;
         l = Ladda.create(e.currentTarget);
         l.start();
-        findUserFromServiceUUID = function(serviceUuid, scannerPayload) {
+        findUserFromServiceUUID = function(serviceUuid, prints) {
           var users, viewOptions,
             _this = this;
           viewOptions = {};
@@ -71,7 +73,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
               }
             },
             success: function() {
-              var adminUser, uuid;
+              var adminUser, client, message, uuid;
               console.log('by_serviceUuid returned: ' + JSON.stringify(users));
               l.stop();
               if (users.length > 0) {
@@ -82,22 +84,22 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   CoconutUtils.setSession('currentAdmin', adminUser.get('email'));
                   return Coconut.router.navigate("displayUserScanner", true);
                 } else {
-                  user = users.first();
-                  console.log('Coconut.currentClient: ' + JSON.stringify(user));
-                  Coconut.currentClient = user;
+                  client = users.first();
+                  console.log('Coconut.currentClient: ' + JSON.stringify(client));
+                  Coconut.currentClient = client;
                   CoconutUtils.setSession('currentClient', true);
                   return Coconut.router.navigate("displayClientRecords", true);
                 }
               } else {
-                console.log('Strange. This user was identified but is not registered.');
+                message = 'Strange. This user was identified but is not registered. User: ' + user;
+                console.log(message);
+                $('#progress').append("<br/>" + message);
                 uuid = CoconutUtils.uuidGenerator(30);
                 Coconut.currentClient = new Result({
-                  _id: uuid,
                   serviceUuid: serviceUuid,
-                  Template: scannerPayload.Template
+                  Fingerprints: prints
                 });
                 console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
-                Coconut.scannerPayload = scannerPayload;
                 if (user === "Admin") {
                   return Coconut.trigger("displayAdminRegistrationForm");
                 } else {
@@ -111,7 +113,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           console.log("method: " + method);
           if (method === "Identify") {
             cordova.plugins.SecugenPlugin.scan(function(results) {
-              var finger, payload, urlServer;
+              var finger, fingerprint, payload, prints, template, urlServer;
               finger = $('#Finger').val();
               payload = {};
               payload["Key"] = Coconut.config.get("AfisServerKey");
@@ -119,9 +121,37 @@ VerifyView = Backbone.Marionette.ItemView.extend({
               payload["Template"] = results;
               payload["Finger"] = finger;
               console.log("payload: " + JSON.stringify(payload));
+              template = payload.Template;
+              fingerprint = {};
+              fingerprint.template = template;
+              fingerprint.finger = finger;
+              prints = [];
+              prints.push(fingerprint);
+              Coconut.currentPrints = prints;
               urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+              $('#progress').append("<br/>Fingerprint scanned. Now uploading to server. User: " + user);
+              $.ajaxSetup({
+                type: 'POST',
+                timeout: 20000,
+                error: function(xhr) {
+                  var message;
+                  l.stop();
+                  _this.currentOfflineUser = user;
+                  if (user === 'Admin') {
+                    message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin");
+                  } else {
+                    message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient");
+                  }
+                  $("#uploadFailedMessage").html(message);
+                  $("#uploadFailed").css({
+                    "display": "block"
+                  });
+                  console.log(message);
+                  return $('#progress').append(message);
+                }
+              });
               return $.post(urlServer, payload, function(result) {
-                var error, scannerPayload, serviceUuid, statusCode;
+                var error, log, scannerPayload, serviceUuid, statusCode;
                 console.log("response from service: " + JSON.stringify(result));
                 try {
                   scannerPayload = payload["Template"];
@@ -134,16 +164,15 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   $('#progress').append("<br/>Error uploading scan: " + error);
                 }
                 if (statusCode !== null && statusCode === 1) {
-                  findUserFromServiceUUID(serviceUuid, scannerPayload);
-                }
-                if (statusCode !== null && statusCode === 4) {
+                  return findUserFromServiceUUID(serviceUuid, prints);
+                } else if (statusCode !== null && statusCode === 4) {
                   l.stop();
                   if (user === 'Admin') {
                     CoconutUtils.setSession('currentAdmin', null);
                   } else {
                     CoconutUtils.setSession('currentClient', true);
                   }
-                  $('#progress').append("<br/>Enrolling new fingerprint. ");
+                  $('#progress').append("<br/>Enrolling new fingerprint. User: " + user);
                   urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
                   return $.post(urlServer, payload, function(result) {
                     console.log("response from service: " + JSON.stringify(result));
@@ -152,68 +181,57 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                     console.log("statusCode: " + statusCode);
                     if (statusCode !== null) {
                       if (statusCode === 1) {
-                        $("#progress").html('Fingerprint enrolled. Success!');
-                        Coconut.currentClient = new Result({
-                          serviceUuid: serviceUuid,
-                          Template: payload.Template
-                        });
-                        if (typeof user !== 'undefined' && user !== null && user === 'user') {
-                          return Coconut.trigger("displayUserRegistrationForm");
-                        } else {
-                          return Coconut.trigger("displayAdminRegistrationForm");
-                        }
+                        $('#progress').append("<br/>Fingerprint enrolled. Success! User: " + user);
+                        return _this.registerEnrolledPerson(serviceUuid, prints, user);
                       } else {
-                        $("#progress").html('Problem enrolling fingerprint. StatusCode: ' + statusCode);
+                        $("#progress").append('Problem enrolling fingerprint. StatusCode: ' + statusCode);
                         return Coconut.trigger("displayEnroll");
                       }
                     }
                   }, "json");
                 } else {
                   l.stop();
-                  $("#message").html("No match - you must register.");
-                  Coconut.scannerPayload = scannerPayload;
-                  if (_this.nextUrl != null) {
-                    return Coconut.router.navigate(_this.nextUrl, true);
-                  } else {
-                    return Coconut.router.navigate("registration", true);
-                  }
+                  $("#message").append("Problem processing fingerprint. StatusCode: " + statusCode);
+                  log = new Log();
+                  return log.save({
+                    message: "Problem processing fingerprint.",
+                    statusCode: statusCode
+                  }, {
+                    success: function() {
+                      $("#message").append("<br/>Saved log about problem.");
+                      return console.log("Saved log about problem.");
+                    },
+                    error: function(model, err, cb) {
+                      return console.log(JSON.stringify(err));
+                    }
+                  });
                 }
               }, "json");
             }, function(error) {
-              var message;
-              console.log("SecugenPlugin.identify error: " + error);
+              var log, message,
+                _this = this;
+              l.stop();
+              console.log("SecugenPlugin.scan error: " + error);
               message = error;
               if (error === "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app.") {
                 message = '<p>' + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>';
+              } else {
+                message = '<p> Error: ' + error + " " + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>';
               }
               $("#message").html(message);
-              return l.stop();
-            });
-          } else {
-            cordova.plugins.SecugenPlugin.register(function(results) {
-              var obj, serviceUuid, statusCode, uuid;
-              console.log("SecugenPlugin.register: " + results);
-              $("#message").html(results);
-              l.stop();
-              obj = JSON.parse(results);
-              statusCode = obj.StatusCode;
-              serviceUuid = obj.UID;
-              if (statusCode === 1) {
-                uuid = CoconutUtils.uuidGenerator(30);
-                Coconut.currentClient = new Result({
-                  _id: uuid,
-                  serviceUuid: serviceUuid
-                });
-                console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
-                $("#message").html("No match - you must register.");
-                if (_this.nextUrl != null) {
-                  return Coconut.router.navigate(_this.nextUrl, true);
-                } else {
-                  return Coconut.router.navigate("registration", true);
+              log = new Log();
+              return log.save({
+                message: "Problem scanning fingerprint.",
+                error: error
+              }, {
+                success: function() {
+                  $("#message").append("<br/>Saved log about problem.");
+                  return console.log("Saved log about problem.");
+                },
+                error: function(model, err, cb) {
+                  return console.log(JSON.stringify(err));
                 }
-              } else {
-                return Coconut.router.navigate("displayAdminScanner", true);
-              }
+              });
             });
           }
         } else {
@@ -232,7 +250,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 "Key": "HH8XGFYSDU9QGZ833"
               };
               Coconut.currentClient = new Result({
-                _id: uuid,
                 serviceUuid: serviceUuid
               });
               $("#message").html("Scanning complete!");
@@ -274,5 +291,65 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   },
   sendLogs: function() {
     return this.sync.sendLogs('#progress');
+  },
+  registerEnrolledPerson: function(serviceUuid, prints, user, createdOffline) {
+    Coconut.currentClient = new Result({
+      serviceUuid: serviceUuid,
+      Fingerprints: prints
+    });
+    if (createdOffline) {
+      Coconut.currentClient.createdOffline = true;
+    }
+    if (typeof user !== 'undefined' && user !== null && user === 'Individual') {
+      return Coconut.trigger("displayUserRegistrationForm");
+    } else {
+      return Coconut.trigger("displayAdminRegistrationForm");
+    }
+  },
+  continueAfterFail: function() {
+    var serviceUuid, user, users,
+      _this = this;
+    serviceUuid = CoconutUtils.uuidGenerator(30);
+    user = this.currentOfflineUser;
+    Coconut.offlineUser = true;
+    console.log('Continuing after the fail. User: ' + user);
+    if (user === "Admin") {
+      users = new SecondaryIndexCollection;
+      return users.fetch({
+        fetch: 'query',
+        options: {
+          query: {
+            include_docs: true,
+            fun: 'by_AdminRegistration'
+          }
+        },
+        success: function() {
+          var adminUser, message, uuid;
+          console.log('by_AdminRegistration returned: ' + JSON.stringify(users));
+          if (users.length > 0) {
+            adminUser = users.first();
+            console.log('Coconut.currentAdmin: ' + JSON.stringify(adminUser));
+            Coconut.currentAdmin = adminUser;
+            CoconutUtils.setSession('currentAdmin', adminUser.get('email'));
+            return Coconut.router.navigate("displayUserScanner", true);
+          } else {
+            message = 'Strange. There should already be an Admin user. ';
+            console.log(message);
+            $('#progress').append("<br/>" + message);
+            uuid = CoconutUtils.uuidGenerator(30);
+            Coconut.currentAdmin = new Result({
+              serviceUuid: serviceUuid,
+              createdOffline: true,
+              Fingerprints: Coconut.currentPrints
+            });
+            console.log("currentAdmin: " + JSON.stringify(Coconut.currentAdmin));
+            CoconutUtils.setSession('currentAdmin', null);
+            return Coconut.trigger("displayAdminRegistrationForm");
+          }
+        }
+      });
+    } else {
+      return this.registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true);
+    }
   }
 });

@@ -496,3 +496,41 @@ CoconutUtils.refreshChart = function (id, name) {
        Coconut.session[name] = date
        //$.cookie(name, value, { expires: date });
   }
+
+CoconutUtils.check_network = function() {
+  var networkState = navigator.network.connection.type;
+
+  var states = {};
+  states[Connection.UNKNOWN]  = 'Unknown connection';
+  states[Connection.ETHERNET] = 'Ethernet connection';
+  states[Connection.WIFI]     = 'WiFi connection';
+  states[Connection.CELL]  = 'Cell connection';
+  states[Connection.CELL_2G]  = 'Cell 2G connection';
+  states[Connection.CELL_3G]  = 'Cell 3G connection';
+  states[Connection.CELL_4G]  = 'Cell 4G connection';
+  states[Connection.NONE]     = 'No network connection';
+
+  var message = 'Connection type:\n ' + states[networkState];
+  console.log(message);
+  confirm(message);
+}
+
+CoconutUtils.getCurrentPosition = function(currentPosition, errorObj) {
+
+  // onSuccess Callback
+  // This method accepts a Position object, which contains the
+  // current GPS coordinates
+  //
+  var onSuccess = function(position) {
+    currentPosition = position;
+  };
+
+  // onError Callback receives a PositionError object
+  //
+  function onError(error) {
+    errorObj = error;
+    console.log('code: '    + error.code    + '\n' +  'message: ' + error.message + '\n');
+  }
+  navigator.geolocation.getCurrentPosition(onSuccess, onError);
+}
+

@@ -415,6 +415,7 @@ class Router extends Backbone.Router
         Coconut.mapView.render()
 
   bootstrapApp: ->
+    Controller.displaySiteNav()
     Coconut.config = new Config()
     Coconut.config.fetch
       success: ->
@@ -465,8 +466,21 @@ class Router extends Backbone.Router
     Backbone.history.start()
     if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
       CoconutUtils.checkVersion()
+#      CoconutUtils.check_network()
 
 $(() =>
+
+  onOffline = () ->
+    message = 'Device is offline.'
+    console.log message
+    Coconut.connectionStatus = "offline"
+    $("#statusIcons").html('<img src="images/connection-down.png"/>')
+  onOnline = () ->
+    message = 'Device is online.'
+    console.log message
+    Coconut.connectionStatus = "online"
+    $("#statusIcons").html('<img src="images/connection-up.png"/>')
+
   onDeviceReady = () =>
     if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
       console.log("Init Secugen: this wheel is on fire.")
@@ -505,6 +519,9 @@ $(() =>
     Coconut.router = new Router()
     Coconut.currentClient = null;
     Coconut.currentAdmin = null;
+
+    Coconut.currentPosition = null
+    Coconut.currentPositionError = null
 
     Coconut.addRegions siteNav: "#siteNav"
     Coconut.addRegions mainRegion: "#content"
@@ -581,6 +598,8 @@ $(() =>
   if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
     console.log("listening for deviceready event.")
     document.addEventListener("deviceready", onDeviceReady, false);
+    document.addEventListener("offline", onOffline, false);
+    document.addEventListener("online", onOnline, false);
   else
     onDeviceReady()
 )

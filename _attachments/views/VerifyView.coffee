@@ -10,10 +10,13 @@ VerifyView = Backbone.Marionette.ItemView.extend
       "click #verifyNo": "displayNewUserRegistration"
       "click #refresh": "refresh"
       "click #verifySendLogs":  "sendLogs"
+      "click #continueAfterFail":  "continueAfterFail"
 
     nextUrl:null
 
     hasCordova:true
+
+    currentOfflineUser:null
 
     initialize: ->
       @sync = new Sync()
@@ -61,7 +64,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
           l.start()
 #          if not typeof cordova is "undefined"
 
-          findUserFromServiceUUID = (serviceUuid, scannerPayload) ->
+          findUserFromServiceUUID = (serviceUuid, prints) ->
             viewOptions = {}
             users = new SecondaryIndexCollection
             users.fetch
@@ -84,20 +87,21 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     CoconutUtils.setSession('currentAdmin', adminUser.get('email'))
                     Coconut.router.navigate "displayUserScanner", true
                   else
-                    user = users.first()
-                    console.log 'Coconut.currentClient: ' + JSON.stringify user
-                    Coconut.currentClient = user
+                    client = users.first()
+                    console.log 'Coconut.currentClient: ' + JSON.stringify client
+                    Coconut.currentClient = client
                     CoconutUtils.setSession('currentClient', true)
                     Coconut.router.navigate "displayClientRecords", true
                 else
-                  console.log 'Strange. This user was identified but is not registered.'
+                  message = 'Strange. This user was identified but is not registered. User: ' + user
+                  console.log message
+                  $('#progress').append "<br/>" + message
                   uuid = CoconutUtils.uuidGenerator(30)
                   Coconut.currentClient = new Result
-                    _id: uuid
                     serviceUuid: serviceUuid
-                    Template: scannerPayload.Template
+#                    Template: scannerPayload.Template
+                    Fingerprints: prints
                   console.log "currentClient: " + JSON.stringify Coconut.currentClient
-                  Coconut.scannerPayload = scannerPayload
                   if user == "Admin"
                     Coconut.trigger "displayAdminRegistrationForm"
                   else
@@ -114,7 +118,35 @@ VerifyView = Backbone.Marionette.ItemView.extend
                 payload["Template"] = results
                 payload["Finger"] = finger
                 console.log "payload: " + JSON.stringify payload
+                template = payload.Template
+                # Set things up for future handling of multiple fingerprints
+                fingerprint = {}
+                fingerprint.template = template
+                fingerprint.finger = finger
+                prints = []
+                prints.push(fingerprint)
+                # used when print upload fails and Continue button is pressed.
+                Coconut.currentPrints = prints
                 urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+                $('#progress').append "<br/>Fingerprint scanned. Now uploading to server. User: " + user
+                $.ajaxSetup
+                  type:'POST'
+                  timeout:20000
+                  error: (xhr)=>
+                    l.stop()
+                    @currentOfflineUser = user;
+                    if user == 'Admin'
+#                      Operating in offline-mode. Press Continue to scan a new patient.
+                      message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
+                    else
+#                      Operating in offline-mode. Press Continue to enroll this new patient.
+                      message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
+                    $("#uploadFailedMessage").html(message)
+                    $("#uploadFailed").css({
+                      "display": "block"
+                    })
+                    console.log message
+                    $('#progress').append message
                 $.post(urlServer, payload,
                 (result) =>
                   console.log "response from service: " + JSON.stringify result
@@ -127,15 +159,15 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     console.log error
                     $('#progress').append "<br/>Error uploading scan: " + error
                   if statusCode != null && statusCode == 1
-                    findUserFromServiceUUID(serviceUuid, scannerPayload)
-                  if statusCode != null && statusCode == 4
+                    findUserFromServiceUUID(serviceUuid, prints)
+                  else if statusCode != null && statusCode == 4
 #                    Status Code 4 = No Person found
                     l.stop()
                     if user == 'Admin'
                       CoconutUtils.setSession('currentAdmin', null)
                     else
                       CoconutUtils.setSession('currentClient', true)
-                    $('#progress').append "<br/>Enrolling new fingerprint. "
+                    $('#progress').append "<br/>Enrolling new fingerprint. User: " + user
                     urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
                     $.post(urlServer, payload,
                       (result) =>
@@ -145,56 +177,43 @@ VerifyView = Backbone.Marionette.ItemView.extend
                         console.log "statusCode: " + statusCode
                         if statusCode != null
                           if statusCode == 1
-                            $( "#progress" ).html( 'Fingerprint enrolled. Success!' );
-                            Coconut.currentClient = new Result
-                              serviceUuid:serviceUuid
-                              Template: payload.Template
-                            if typeof user != 'undefined' && user != null && user == 'user'
-                              Coconut.trigger "displayUserRegistrationForm"
-                            else
-                              Coconut.trigger "displayAdminRegistrationForm"
+#                            $( "#progress" ).html( 'Fingerprint enrolled. Success!' );
+                            $('#progress').append "<br/>Fingerprint enrolled. Success! User: " + user
+                            @registerEnrolledPerson(serviceUuid, prints, user)
                           else
-                            $( "#progress" ).html( 'Problem enrolling fingerprint. StatusCode: ' +  statusCode);
+                            $( "#progress" ).append( 'Problem enrolling fingerprint. StatusCode: ' +  statusCode);
                             Coconut.trigger "displayEnroll"
                     , "json")
-
                   else
                     l.stop()
-                    $( "#message").html("No match - you must register.")
-                    Coconut.scannerPayload = scannerPayload
-                    if  @nextUrl?
-                      Coconut.router.navigate @nextUrl, true
-                    else
-                      Coconut.router.navigate "registration", true
+                    $( "#message").append("Problem processing fingerprint. StatusCode: " + statusCode)
+#                    Coconut.scannerPayload = payload
+                    log = new Log()
+                    log.save  {message: "Problem processing fingerprint.", statusCode:statusCode},
+                      success: () =>
+                        $( "#message").append("<br/>Saved log about problem.")
+                        console.log("Saved log about problem.")
+                      ,
+                      error: (model, err, cb) =>
+                        console.log(JSON.stringify(err))
                 , "json")
               , (error) ->
-                  console.log("SecugenPlugin.identify error: " + error)
+                  l.stop()
+                  console.log("SecugenPlugin.scan error: " + error)
                   message = error
                   if error == "Scan failed: Unable to capture fingerprint. Please kill the app in the Task Manager and restart the app."
                       message = '<p>' + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>'
-                  $("#message").html message
-                  l.stop()
-            else
-              cordova.plugins.SecugenPlugin.register (results) =>
-                console.log "SecugenPlugin.register: " + results
-                $( "#message").html(results)
-                l.stop()
-                obj = JSON.parse(results)
-                statusCode = obj.StatusCode
-                serviceUuid = obj.UID
-                if statusCode == 1
-                  uuid = CoconutUtils.uuidGenerator(30)
-                  Coconut.currentClient = new Result
-                    _id:uuid
-                    serviceUuid:serviceUuid
-                  console.log "currentClient: " + JSON.stringify Coconut.currentClient
-                  $( "#message").html("No match - you must register.")
-                  if  @nextUrl?
-                    Coconut.router.navigate @nextUrl, true
                   else
-                    Coconut.router.navigate "registration", true
-                else
-                  Coconut.router.navigate "displayAdminScanner", true
+                      message = '<p> Error: ' + error + " " + polyglot.t("scanFailed") + '<br/><a data-role="button" id="refresh" class="btn btn-primary btn-lg" data-style="expand-right">Refresh</a></p>'
+                  $("#message").html message
+                  log = new Log()
+                  log.save  {message: "Problem scanning fingerprint.", error:error},
+                    success: () =>
+                      $( "#message").append("<br/>Saved log about problem.")
+                      console.log("Saved log about problem.")
+                    ,
+                    error: (model, err, cb) =>
+                      console.log(JSON.stringify(err))
           else
             i=1
             interval = setInterval =>
@@ -209,7 +228,6 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   "Finger":1,
                   "Key":"HH8XGFYSDU9QGZ833"
                 Coconut.currentClient = new Result
-                  _id:uuid
                   serviceUuid:serviceUuid
                 $( "#message").html("Scanning complete!")
                 CoconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email)
@@ -241,56 +259,6 @@ VerifyView = Backbone.Marionette.ItemView.extend
       revealSlider event, method, user
 
 
-        #      if not typeof cordova is "undefined"
-#        cordova.plugins.SecugenPlugin.register ((results) ->
-#          #                display(JSON.stringify(results));
-#          console.log("SecugenPlugin register: " + results)
-#          $("#message").html results
-#          return
-#
-#        #                revealSlider();
-#        ), (e) ->
-#          console.log "Error: " + e
-#          $("#message").html "Error:" + results
-#          return
-#
-#
-#      #                display("Error: " + e);
-#      else
-#        console.log "Cordova is not initialised. Plugins will not work."
-#        revealSlider event, method
-#      return
-
-
-    #        revealSlider: function(e) {
-    #            console.log("click scan.")
-    #
-    #            $( "#slider" ).show();
-    #
-    #            $( "#slider" ).parent().find('input').hide();
-    #            $( "#slider" ).parent().find('.ui-slider-track').css('margin','0 15px 0 15px');
-    #            $( "#slider" ).parent().find('.ui-slider-handle').hide();
-    #            $( "#slider" ).slider({
-    #                value: 0
-    #                // setup the rest ...
-    #            });
-    #
-    #            var i = 1;
-    #            var interval = setInterval(function(){
-    #                Coconut.progressBar.setValue('#slider',i);
-    #                if(i === 50) {
-    #                    console.log("Go to next page.")
-    #                    $( "#message").html("Scanning complete!")
-    #                    window.setTimeout(function() { Coconut.router.navigate("registration")}, 2000);
-    #                    clearInterval(interval);
-    #                }
-    #                i++;
-    #            },50);
-    #        },
-
-    #
-    #         appends @message to the message div:
-    #
     display: (message) ->
       console.log "display message."
       display = document.getElementById("message") # the message div
@@ -307,26 +275,49 @@ VerifyView = Backbone.Marionette.ItemView.extend
     sendLogs: ->
         @sync.sendLogs('#progress')
 
-#        initSlider: function () {
-#            $('<input>').appendTo('[ data-role="content"]').attr({'name':'slider','id':'slider','data-highlight':'true','min':'0','max':'100','value':'50','type':'range'}).slider({
-#                create: function( event, ui ) {
-#                    $(this).parent().find('input').hide();
-#                    $(this).parent().find('input').css('margin-left','-9999px'); // Fix for some FF versions
-#                    $(this).parent().find('.ui-slider-track').css('margin','0 15px 0 15px');
-#                    $(this).parent().find('.ui-slider-handle').hide();
-#                }
-#            }).slider("refresh");
-#
-#            // Test
-#            var i = 1;
-#            var interval = setInterval(function(){
-#                Coconut.progressBar.setValue('#slider',i);
-#                if(i === 99) {
-#                    console.log("Go to next page.")
-#                    $( "#message").html("Scanning complete!")
-#                    clearInterval(interval);
-#                }
-#                i++;
-#            },100);
-#        }
+    registerEnrolledPerson: (serviceUuid, prints, user, createdOffline) ->
+      Coconut.currentClient = new Result
+        serviceUuid: serviceUuid
+        Fingerprints: prints
+      if createdOffline
+        Coconut.currentClient.createdOffline = true
+      if typeof user != 'undefined' && user != null && user == 'Individual'
+        Coconut.trigger "displayUserRegistrationForm"
+      else
+        Coconut.trigger "displayAdminRegistrationForm"
 
+    continueAfterFail: ->
+      serviceUuid = CoconutUtils.uuidGenerator(30)
+      user = @currentOfflineUser
+      Coconut.offlineUser = true
+      console.log('Continuing after the fail. User: ' + user)
+      if user == "Admin"
+        users = new SecondaryIndexCollection
+        users.fetch
+          fetch: 'query',
+          options:
+            query:
+              include_docs: true,
+              fun: 'by_AdminRegistration'
+          success: =>
+            console.log 'by_AdminRegistration returned: ' + JSON.stringify users
+            if users.length > 0
+              adminUser = users.first()
+              console.log 'Coconut.currentAdmin: ' + JSON.stringify adminUser
+              Coconut.currentAdmin = adminUser
+              CoconutUtils.setSession('currentAdmin', adminUser.get('email'))
+              Coconut.router.navigate "displayUserScanner", true
+            else
+              message = 'Strange. There should already be an Admin user. '
+              console.log message
+              $('#progress').append "<br/>" + message
+              uuid = CoconutUtils.uuidGenerator(30)
+              Coconut.currentAdmin = new Result
+                serviceUuid: serviceUuid
+                createdOffline: true
+                Fingerprints: Coconut.currentPrints
+              console.log "currentAdmin: " + JSON.stringify Coconut.currentAdmin
+              CoconutUtils.setSession('currentAdmin', null)
+              Coconut.trigger "displayAdminRegistrationForm"
+      else
+        @registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true)

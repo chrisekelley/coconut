@@ -13,6 +13,13 @@ Controller = {
       model: model
     });
     Coconut.siteNav.show(staticView);
+    if (Coconut.connectionStatus !== null) {
+      if (Coconut.connectionStatus === "offline") {
+        $("#statusIcons").html('<img src="images/connection-down.png"/>');
+      } else {
+        $("#statusIcons").html('<img src="images/connection-up.png"/>');
+      }
+    }
   },
   displayUserScanner: function() {
     var staticView;

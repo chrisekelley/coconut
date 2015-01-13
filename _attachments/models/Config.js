@@ -71,11 +71,15 @@ Config = (function(_super) {
   };
 
   Config.prototype.coconut_forms_url_with_credentials = function() {
-    if (!this.coconut_forms_url) {
+    if (!this.coconut_forms_url()) {
       alert("Please tell Chris that the coconut_forms_url is missing.");
       this.coconut_forms_url = "https://kiwicentral.org/coconut-forms/";
     }
-    return this.coconut_forms_url().replace(/https:\/\//, "https://" + (this.get("cloud_credentials")) + "@");
+    if (this.coconut_forms_url().indexOf("http:") === 0) {
+      return this.coconut_forms_url().replace(/http:\/\//, "http://" + (this.get("cloud_credentials")) + "@");
+    } else {
+      return this.coconut_forms_url().replace(/https:\/\//, "https://" + (this.get("cloud_credentials")) + "@");
+    }
   };
 
   return Config;

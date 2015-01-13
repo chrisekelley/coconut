@@ -361,6 +361,7 @@ Sync = (function(_super) {
 
   Sync.prototype.replicateForms = function(options) {
     var opts;
+    console.log("coconut_forms_url: " + Coconut.config.coconut_forms_url_with_credentials());
     if (!options) {
       options = {};
     }

@@ -59,6 +59,12 @@ var byServiceUuidDesignDoc = createDesignDoc('by_serviceUuid', function (doc) {
     }
 });
 
+var by_AdminRegistrationDesignDoc = createDesignDoc('by_AdminRegistration', function (doc) {
+    if (doc.serviceUuid &&  doc.question == 'Admin Registration') {
+        emit(doc.serviceUuid);
+    }
+});
+
 //Backbone.sync.defaults.db.get('_design/by_clientId', function(err, doc) {
 //    Backbone.sync.defaults.db.remove(doc, function(err, response) { });
 //    console.log("doc deleted: " + err);
@@ -83,6 +89,17 @@ Backbone.sync.defaults.db.put(byServiceUuidDesignDoc).then(function (doc) {
 }).catch(function (err) {
     if (err.name === 'conflict') {
         console.log("by_serviceUuid exists.")
+    }
+});
+
+Backbone.sync.defaults.db.put(by_AdminRegistrationDesignDoc).then(function (doc) {
+    // design doc created!
+    console.log("by_AdminRegistration created")
+    Backbone.sync.defaults.db.query('by_AdminRegistration', {stale: 'update_after'})
+//    Backbone.sync.defaults.db.viewCleanup()
+}).catch(function (err) {
+    if (err.name === 'conflict') {
+        console.log("by_AdminRegistration exists.")
     }
 });
 

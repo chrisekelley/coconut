@@ -178,6 +178,25 @@ class QuestionView extends Backbone.View
       if typeof Coconut.scannerPayload != 'undefined'
         console.log 'Display the payload' + JSON.stringify Coconut.scannerPayload
 
+    onCurrentPositionSuccess = (position) ->
+      Coconut.currentPositionError = null
+      Coconut.currentPosition = position
+      messageText = 'Gathered current location.'
+      console.log(messageText);
+      $("#messageText").html(messageText)
+      $("#messageText").slideDown().fadeOut()
+
+    onCurrentPositionError = (error) ->
+      Coconut.currentPositionError = error;
+      messageText = 'code: ' + error.code + '\n' + 'message: ' + error.message + '\n'
+      console.log(messageText);
+      $("#messageText").html(messageText)
+      $("#messageText").slideDown().fadeOut()
+
+    maximumAge = 1000*60*60 # 1 hour
+#   timeout: 5000  # disabled
+    navigator.geolocation.getCurrentPosition(onCurrentPositionSuccess, onCurrentPositionError, { maximumAge: maximumAge, enableHighAccuracy: true });
+
   events:
     "change #question-view input"    : "onChange"
     "change #question-view select"   : "onChange"
@@ -448,11 +467,34 @@ class QuestionView extends Backbone.View
   save: _.throttle( ->
 
     currentData = $('form').toObject(skipEmpty: false)
+    currentPosition = {}
+    if Coconut.currentPosition != null
+      coords = {}
+      _.each Coconut.currentPosition.coords, (value,key) ->
+        coords[key] = value
+      currentPosition.coords = coords
+      currentPosition.timestamp = Coconut.currentPosition.timestamp
+
+    if Coconut.currentPositionError != null
+      error = {}
+      error.code = Coconut.currentPositionError.code
+      error.message = Coconut.currentPositionError.message
+      currentData.currentPositionError = error
+      if Coconut.currentPosition != null
+        currentData.lastRecordedPosition = currentPosition
+    else
+      if Coconut.currentPosition != null
+        currentData.currentPosition = currentPosition
 
     # Make sure lastModifiedAt is always updated on save
     currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get "datetime_format")
     if typeof Coconut.currentAdmin != 'undefined' && Coconut.currentAdmin != null
       currentData.savedBy = Coconut.currentAdmin.id
+      if @result.question() == 'Admin Registration'
+        currentData.serviceUuid = Coconut.currentAdmin.get("serviceUuid")
+        currentData.Fingerprints = Coconut.currentAdmin.get("Fingerprints")
+      if typeof Coconut.currentAdmin.createdOffline != 'undefined' && Coconut.currentAdmin.createdOffline != null
+        currentData.createdOffline = Coconut.currentAdmin.get("createdOffline")
     else
       currentData.savedBy = $.cookie('current_user')
     if typeof Coconut.currentClient != 'undefined' && Coconut.currentClient != null
@@ -461,13 +503,17 @@ class QuestionView extends Backbone.View
       if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
         console.log "currentClient: " + JSON.stringify Coconut.currentClient
         currentData._id = currentData.clientId
-        currentData.Template = Coconut.currentClient.get("Template")
+        currentData.Fingerprints = Coconut.currentClient.get("Fingerprints")
         console.log "currentData: " + JSON.stringify currentData
       if @result.question() == 'Admin Registration'
         Coconut.currentAdmin = Coconut.currentClient
         CoconutUtils.setSession('currentAdmin', Coconut.currentAdmin.get('email'))
+    if typeof Coconut.offlineUser!= 'undefined' && Coconut.offlineUser != null
+      currentData.createdByOfflineUser = true
     @result.save currentData,
         success: (model) =>
+          messageText = 'Saving...'
+          $("#messageText").html(messageText)
           $("#messageText").slideDown().fadeOut()
           if (Coconut.currentAdmin != null)
               _.extend(Coconut.currentAdmin, currentData)

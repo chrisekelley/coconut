@@ -3,12 +3,12 @@ class CaseView extends Backbone.View
 
   render: =>
     @$el.html "
-          <h1>Case ID: #{@case.get("caseID")}</h1>
-          <h2>Last Modified: #{@case.get("lastModifiedAt")}</h1>
+          <h1>#{polyglot.t 'Case ID'}: #{@case.get("caseID")}</h1>
+          <h2>#{polyglot.t 'Last Modified'}: #{@case.get("lastModifiedAt")}</h1>
           <table>
             <thead>
-              <th>Property</th>
-              <th>Value</th>
+              <th>#{polyglot.t 'Property'}</th>
+              <th>#{polyglot.t 'Value'}</th>
             </thead>
             <tbody>
                #{
@@ -16,10 +16,10 @@ class CaseView extends Backbone.View
       "
                       <tr>
                         <td>
-                          #{property}
+                          #{polyglot.t property}
                         </td>
                         <td>
-                          #{value}
+                          #{polyglot.t value}
                         </td>
                       </tr>
                     "
