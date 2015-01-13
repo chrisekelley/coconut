@@ -15,12 +15,12 @@ Result = (function(_super) {
     if (!this.attributes.createdAt) {
       this.set({
         collection: 'result',
-        createdAt: moment(new Date()).format(Coconut.config.get("date_format"))
+        createdAt: moment(new Date()).format(Coconut.config.get("datetime_format"))
       });
     }
     if (!this.attributes.lastModifiedAt) {
       return this.set({
-        lastModifiedAt: moment(new Date()).format(Coconut.config.get("date_format"))
+        lastModifiedAt: moment(new Date()).format(Coconut.config.get("datetime_format"))
       });
     }
   };

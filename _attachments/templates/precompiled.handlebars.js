@@ -119,6 +119,62 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
+this["JST"]["_attachments/templates/ReportLayout.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<div id=\"report-header-region\"></div>\n<div id=\"report-listing-region\"></div>\n\n\n";
+  });
+
+this["JST"]["_attachments/templates/ReportRecordItemView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n<td class=\"recordName\"><a href=\"#show/case/";
+  if (helper = helpers._id) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0._id); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">"
+    + escapeExpression((helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.question), options) : helperMissing.call(depth0, "polyglot", (depth0 && depth0.question), options)))
+    + "</a></td>\n<td class=\"recordTs\">";
+  if (helper = helpers.lastModifiedAt) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.lastModifiedAt); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</td>\n";
+  return buffer;
+  }
+
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.question), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  return buffer;
+  });
+
+this["JST"]["_attachments/templates/ReportView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, helperMissing=helpers.helperMissing;
+
+
+  buffer += "<table id=\"records\">\n    <thead><tr>\n        <th>";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Question", options) : helperMissing.call(depth0, "polyglot", "Question", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</th>\n        <!--<th>";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "User", options) : helperMissing.call(depth0, "polyglot", "User", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</th>-->\n        <th>";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "dateModified", options) : helperMissing.call(depth0, "polyglot", "dateModified", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</th>\n    </tr></thead>\n    <tbody></tbody>\n</table>\n";
+  return buffer;
+  });
+
 this["JST"]["_attachments/templates/ScanRetry.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -168,7 +224,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   buffer += "</p>\n<p>\n    <label for=\"Finger\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Finger", options) : helperMissing.call(depth0, "polyglot", "Finger", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</label>\n    <select id=\"Finger\" name=\"Finger\">\n        <option value=\"0\">Null</option>\n        <option value=\"6\">L1</option>\n        <option value=\"7\">L2</option>\n        <option value=\"8\">L3</option>\n        <option value=\"9\">L4</option>\n        <option value=\"10\">L5</option>\n        <option selected=\"selected\" value=\"1\">R1</option>\n        <option value=\"2\">R2</option>\n        <option value=\"3\">R3</option>\n        <option value=\"4\">R4</option>\n        <option value=\"5\">R5</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyIndividual\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Continue</span></a>\n    </div>\n</p>\n\n<div id=\"message\"></div>\n\n<p>";
+  buffer += "</label>\n    <select id=\"Finger\" name=\"Finger\">\n        <option value=\"0\">Null</option>\n        <option value=\"6\">L1</option>\n        <option value=\"7\">L2</option>\n        <option value=\"8\">L3</option>\n        <option value=\"9\">L4</option>\n        <option value=\"10\">L5</option>\n        <option selected=\"selected\" value=\"1\">R1</option>\n        <option value=\"2\">R2</option>\n        <option value=\"3\">R3</option>\n        <option value=\"4\">R4</option>\n        <option value=\"5\">R5</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyIndividual\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Continue", options) : helperMissing.call(depth0, "polyglot", "Continue", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</span></a>\n    </div>\n</p>\n\n<div id=\"message\"></div>\n\n<p>";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "scanSendLogs", options) : helperMissing.call(depth0, "polyglot", "scanSendLogs", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>";
@@ -252,7 +311,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   buffer += "</p>\n<p>\n    <label for=\"Finger\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Finger", options) : helperMissing.call(depth0, "polyglot", "Finger", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</label>\n    <select id=\"Finger\" name=\"Finger\">\n        <option value=\"0\">Null</option>\n        <option value=\"6\">L1</option>\n        <option value=\"7\">L2</option>\n        <option value=\"8\">L3</option>\n        <option value=\"9\">L4</option>\n        <option value=\"10\">L5</option>\n        <option selected=\"selected\" value=\"1\">R1</option>\n        <option value=\"2\">R2</option>\n        <option value=\"3\">R3</option>\n        <option value=\"4\">R4</option>\n        <option value=\"5\">R5</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyAdmin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Continue</span></a>\n    </div>\n\n</p>\n\n<div id=\"message\"></div>\n\n<p>";
+  buffer += "</label>\n    <select id=\"Finger\" name=\"Finger\">\n        <option value=\"0\">Null</option>\n        <option value=\"6\">L1</option>\n        <option value=\"7\">L2</option>\n        <option value=\"8\">L3</option>\n        <option value=\"9\">L4</option>\n        <option value=\"10\">L5</option>\n        <option selected=\"selected\" value=\"1\">R1</option>\n        <option value=\"2\">R2</option>\n        <option value=\"3\">R3</option>\n        <option value=\"4\">R4</option>\n        <option value=\"5\">R5</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyAdmin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Continue", options) : helperMissing.call(depth0, "polyglot", "Continue", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</span></a>\n    </div>\n\n</p>\n\n<div id=\"message\"></div>\n\n<p>";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "scanSendLogs", options) : helperMissing.call(depth0, "polyglot", "scanSendLogs", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>";

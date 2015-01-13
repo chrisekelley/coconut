@@ -98,6 +98,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   $('#progress').append "<br/>" + message
                   uuid = CoconutUtils.uuidGenerator(30)
                   Coconut.currentClient = new Result
+                    _id: uuid
                     serviceUuid: serviceUuid
 #                    Template: scannerPayload.Template
                     Fingerprints: prints
@@ -136,11 +137,12 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     l.stop()
                     @currentOfflineUser = user;
                     if user == 'Admin'
+#                      Error uploading scan
 #                      Operating in offline-mode. Press Continue to scan a new patient.
-                      message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
+                      message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
                     else
 #                      Operating in offline-mode. Press Continue to enroll this new patient.
-                      message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
+                      message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
                     $("#uploadFailedMessage").html(message)
                     $("#uploadFailed").css({
                       "display": "block"
@@ -228,6 +230,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   "Finger":1,
                   "Key":"HH8XGFYSDU9QGZ833"
                 Coconut.currentClient = new Result
+                  _id: uuid
                   serviceUuid:serviceUuid
                 $( "#message").html("Scanning complete!")
                 CoconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email)
@@ -276,7 +279,12 @@ VerifyView = Backbone.Marionette.ItemView.extend
         @sync.sendLogs('#progress')
 
     registerEnrolledPerson: (serviceUuid, prints, user, createdOffline) ->
+      if createdOffline
+        uuid = 'oflId-' + CoconutUtils.uuidGenerator(30)
+      else
+        uuid = CoconutUtils.uuidGenerator(30)
       Coconut.currentClient = new Result
+        _id: uuid
         serviceUuid: serviceUuid
         Fingerprints: prints
       if createdOffline
@@ -287,7 +295,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
         Coconut.trigger "displayAdminRegistrationForm"
 
     continueAfterFail: ->
-      serviceUuid = CoconutUtils.uuidGenerator(30)
+      serviceUuid = 'oflSid-' + CoconutUtils.uuidGenerator(30)
       user = @currentOfflineUser
       Coconut.offlineUser = true
       console.log('Continuing after the fail. User: ' + user)
@@ -311,10 +319,10 @@ VerifyView = Backbone.Marionette.ItemView.extend
               message = 'Strange. There should already be an Admin user. '
               console.log message
               $('#progress').append "<br/>" + message
-              uuid = CoconutUtils.uuidGenerator(30)
+              uuid = 'oflId-' + CoconutUtils.uuidGenerator(30)
               Coconut.currentAdmin = new Result
+                _id: uuid
                 serviceUuid: serviceUuid
-                createdOffline: true
                 Fingerprints: Coconut.currentPrints
               console.log "currentAdmin: " + JSON.stringify Coconut.currentAdmin
               CoconutUtils.setSession('currentAdmin', null)

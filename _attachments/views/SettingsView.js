@@ -8,6 +8,7 @@ SettingsView = (function(_super) {
   __extends(SettingsView, _super);
 
   function SettingsView() {
+    this.viewReports = __bind(this.viewReports, this);
     this.changeLanguage = __bind(this.changeLanguage, this);
     this.sendReplicateLogs = __bind(this.sendReplicateLogs, this);
     this.updateForms = __bind(this.updateForms, this);
@@ -43,11 +44,12 @@ SettingsView = (function(_super) {
     "click #refreshLog": "refreshLog",
     "click #updateForms": "updateForms",
     "click #sendReplicateLogs": "sendReplicateLogs",
+    "click #viewReports": "viewReports",
     "change #langChoice": "changeLanguage"
   };
 
   SettingsView.prototype.render = function() {
-    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' id='replicate'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendReplicateLogs'>" + polyglot.t("sendLogs") + "</a>        <span id='progress'></span>        <h2>" + polyglot.t("SetLanguage") + "</h2>        <p>            " + polyglot.t("LangChoice") + "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" + "<select id='langChoice'>                <option value=''>--Select --</option>                <option value='en'>en</option>                <option value='pt'>pt</option>            </select>        </p>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
+    this.$el.html("        <h2>" + polyglot.t("server") + ("</h2>        <p><span class='sync-target'>" + (this.sync.target()) + "</span></p>        <p>" + (polyglot.t("version")) + ": " + Coconut.version_code + "</p>        <a data-role='button' class='btn btn-primary btn-lg' id='replicate'>") + polyglot.t("sendData") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>        <a data-role='button' class='btn btn-primary btn-lg' id='sendReplicateLogs'>" + polyglot.t("sendLogs") + "</a>        <span id='progress'></span>        <h2>" + polyglot.t("Reports") + "</h2>        <p>          <a data-role='button' class='btn btn-primary btn-lg' id='viewReports'>" + polyglot.t("viewReports") + "</a>        </p>        <h2>" + polyglot.t("SetLanguage") + "</h2>        <p>            " + polyglot.t("LangChoice") + "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" + "<select id='langChoice'>                <option value=''>--Select --</option>                <option value='en'>en</option>                <option value='pt'>pt</option>            </select>        </p>        <h2>" + polyglot.t("replicationLog") + "</h2>        <p>" + polyglot.t("replicationLogDescription") + "        <br/><br/><a data-role='button' class='btn btn-primary btn-lg' id='refreshLog'>" + polyglot.t("refreshLog") + "</a>        </p>        <div id=\"replicationLog\"></div>");
     return $("a").button();
   };
 
@@ -145,6 +147,11 @@ SettingsView = (function(_super) {
         }
       });
     }
+  };
+
+  SettingsView.prototype.viewReports = function() {
+    console.log("viewReports: ");
+    return Coconut.trigger("displayAllRecords");
   };
 
   return SettingsView;

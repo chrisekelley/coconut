@@ -3,10 +3,10 @@ class Result extends Backbone.Model
     unless this.attributes.createdAt
       @set
         collection: 'result'
-        createdAt: moment(new Date()).format(Coconut.config.get "date_format")
+        createdAt: moment(new Date()).format(Coconut.config.get "datetime_format")
     unless this.attributes.lastModifiedAt
       @set
-        lastModifiedAt: moment(new Date()).format(Coconut.config.get "date_format")
+        lastModifiedAt: moment(new Date()).format(Coconut.config.get "datetime_format")
 
   url: "/result"
 

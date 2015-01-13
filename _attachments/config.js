@@ -65,6 +65,17 @@ var by_AdminRegistrationDesignDoc = createDesignDoc('by_AdminRegistration', func
     }
 });
 
+var by_QuestionSortableByDateDesignDoc = createDesignDoc('by_QuestionSortableByDate', function(document) {
+    //return emit(document.question + '|' + document.lastModifiedAt, null);
+    return emit( document.lastModifiedAt);
+});
+
+var by_QIndivRegistrationDesignDoc = createDesignDoc('by_AdminRegistration', function(document) {
+    if (doc.question == 'Individual Registration') {
+        emit(doc.serviceUuid);
+    }
+});
+
 //Backbone.sync.defaults.db.get('_design/by_clientId', function(err, doc) {
 //    Backbone.sync.defaults.db.remove(doc, function(err, response) { });
 //    console.log("doc deleted: " + err);
@@ -103,7 +114,16 @@ Backbone.sync.defaults.db.put(by_AdminRegistrationDesignDoc).then(function (doc)
     }
 });
 
-
+Backbone.sync.defaults.db.put(by_QuestionSortableByDateDesignDoc).then(function (doc) {
+    // design doc created!
+    console.log("by_QuestionSortableByDate created")
+    Backbone.sync.defaults.db.query('by_QuestionSortableByDate', {stale: 'update_after'})
+//    Backbone.sync.defaults.db.viewCleanup()
+}).catch(function (err) {
+    if (err.name === 'conflict') {
+        console.log("by_QuestionSortableByDate exists.")
+    }
+});
 
 //Backbone.sync.defaults.db.get('Individual Registration', function(err, otherDoc) {
 //    otherDoc.collection = "question";

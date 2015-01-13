@@ -447,11 +447,10 @@ QuestionView = (function(_super) {
     if (typeof Coconut.currentAdmin !== 'undefined' && Coconut.currentAdmin !== null) {
       currentData.savedBy = Coconut.currentAdmin.id;
       if (this.result.question() === 'Admin Registration') {
+        currentData._id = Coconut.currentAdmin.get("_id");
+        currentData.clientId = Coconut.currentAdmin.get("_id");
         currentData.serviceUuid = Coconut.currentAdmin.get("serviceUuid");
         currentData.Fingerprints = Coconut.currentAdmin.get("Fingerprints");
-      }
-      if (typeof Coconut.currentAdmin.createdOffline !== 'undefined' && Coconut.currentAdmin.createdOffline !== null) {
-        currentData.createdOffline = Coconut.currentAdmin.get("createdOffline");
       }
     } else {
       currentData.savedBy = $.cookie('current_user');
@@ -466,8 +465,7 @@ QuestionView = (function(_super) {
         console.log("currentData: " + JSON.stringify(currentData));
       }
       if (this.result.question() === 'Admin Registration') {
-        Coconut.currentAdmin = Coconut.currentClient;
-        CoconutUtils.setSession('currentAdmin', Coconut.currentAdmin.get('email'));
+        CoconutUtils.setSession('currentAdmin', currentData.email);
       }
     }
     if (typeof Coconut.offlineUser !== 'undefined' && Coconut.offlineUser !== null) {
@@ -479,9 +477,6 @@ QuestionView = (function(_super) {
         messageText = 'Saving...';
         $("#messageText").html(messageText);
         $("#messageText").slideDown().fadeOut();
-        if (Coconut.currentAdmin !== null) {
-          _.extend(Coconut.currentAdmin, currentData);
-        }
         Coconut.router.navigate("edit/result/" + model.id, false);
         Coconut.menuView.update();
         if (_this.result.complete()) {

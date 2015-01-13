@@ -51,6 +51,7 @@ Router = (function(_super) {
     "scanRetry/:user": "scanRetry",
     "users": "users",
     "displayClientRecords": "displayClientRecords",
+    "displayAllRecords": "displayAllRecords",
     "loadTestClient": "loadTestClient",
     "enroll": "enroll",
     "enroll/:user": "enroll",
@@ -272,6 +273,14 @@ Router = (function(_super) {
     return this.userLoggedIn({
       success: function() {
         return Coconut.Controller.displayClientRecords();
+      }
+    });
+  };
+
+  Router.prototype.displayAllRecords = function() {
+    return this.userLoggedIn({
+      success: function() {
+        return Coconut.Controller.displayAllRecords();
       }
     });
   };
@@ -747,6 +756,11 @@ $(function() {
     Coconut.on("displayClientRecords", function() {
       Coconut.router.navigate("displayClientRecords");
       return Coconut.Controller.displayClientRecords();
+    });
+    Coconut.on("displayAllRecords", function() {
+      console.log("displayAllRecords triggered");
+      Coconut.router.navigate("displayAllRecords");
+      return Coconut.Controller.displayAllRecords();
     });
     Coconut.on("displaySync", function() {
       Coconut.router.navigate("sync");

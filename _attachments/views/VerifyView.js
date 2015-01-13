@@ -96,6 +96,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 $('#progress').append("<br/>" + message);
                 uuid = CoconutUtils.uuidGenerator(30);
                 Coconut.currentClient = new Result({
+                  _id: uuid,
                   serviceUuid: serviceUuid,
                   Fingerprints: prints
                 });
@@ -138,9 +139,9 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   l.stop();
                   _this.currentOfflineUser = user;
                   if (user === 'Admin') {
-                    message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin");
+                    message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin");
                   } else {
-                    message = "Error uploading scan: " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient");
+                    message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient");
                   }
                   $("#uploadFailedMessage").html(message);
                   $("#uploadFailed").css({
@@ -250,6 +251,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 "Key": "HH8XGFYSDU9QGZ833"
               };
               Coconut.currentClient = new Result({
+                _id: uuid,
                 serviceUuid: serviceUuid
               });
               $("#message").html("Scanning complete!");
@@ -293,7 +295,14 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     return this.sync.sendLogs('#progress');
   },
   registerEnrolledPerson: function(serviceUuid, prints, user, createdOffline) {
+    var uuid;
+    if (createdOffline) {
+      uuid = 'oflId-' + CoconutUtils.uuidGenerator(30);
+    } else {
+      uuid = CoconutUtils.uuidGenerator(30);
+    }
     Coconut.currentClient = new Result({
+      _id: uuid,
       serviceUuid: serviceUuid,
       Fingerprints: prints
     });
@@ -309,7 +318,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   continueAfterFail: function() {
     var serviceUuid, user, users,
       _this = this;
-    serviceUuid = CoconutUtils.uuidGenerator(30);
+    serviceUuid = 'oflSid-' + CoconutUtils.uuidGenerator(30);
     user = this.currentOfflineUser;
     Coconut.offlineUser = true;
     console.log('Continuing after the fail. User: ' + user);
@@ -336,10 +345,10 @@ VerifyView = Backbone.Marionette.ItemView.extend({
             message = 'Strange. There should already be an Admin user. ';
             console.log(message);
             $('#progress').append("<br/>" + message);
-            uuid = CoconutUtils.uuidGenerator(30);
+            uuid = 'oflId-' + CoconutUtils.uuidGenerator(30);
             Coconut.currentAdmin = new Result({
+              _id: uuid,
               serviceUuid: serviceUuid,
-              createdOffline: true,
               Fingerprints: Coconut.currentPrints
             });
             console.log("currentAdmin: " + JSON.stringify(Coconut.currentAdmin));

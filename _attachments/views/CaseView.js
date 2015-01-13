@@ -16,7 +16,7 @@ CaseView = (function(_super) {
   CaseView.prototype.el = '#content';
 
   CaseView.prototype.render = function() {
-    return this.$el.html("          <h1>" + (polyglot.t('Case ID')) + ": " + (this["case"].get("caseID")) + "</h1>          <h2>" + (polyglot.t('Last Modified')) + ": " + (this["case"].get("lastModifiedAt")) + "</h1>          <table>            <thead>              <th>" + (polyglot.t('Property')) + "</th>              <th>" + (polyglot.t('Value')) + "</th>            </thead>            <tbody>               " + (_.map(this["case"].attributes, function(value, property) {
+    return this.$el.html("          <h1>" + (polyglot.t('Case ID')) + ": " + (this["case"].get("caseID")) + "</h1>          <h3>" + (polyglot.t('LastModified')) + ": " + (this["case"].get("lastModifiedAt")) + "</h3>          <table>            <thead>              <th>" + (polyglot.t('Property')) + "</th>              <th>" + (polyglot.t('Value')) + "</th>            </thead>            <tbody>               " + (_.map(this["case"].attributes, function(value, property) {
       return "                      <tr>                        <td>                          " + (polyglot.t(property)) + "                        </td>                        <td>                          " + (polyglot.t(value)) + "                        </td>                      </tr>                    ";
     }).join("")) + "                <tr>              </tr>            </tbody>          </table>    ");
   };

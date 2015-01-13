@@ -16,6 +16,7 @@ class SettingsView extends Backbone.View
     "click #refreshLog":  "refreshLog"
     "click #updateForms":  "updateForms"
     "click #sendReplicateLogs":  "sendReplicateLogs"
+    "click #viewReports":  "viewReports"
     "change #langChoice": "changeLanguage"
 
   render: =>
@@ -27,6 +28,10 @@ class SettingsView extends Backbone.View
         <a data-role='button' class='btn btn-primary btn-lg' id='updateForms'>" + polyglot.t("updateForms") + "</a>
         <a data-role='button' class='btn btn-primary btn-lg' id='sendReplicateLogs'>" + polyglot.t("sendLogs") + "</a>
         <span id='progress'></span>
+        <h2>" + polyglot.t("Reports") + "</h2>
+        <p>
+          <a data-role='button' class='btn btn-primary btn-lg' id='viewReports'>" + polyglot.t("viewReports") + "</a>
+        </p>
         <h2>" + polyglot.t("SetLanguage") + "</h2>
         <p>
             " + polyglot.t("LangChoice") +  "&nbsp;<span id='langCurrently'>" + langChoice + "</span><br/>" +
@@ -121,8 +126,8 @@ class SettingsView extends Backbone.View
                           location.reload()
                     error: (json, msg) ->
                         console.log("Error saving langChoice  " + msg)
-#        _.delay ->
-##            Coconut.trigger "displayUserScanner"
-#            Coconut.router.navigate("",false)
-#            location.reload()
-#        , 2000
+
+  viewReports: =>
+    console.log("viewReports: ")
+    Coconut.trigger "displayAllRecords"
+

@@ -38,6 +38,7 @@ class Router extends Backbone.Router
     "scanRetry/:user":	 "scanRetry"
     "users": "users"
     "displayClientRecords": "displayClientRecords"
+    "displayAllRecords": "displayAllRecords"
     "loadTestClient": "loadTestClient"
     "enroll": "enroll"
     "enroll/:user": "enroll"
@@ -205,6 +206,11 @@ class Router extends Backbone.Router
       success: ->
 #        Coconut.Controller.showDashboard()
         Coconut.Controller.displayClientRecords()
+
+  displayAllRecords: ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.displayAllRecords()
 
   loadTestClient: ->
     @userLoggedIn
@@ -563,6 +569,11 @@ $(() =>
       Coconut.router.navigate "displayClientRecords"
       Coconut.Controller.displayClientRecords()
     #  Coconut.Controller.showDashboard()
+
+    Coconut.on "displayAllRecords", ->
+      console.log("displayAllRecords triggered")
+      Coconut.router.navigate "displayAllRecords"
+      Coconut.Controller.displayAllRecords()
 
     Coconut.on "displaySync", ->
       Coconut.router.navigate "sync"

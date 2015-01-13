@@ -196,5 +196,34 @@ Controller = {
       dashboardLayout.dashboardRegion.show(dashboardView);
       return dashboardLayout.contentRegion.show(new HomeCompositeView(viewOptions));
     }
+  },
+  displayAllRecords: function() {
+    var results, viewOptions,
+      _this = this;
+    viewOptions = {};
+    results = new SecondaryIndexCollection;
+    return results.fetch({
+      fetch: 'query',
+      options: {
+        query: {
+          include_docs: true,
+          fun: 'by_QuestionSortableByDate'
+        }
+      },
+      success: function() {
+        var reportHeaderView, reportLayout;
+        viewOptions = {
+          collection: results
+        };
+        reportLayout = new ReportLayout();
+        Coconut.mainRegion.show(reportLayout);
+        reportHeaderView = new ReportHeaderDashboardView;
+        reportLayout.reportHeaderRegion.show(reportHeaderView);
+        return reportLayout.reportListingRegion.show(new ReportCompositeView(viewOptions));
+      },
+      error: function(model, err, cb) {
+        return console.log(JSON.stringify(err));
+      }
+    });
   }
 };

@@ -162,3 +162,25 @@ Controller =
       dashboardLayout.dashboardRegion.show dashboardView
       dashboardLayout.contentRegion.show(new HomeCompositeView viewOptions)
 
+  displayAllRecords: () ->
+    viewOptions = {}
+    results = new SecondaryIndexCollection
+    results.fetch
+      fetch: 'query',
+      options:
+        query:
+          include_docs: true,
+          fun: 'by_QuestionSortableByDate'
+      success: =>
+#        console.log JSON.stringify results
+        viewOptions =
+          collection : results
+        reportLayout = new ReportLayout();
+        Coconut.mainRegion.show reportLayout
+        reportHeaderView = new ReportHeaderDashboardView
+        reportLayout.reportHeaderRegion.show reportHeaderView
+        reportLayout.reportListingRegion.show(new ReportCompositeView viewOptions)
+      error: (model, err, cb) ->
+              console.log JSON.stringify err
+
+

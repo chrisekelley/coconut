@@ -4,7 +4,7 @@ class CaseView extends Backbone.View
   render: =>
     @$el.html "
           <h1>#{polyglot.t 'Case ID'}: #{@case.get("caseID")}</h1>
-          <h2>#{polyglot.t 'Last Modified'}: #{@case.get("lastModifiedAt")}</h1>
+          <h3>#{polyglot.t 'LastModified'}: #{@case.get("lastModifiedAt")}</h3>
           <table>
             <thead>
               <th>#{polyglot.t 'Property'}</th>
