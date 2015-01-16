@@ -171,7 +171,6 @@ Controller = {
         },
         success: function() {
           var dashboardLayout, dashboardView;
-          console.log(JSON.stringify(results));
           viewOptions = {
             collection: results
           };
@@ -197,17 +196,20 @@ Controller = {
       return dashboardLayout.contentRegion.show(new HomeCompositeView(viewOptions));
     }
   },
-  displayAllRecords: function() {
-    var results, viewOptions,
+  displayAdminRecords: function() {
+    var adminId, results, viewOptions,
       _this = this;
+    adminId = Coconut.currentAdmin.get("_id");
     viewOptions = {};
-    results = new SecondaryIndexCollection;
+    results = new AdminCollection;
     return results.fetch({
       fetch: 'query',
       options: {
         query: {
+          startkey: adminId,
+          endkey: adminId + '\uffff',
           include_docs: true,
-          fun: 'by_QuestionSortableByDate'
+          fun: 'by_AdminDate'
         }
       },
       success: function() {

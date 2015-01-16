@@ -280,7 +280,7 @@ Router = (function(_super) {
   Router.prototype.displayAllRecords = function() {
     return this.userLoggedIn({
       success: function() {
-        return Coconut.Controller.displayAllRecords();
+        return Coconut.Controller.displayAdminRecords();
       }
     });
   };
@@ -760,7 +760,7 @@ $(function() {
     Coconut.on("displayAllRecords", function() {
       console.log("displayAllRecords triggered");
       Coconut.router.navigate("displayAllRecords");
-      return Coconut.Controller.displayAllRecords();
+      return Coconut.Controller.displayAdminRecords();
     });
     Coconut.on("displaySync", function() {
       Coconut.router.navigate("sync");

@@ -154,6 +154,11 @@ unique name, so find the name in devtools/Resources/Indexeddb and modify the nam
   indexedDB.deleteDatabase('_pouch_coconut-mrview-1f25d520a467c823dd18beca3000809e');
   indexedDB.deleteDatabase('_pouch_coconut-mrview-4cd1cd399de52c6325a3c89750262205');
   indexedDB.deleteDatabase('_pouch_coconut-mrview-d64ce65c938ae0c44375c9ec586645e3');
+  indexedDB.deleteDatabase('_pouch_coconut-mrview-83ceb52de53e12103f3cedbc413ad3b7');
+
+Cleanup any orphined indexes
+
+  pouch.viewCleanup()
 
 ## App flow
 

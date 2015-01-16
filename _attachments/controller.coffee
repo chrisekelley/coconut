@@ -142,7 +142,7 @@ Controller =
   #                  key:'Individual Registration',
             fun: 'by_clientId'
         success: =>
-          console.log JSON.stringify results
+#          console.log JSON.stringify results
           viewOptions =
             collection : results
   #        Coconut.mainRegion.show new HomeCompositeView viewOptions
@@ -162,17 +162,20 @@ Controller =
       dashboardLayout.dashboardRegion.show dashboardView
       dashboardLayout.contentRegion.show(new HomeCompositeView viewOptions)
 
-  displayAllRecords: () ->
+  displayAdminRecords: () ->
+    adminId = Coconut.currentAdmin.get("_id")
+#    console.log("adminId: " + adminId)
     viewOptions = {}
-    results = new SecondaryIndexCollection
+    results = new AdminCollection
     results.fetch
       fetch: 'query',
       options:
         query:
+          startkey:adminId
+          endkey:adminId + '\uffff'
           include_docs: true,
-          fun: 'by_QuestionSortableByDate'
+          fun: 'by_AdminDate'
       success: =>
-#        console.log JSON.stringify results
         viewOptions =
           collection : results
         reportLayout = new ReportLayout();
@@ -182,5 +185,3 @@ Controller =
         reportLayout.reportListingRegion.show(new ReportCompositeView viewOptions)
       error: (model, err, cb) ->
               console.log JSON.stringify err
-
-

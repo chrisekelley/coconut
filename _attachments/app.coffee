@@ -210,7 +210,7 @@ class Router extends Backbone.Router
   displayAllRecords: ->
     @userLoggedIn
       success: ->
-        Coconut.Controller.displayAllRecords()
+        Coconut.Controller.displayAdminRecords()
 
   loadTestClient: ->
     @userLoggedIn
@@ -573,7 +573,7 @@ $(() =>
     Coconut.on "displayAllRecords", ->
       console.log("displayAllRecords triggered")
       Coconut.router.navigate "displayAllRecords"
-      Coconut.Controller.displayAllRecords()
+      Coconut.Controller.displayAdminRecords()
 
     Coconut.on "displaySync", ->
       Coconut.router.navigate "sync"

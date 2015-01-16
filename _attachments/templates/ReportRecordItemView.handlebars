@@ -1,4 +1,10 @@
 {{#if question}}
 <td class="recordName"><a href="#show/case/{{_id}}">{{polyglot question}}</a></td>
+<td class="recordTs">
+{{#if Gender}}{{polyglot Gender}}<br/>{{/if}}
+{{#if DOB}}{{DOB}}<br/>{{/if}}
+{{#if Name}}{{Name}}<br/>{{/if}}
+</td>
 <td class="recordTs">{{lastModifiedAt}}</td>
 {{/if}}
+

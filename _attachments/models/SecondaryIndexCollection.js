@@ -19,44 +19,6 @@ SecondaryIndexCollection = (function(_super) {
     return _.pluck(result.rows, 'doc');
   };
 
-  SecondaryIndexCollection.prototype.notSent = function() {
-    return this.filter(function(result) {
-      var _ref1;
-      return !((_ref1 = result.get("sentTo")) != null ? _ref1.length : void 0);
-    });
-  };
-
-  SecondaryIndexCollection.prototype.filteredByQuestionCategorizedByStatus = function(questionType) {
-    var returnObject;
-    returnObject = {};
-    returnObject.complete = [];
-    returnObject.notCompete = [];
-    this.each(function(result) {
-      if (result.get("question") !== questionType) {
-        return;
-      }
-      switch (result.get("complete")) {
-        case true:
-          return returnObject.complete.push(result);
-        default:
-          return returnObject.notComplete.push(result);
-      }
-    });
-    return returnObject;
-  };
-
-  SecondaryIndexCollection.prototype.filterByQuestionType = function(questionType) {
-    return this.filter(function(result) {
-      return result.get("question") === questionType;
-    });
-  };
-
-  SecondaryIndexCollection.prototype.partialResults = function(questionType) {
-    return this.filter(function(result) {
-      return result.get("question") === questionType && !result.complete();
-    });
-  };
-
   return SecondaryIndexCollection;
 
 })(Backbone.Collection);

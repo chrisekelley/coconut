@@ -107,6 +107,7 @@ class QuestionView extends Backbone.View
       <div id='question-view'>
         <form onsubmit=\"return false;\">
           #{@toHTMLForm(@model)}
+          <p>&nbsp;</p>
             <div data-corners=\"true\" data-shadow=\"true\" data-iconshadow=\"true\" data-wrapperels=\"span\" data-icon=\"null\" data-iconpos=\"null\" data-theme=\"c\" class=\"ui-btn ui-shadow ui-btn-corner-all ui-submit ui-btn-up-b\" aria-disabled=\"false\">
     <span class=\"ui-btn-inner ui-btn-corner-all\">
     <span class=\"ui-btn-text\">Submit</span></span>

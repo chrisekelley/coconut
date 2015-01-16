@@ -1,8 +1,15 @@
-class SecondaryIndexCollection extends Backbone.Collection
+class AdminCollection extends Backbone.Collection
   model: Result
   url: '/result'
   parse: (result) ->
-    _.pluck result.rows, 'doc'
+#    adminId = Coconut.currentAdmin.get("_id")
+#    nudocs = []
+    docs = _.pluck result.rows, 'doc'
+#    _.each docs, (doc) ->
+#      if (doc.savedBy == adminId)
+#        nudocs.push(doc)
+#    return nudocs
+    return docs
 
 #  fetch: (options = {}) ->
 #    unless options.include_docs?
@@ -19,5 +26,4 @@ class SecondaryIndexCollection extends Backbone.Collection
 #        options.endkey = options.question
 ##    console.log "options" + JSON.stringify options
 #    super(options)
-
 

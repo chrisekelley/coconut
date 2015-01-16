@@ -131,7 +131,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 this["JST"]["_attachments/templates/ReportRecordItemView.handlebars"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing, self=this;
+  var buffer = "", stack1, helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression, functionType="function", self=this;
 
 function program1(depth0,data) {
   
@@ -142,17 +142,53 @@ function program1(depth0,data) {
   buffer += escapeExpression(stack1)
     + "\">"
     + escapeExpression((helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.question), options) : helperMissing.call(depth0, "polyglot", (depth0 && depth0.question), options)))
-    + "</a></td>\n<td class=\"recordTs\">";
+    + "</a></td>\n<td class=\"recordTs\">\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.Gender), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.DOB), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.Name), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</td>\n<td class=\"recordTs\">";
   if (helper = helpers.lastModifiedAt) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.lastModifiedAt); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "</td>\n";
   return buffer;
   }
+function program2(depth0,data) {
+  
+  var buffer = "", helper, options;
+  buffer += escapeExpression((helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, (depth0 && depth0.Gender), options) : helperMissing.call(depth0, "polyglot", (depth0 && depth0.Gender), options)))
+    + "<br/>";
+  return buffer;
+  }
+
+function program4(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  if (helper = helpers.DOB) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.DOB); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "<br/>";
+  return buffer;
+  }
+
+function program6(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  if (helper = helpers.Name) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.Name); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "<br/>";
+  return buffer;
+  }
 
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.question), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n";
+  buffer += "\n\n";
   return buffer;
   });
 
@@ -165,10 +201,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   buffer += "<table id=\"records\">\n    <thead><tr>\n        <th>";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Question", options) : helperMissing.call(depth0, "polyglot", "Question", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</th>\n        <!--<th>";
-  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "User", options) : helperMissing.call(depth0, "polyglot", "User", options));
+  buffer += "</th>\n        <th>";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "Details", options) : helperMissing.call(depth0, "polyglot", "Details", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</th>-->\n        <th>";
+  buffer += "</th>\n        <th>";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "dateModified", options) : helperMissing.call(depth0, "polyglot", "dateModified", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</th>\n    </tr></thead>\n    <tbody></tbody>\n</table>\n";

@@ -1,12 +1,24 @@
 trichiasisForm =
 {
     "_id": "Trichiasis Surgery",
+    "_rev": "2-5c44d63968d07e1c9f97605d3d1de2e0",
     "id": "Trichiasis Surgery",
     "noClientPush": "true",
     "enabled": "true",
     "required": "false",
     "safeLabel": "trichiasisSurgery",
     "questions": [
+        {
+            "id": "21",
+            "_id": "21",
+            "label": "Location where service was provided",
+            "type": "select",
+            "repeatable": "false",
+            "select-options": "Household, School, Community, Clinic/hospital",
+            "validation": "",
+            "required": "false",
+            "safeLabel": "serviceLocation"
+        },
         {
             "id": "345",
             "_id": "345",
@@ -16,6 +28,16 @@ trichiasisForm =
             "validation": "",
             "required": "true",
             "safeLabel": "DateTime"
+        },
+        {
+            "id": "765",
+            "_id": "765",
+            "label": "Left eye",
+            "type": "header",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "Lefteye"
         },
         {
             "id": "134",
@@ -36,16 +58,6 @@ trichiasisForm =
             "validation": "",
             "required": "true",
             "safeLabel": "ProvidedEpilationConsultation"
-        },
-        {
-            "id": "765",
-            "_id": "765",
-            "label": "Left eye",
-            "type": "header",
-            "repeatable": "false",
-            "validation": "",
-            "required": "true",
-            "safeLabel": "Lefteye"
         },
         {
             "id": "566",
@@ -148,6 +160,26 @@ trichiasisForm =
             "validation": "",
             "required": "true",
             "safeLabel": "Righteye"
+        },
+        {
+            "id": "134",
+            "_id": "134",
+            "label": "Refused Surgery",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "RefusedSurgery"
+        },
+        {
+            "id": "135",
+            "_id": "135",
+            "label": "Provided consultation on epilation",
+            "type": "checkbox",
+            "repeatable": "false",
+            "validation": "",
+            "required": "true",
+            "safeLabel": "ProvidedEpilationConsultation"
         },
         {
             "id": "47",

@@ -104,6 +104,12 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     Fingerprints: prints
                   console.log "currentClient: " + JSON.stringify Coconut.currentClient
                   if user == "Admin"
+                    Coconut.currentAdmin = new Result
+                      _id: uuid
+                      serviceUuid: serviceUuid
+                      Fingerprints: prints
+                    console.log "currentAdmin: " + JSON.stringify Coconut.currentAdmin
+                    CoconutUtils.setSession('currentAdmin', null)
                     Coconut.trigger "displayAdminRegistrationForm"
                   else
                     Coconut.trigger "displayUserRegistrationForm"
@@ -129,10 +135,13 @@ VerifyView = Backbone.Marionette.ItemView.extend
                 # used when print upload fails and Continue button is pressed.
                 Coconut.currentPrints = prints
                 urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+                timeout = 15000
                 $('#progress').append "<br/>Fingerprint scanned. Now uploading to server. User: " + user
+                $('#progress').append "<br/>Server URL: " + urlServer
+                $('#progress').append "<br/>Timeout: " + timeout
                 $.ajaxSetup
                   type:'POST'
-                  timeout:20000
+                  timeout:timeout
                   error: (xhr)=>
                     l.stop()
                     @currentOfflineUser = user;
@@ -148,10 +157,12 @@ VerifyView = Backbone.Marionette.ItemView.extend
                       "display": "block"
                     })
                     console.log message
+                    console.log "Fingerprint server URL: " + urlServer
                     $('#progress').append message
                 $.post(urlServer, payload,
                 (result) =>
                   console.log "response from service: " + JSON.stringify result
+                  $('#progress').append "<br/>Received response from service. StatusCode: " + statusCode
                   try
                     scannerPayload = payload["Template"]
                     statusCode = result.StatusCode
@@ -161,8 +172,10 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     console.log error
                     $('#progress').append "<br/>Error uploading scan: " + error
                   if statusCode != null && statusCode == 1
+                    $('#progress').append "<br/>Locating user in local database."
                     findUserFromServiceUUID(serviceUuid, prints)
                   else if statusCode != null && statusCode == 4
+                    $('#progress').append "<br/>User not in the local database."
 #                    Status Code 4 = No Person found
                     l.stop()
                     if user == 'Admin'
@@ -233,6 +246,8 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   _id: uuid
                   serviceUuid:serviceUuid
                 $( "#message").html("Scanning complete!")
+                if user == "Admin"
+                  Coconut.currentAdmin = Coconut.currentClient
                 CoconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email)
                 l.stop()
                 if  @nextUrl?

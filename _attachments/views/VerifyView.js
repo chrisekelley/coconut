@@ -102,6 +102,13 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 });
                 console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
                 if (user === "Admin") {
+                  Coconut.currentAdmin = new Result({
+                    _id: uuid,
+                    serviceUuid: serviceUuid,
+                    Fingerprints: prints
+                  });
+                  console.log("currentAdmin: " + JSON.stringify(Coconut.currentAdmin));
+                  CoconutUtils.setSession('currentAdmin', null);
                   return Coconut.trigger("displayAdminRegistrationForm");
                 } else {
                   return Coconut.trigger("displayUserRegistrationForm");
@@ -114,7 +121,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           console.log("method: " + method);
           if (method === "Identify") {
             cordova.plugins.SecugenPlugin.scan(function(results) {
-              var finger, fingerprint, payload, prints, template, urlServer;
+              var finger, fingerprint, payload, prints, template, timeout, urlServer;
               finger = $('#Finger').val();
               payload = {};
               payload["Key"] = Coconut.config.get("AfisServerKey");
@@ -130,10 +137,13 @@ VerifyView = Backbone.Marionette.ItemView.extend({
               prints.push(fingerprint);
               Coconut.currentPrints = prints;
               urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+              timeout = 15000;
               $('#progress').append("<br/>Fingerprint scanned. Now uploading to server. User: " + user);
+              $('#progress').append("<br/>Server URL: " + urlServer);
+              $('#progress').append("<br/>Timeout: " + timeout);
               $.ajaxSetup({
                 type: 'POST',
-                timeout: 20000,
+                timeout: timeout,
                 error: function(xhr) {
                   var message;
                   l.stop();
@@ -148,12 +158,14 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                     "display": "block"
                   });
                   console.log(message);
+                  console.log("Fingerprint server URL: " + urlServer);
                   return $('#progress').append(message);
                 }
               });
               return $.post(urlServer, payload, function(result) {
                 var error, log, scannerPayload, serviceUuid, statusCode;
                 console.log("response from service: " + JSON.stringify(result));
+                $('#progress').append("<br/>Received response from service. StatusCode: " + statusCode);
                 try {
                   scannerPayload = payload["Template"];
                   statusCode = result.StatusCode;
@@ -165,8 +177,10 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   $('#progress').append("<br/>Error uploading scan: " + error);
                 }
                 if (statusCode !== null && statusCode === 1) {
+                  $('#progress').append("<br/>Locating user in local database.");
                   return findUserFromServiceUUID(serviceUuid, prints);
                 } else if (statusCode !== null && statusCode === 4) {
+                  $('#progress').append("<br/>User not in the local database.");
                   l.stop();
                   if (user === 'Admin') {
                     CoconutUtils.setSession('currentAdmin', null);
@@ -255,6 +269,9 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 serviceUuid: serviceUuid
               });
               $("#message").html("Scanning complete!");
+              if (user === "Admin") {
+                Coconut.currentAdmin = Coconut.currentClient;
+              }
               CoconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email);
               l.stop();
               if (_this.nextUrl != null) {
