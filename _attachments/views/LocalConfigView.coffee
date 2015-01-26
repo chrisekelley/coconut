@@ -8,6 +8,7 @@ class LocalConfigView extends Backbone.View
         <label for='coconut-cloud' >Coconut Cloud URL</label>
         <select name='coconut-cloud'>
           <option value='https://kiwicentral.org/coconut-central'>https://kiwicentral.org/coconut-central</option>
+          <option value='https://kiwicentral.org/coconut-central-test'>https://kiwicentral.org/coconut-central-test</option>
           <option value='http://192.168.16.101:5984/coconut-central-alt'>16.101:5984/coconut-central-alt - rep to kiwicentral</option>
           <option value='http://192.168.16.101:5984/coconut-central'>http://192.168.16.101:5984/coconut-central</option>
           <option value='http://localhost:5984/coconut-central-local'>http://localhost:5984/coconut-central-local</option>
