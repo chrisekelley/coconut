@@ -1,4 +1,4 @@
-# Examplation of forms and form markup
+# Explanation of forms and form markup
 
 admin_reg.js is for the users of the app - in your case, the midwives, nurses, or doctors who would be entering data into the app.
 

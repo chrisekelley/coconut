@@ -44,9 +44,7 @@ Use [bower](bower.io). The following libs are already installed. The "-S" switch
 
 ## Form building tips
 
-Login as admin to create/edit forms. See the Setup instructions for creating the admin user.
-
-Add a complete checkbox at the bottom of the form to make it easy to view the results.
+There is an [explanation of forms here](https://github.com/chrisekelley/coconut/blob/coconut-pouch/docs/forms.md).
 
 Change the routing after a form is submitted in QuestionView:
 
