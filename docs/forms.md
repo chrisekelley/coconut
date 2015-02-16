@@ -1,5 +1,7 @@
 # Explanation of forms and form markup
 
+## Form Markup
+
 admin_reg.js is for the users of the app - in your case, the midwives, nurses, or doctors who would be entering data into the app.
 
 indiv_reg.js is for the patient registration
@@ -43,3 +45,24 @@ Rename the file and the '_id' and 'id' fields to whatever your form is about. Re
 
 Note the different types of field types: input, select, date-time, checkbox, header, and subheader.
 The last two types - header and subheader - are display only, to denote different sections in a form. I currently do not use the repeatable or validation fields.
+
+## i18n - Supporting multiple languages
+
+If your app needs translations, you'll need to have the translation files in the i18n directory. Each label and select option
+will need a translation:
+
+(from pt_PT.coffee:)
+
+Labels:
+
+    "Home": "Início"
+    "Sync": "Sinc"
+    "Scanner": "Scan"
+
+Select label and options. Note that select options have a "::"" between the label and the option:
+
+    "Followupdate": "Data de Visita de Acompanhamento"
+    "Followupdate::1 week": "1 semana"
+    "Followupdate::2 weeks": "2 semanas"
+    "Followupdate::1 month": "1 mês"
+
