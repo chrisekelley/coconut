@@ -27,9 +27,26 @@ CouchDB, [Backbone.js](http://documentcloud.github.com/backbone), [backbone-couc
 
 ## How is this organized?
 
-All of the backbone [models](http://documentcloud.github.com/backbone/#Model) and [views](http://documentcloud.github.com/backbone/#Model) have their own file and are in app/models and app/views respectively. app/app.js is responsible for tying it all together.
+All of the backbone [models](http://documentcloud.github.com/backbone/#Model) and [views](http://documentcloud.github.com/backbone/#Model)
+have their own file and are in app/models and app/views respectively. app/app.js is responsible for tying it all together.
 
 You can put json forms into the \_docs directory and they will be added to your couch when you do a couchapp push.
+Please note that this capability is no longer supported.
+
+## Setup
+
+The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you.
+See the Pouch watchr section below for details and dependencies.
+
+This app is designed to sync with a central server for configuration data. Create another couch called coconut-central.
+Upload samplejson/coconut.config to it.
+
+You can also create another couch to sync data to it. See the name for synchronization_target in samplejson/coconut.config.
+
+The first time the app runs, enter the url to coconut-central.
+
+To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly,
+it may have already sync'd these users over. If not, well here you go.
 
 ## Starting the app
 
@@ -76,20 +93,9 @@ The following grunt task will monitor _attachments/templates and pre-compile you
 
 The npm start task (see package.json) runs this task for you.
 
-## Setup
+## Reports
 
-The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you.
-See the Pouch watchr section below for details and dependencies.
-
-This app is designed to sync with a central server for configuration data. Create another couch called coconut-central.
-Upload samplejson/coconut.config to it.
-
-You can also create another couch to sync data to it. See the name for synchronization_target in samplejson/coconut.config.
-
-The first time the app runs, enter the url to coconut-central.
-
-To login to the app, seed the coconut couch with samplejson/user.admin and user.john. If you're coconut-central is setup properly,
-it may have already sync'd these users over. If not, well here you go.
+See [the report doc](docs/reports.md).
 
 ## What are the important record identifiers
 
