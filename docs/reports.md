@@ -56,3 +56,31 @@ of the value to it. This is used for aggregating the values for the report.
     {"key":"01 Trabut-R","value":2}
 
     ]}
+
+#Some useful views:
+
+byCollection_date
+
+    function(doc) {
+      emit(doc.collection + ":"+ doc.timestamp, doc);
+    }
+
+by_AdminDate
+
+    function (doc) {
+            emit(doc.savedBy + '|' + doc.lastModifiedAt);
+    }
+
+by_AdminRegistration
+
+    function (doc) {
+        if (doc.serviceUuid &&  doc.question == 'Admin Registration') {
+            emit(doc.serviceUuid);
+        }
+    }
+
+by_DocsDate
+
+    function (doc) {
+            emit(doc.lastModifiedAt);
+    }
