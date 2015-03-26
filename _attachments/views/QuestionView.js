@@ -511,7 +511,7 @@ QuestionView = (function(_super) {
       questions = [questions];
     }
     return _.map(questions, function(question) {
-      var div, html, i18nKey, i18nLabelText, i18nOptionText, index, label, labelText, name, newGroupId, option, optionText, options, question_id, repeatable;
+      var districts, div, html, i18nKey, i18nLabelText, i18nOptionText, index, key, label, labelText, name, newGroupId, option, optionText, options, phrase, question_id, repeatable;
       if (question.repeatable() === "true") {
         repeatable = "<button>+</button>";
       } else {
@@ -583,6 +583,25 @@ QuestionView = (function(_super) {
                     optionText = i18nOptionText;
                   }
                   html += "<option name='" + name + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + optionText + "</option>";
+                }
+                return html += "</select></div>";
+              }
+              break;
+            case "selectDistrict":
+              if (this.readonly) {
+                return question.value();
+              } else {
+                html = ("<div class='form-group'><select name='" + name + "' id='" + question_id + "' class='form-control'><option value=''> -- ") + polyglot.t("SelectOne") + " -- </option>";
+                districts = KiwiUtils.districts;
+                index = 0;
+                for (key in districts) {
+                  if (!__hasProp.call(districts, key)) continue;
+                  phrase = districts[key];
+                  if (key !== '_id' && key !== '_rev') {
+                    index++;
+                    optionText = phrase;
+                    html += "<option name='" + key + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + optionText + "</option>";
+                  }
                 }
                 return html += "</select></div>";
               }

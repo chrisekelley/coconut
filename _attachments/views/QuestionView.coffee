@@ -640,6 +640,19 @@ class QuestionView extends Backbone.View
 #                     console.log "labelText: " + labelText + " optionText: " + optionText
                      html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{optionText}</option>"
                   html += "</select></div>"
+              when "selectDistrict"
+                if @readonly
+                  question.value()
+                else
+                  html = "<div class='form-group'><select name='#{name}' id='#{question_id}' class='form-control'><option value=''> -- " + polyglot.t("SelectOne") + " -- </option>"
+                  districts = KiwiUtils.districts
+                  index = 0
+                  for own key, phrase of districts
+                    if key != '_id' && key != '_rev'
+                      index++
+                      optionText = phrase
+                      html += "<option name='#{key}' id='#{question_id}-#{index}' value='#{option}'>#{optionText}</option>"
+                  html += "</select></div>"
               when "radio"
                 if @readonly
                   "<div class='form-group radiodrop'><input class='radioradio form-control' name='#{name}' type='text' id='#{question_id}' value='#{question.value()}'></input></div>"

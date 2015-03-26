@@ -654,6 +654,7 @@ Router = (function(_super) {
     Coconut.questionView = new QuestionView();
     Coconut.menuView = new MenuView();
     Coconut.syncView = new SettingsView();
+    KiwiUtils.fetchDistricts();
     Coconut.syncView.sync.replicateToServer();
     Coconut.syncView.sync.replicateFromServer();
     Backbone.history.start();

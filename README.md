@@ -150,6 +150,15 @@ If you need to use polyglot in your js/coffee files:
 
 In order to reset the app when developing locally, you must delete the local indexeddb instance:
 
+  var db = new PouchDB('coconut');
+  db.destroy().then(function () {
+    // success
+  }).catch(function (error) {
+    console.log(error);
+  });
+
+Here's another way to do it:
+
   indexedDB.deleteDatabase('_pouch_coconut');
 
 You also should delete the other pouch db's related to the app, which are used to speed up the views. These db's have a
