@@ -15,6 +15,13 @@ module.exports = function(grunt) {
             less: {
                 files: ['_attachments/bower_components/bootstrap/less/*.less'],
                 tasks: ['less']
+            },
+            coffee: {
+              files: ['_attachments/**/*.coffee','lists/**/*.coffee','views/**/*.coffee'],
+              tasks: ['coffee', 'couch']
+            },
+            configFiles: {
+              files: [ 'Gruntfile.js']
             }
         },
         handlebars: {
@@ -41,19 +48,47 @@ module.exports = function(grunt) {
                     "_attachments/bower_components/bootstrap/dist/css/bootstrap.css": "_attachments/bower_components/bootstrap/less/bootstrap.less"
                 }
             }
+        },
+      coffee: {
+        compile: {
+          options: {
+            bare: true
+          },
+          expand: true,
+          flatten: false,
+          cwd: "_attachments",
+          src: ["**/*.coffee"],
+          dest: '_attachments',
+          ext: ".js"
         }
+      },
+      'couch-compile': {
+        app: {
+          files: {
+            'tmp/couch.json': ['*',  '!.coffee', '!_attachments/js/KiwiUtils.coffee']
+          }
+        }
+      },
+      'couch-push': {
+        options: {
+          user: 'admin',
+          pass: 'password'
+        },
+        localhost: {
+          files: {
+            'http://localhost:5984/coconut': 'tmp/couch.json'
+          }
+        }
+      }
     });
 
-    // Requires the needed plugin
-    grunt.loadNpmTasks('grunt-contrib-handlebars');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.registerTask('default',['less']);
+  // Requires the needed plugin
+  grunt.loadNpmTasks('grunt-contrib-handlebars');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-couch');
+  grunt.registerTask('default',['couch']);
+  grunt.registerTask('default',['less']);
 
-//    grunt.registerTask('less', function (target) {
-//
-//        grunt.task.run([
-//            'less'
-//        ]);
-//    });
 };

@@ -64,7 +64,7 @@ class ResultsView extends Backbone.View
       isComplete: true
       success: =>
         $(".count-complete-true").html results.length
-  
+
   loadIncompleteResults: ->
     @loadResults(false)
 
@@ -81,16 +81,13 @@ class ResultsView extends Backbone.View
         $(".count-complete-#{complete}").html results.length
         results.each (result,index) =>
 
-          $("table.complete-#{complete} tbody").append "
-            <tr>
-              #{_.map(result.summaryValues(@question), (value) ->
+          $("table.complete-#{complete} tbody").append("<tr>" +
+              (_.map(result.summaryValues(@question), (value) ->
                 "<td><a href='#edit/result/#{result.id}'>#{value}</a></td>"
-              ).join("")
-              }
-              <td><a href='#delete/result/#{result.id}' data-icon='delete' data-iconpos='notext'>Delete</a></td>
+              ).join("")) + "<td><a href='#delete/result/#{result.id}' data-icon='delete' data-iconpos='notext'>Delete</a></td>
             </tr>
-          "
-  
+          ")
+
           if index+1 is results.length
             $("table a").button()
             $("table").trigger("update")

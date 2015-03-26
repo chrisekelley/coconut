@@ -78,7 +78,7 @@ class ReportView extends Backbone.View
         form: "<input id='end' type='date' value='#{@endDate}'/>"
       )
 
-     
+
 #    selectedLocations = {}
 #    _.each @locationTypes, (locationType) ->
 #      selectedLocations[locationType] = this[locationType]
@@ -155,7 +155,7 @@ class ReportView extends Backbone.View
     "
         <tr>
           <td>
-            <label style='display:inline' for='#{options.id}'>#{options.label}</label> 
+            <label style='display:inline' for='#{options.id}'>#{options.label}</label>
           </td>
           <td style='width:150%'>
             #{options.form}
@@ -213,21 +213,31 @@ class ReportView extends Backbone.View
           _.map results.fields, (field) ->
             result.get field
 
-        $("table#results thead tr").append "
-          #{ _.map(results.fields, (field) ->
-            "<th>#{field}</th>"
-          ).join("")
-          }
-        "
+        $("table#results thead tr").append("" +
+        (_.map(results.fields, (field) ->
+          "<th>#{field}</th>"
+        ).join("")
+        )
+        )
 
-        $("table#results tbody").append _.map(tableData, (row) ->  "
-          <tr>
-            #{_.map(row, (element,index) -> "
-              <td>#{element}</td>
-            ").join("")
-            }
-          </tr>
-        ").join("")
+#        $("table#results thead tr").append("" + (_.map(results.fields, function(field) {
+#        return "<th>" + field + "</th>";
+#        }).join("")));
+
+
+        $("table#results tbody").append("" +
+            (_.map(tableData, (row) ->
+              "<tr>" +
+              (_.map(row, (element,index) ->
+                "<td>#{element}</td>"
+              ).join("")
+              ) + "</tr>").join("")))
+
+#        $("table#results tbody").append(_.map(tableData, function(row) {
+#        return "<tr> " + (_.map(row, function(element, index) {
+#        return "<td>" + element + "</td>";
+#        }).join("")) + " </tr>";
+#        }).join(""));
 
         _.each $('table tr'), (row, index) ->
           $(row).addClass("odd") if index%2 is 1
@@ -246,7 +256,7 @@ class ReportView extends Backbone.View
         .value()
 
         fields = _.without(fields, "_id", "_rev")
-    
+
         @$el.append  "
           <br/>
           Choose a field to summarize:<br/>

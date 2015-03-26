@@ -1,5 +1,6 @@
 {
   "_id": "Trichiasis Surgery",
+  "_rev": "12-fc2f46934b78b77dd23741d123232083",
   "id": "Trichiasis Surgery",
   "noClientPush": "true",
   "enabled": "true",
@@ -32,7 +33,7 @@
     "id": "345",
     "_id": "345",
     "label": "Date/Time",
-    "type": "date-time",
+    "type": "text",
     "repeatable": "false",
     "validation": "",
     "required": "true",
@@ -67,6 +68,39 @@
     "validation": "",
     "required": "true",
     "safeLabel": "ProvidedEpilationConsultationL"
+  },
+  {
+    "id": "136",
+    "_id": "136",
+    "label": "# of trichiatic lashes touching eyeball",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "1,2,3,4,5,6,7,8,9,10,10+",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "countLashesTouchingEyeballL"
+  },
+  {
+    "id": "136",
+    "_id": "136",
+    "label": "Evidence of epilation (if yes, indicate what proportion of lid is epilated)",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "No,Yes <1/3 of lid,Yes 1/3-2/3 of lid,Yes >2/3 of lid",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "evidenceOfEpilationL"
+  },
+  {
+    "id": "137",
+    "_id": "137",
+    "label": "Cataract (causing VI or blindness)",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes, No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "cataractL"
   },
   {
     "id": "566",
@@ -189,6 +223,39 @@
     "validation": "",
     "required": "true",
     "safeLabel": "ProvidedEpilationConsultationR"
+  },
+  {
+    "id": "136",
+    "_id": "136",
+    "label": "# of trichiatic lashes touching eyeball",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "1,2,3,4,5,6,7,8,9,10,10+",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "countLashesTouchingEyeballR"
+  },
+  {
+    "id": "136",
+    "_id": "136",
+    "label": "Evidence of epilation (if yes, indicate what proportion of lid is epilated)",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "No,Yes &lt;1/3 of lid,Yes, 1/3-2/3 of lid,Yes &gt;2/3 of lid",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "evidenceOfEpilationR"
+  },
+  {
+    "id": "137",
+    "_id": "137",
+    "label": "Cataract (causing VI or blindness)",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes, No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "cataractR"
   },
   {
     "id": "47",

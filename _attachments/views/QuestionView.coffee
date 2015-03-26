@@ -625,6 +625,7 @@ class QuestionView extends Backbone.View
 #                  }
 #                  </select>
 #                "
+
               when "select"
                 if @readonly
                   question.value()
@@ -635,7 +636,7 @@ class QuestionView extends Backbone.View
                      optionText = option
                      i18nKey = question.get('safeLabel') + "::" + optionText
                      i18nOptionText = polyglot.t(i18nKey)
-                     if i18nOptionText !=null
+                     if i18nOptionText != i18nKey
                         optionText = i18nOptionText
 #                     console.log "labelText: " + labelText + " optionText: " + optionText
                      html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{optionText}</option>"
