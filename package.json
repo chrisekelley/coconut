@@ -3,17 +3,18 @@
   "version": "0.0.1",
   "type": "app",
   "scripts": {
-    "start": "http-server -p 9000 _attachments --silent & grunt watch"
+    "start": "http-server -p 9000 couch/app/_attachments --silent & grunt watch"
   },
   "dependencies": {
     "http-server": "^0.6.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
+    "grunt-bowercopy": "^1.2.0",
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-handlebars": "^0.8.0",
     "grunt-contrib-less": "^0.11.4",
     "grunt-contrib-watch": "~0.5.1",
-    "grunt-couch": "^1.4.0"
+    "grunt-couch": "chrisekelley/grunt-couch"
   }
 }

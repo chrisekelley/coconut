@@ -15,4 +15,5 @@
   "scripts",
   "tests",
   "node_modules"
+  ".coffee"
 ]

@@ -5,7 +5,7 @@ module.exports = function(grunt) {
      */
     grunt.initConfig({
         dirs: {
-            handlebars: '_attachments/templates'
+            handlebars: 'couch/app/_attachments/templates'
         },
         watch: {
             handlebars: {
@@ -13,11 +13,11 @@ module.exports = function(grunt) {
                 tasks: ['handlebars:compile']
             },
             less: {
-                files: ['_attachments/bower_components/bootstrap/less/*.less'],
+                files: ['couch/app/_attachments/bower_components/bootstrap/less/*.less'],
                 tasks: ['less']
             },
             coffee: {
-              files: ['_attachments/**/*.coffee','lists/**/*.coffee','views/**/*.coffee'],
+              files: ['couch/app/_attachments/**/*.coffee','couch/app/lists/**/*.coffee','couch/app/views/**/*.coffee'],
               tasks: ['coffee', 'couch']
             },
             configFiles: {
@@ -29,57 +29,97 @@ module.exports = function(grunt) {
                 options: {
                     amd: false
                 },
-                src: ["_attachments/templates/**/*.handlebars"],
-                dest: "_attachments/templates/precompiled.handlebars.js"
+                src: ["couch/app/_attachments/templates/**/*.handlebars"],
+                dest: "couch/app/_attachments/templates/precompiled.handlebars.js"
             }
         },
         less: {
             development: {
                 options: {
-                    paths: ["_attachments/bower_components/bootstrap/less", "_attachments/bower_components/bootstrap/dist/css"],
+                    paths: ["couch/app/attachments/bower_components/bootstrap/less", "couch/app/_attachments/bower_components/bootstrap/dist/css"],
                     cleancss: true,
                     yuicompress: true,
                     compress: true,
                     sourceMap: true,
-                    sourceMapFilename: "_attachments/bower_components/bootstrap/dist/css/bootstrap.css.map",
-                    sourceMapBasepath: "_attachments/bower_components/bootstrap/dist/css/"
+                    sourceMapFilename: "couch/app/_attachments/bower_components/bootstrap/dist/css/bootstrap.css.map",
+                    sourceMapBasepath: "couch/app/_attachments/bower_components/bootstrap/dist/css/"
                 },
                 files: {
-                    "_attachments/bower_components/bootstrap/dist/css/bootstrap.css": "_attachments/bower_components/bootstrap/less/bootstrap.less"
+                    "couch/app/_attachments/bower_components/bootstrap/dist/css/bootstrap.css": "couch/app/_attachments/bower_components/bootstrap/less/bootstrap.less"
                 }
             }
         },
-      coffee: {
-        compile: {
-          options: {
-            bare: true
-          },
-          expand: true,
-          flatten: false,
-          cwd: "_attachments",
-          src: ["**/*.coffee"],
-          dest: '_attachments',
-          ext: ".js"
-        }
-      },
-      'couch-compile': {
-        app: {
-          files: {
-            'tmp/couch.json': ['*',  '!.coffee', '!_attachments/js/KiwiUtils.coffee']
+        coffee: {
+          compile: {
+            options: {
+              bare: true
+            },
+            expand: true,
+            flatten: false,
+            cwd: "couch/app/_attachments",
+            src: ["**/*.coffee"],
+            dest: 'couch/app/_attachments',
+            ext: ".js"
           }
-        }
-      },
-      'couch-push': {
-        options: {
-          user: 'admin',
-          pass: 'password'
         },
-        localhost: {
-          files: {
-            'http://localhost:5984/coconut': 'tmp/couch.json'
+        'couch-compile': {
+          app: {
+            files: [
+              {src: ['couch/*', '!*.coffee', '!bar.js','!couch/bar.js', '!couch/full/bar.js'], dest: 'tmp/app.json'}
+            ]
+            //    files: {
+            //      'tmp/app.json': 'app/*'
+            //
+            //    }
+          }
+        },
+        'couch-push': {
+          options: {
+            user: 'admin',
+            pass: 'password'
+          },
+          localhost: {
+            files: {
+              'http://localhost:5984/coconut': 'tmp/app.json'
+            }
+          }
+        },
+        bowercopy: {
+          options: {},
+          libs: {
+            options: {
+              destPrefix: 'couch/app/_attachments/js-libraries'
+            },
+            files: {
+              'jquery.js': 'jquery/dist/jquery.js',
+              'underscore.js': 'underscore/underscore.js',
+              'moment/moment.min.js': 'moment/min/moment.min.js',
+              'moment/locale/pt.js': 'moment/locale/pt.js',
+              'backbone.js': 'backbone/backbone.js',
+              'backbone.wreqr.js': 'backbone.wreqr/lib/backbone.wreqr.js',
+              'backbone.babysitter.js': 'backbone.babysitter/lib/backbone.babysitter.js',
+              'backbone.marionette.js': 'marionette/lib/backbone.marionette.js',
+              'backbone-pouch.js': 'backbone-pouch/index.js',
+              'pouchdb.js': 'pouchdb/dist/pouchdb.js',
+              'bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
+              'ladda-bootstrap/spin.min.js': 'ladda-bootstrap/dist/spin.min.js',
+              'ladda-bootstrap/ladda.js': 'ladda-bootstrap/dist/ladda.js',
+              'bootstrap-datetimepicker.min.js': 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
+              'handlebars.js': 'handlebars/handlebars.js'
+            }
+          },
+          css: {
+            options: {
+              destPrefix: 'couch/app/_attachments/css'
+            },
+            files: {
+              'bootstrap.css': 'bootstrap/dist/css/bootstrap.css',
+              'bootstrap.css.map': 'bootstrap/dist/css/bootstrap.css.map',
+              'ladda-themeless.min.css': 'ladda-bootstrap/dist/ladda-themeless.min.css',
+              'bootstrap-datetimepicker.min.css': 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
+            }
           }
         }
-      }
     });
 
   // Requires the needed plugin
@@ -88,6 +128,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-couch');
+  grunt.loadNpmTasks('grunt-bowercopy');
   grunt.registerTask('default',['couch']);
   grunt.registerTask('default',['less']);
 
