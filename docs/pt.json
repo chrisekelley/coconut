@@ -1,5 +1,6 @@
 {
   "_id": "pt",
+  "_rev": "57-37a6ab53a757fb11697676ea4cce1482",
   "id": "pt",
   "noClientPush": "true",
   "Home": "Início",
@@ -169,7 +170,7 @@
   "Details": "Detalhes",
   "Surgeon": "Cirujano ID",
   "userDistrict": "District",
-  "countLashesTouchingEyeballL":" Número de cílios que tocam no globo ocular",
+  "countLashesTouchingEyeballL": " Número de cílios que tocam no globo ocular",
   "evidenceOfEpilationL": "Evidência de depilação (se sim, indicar a proporção da palpebra depilada)",
   "evidenceOfEpilationL::No": "Não",
   "evidenceOfEpilationL::Yes <1/3 of lid": "Sim <1/3 of pálpebra",
@@ -178,7 +179,7 @@
   "cataractL": "Catarata (causando baixa visão ou cegueira)",
   "cataractL::Yes": "Sim",
   "cataractL::No": "Não",
-  "countLashesTouchingEyeballR":" Número de cílios que tocam no globo ocular",
+  "countLashesTouchingEyeballR": " Número de cílios que tocam no globo ocular",
   "evidenceOfEpilationR": "Evidência de depilação (se sim, indicar a proporção da palpebra depilada)",
   "evidenceOfEpilationR::No": "Não",
   "evidenceOfEpilationR::Yes <1/3 of lid": "Sim <1/3 of pálpebra",
@@ -186,5 +187,17 @@
   "evidenceOfEpilationR::Yes >2/3 of lid": "Sim >2/3 of pálpebra",
   "cataractR": "Catarata (causando baixa visão ou cegueira)",
   "cataractR::Yes": "Sim",
-  "cataractR::No": "Não"
+  "cataractR::No": "Não",
+  "photographPreOpL": "Fotografia pré-operatória do Olho (opcional)",
+  "photographPreOpL::Yes": "Sim",
+  "photographPreOpL::No": "Não",
+  "cornealOpacityL": "Opacidade da córnea",
+  "cornealOpacityL::Yes": "Sim",
+  "cornealOpacityL::No": "Não",
+  "photographPreOpR": "Fotografia pré-operatória do Olho (opcional)",
+  "photographPreOpR::Yes": "Sim",
+  "photographPreOpR::No": "Não",
+  "cornealOpacityR": "Opacidade da córnea",
+  "cornealOpacityR::Yes": "Sim",
+  "cornealOpacityR::No": "Não"
 }

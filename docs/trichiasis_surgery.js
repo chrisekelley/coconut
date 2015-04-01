@@ -1,6 +1,6 @@
 {
   "_id": "Trichiasis Surgery",
-  "_rev": "12-fc2f46934b78b77dd23741d123232083",
+  "_rev": "15-99b7f5f2f1d90bc68e6e7ebe2300a3a8",
   "id": "Trichiasis Surgery",
   "noClientPush": "true",
   "enabled": "true",
@@ -92,6 +92,17 @@
     "safeLabel": "evidenceOfEpilationL"
   },
   {
+    "id": "138",
+    "_id": "138",
+    "label": "Pre-operative photograph of eye (optional)",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes, No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "photographPreOpL"
+  },
+  {
     "id": "137",
     "_id": "137",
     "label": "Cataract (causing VI or blindness)",
@@ -101,6 +112,17 @@
     "validation": "",
     "required": "false",
     "safeLabel": "cataractL"
+  },
+  {
+    "id": "139",
+    "_id": "139",
+    "label": "Corneal opacity",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes, No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "cornealOpacityL"
   },
   {
     "id": "566",
@@ -247,6 +269,17 @@
     "safeLabel": "evidenceOfEpilationR"
   },
   {
+    "id": "138",
+    "_id": "138",
+    "label": "Pre-operative photograph of eye (optional)",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes, No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "photographPreOpR"
+  },
+  {
     "id": "137",
     "_id": "137",
     "label": "Cataract (causing VI or blindness)",
@@ -256,6 +289,17 @@
     "validation": "",
     "required": "false",
     "safeLabel": "cataractR"
+  },
+  {
+    "id": "139",
+    "_id": "139",
+    "label": "Corneal opacity",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes, No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "cornealOpacityR"
   },
   {
     "id": "47",

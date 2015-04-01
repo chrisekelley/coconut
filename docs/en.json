@@ -1,5 +1,6 @@
 {
   "_id": "en",
+  "_rev": "27-36ef984141022271413fcd4235557ce8",
   "id": "en",
   "noClientPush": "true",
   "Home": "Home",
@@ -167,7 +168,7 @@
   "ProvidedEpilationConsultationR": "Provided consultation on epilation",
   "Details": "Details",
   "Surgeon": "Surgeon's Initials",
-  "countLashesTouchingEyeballL":" Number of trichiatic lashes touching eyeball",
+  "countLashesTouchingEyeballL": " Number of trichiatic lashes touching eyeball",
   "evidenceOfEpilationL": "Evidence of epilation (if yes, indicate what proportion of lid is epilated)",
   "evidenceOfEpilationL::No": "No",
   "evidenceOfEpilationL::Yes <1/3 of lid": "Yes <1/3 of lid",
@@ -176,7 +177,7 @@
   "cataractL": " Cataract (causing VI or blindness)",
   "cataractL::Yes": "Yes",
   "cataractL::No": "No",
-  "countLashesTouchingEyeballR":" Number of trichiatic lashes touching eyeball",
+  "countLashesTouchingEyeballR": " Number of trichiatic lashes touching eyeball",
   "evidenceOfEpilationR": "Evidence of epilation (if yes, indicate what proportion of lid is epilated)",
   "evidenceOfEpilationR::No": "No",
   "evidenceOfEpilationR::Yes <1/3 of lid": "Yes <1/3 of lid",
@@ -184,5 +185,17 @@
   "evidenceOfEpilationR::Yes >2/3 of lid": "Yes >2/3 of lid",
   "cataractR": " Cataract (causing VI or blindness)",
   "cataractR::Yes": "Yes",
-  "cataractR::No": "No"
+  "cataractR::No": "No",
+  "photographPreOpL": "Pre-operative photograph of eye (optional)",
+  "photographPreOpL::Yes": "Yes",
+  "photographPreOpL::No": "No",
+  "cornealOpacityL": "Corneal opacity",
+  "cornealOpacityL::Yes": "Yes",
+  "cornealOpacityL::No": "No",
+  "photographPreOpR": "Pre-operative photograph of eye (optional)",
+  "photographPreOpR::Yes": "Yes",
+  "photographPreOpR::No": "No",
+  "cornealOpacitRy": "Corneal opacity",
+  "cornealOpacityR::Yes": "Yes",
+  "cornealOpacityR::No": "No"
 }
