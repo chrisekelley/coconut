@@ -534,3 +534,27 @@ CoconutUtils.getCurrentPosition = function(currentPosition, errorObj) {
   navigator.geolocation.getCurrentPosition(onSuccess, onError);
 }
 
+CoconutUtils.toggleDivs = function(elements) {
+  for (var i = 0; i < elements.length; i++) {
+    var currentElement = elements[i]
+    var el = $('#' + currentElement);
+    el.toggle();
+  }
+}
+
+CoconutUtils.showDivs = function(elements) {
+  for (var i = 0; i < elements.length; i++) {
+    var currentElement = elements[i]
+    var el = $('#' + currentElement);
+    el.show();
+  }
+}
+
+CoconutUtils.hideDivs = function(elements) {
+  for (var i = 0; i < elements.length; i++) {
+    var currentElement = elements[i]
+    var el = $('#' + currentElement);
+    el.hide();
+  }
+}
+

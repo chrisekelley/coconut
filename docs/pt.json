@@ -26,7 +26,7 @@
   "Post-Operative Followup": "Visita de acompanhamento pos-cirurgia",
   "DateTime": "Data / Hora",
   "Lefteye": "Olho esquerdo",
-  "TypeofOperationL": "Tipo de operação",
+  "TypeofOperationL": "Técnica cirurgia",
   "TypeofOperationL::BTRP": "BLTR",
   "TypeofOperationL::Trabut": "Trabut",
   "SutureTypeL": "Tipo de Sutura",
@@ -40,7 +40,7 @@
   "ComplicationsReferralL": "Complicações referidas ao Hospital",
   "ReferralHospitalL": "Nome do hospital",
   "Righteye": "Olho direito",
-  "TypeofOperationR": "Tipo de operação",
+  "TypeofOperationR": "Técnica cirurgia",
   "TypeofOperationR::BTRP": "BLTR",
   "TypeofOperationR::Trabut": "Trabut",
   "SutureTypeR": "Tipo de Sutura",
@@ -240,5 +240,13 @@
   "countLashesTouchingEyeballR::10":"10",
   "countLashesTouchingEyeballR::10+":"10+",
   "spacer":"&nbsp;",
-  "Observations":"Observações"
+  "Observations":"Observações",
+  "acceptedSurgeryL":"Aceitou cirurgia",
+  "acceptedSurgeryL::Yes":"Sim",
+  "acceptedSurgeryL::No":"Não",
+  "acceptedSurgeryL::Proposed Epilation":"Propôs depilação",
+  "acceptedSurgeryR":"Aceitou cirurgia",
+  "acceptedSurgeryR::Yes":"Sim",
+  "acceptedSurgeryR::No":"Não",
+  "acceptedSurgeryR::Proposed Epilation":"Propôs depilação"
 }

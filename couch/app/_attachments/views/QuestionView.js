@@ -165,9 +165,19 @@ QuestionView = (function(superClass) {
   };
 
   QuestionView.prototype.onChange = function(event) {
-    var $target, eventStamp, messageVisible, targetName;
+    var $target, els, eventStamp, messageVisible, name, targetName, value;
     $target = $(event.target);
     eventStamp = $target.attr("id");
+    name = $target.attr("name");
+    if (name === 'acceptedSurgeryL' || name === 'acceptedSurgeryR') {
+      els = ['566TypeofOperationLDiv', '189ClampusedLDiv', '964SutureTypeLDiv', '827ComplicationsLDiv', '57ExcessbleedingLDiv', '533MarginfragmantseveredLDiv', '151GlobePunctureLDiv', '152ComplicationsReferralLDiv', '153ReferralHospitalLDiv'];
+      value = $target.val();
+      if (value === 'Yes') {
+        CoconutUtils.showDivs(els);
+      } else {
+        CoconutUtils.hideDivs(els);
+      }
+    }
     if (eventStamp === this.oldStamp && (new Date()).getTime() < this.throttleTime + 1000) {
       return;
     }
@@ -546,19 +556,19 @@ QuestionView = (function(superClass) {
             name = "group." + groupId + "." + name;
           }
           if (question.type() === 'header') {
-            div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+            div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<h2>" + labelText + " </h2>";
           } else if (question.type() === 'subheader') {
-            div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+            div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<h3>" + labelText + " </h3>";
           } else if (question.type() === 'spacer') {
-            div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+            div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<p>&nbsp</p>";
           } else if (question.type() === 'instructions') {
-            div = "<div class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+            div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<p>" + labelText + " </p>";
           } else {
-            div = "<div " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + " data-required='" + (question.required()) + "' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "' data-question-name='" + name + "' data-question-id='" + question_id + "' data-action_on_change='" + (_.escape(question.actionOnChange())) + "' >";
+            div = "<div " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + " id='" + question_id + name + "Div' data-required='" + (question.required()) + "' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "' data-question-name='" + name + "' data-question-id='" + question_id + "' data-action_on_change='" + (_.escape(question.actionOnChange())) + "' >";
             label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + labelText + " <span></span></label>";
           }
           return div + " " + ((function() {

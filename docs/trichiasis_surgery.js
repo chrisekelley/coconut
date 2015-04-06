@@ -135,6 +135,17 @@
     "safeLabel": "cornealOpacityL"
   },
   {
+    "id": "141",
+    "_id": "141",
+    "label": "Accepted surgery",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes, No, Proposed Epilation",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "acceptedSurgeryL"
+  },
+  {
     "id": "566",
     "_id": "566",
     "label": "Type of Operation",
@@ -322,6 +333,17 @@
     "safeLabel": "cornealOpacityR"
   },
   {
+    "id": "141",
+    "_id": "141",
+    "label": "Accepted surgery",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes,No,Proposed Epilation",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "acceptedSurgeryR"
+  },
+  {
     "id": "47",
     "_id": "47",
     "label": "Type of Operation",
@@ -412,36 +434,6 @@
     "validation": "",
     "required": "true",
     "safeLabel": "ReferralHospitalR"
-  },
-  {
-    "id": "324",
-    "_id": "324",
-    "label": "Post-Surgical Treatments",
-    "type": "subheader",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "PostSurgicalTreatments"
-  },
-  {
-    "id": "325",
-    "_id": "325",
-    "label": "Azithromycin",
-    "type": "checkbox",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "azithromycinR"
-  },
-  {
-    "id": "326",
-    "_id": "326",
-    "label": "Tetracycline eye ointment",
-    "type": "checkbox",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "tetracyclineEyeOintmentR"
   }
 ],
   "collection": "question"

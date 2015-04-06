@@ -209,6 +209,7 @@ class QuestionView extends Backbone.View
     "click .validate_one" : "onValidateOne"
     "click #submitButton" : "onSubmitButton"
 
+
   runValidate: -> @validateAll()
 
   onChange: (event) ->
@@ -218,6 +219,15 @@ class QuestionView extends Backbone.View
     # Don't duplicate events unless 1 second later
     #
     eventStamp = $target.attr("id")
+    name = $target.attr("name")
+    if name == 'acceptedSurgeryL' || name == 'acceptedSurgeryR'
+      els = ['566TypeofOperationLDiv','189ClampusedLDiv','964SutureTypeLDiv','827ComplicationsLDiv','57ExcessbleedingLDiv',
+             '533MarginfragmantseveredLDiv','151GlobePunctureLDiv','152ComplicationsReferralLDiv','153ReferralHospitalLDiv']
+      value = $target.val()
+      if value == 'Yes'
+        CoconutUtils.showDivs(els)
+      else
+        CoconutUtils.hideDivs(els)
 
     return if eventStamp == @oldStamp and (new Date()).getTime() < @throttleTime + 1000
 
@@ -568,16 +578,16 @@ class QuestionView extends Backbone.View
         if groupId?
           name = "group.#{groupId}.#{name}"
         if question.type() == 'header'
-          div = "<div class='question #{question.type?() or ''}'>"
+          div = "<div id='#{question_id}#{name}Div' class='question #{question.type?() or ''}'>"
           label = "<h2>#{labelText} </h2>"
         else if question.type() == 'subheader'
-          div = "<div class='question #{question.type?() or ''}'>"
+          div = "<div id='#{question_id}#{name}Div' class='question #{question.type?() or ''}'>"
           label = "<h3>#{labelText} </h3>"
         else if question.type() == 'spacer'
-          div = "<div class='question #{question.type?() or ''}'>"
+          div = "<div id='#{question_id}#{name}Div' class='question #{question.type?() or ''}'>"
           label = "<p>&nbsp</p>"
         else if question.type() == 'instructions'
-          div = "<div class='question #{question.type?() or ''}'>"
+          div = "<div id='#{question_id}#{name}Div' class='question #{question.type?() or ''}'>"
           label = "<p>#{labelText} </p>"
         else
           div = "<div
@@ -587,6 +597,7 @@ class QuestionView extends Backbone.View
           else
             ""
           }
+          id='#{question_id}#{name}Div'
           data-required='#{question.required()}'
           class='question #{question.type?() or ''}'
           data-question-name='#{name}'

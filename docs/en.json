@@ -238,6 +238,14 @@
   "countLashesTouchingEyeballR::10":"10",
   "countLashesTouchingEyeballR::10+":"10+",
   "spacer":"&nbsp;",
-  "Observations":"Observations"
+  "Observations":"Observations",
+  "acceptedSurgeryL":"Accepted surgery",
+  "acceptedSurgeryL::Yes":"Yes",
+  "acceptedSurgeryL::No":"No",
+  "acceptedSurgeryL::Proposed Epilation":"Proposed Epilation",
+  "acceptedSurgeryR":"Accepted surgery",
+  "acceptedSurgeryR::Yes":"Yes",
+  "acceptedSurgeryR::No":"No",
+  "acceptedSurgeryR::Proposed Epilation":"Proposed Epilation"
 
 }
