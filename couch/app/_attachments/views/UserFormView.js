@@ -14,7 +14,8 @@ UserFormView = Backbone.Marionette.ItemView.extend({
     "click #registrationLink": "submitRegistration",
     "click #newReportLink": "newReportLink",
     "click #PostOperativeFollowup": "postOperativeFollowup",
-    "click #TrichiasisSurgery": "trichiasisSurgery"
+    "click #TrichiasisSurgery": "trichiasisSurgery",
+    "click #PostOperativeEpilation": "postOperativeEpilation"
   },
   submitRegistration: function() {
     console.log("submitRegistration");
@@ -39,5 +40,9 @@ UserFormView = Backbone.Marionette.ItemView.extend({
   postOperativeFollowup: function() {
     console.log("postOperativeFollowup");
     Coconut.router.navigate("#new/result/Post-Operative%20Followup", true);
+  },
+  postOperativeEpilation: function() {
+    console.log("postOperativeEpilation");
+    Coconut.router.navigate("#new/result/PostOperativeEpilation", true);
   }
 });

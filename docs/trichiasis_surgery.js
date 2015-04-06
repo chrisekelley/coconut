@@ -70,6 +70,16 @@
     "safeLabel": "ProvidedEpilationConsultationL"
   },
   {
+    "id": "150",
+    "_id": "150",
+    "label": "Visual acuity",
+    "type": "text",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "visualAcuityL"
+  },
+  {
     "id": "136",
     "_id": "136",
     "label": "# of trichiatic lashes touching eyeball",
@@ -245,6 +255,16 @@
     "validation": "",
     "required": "true",
     "safeLabel": "ProvidedEpilationConsultationR"
+  },
+  {
+    "id": "150",
+    "_id": "150",
+    "label": "Visual acuity",
+    "type": "text",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "visualAcuityR"
   },
   {
     "id": "136",

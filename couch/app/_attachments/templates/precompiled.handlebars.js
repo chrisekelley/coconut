@@ -328,10 +328,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   buffer += "</legend>\n</div>\n\n<p>\n    <a data-role=\"button\" id=\"TrichiasisSurgery\" class=\"btn btn-primary btn-lg\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "trichiasisSurgery", options) : helperMissing.call(depth0, "polyglot", "trichiasisSurgery", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a><br/>\n</p>\n<p>\n    <a data-role=\"button\" id=\"PostOperativeEpilation\" class=\"btn btn-primary btn-lg\">";
+  stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "PostOperativeEpilation", options) : helperMissing.call(depth0, "polyglot", "PostOperativeEpilation", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a><br/>\n</p>\n<p>\n    <a data-role=\"button\" id=\"PostOperativeFollowup\" class=\"btn btn-primary btn-lg\">";
   stack1 = (helper = helpers.polyglot || (depth0 && depth0.polyglot),options={hash:{},data:data},helper ? helper.call(depth0, "postOperativeFollowup", options) : helperMissing.call(depth0, "polyglot", "postOperativeFollowup", options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "</a>\n</p>\n\n";
+  buffer += "</a>\n</p>\n";
   return buffer;
   });
 

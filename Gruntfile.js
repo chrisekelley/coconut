@@ -27,9 +27,13 @@ module.exports = function(grunt) {
         handlebars: {
             compile: {
                 options: {
-                    amd: false
+                    amd: false,
+                  processName: function(filePath) {
+                    var nuPath = filePath.replace("couch/app/", "")
+                    return nuPath;
+                  }
                 },
-                src: ["couch/app/_attachments/templates/**/*.handlebars"],
+              src: ["couch/app/_attachments/templates/**/*.handlebars"],
                 dest: "couch/app/_attachments/templates/precompiled.handlebars.js"
             }
         },
@@ -88,7 +92,7 @@ module.exports = function(grunt) {
           options: {},
           libs: {
             options: {
-              destPrefix: 'couch/app/_attachments/js-libraries'
+              destPrefix: 'couch/app/_attachments/js'
             },
             files: {
               'jquery.js': 'jquery/dist/jquery.js',
@@ -117,6 +121,17 @@ module.exports = function(grunt) {
               'bootstrap.css.map': 'bootstrap/dist/css/bootstrap.css.map',
               'ladda-themeless.min.css': 'ladda-bootstrap/dist/ladda-themeless.min.css',
               'bootstrap-datetimepicker.min.css': 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css'
+            }
+          },
+          fonts: {
+            options: {
+              destPrefix: 'couch/app/_attachments/fonts'
+            },
+            files: {
+              'glyphicons-halflings-regular.woff2': 'bootstrap/dist/fonts/glyphicons-halflings-regular.woff2',
+              'glyphicons-halflings-regular.woff': 'bootstrap/dist/fonts/glyphicons-halflings-regular.woff',
+              'glyphicons-halflings-regular.ttf': 'bootstrap/dist/fonts/glyphicons-halflings-regular.ttf',
+              'glyphicons-halflings-regular.svg': 'bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
             }
           }
         }

@@ -2,7 +2,14 @@ window.polyglot = new Polyglot();
 
 window.polyglot.extend({
   "Home": "home",
-  "verifyAdmin": "verifyAdmin"
+  "verifyAdmin": "verifyAdmin",
+  "Finger": "Finger",
+  "Continue": "Continue",
+  "scanSendLogs": "scanSendLogs",
+  "Login": "Login",
+  "Settings": "Settings",
+  "PatientEncounters": "PatientEncounters",
+  "sendLogs": "sendLogs"
 });
 
 Handlebars.registerHelper('polyglot', function(phrase) {
