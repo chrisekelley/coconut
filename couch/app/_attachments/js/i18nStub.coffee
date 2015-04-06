@@ -1,13 +1,13 @@
 window.polyglot = new Polyglot()
 window.polyglot.extend({
-    "Home": "home",
+    "Home": "Início",
     "verifyAdmin": "verifyAdmin",
     "Finger": "Finger",
     "Continue": "Continue",
     "scanSendLogs": "scanSendLogs",
-    "Login": "Login",
-    "Settings": "Settings",
-    "PatientEncounters": "PatientEncounters",
+    "Login": "Conecte-Se",
+    "Settings": "Configurações",
+    "PatientEncounters": "Visitas",
     "sendLogs": "sendLogs"
 })
 

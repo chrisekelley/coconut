@@ -603,8 +603,8 @@ class QuestionView extends Backbone.View
 
           #{
             switch question.type()
-              when "textarea"
-                ""
+#              when "textarea"
+#                ""
               when "checkbox"
                 ""
               else
@@ -615,7 +615,8 @@ class QuestionView extends Backbone.View
           #{
             switch question.type()
               when "textarea"
-                "<div class='form-group'><input name='#{name}' class='form-control' type='text' id='#{question_id}' value='#{_.escape(question.value())}'></input></div>"
+                "<div class='form-group'><textarea class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='" + polyglot.t('Enter') + "&nbsp;" +  i18nLabelText + "'>" + "</textarea></div>"
+
 # Selects look lame - use radio buttons instead or autocomplete if long list
 #              when "select"
 #                "

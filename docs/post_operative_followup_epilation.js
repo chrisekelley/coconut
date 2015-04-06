@@ -35,7 +35,7 @@
     "type": "date-time",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
+    "required": "false",
     "safeLabel": "DateTime"
   },
   {
@@ -45,7 +45,7 @@
     "type": "header",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
+    "required": "false",
     "safeLabel": "Lefteye"
   },
   {
@@ -100,7 +100,7 @@
     "type": "header",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
+    "required": "false",
     "safeLabel": "Righteye"
   },
   {
@@ -160,7 +160,7 @@
     "id": "153",
     "_id": "153",
     "label": "Observations",
-    "type": "input",
+    "type": "textarea",
     "repeatable": "false",
     "validation": "",
     "required": "false",

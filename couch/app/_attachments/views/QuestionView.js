@@ -563,8 +563,6 @@ QuestionView = (function(superClass) {
           }
           return div + " " + ((function() {
             switch (question.type()) {
-              case "textarea":
-                return "";
               case "checkbox":
                 return "";
               default:
@@ -574,7 +572,7 @@ QuestionView = (function(superClass) {
             var i, len, ref;
             switch (question.type()) {
               case "textarea":
-                return "<div class='form-group'><input name='" + name + "' class='form-control' type='text' id='" + question_id + "' value='" + (_.escape(question.value())) + "'></input></div>";
+                return ("<div class='form-group'><textarea class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='") + polyglot.t('Enter') + "&nbsp;" + i18nLabelText + "'>" + "</textarea></div>";
               case "select":
                 if (this.readonly) {
                   return question.value();
