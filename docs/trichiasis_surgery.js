@@ -143,7 +143,8 @@
     "select-options": "Yes, No, Proposed Epilation",
     "validation": "",
     "required": "false",
-    "safeLabel": "acceptedSurgeryL"
+    "safeLabel": "acceptedSurgeryL",
+    "event_on_change": "KiwiUtils.toggleAcceptedSurgery()"
   },
   {
     "id": "566",
@@ -341,7 +342,8 @@
     "select-options": "Yes,No,Proposed Epilation",
     "validation": "",
     "required": "false",
-    "safeLabel": "acceptedSurgeryR"
+    "safeLabel": "acceptedSurgeryR",
+    "event_on_change": "KiwiUtils.toggleAcceptedSurgery()"
   },
   {
     "id": "47",

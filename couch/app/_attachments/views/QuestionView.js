@@ -46,7 +46,7 @@ QuestionView = (function(superClass) {
 
   QuestionView.prototype.el = '#content';
 
-  QuestionView.prototype.triggerChangeIn = function(names) {
+  QuestionView.prototype.triggerChangeIn = function(names, type) {
     var elements, i, len, name, results;
     results = [];
     for (i = 0, len = names.length; i < len; i++) {
@@ -59,7 +59,7 @@ QuestionView = (function(superClass) {
           event = {
             target: element
           };
-          return _this.actionOnChange(event);
+          return _this.actionOnChange(event, type);
         };
       })(this)));
     }
@@ -67,7 +67,7 @@ QuestionView = (function(superClass) {
   };
 
   QuestionView.prototype.render = function() {
-    var autocompleteElements, formNameText, i18nFormNameText, maximumAge, onCurrentPositionError, onCurrentPositionSuccess, skipperList;
+    var autocompleteElements, formNameText, i18nFormNameText, maximumAge, onChangeList, onCurrentPositionError, onCurrentPositionSuccess, skipperList;
     formNameText = this.model.id;
     i18nFormNameText = polyglot.t(formNameText);
     if (i18nFormNameText) {
@@ -77,10 +77,14 @@ QuestionView = (function(superClass) {
     this.updateCache();
     this.updateSkipLogic();
     skipperList = [];
+    onChangeList = [];
     $(this.model.get("questions")).each((function(_this) {
       return function(index, question) {
         if (question.actionOnChange().match(/skip/i)) {
           skipperList.push(question.safeLabel());
+        }
+        if (question.eventOnChange() !== "") {
+          onChangeList.push(question.safeLabel());
         }
         if ((question.get("action_on_questions_loaded") != null) && question.get("action_on_questions_loaded") !== "") {
           return CoffeeScript["eval"](question.get("action_on_questions_loaded"));
@@ -88,6 +92,7 @@ QuestionView = (function(superClass) {
       };
     })(this));
     this.triggerChangeIn(skipperList);
+    this.triggerChangeIn(onChangeList, "eventOnChange");
     autocompleteElements = [];
     _.each($("input[type='autocomplete from list']"), function(element) {
       element = $(element);
@@ -165,18 +170,13 @@ QuestionView = (function(superClass) {
   };
 
   QuestionView.prototype.onChange = function(event) {
-    var $target, els, eventStamp, messageVisible, name, targetName, value;
+    var $target, eventOnChange, eventStamp, messageVisible, name, targetName;
     $target = $(event.target);
     eventStamp = $target.attr("id");
     name = $target.attr("name");
-    if (name === 'acceptedSurgeryL' || name === 'acceptedSurgeryR') {
-      els = ['566TypeofOperationLDiv', '189ClampusedLDiv', '964SutureTypeLDiv', '827ComplicationsLDiv', '57ExcessbleedingLDiv', '533MarginfragmantseveredLDiv', '151GlobePunctureLDiv', '152ComplicationsReferralLDiv', '153ReferralHospitalLDiv'];
-      value = $target.val();
-      if (value === 'Yes') {
-        CoconutUtils.showDivs(els);
-      } else {
-        CoconutUtils.hideDivs(els);
-      }
+    eventOnChange = $target.attr("data-event_on_change");
+    if (typeof eventOnChange !== 'undefined') {
+      this.actionOnChange(event, 'eventOnChange');
     }
     if (eventStamp === this.oldStamp && (new Date()).getTime() < this.throttleTime + 1000) {
       return;
@@ -367,7 +367,7 @@ QuestionView = (function(superClass) {
     }
   };
 
-  QuestionView.prototype.actionOnChange = function(event) {
+  QuestionView.prototype.actionOnChange = function(event, type) {
     var $divQuestion, $target, code, error, message, name, newFunction, nodeName, value;
     nodeName = $(event.target).get(0).nodeName;
     $target = nodeName === "INPUT" || nodeName === "SELECT" || nodeName === "TEXTAREA" ? $(event.target) : $(event.target).parent().parent().parent().find("input,textarea,select");
@@ -376,7 +376,11 @@ QuestionView = (function(superClass) {
     }
     name = $target.attr("name");
     $divQuestion = $(".question [data-question-name=" + name + "]");
-    code = $divQuestion.attr("data-action_on_change");
+    if (typeof type !== 'undefined' && type === 'eventOnChange') {
+      code = $divQuestion.attr("data-event_on_change");
+    } else {
+      code = $divQuestion.attr("data-action_on_change");
+    }
     try {
       value = ResultOfQuestion(name);
     } catch (_error) {
@@ -388,15 +392,30 @@ QuestionView = (function(superClass) {
     if (code === "" || (code == null)) {
       return;
     }
-    code = "(value) -> " + code;
-    try {
-      newFunction = CoffeeScript["eval"].apply(this, [code]);
-      return newFunction(value);
-    } catch (_error) {
-      error = _error;
-      name = (/function (.{1,})\(/.exec(error.constructor.toString())[1]);
-      message = error.message;
-      return alert("Action on change error in question " + ($divQuestion.attr('data-question-id') || $divQuestion.attr("id")) + "\n\n" + name + "\n\n" + message);
+    if (typeof type !== 'undefined' && type === 'eventOnChange') {
+      try {
+        $target = $(event.target);
+        code = "function(target) = { KiwiUtils.toggleAcceptedSurgery(target) }";
+        code = "return KiwiUtils.toggleAcceptedSurgery(target)";
+        newFunction = new Function("target", code);
+        return newFunction($target);
+      } catch (_error) {
+        error = _error;
+        name = (/function (.{1,})\(/.exec(error.constructor.toString())[1]);
+        message = error.message;
+        return alert("Action on change error in question " + ($divQuestion.attr('data-question-id') || $divQuestion.attr("id")) + "\n\n" + name + "\n\n" + message);
+      }
+    } else {
+      code = "(value) -> " + code;
+      try {
+        newFunction = CoffeeScript["eval"].apply(this, [code]);
+        return newFunction(value);
+      } catch (_error) {
+        error = _error;
+        name = (/function (.{1,})\(/.exec(error.constructor.toString())[1]);
+        message = error.message;
+        return alert("Action on change error in question " + ($divQuestion.attr('data-question-id') || $divQuestion.attr("id")) + "\n\n" + name + "\n\n" + message);
+      }
     }
   };
 
@@ -568,7 +587,7 @@ QuestionView = (function(superClass) {
             div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<p>" + labelText + " </p>";
           } else {
-            div = "<div " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + " id='" + question_id + name + "Div' data-required='" + (question.required()) + "' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "' data-question-name='" + name + "' data-question-id='" + question_id + "' data-action_on_change='" + (_.escape(question.actionOnChange())) + "' >";
+            div = "<div " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + " id='" + question_id + name + "Div' data-required='" + (question.required()) + "' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "' data-question-name='" + name + "' data-question-id='" + question_id + "' data-action_on_change='" + (_.escape(question.actionOnChange())) + "' data-event_on_change='" + (_.escape(question.eventOnChange())) + "' >";
             label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + labelText + " <span></span></label>";
           }
           return div + " " + ((function() {
@@ -587,7 +606,7 @@ QuestionView = (function(superClass) {
                 if (this.readonly) {
                   return question.value();
                 } else {
-                  html = ("<div class='form-group'><select name='" + name + "' id='" + question_id + "' class='form-control'><option value=''> -- ") + polyglot.t("SelectOne") + " -- </option>";
+                  html = ("<div class='form-group'><select name='" + name + "' id='" + question_id + "' class='form-control' data-event_on_change='" + (_.escape(question.eventOnChange())) + "'><option value=''> -- ") + polyglot.t("SelectOne") + " -- </option>";
                   ref = question.get("select-options").split(/, */);
                   for (index = i = 0, len = ref.length; i < len; index = ++i) {
                     option = ref[index];

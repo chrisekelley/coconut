@@ -25,7 +25,7 @@ Question = (function(superClass) {
   };
 
   Question.prototype.safeLabel = function() {
-    return this.label().replace(/[^a-zA-Z0-9 -]/g, "").replace(/[ -]/g, "");
+    return this.get("safeLabel");
   };
 
   Question.prototype.repeatable = function() {
@@ -66,6 +66,10 @@ Question = (function(superClass) {
 
   Question.prototype.actionOnChange = function() {
     return this.get("action_on_change") || "";
+  };
+
+  Question.prototype.eventOnChange = function() {
+    return this.get("event_on_change") || "";
   };
 
   Question.prototype.attributeSafeText = function() {

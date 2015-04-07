@@ -23,3 +23,16 @@ KiwiUtils.fetchDistricts = function() {
   });
   return deferred.promise();
 };
+
+KiwiUtils.toggleAcceptedSurgery = function(target) {
+  var els, value;
+  els = ['566TypeofOperationLDiv', '189ClampusedLDiv', '964SutureTypeLDiv', '827ComplicationsLDiv', '57ExcessbleedingLDiv', '533MarginfragmantseveredLDiv', '151GlobePunctureLDiv', '152ComplicationsReferralLDiv', '153ReferralHospitalLDiv'];
+  value = target.val();
+  if (value === '') {
+
+  } else if (value === 'Yes') {
+    return CoconutUtils.showDivs(els);
+  } else {
+    return CoconutUtils.hideDivs(els);
+  }
+};

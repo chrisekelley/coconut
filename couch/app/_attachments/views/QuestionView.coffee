@@ -22,14 +22,14 @@ class QuestionView extends Backbone.View
 
   el: '#content'
 
-  triggerChangeIn: ( names ) ->
+  triggerChangeIn: ( names, type ) ->
 
     for name in names
       elements = []
       elements.push window.questionCache[name].find("input, select, textarea, img")
       $(elements).each (index, element) =>
         event = target : element
-        @actionOnChange event
+        @actionOnChange event,type
 
   render: =>
     formNameText = @model.id
@@ -132,16 +132,24 @@ class QuestionView extends Backbone.View
     # skipperList is a list of questions that use skip logic in their action on change events
     skipperList = []
 
+    # onChangeList is a list of questions that have onChange events different from skip logic - they have event_on_change properties
+    onChangeList = []
+
     $(@model.get("questions")).each (index, question) =>
 
       # remember which questions have skip logic in their actionOnChange code
       skipperList.push(question.safeLabel()) if question.actionOnChange().match(/skip/i)
+
+      # remember which questions have onchange  in their actionOnChange code
+      onChangeList.push(question.safeLabel()) if question.eventOnChange() != ""
 
       if question.get("action_on_questions_loaded")? and question.get("action_on_questions_loaded") isnt ""
         CoffeeScript.eval question.get "action_on_questions_loaded"
 
     # Trigger a change event for each of the questions that contain skip logic in their actionOnChange code
     @triggerChangeIn skipperList
+    # Trigger a change event for each of the questions that contain eventOnChange code
+    @triggerChangeIn onChangeList,"eventOnChange"
 
 #    @$el.find("input[type=text],input[type=number],input[type='autocomplete from previous entries'],input[type='autocomplete from list'],input[type='autocomplete from code']").textinput()
 #    @$el.find('input[type=checkbox]').checkboxradio()
@@ -209,7 +217,6 @@ class QuestionView extends Backbone.View
     "click .validate_one" : "onValidateOne"
     "click #submitButton" : "onSubmitButton"
 
-
   runValidate: -> @validateAll()
 
   onChange: (event) ->
@@ -220,14 +227,17 @@ class QuestionView extends Backbone.View
     #
     eventStamp = $target.attr("id")
     name = $target.attr("name")
-    if name == 'acceptedSurgeryL' || name == 'acceptedSurgeryR'
-      els = ['566TypeofOperationLDiv','189ClampusedLDiv','964SutureTypeLDiv','827ComplicationsLDiv','57ExcessbleedingLDiv',
-             '533MarginfragmantseveredLDiv','151GlobePunctureLDiv','152ComplicationsReferralLDiv','153ReferralHospitalLDiv']
-      value = $target.val()
-      if value == 'Yes'
-        CoconutUtils.showDivs(els)
-      else
-        CoconutUtils.hideDivs(els)
+#    question = @model.get("questions")[name]
+#    if typeof question != 'undefined'
+#      onChangeFunction = question.get("onChangeFunction")
+#      if typeof onChangeFunction != 'undefined'
+#        onChangeFunction = this.model.get("onChangeFunction")
+#        tmpFunc = new Function(onChangeFunction);
+#        tmpFunc(name);
+
+    eventOnChange = $target.attr("data-event_on_change")
+    if typeof eventOnChange != 'undefined'
+      @actionOnChange(event,'eventOnChange')
 
     return if eventStamp == @oldStamp and (new Date()).getTime() < @throttleTime + 1000
 
@@ -421,7 +431,7 @@ class QuestionView extends Backbone.View
 
   # takes an event as an argument, and looks for an input, select or textarea inside the target of that event.
   # Runs the change code associated with that question.
-  actionOnChange: (event) ->
+  actionOnChange: (event, type) ->
 
     nodeName = $(event.target).get(0).nodeName
     $target =
@@ -435,21 +445,39 @@ class QuestionView extends Backbone.View
 
     name = $target.attr("name")
     $divQuestion = $(".question [data-question-name=#{name}]")
-    code = $divQuestion.attr("data-action_on_change")
+    if typeof type != 'undefined' && type == 'eventOnChange'
+      code = $divQuestion.attr("data-event_on_change")
+    else
+      code = $divQuestion.attr("data-action_on_change")
     try
       value = ResultOfQuestion(name)
     catch error
       return if error == "invisible reference"
 
     return if code == "" or not code?
-    code = "(value) -> #{code}"
-    try
-      newFunction = CoffeeScript.eval.apply(@, [code])
-      newFunction(value)
-    catch error
-      name = ((/function (.{1,})\(/).exec(error.constructor.toString())[1])
-      message = error.message
-      alert "Action on change error in question #{$divQuestion.attr('data-question-id') || $divQuestion.attr("id")}\n\n#{name}\n\n#{message}"
+    if typeof type != 'undefined' && type == 'eventOnChange'
+      try
+        $target = $(event.target)
+#        code = "function($target) = #{code}"
+        code = "function(target) = { KiwiUtils.toggleAcceptedSurgery(target) }"
+        code = "return KiwiUtils.toggleAcceptedSurgery(target)"
+        newFunction = new Function("target", code);
+#        newFunction.target = $target
+#        newFunction.apply(@, [$target])
+        newFunction($target)
+      catch error
+        name = ((/function (.{1,})\(/).exec(error.constructor.toString())[1])
+        message = error.message
+        alert "Action on change error in question #{$divQuestion.attr('data-question-id') || $divQuestion.attr("id")}\n\n#{name}\n\n#{message}"
+    else
+      code = "(value) -> #{code}"
+      try
+        newFunction = CoffeeScript.eval.apply(@, [code])
+        newFunction(value)
+      catch error
+        name = ((/function (.{1,})\(/).exec(error.constructor.toString())[1])
+        message = error.message
+        alert "Action on change error in question #{$divQuestion.attr('data-question-id') || $divQuestion.attr("id")}\n\n#{name}\n\n#{message}"
 
   updateSkipLogic: ->
 
@@ -603,6 +631,7 @@ class QuestionView extends Backbone.View
           data-question-name='#{name}'
           data-question-id='#{question_id}'
           data-action_on_change='#{_.escape(question.actionOnChange())}'
+          data-event_on_change='#{_.escape(question.eventOnChange())}'
 
           >"
 #          label = "<label type='#{question.type()}' for='#{question_id}'>#{question.label()} <span></span></label>"
@@ -643,7 +672,7 @@ class QuestionView extends Backbone.View
                 if @readonly
                   question.value()
                 else
-                  html = "<div class='form-group'><select name='#{name}' id='#{question_id}' class='form-control'><option value=''> -- " + polyglot.t("SelectOne") + " -- </option>"
+                  html = "<div class='form-group'><select name='#{name}' id='#{question_id}' class='form-control' data-event_on_change='#{_.escape(question.eventOnChange())}'><option value=''> -- " + polyglot.t("SelectOne") + " -- </option>"
                   for option, index in question.get("select-options").split(/, */)
 #                    html += "<option name='#{name}' id='#{question_id}-#{index}' value='#{option}'>#{option}</option>"
                      optionText = option
