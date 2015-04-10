@@ -32,7 +32,7 @@ class QuestionView extends Backbone.View
         @actionOnChange event,type
 
   render: =>
-    formNameText = @model.id
+    formNameText = @model.safeLabel()
     i18nFormNameText = polyglot.t(formNameText)
     if i18nFormNameText
         formNameText = i18nFormNameText

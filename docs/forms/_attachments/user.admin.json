@@ -1,0 +1,13 @@
+{
+   "_id": "user.admin",
+   "collection": "user",
+   "noClientPush": "true",
+   "createdAt": "2015-01-07",
+   "lastModifiedAt": "2015-01-07",
+   "user": null,
+   "type": "admin",
+   "name": "admin",
+   "langChoice": "pt",
+   "roles": [
+   ]
+}

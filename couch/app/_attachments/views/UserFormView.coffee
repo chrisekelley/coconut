@@ -16,6 +16,9 @@ UserFormView = Backbone.Marionette.ItemView.extend
       "click #PostOperativeFollowup": "postOperativeFollowup",
       "click #TrichiasisSurgery": "trichiasisSurgery"
       "click #PostOperativeEpilation": "postOperativeEpilation"
+      "click #PostOperativeFollowup_1day": "postOperativeFollowup_1day"
+      "click #PostOperativeFollowup_7_14_days": "postOperativeFollowup_7_14_days"
+      "click #PostOperativeFollowup_3_6_months": "postOperativeFollowup_3_6_months"
 
     submitRegistration: ->
       console.log "submitRegistration"
@@ -52,6 +55,20 @@ UserFormView = Backbone.Marionette.ItemView.extend
       Coconut.router.navigate "#new/result/PostOperativeEpilation",true
       return
 
+    postOperativeFollowup_1day: ->
+      console.log "postOperativeFollowup_1day"
+      Coconut.router.navigate "#new/result/PostOperativeFollowup_1day",true
+      return
+
+    postOperativeFollowup_7_14_days: ->
+      console.log "postOperativeFollowup_7_14_days"
+      Coconut.router.navigate "#new/result/PostOperativeFollowup_7_14_days",true
+      return
+
+    postOperativeFollowup_3_6_months: ->
+      console.log "postOperativeFollowup_3_6_months"
+      Coconut.router.navigate "#new/result/PostOperativeFollowup_3_6_months",true
+      return
 
 
 

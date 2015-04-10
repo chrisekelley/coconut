@@ -391,6 +391,7 @@ Sync = (function(superClass) {
     return Backbone.sync.defaults.db.replicate.from(Coconut.config.coconut_forms_url_with_credentials(), options).on('uptodate', function(result) {
       if (typeof result !== 'undefined' && result.ok) {
         console.log("uptodate: Form Replication is fine. ");
+        Coconut.syncView.sync.populateForms();
         return options.success();
       } else {
         return console.log("uptodate: Form Replication error: " + JSON.stringify(result));
@@ -399,6 +400,38 @@ Sync = (function(superClass) {
       return Coconut.debug("Form Replication Change: " + JSON.stringify(info));
     }).on('complete', function(info) {
       return Coconut.debug("Form Replication Complete: " + JSON.stringify(info));
+    });
+  };
+
+  Sync.prototype.populateForms = function() {
+    var model;
+    model = new Backbone.Model({
+      _id: Coconut.config.coconut_forms_design_doc()
+    });
+    return model.fetch({
+      options: {
+        get: {
+          attachments: true
+        }
+      }
+    }).then(function(result) {
+      var decodedData, key, nuKey, obj, results;
+      results = [];
+      for (key in result._attachments) {
+        obj = result._attachments[key];
+        decodedData = decodeURIComponent(escape(window.atob(obj.data)));
+        obj = JSON.parse(decodedData);
+        nuKey = key.replace(".json", "");
+        model = new Backbone.Model({
+          _id: nuKey
+        });
+        results.push(model.save(obj, {
+          success: (function(_this) {
+            return function(model) {};
+          })(this)
+        }, console.log('Saving... ' + nuKey)));
+      }
+      return results;
     });
   };
 

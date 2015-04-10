@@ -18,7 +18,7 @@ KiwiUtils.fetchDistricts = function() {
       return deferred.resolve();
     },
     error: function(error, response) {
-      return console.log("Unable to fetch translation for " + " languge:" + languge + " model:" + JSON.stringify(error) + " response: " + response);
+      return console.log("Unable to fetch districts.  error:" + JSON.stringify(error) + " response: " + response);
     }
   });
   return deferred.promise();

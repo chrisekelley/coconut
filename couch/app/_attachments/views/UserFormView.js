@@ -15,7 +15,10 @@ UserFormView = Backbone.Marionette.ItemView.extend({
     "click #newReportLink": "newReportLink",
     "click #PostOperativeFollowup": "postOperativeFollowup",
     "click #TrichiasisSurgery": "trichiasisSurgery",
-    "click #PostOperativeEpilation": "postOperativeEpilation"
+    "click #PostOperativeEpilation": "postOperativeEpilation",
+    "click #PostOperativeFollowup_1day": "postOperativeFollowup_1day",
+    "click #PostOperativeFollowup_7_14_days": "postOperativeFollowup_7_14_days",
+    "click #PostOperativeFollowup_3_6_months": "postOperativeFollowup_3_6_months"
   },
   submitRegistration: function() {
     console.log("submitRegistration");
@@ -44,5 +47,17 @@ UserFormView = Backbone.Marionette.ItemView.extend({
   postOperativeEpilation: function() {
     console.log("postOperativeEpilation");
     Coconut.router.navigate("#new/result/PostOperativeEpilation", true);
+  },
+  postOperativeFollowup_1day: function() {
+    console.log("postOperativeFollowup_1day");
+    Coconut.router.navigate("#new/result/PostOperativeFollowup_1day", true);
+  },
+  postOperativeFollowup_7_14_days: function() {
+    console.log("postOperativeFollowup_7_14_days");
+    Coconut.router.navigate("#new/result/PostOperativeFollowup_7_14_days", true);
+  },
+  postOperativeFollowup_3_6_months: function() {
+    console.log("postOperativeFollowup_3_6_months");
+    Coconut.router.navigate("#new/result/PostOperativeFollowup_3_6_months", true);
   }
 });

@@ -27,6 +27,8 @@ Backbone.sync = BackbonePouch.sync({
     db: PouchDB(Coconut.db_name)
 });
 
+_.extend(Backbone.Model.prototype, BackbonePouch.attachments());
+
 function createDesignDoc(name, mapFunction) {
     var ddoc = {
         _id: '_design/' + name,

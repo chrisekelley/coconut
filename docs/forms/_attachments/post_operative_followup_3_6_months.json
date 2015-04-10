@@ -1,0 +1,130 @@
+{
+  "_id": "PostOperativeFollowup_3_6_months",
+  "id": "PostOperativeFollowup_3_6_months",
+  "noClientPush": "true",
+  "safeLabel": "postOperativeFollowup_3_6_months",
+  "enabled": "true",
+  "required": "false",
+  "questions": [
+  {
+    "id": "20",
+    "_id": "20",
+    "label": "Surgeon",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "A,B,C,D,E,F,G,H",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "Surgeon"
+  },
+  {
+    "id": "21",
+    "_id": "21",
+    "label": "Location where service was provided",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Household, School, Community, Clinic/hospital",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "serviceLocation"
+  },
+  {
+    "id": "345",
+    "_id": "345",
+    "label": "Date/Time",
+    "type": "date-time",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "DateTime"
+  },
+  {
+    "id": "765",
+    "_id": "765",
+    "label": "Left eye",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "Lefteye"
+  },
+  {
+    "id": "600",
+    "_id": "600",
+    "label": "Patient developed Trichiasis",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes,No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "patientDevelopedTrichiasisL"
+  },
+  {
+    "id": "601",
+    "_id": "601",
+    "label": "# of trichiatic lashes touching eyeball",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "1,2,3,4,5,6,7,8,9,10,10+",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "countLashesTouchingEyeballL"
+  },
+  {
+    "id": "602",
+    "_id": "602",
+    "label": "Outcome",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Suggest waxing,Referred to experienced TT surgeon, High",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "outcomeL"
+  },
+  {
+    "id": "734",
+    "_id": "734",
+    "label": "Right eye",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "Righteye"
+  },
+  {
+    "id": "603",
+    "_id": "603",
+    "label": "Patient developed Trichiasis",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes,No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "patientDevelopedTrichiasisR"
+  },
+  {
+    "id": "604",
+    "_id": "604",
+    "label": "# of trichiatic lashes touching eyeball",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "1,2,3,4,5,6,7,8,9,10,10+",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "countLashesTouchingEyeballR"
+  },
+  {
+    "id": "605",
+    "_id": "605",
+    "label": "Outcome",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Suggest waxing,Referred to experienced TT surgeon, High",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "outcomeR"
+  }
+],
+  "collection": "question"
+}
+

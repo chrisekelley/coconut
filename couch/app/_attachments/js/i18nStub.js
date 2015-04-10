@@ -20,14 +20,14 @@ if (typeof window.CoconutUtils === "undefined" || window.CoconutUtils === null) 
   window.CoconutUtils = {};
 }
 
-CoconutUtils.fetchTranslation = function(languge) {
+CoconutUtils.fetchTranslation = function(language) {
   var deferred, options, opts, translation;
   if (!options) {
     options = {};
   }
   deferred = $.Deferred();
   translation = new Translation({
-    _id: languge
+    _id: language
   });
   opts = _.extend(options, opts);
   translation.fetch({

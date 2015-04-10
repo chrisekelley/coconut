@@ -13,7 +13,7 @@
     "grunt-bowercopy": "^1.2.0",
     "grunt-contrib-coffee": "^0.13.0",
     "grunt-contrib-handlebars": "^0.10.1",
-    "grunt-contrib-less": "^1.0.0",
+    "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-couch": "chrisekelley/grunt-couch"
   }

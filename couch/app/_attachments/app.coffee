@@ -583,7 +583,7 @@ $(() =>
     Coconut.router.bootstrapApp()
 
     Coconut.debug = (string) ->
-      console.log string
+#      console.log string
       Coconut.replicationLog = "" unless Coconut.replicationLog?
       Coconut.replicationLog += "<br/>"
       Coconut.replicationLog += string

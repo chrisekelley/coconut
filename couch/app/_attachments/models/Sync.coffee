@@ -279,6 +279,7 @@ class Sync extends Backbone.Model
     Backbone.sync.defaults.db.replicate.from(Coconut.config.coconut_forms_url_with_credentials(), options).on('uptodate', (result) ->
       if typeof result != 'undefined' && result.ok
         console.log "uptodate: Form Replication is fine. "
+        Coconut.syncView.sync.populateForms()
         options.success()
       else
         console.log "uptodate: Form Replication error: " + JSON.stringify result).on('change', (info)->
@@ -286,6 +287,29 @@ class Sync extends Backbone.Model
         ).on('complete', (info)->
           Coconut.debug "Form Replication Complete: " + JSON.stringify info
         )
+
+  populateForms: () ->
+    model = new Backbone.Model
+      _id: Coconut.config.coconut_forms_design_doc()
+    model.fetch
+      options:
+        get:
+          attachments: true
+    .then (result) ->
+#      console.log("result: " + JSON.stringify((result)))
+      for key of result._attachments
+        obj = result._attachments[key];
+#        decodedData = window.atob(obj.data);
+        decodedData = decodeURIComponent(escape(window.atob( obj.data )));
+#        console.log("key: " + key + " decodedData: " + JSON.stringify((decodedData)))
+        obj = JSON.parse  decodedData
+        nuKey = key.replace(".json","")
+        model = new Backbone.Model
+          _id: nuKey
+        model.save obj,
+          success: (model) =>
+          console.log 'Saving... ' + nuKey
+
 
   replicate: (messageId)=>
     @replicateToServer

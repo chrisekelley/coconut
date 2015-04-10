@@ -80,6 +80,10 @@ Config = (function(superClass) {
     }
   };
 
+  Config.prototype.coconut_forms_design_doc = function() {
+    return "" + (this.get("coconut_forms_design_doc"));
+  };
+
   return Config;
 
 })(Backbone.Model);

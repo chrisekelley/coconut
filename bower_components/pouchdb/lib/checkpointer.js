@@ -1,6 +1,8 @@
 'use strict';
 
 var utils = require('./utils');
+var pouchCollate = require('pouchdb-collate');
+var collate = pouchCollate.collate;
 
 function updateCheckpoint(db, id, checkpoint, returnValue) {
   return db.get(id).catch(function (err) {
@@ -17,7 +19,13 @@ function updateCheckpoint(db, id, checkpoint, returnValue) {
       return;
     }
     doc.last_seq = checkpoint;
-    return db.put(doc);
+    return db.put(doc).catch(function (err) {
+      if (err.status === 409) {
+        // retry; someone is trying to write a checkpoint simultaneously
+        return updateCheckpoint(db, id, checkpoint, returnValue);
+      }
+      throw err;
+    });
   });
 }
 
@@ -60,7 +68,7 @@ Checkpointer.prototype.getCheckpoint = function () {
   var self = this;
   return self.target.get(self.id).then(function (targetDoc) {
     return self.src.get(self.id).then(function (sourceDoc) {
-      if (targetDoc.last_seq === sourceDoc.last_seq) {
+      if (collate(targetDoc.last_seq, sourceDoc.last_seq) === 0) {
         return sourceDoc.last_seq;
       }
       return 0;

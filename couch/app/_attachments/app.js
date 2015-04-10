@@ -768,7 +768,6 @@ $((function(_this) {
       });
       Coconut.router.bootstrapApp();
       return Coconut.debug = function(string) {
-        console.log(string);
         if (Coconut.replicationLog == null) {
           Coconut.replicationLog = "";
         }

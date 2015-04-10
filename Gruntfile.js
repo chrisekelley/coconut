@@ -20,6 +20,10 @@ module.exports = function(grunt) {
               files: ['couch/app/_attachments/**/*.coffee','couch/app/lists/**/*.coffee','couch/app/views/**/*.coffee'],
               tasks: ['coffee', 'couch']
             },
+            docs: {
+              files: ['docs/**/*'],
+              tasks: ['couch']
+            },
             configFiles: {
               files: [ 'Gruntfile.js']
             }
@@ -68,13 +72,14 @@ module.exports = function(grunt) {
         },
         'couch-compile': {
           app: {
-            files: [
-              {src: ['couch/*', '!*.coffee', '!bar.js','!couch/bar.js', '!couch/full/bar.js'], dest: 'tmp/app.json'}
-            ]
-            //    files: {
-            //      'tmp/app.json': 'app/*'
-            //
-            //    }
+            //files: [
+            //  {src: ['couch/*', '!*.coffee', '!bar.js','!couch/bar.js', '!couch/full/bar.js'], dest: 'tmp/app.json'},
+            //  {src: ['docs/*'], dest: 'tmp/forms.json'}
+            //]
+            files: {
+              'tmp/app.json': 'couch/*',
+              'tmp/forms.json': 'docs/*'
+            }
           }
         },
         'couch-push': {
@@ -84,7 +89,8 @@ module.exports = function(grunt) {
           },
           localhost: {
             files: {
-              'http://localhost:5984/coconut': 'tmp/app.json'
+              'http://localhost:5984/coconut': 'tmp/app.json',
+              'http://localhost:5984/coconut-forms': 'tmp/forms.json'
             }
           }
         },

@@ -49,3 +49,6 @@ class Config extends Backbone.Model
         @coconut_forms_url().replace(/http:\/\//,"http://#{@get "cloud_credentials"}@")
       else
         @coconut_forms_url().replace(/https:\/\//,"https://#{@get "cloud_credentials"}@")
+
+  coconut_forms_design_doc: ->
+    "#{@get "coconut_forms_design_doc"}"

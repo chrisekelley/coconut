@@ -15,7 +15,7 @@ KiwiUtils.fetchDistricts = () ->
       deferred.resolve()
 
     error: (error, response) ->
-      console.log("Unable to fetch translation for " + " languge:" + languge + " model:" + JSON.stringify(error) + " response: " + response)
+      console.log("Unable to fetch districts.  error:" + JSON.stringify(error) + " response: " + response)
   return deferred.promise()
 
 KiwiUtils.toggleAcceptedSurgery = (target) ->

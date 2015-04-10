@@ -68,7 +68,7 @@ QuestionView = (function(superClass) {
 
   QuestionView.prototype.render = function() {
     var autocompleteElements, formNameText, i18nFormNameText, maximumAge, onChangeList, onCurrentPositionError, onCurrentPositionSuccess, skipperList;
-    formNameText = this.model.id;
+    formNameText = this.model.safeLabel();
     i18nFormNameText = polyglot.t(formNameText);
     if (i18nFormNameText) {
       formNameText = i18nFormNameText;

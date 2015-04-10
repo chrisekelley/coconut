@@ -1,0 +1,310 @@
+{
+  "_id": "PostOperativeFollowup_7_14_days",
+  "id": "PostOperativeFollowup_7_14_days",
+  "noClientPush": "true",
+  "safeLabel": "postOperativeFollowup_7_14_days",
+  "enabled": "true",
+  "required": "false",
+  "questions": [
+  {
+    "id": "20",
+    "_id": "20",
+    "label": "Surgeon",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "A,B,C,D,E,F,G,H",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "Surgeon"
+  },
+  {
+    "id": "21",
+    "_id": "21",
+    "label": "Location where service was provided",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Household, School, Community, Clinic/hospital",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "serviceLocation"
+  },
+  {
+    "id": "345",
+    "_id": "345",
+    "label": "Date/Time",
+    "type": "date-time",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "DateTime"
+  },
+  {
+    "id": "765",
+    "_id": "765",
+    "label": "Left eye",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "Lefteye"
+  },
+  {
+    "id": "280",
+    "_id": "280",
+    "label": "Complications",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "ComplicationsL"
+  },
+  {
+    "id": "401",
+    "_id": "401",
+    "label": "Defects in eyelid contour",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "defectsEyelidL"
+  },
+  {
+    "id": "402",
+    "_id": "402",
+    "label": "Granuloma",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "granulomaL"
+  },
+  {
+    "id": "403",
+    "_id": "403",
+    "label": "Infection",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "infectionL"
+  },
+  {
+    "id": "404",
+    "_id": "404",
+    "label": "Sub-correction",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "subCorrectionL"
+  },
+  {
+    "id": "280",
+    "_id": "280",
+    "label": "Outcome",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "outcomeL"
+  },
+  {
+    "id": "405",
+    "_id": "405",
+    "label": "Removal of Sutures",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "removalOfSuturesL"
+  },
+  {
+    "id": "406",
+    "_id": "406",
+    "label": "Granuloma Excision",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "granulomaExcisionL"
+  },
+  {
+    "id": "407",
+    "_id": "407",
+    "label": "Referred to hospital",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "referredToHospitalL"
+  },
+  {
+    "id": "408",
+    "_id": "408",
+    "label": "Hospital",
+    "type": "input",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "referredToHospitalTextL"
+  },
+  {
+    "id": "409",
+    "_id": "409",
+    "label": "Return for followup",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "returnForFollowupL"
+  },
+  {
+    "id": "410",
+    "_id": "410",
+    "label": "Days or Months",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Days,Months",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "returnInDaysMonthsL"
+  },
+
+
+  {
+    "id": "734",
+    "_id": "734",
+    "label": "Right eye",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "Righteye"
+  },
+
+
+  {
+    "id": "280",
+    "_id": "280",
+    "label": "Complications",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "ComplicationsR"
+  },
+  {
+    "id": "501",
+    "_id": "501",
+    "label": "Defects in eyelid contour",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "defectsEyelidR"
+  },
+  {
+    "id": "502",
+    "_id": "502",
+    "label": "Granuloma",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "granulomaR"
+  },
+  {
+    "id": "503",
+    "_id": "503",
+    "label": "Infection",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "infectionR"
+  },
+  {
+    "id": "504",
+    "_id": "504",
+    "label": "Sub-correction",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "subCorrectionR"
+  },
+  {
+    "id": "280",
+    "_id": "280",
+    "label": "Outcome",
+    "type": "header",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "outcomeR"
+  },
+  {
+    "id": "505",
+    "_id": "505",
+    "label": "Removal of Sutures",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "removalOfSuturesR"
+  },
+  {
+    "id": "506",
+    "_id": "506",
+    "label": "Granuloma Excision",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "granulomaExcisionR"
+  },
+  {
+    "id": "507",
+    "_id": "507",
+    "label": "Referred to hospital",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "referredToHospitalR"
+  },
+  {
+    "id": "508",
+    "_id": "508",
+    "label": "Hospital",
+    "type": "input",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "referredToHospitalTextR"
+  },
+  {
+    "id": "509",
+    "_id": "509",
+    "label": "Return for followup",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "returnForFollowupR"
+  },
+  {
+    "id": "510",
+    "_id": "510",
+    "label": "Days or Months",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Days,Months",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "returnInDaysMonthsR"
+  }
+
+],
+  "collection": "question"
+}

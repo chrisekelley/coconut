@@ -17,12 +17,12 @@ Handlebars.registerHelper   'polyglot', (phrase)->
 if typeof window.CoconutUtils == "undefined" || window.CoconutUtils == null
     window.CoconutUtils = {};
 
-CoconutUtils.fetchTranslation = (languge) ->
+CoconutUtils.fetchTranslation = (language) ->
     if !options
         options = {}
     deferred = $.Deferred();
 #    Coconut.translation = {} if !Coconut.translation
-    translation = new Translation {_id: languge}
+    translation = new Translation {_id: language}
     opts =
     _.extend options, opts
     translation.fetch

@@ -1,0 +1,63 @@
+{
+  "_id": "PostOperativeFollowup_1day",
+  "id": "PostOperativeFollowup_1day",
+  "noClientPush": "true",
+  "safeLabel": "postOperativeFollowup_1day",
+  "enabled": "true",
+  "required": "false",
+  "questions": [
+  {
+    "id": "20",
+    "_id": "20",
+    "label": "Surgeon",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "A,B,C,D,E,F,G,H",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "Surgeon"
+  },
+  {
+    "id": "21",
+    "_id": "21",
+    "label": "Location where service was provided",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Household, School, Community, Clinic/hospital",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "serviceLocation"
+  },
+  {
+    "id": "345",
+    "_id": "345",
+    "label": "Date/Time",
+    "type": "date-time",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "DateTime"
+  },
+  {
+    "id": "325",
+    "_id": "325",
+    "label": "Azithromycin",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "azithromycinR"
+  },
+ {
+    "id": "326",
+    "_id": "326",
+    "label": "Tetracycline eye ointment",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "tetracyclineEyeOintmentR"
+}
+],
+  "collection": "question"
+}
