@@ -1,0 +1,14 @@
+{
+  "name": "backbone-pouch",
+  "_cacheHeaders": {
+    "ETag": "\"3cc5d3436bb53e89c4387c2fa56243b30ca15ef9\"",
+    "Content-Length": "7075",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:3cc5d3436",
+  "main": "index.js",
+  "_source": "https://raw.github.com/jo/backbone-pouch/master/backbone-pouch.js",
+  "_target": "*",
+  "_originalSource": "https://raw.github.com/jo/backbone-pouch/master/backbone-pouch.js",
+  "_direct": true
+}
