@@ -277,5 +277,7 @@
   "returnForFollowupR":"Volta para seguimento",
   "returnInDaysMonthsR":"Dia/Meses",
   "patientDevelopedTrichiasisL":"Paciente desenvolveu triquíase",
-  "patientDevelopedTrichiasisR":"Paciente desenvolveu triquíase"
+  "patientDevelopedTrichiasisR":"Paciente desenvolveu triquíase",
+  "DateOfVisit":"Data da visita",
+  "TimeOfVisit":"Tempo da visita"
 }

@@ -31,12 +31,22 @@
   {
     "id": "345",
     "_id": "345",
-    "label": "Date/Time",
-    "type": "text",
+    "label": "Date",
+    "type": "date",
     "repeatable": "false",
     "validation": "",
     "required": "true",
-    "safeLabel": "DateTime"
+    "safeLabel": "DateOfVisit"
+  },
+  {
+    "id": "345",
+    "_id": "345",
+    "label": "Time",
+    "type": "time",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "TimeOfVisit"
   },
   {
     "id": "765",

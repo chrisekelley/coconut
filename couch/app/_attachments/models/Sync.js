@@ -340,7 +340,7 @@ Sync = (function(superClass) {
       filter: filter,
       withCredentials: true,
       complete: function(result) {
-        if (typeof result !== 'undefined' && result.ok) {
+        if (typeof result !== 'undefined' && result !== null && result.ok) {
           return Coconut.debug("replicateFromServer - onComplete: Replication is fine. ");
         } else {
           return Coconut.debug("replicateFromServer - onComplete: Replication message: " + JSON.stringify(result));
@@ -355,7 +355,10 @@ Sync = (function(superClass) {
     return Backbone.sync.defaults.db.replicate.from(Coconut.config.cloud_url_with_credentials(), options).on('uptodate', function(result) {
       if (typeof result !== 'undefined' && result.ok) {
         console.log("uptodate: Replication is fine. ");
-        return options.success();
+        options.complete();
+        if (typeof options.success !== 'undefined') {
+          return options.success();
+        }
       } else {
         return console.log("uptodate: Replication error: " + JSON.stringify(result));
       }
@@ -376,7 +379,7 @@ Sync = (function(superClass) {
       live: true,
       withCredentials: true,
       complete: function(result) {
-        if (typeof result !== 'undefined' && result.ok) {
+        if (typeof result !== 'undefined' && result !== null && result.ok) {
           return Coconut.debug("replicateFromServer - onComplete: Replication is fine. ");
         } else {
           return Coconut.debug("replicateFromServer - onComplete: Replication message: " + JSON.stringify(result));
@@ -392,7 +395,10 @@ Sync = (function(superClass) {
       if (typeof result !== 'undefined' && result.ok) {
         console.log("uptodate: Form Replication is fine. ");
         Coconut.syncView.sync.populateForms();
-        return options.success();
+        options.complete();
+        if (typeof options.success !== 'undefined') {
+          return options.success();
+        }
       } else {
         return console.log("uptodate: Form Replication error: " + JSON.stringify(result));
       }
@@ -427,9 +433,16 @@ Sync = (function(superClass) {
         });
         results.push(model.save(obj, {
           success: (function(_this) {
-            return function(model) {};
+            return function(model) {
+              return console.log('Saving... ' + nuKey);
+            };
+          })(this),
+          error: (function(_this) {
+            return function(model, resp) {
+              return console.log('Error: ' + JSON.stringify(model) + " resp: " + resp);
+            };
           })(this)
-        }, console.log('Saving... ' + nuKey)));
+        }));
       }
       return results;
     });
@@ -484,7 +497,7 @@ Sync = (function(superClass) {
       filter: filter,
       withCredentials: true,
       complete: function(result) {
-        if (typeof result !== 'undefined' && result.ok) {
+        if (typeof result !== 'undefined' && result !== null && result.ok) {
           return Coconut.debug("replicateToServer - onComplete: Replication is fine. ");
         } else {
           return Coconut.debug("replicateToServer - onComplete: Replication message: " + JSON.stringify(result));
@@ -499,7 +512,10 @@ Sync = (function(superClass) {
     return Backbone.sync.defaults.db.replicate.to(Coconut.config.cloud_url_with_credentials(), options).on('uptodate', function(result) {
       if (typeof result !== 'undefined' && result.ok) {
         console.log("uptodate: Replication is fine. ");
-        return options.success();
+        options.complete();
+        if (typeof options.success !== 'undefined') {
+          return options.success();
+        }
       } else {
         return console.log("uptodate: Replication error: " + JSON.stringify(result));
       }

@@ -32,12 +32,12 @@ Here is an example of some of the markup from trichiasis_surgery.js:
           {
               "id": "345",
               "_id": "345",
-              "label": "Date/Time",
-              "type": "date-time",
+              "label": "Date",
+              "type": "date",
               "repeatable": "false",
               "validation": "",
               "required": "true",
-              "safeLabel": "DateTime"
+              "safeLabel": "theDate"
           },
 
 Rename the file and the '_id' and 'id' fields to whatever your form is about. Remove the '_rev' field - it is created by couchdb and is changed with each version.

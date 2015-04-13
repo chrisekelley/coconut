@@ -269,6 +269,7 @@
   "returnForFollowupR":"return for followup",
   "returnInDaysMonthsR":"Days/Months",
   "patientDevelopedTrichiasisL":"Patient developed Trichiasis",
-  "patientDevelopedTrichiasisR":"Patient developed Trichiasis"
-
+  "patientDevelopedTrichiasisR":"Patient developed Trichiasis",
+  "DateOfVisit":"Date of visit",
+  "TimeOfVisit":"Time of visit"
 }

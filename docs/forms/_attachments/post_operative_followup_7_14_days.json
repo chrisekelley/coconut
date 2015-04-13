@@ -38,16 +38,26 @@
     "required": "false",
     "safeLabel": "DateTime"
   },
-  {
-    "id": "765",
-    "_id": "765",
-    "label": "Left eye",
-    "type": "header",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "Lefteye"
-  },
+    {
+      "id": "345",
+      "_id": "345",
+      "label": "Date",
+      "type": "date",
+      "repeatable": "false",
+      "validation": "",
+      "required": "true",
+      "safeLabel": "DateOfVisit"
+    },
+    {
+      "id": "345",
+      "_id": "345",
+      "label": "Time",
+      "type": "time",
+      "repeatable": "false",
+      "validation": "",
+      "required": "true",
+      "safeLabel": "TimeOfVisit"
+    },
   {
     "id": "280",
     "_id": "280",

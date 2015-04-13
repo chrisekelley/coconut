@@ -32,7 +32,7 @@
     "id": "20",
     "_id": "20",
     "label": "DOB",
-    "type": "date-only",
+    "type": "date",
     "repeatable": "false",
     "validation": "",
     "required": "false",

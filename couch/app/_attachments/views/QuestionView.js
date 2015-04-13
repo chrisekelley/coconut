@@ -679,10 +679,10 @@ QuestionView = (function(superClass) {
                 return "";
               case "instructions":
                 return "<p>" + text + "</p>";
-              case "date-only":
-                return ("<div class='form-group'>\n <div class='input-group date' id='datetimepicker1'>\n <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' data-date-showToday='false' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'/>\n <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span> </span>\n </div>\n </div>\n <script type=\"text/javascript\">\n $(function () {\n $('#" + question_id + "').datetimepicker({\n pickTime: false,\n showToday: false,\n language: 'pt'\n });\n });\n </script>\n");
-              case "date-time":
-                return ("<div class='form-group'> <div class='input-group date' id='datetimepicker1'> <input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'/> <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span> </span> </div> </div> <script type=\"text/javascript\"> $(function () { $('#" + question_id + "').datetimepicker({\nlanguage: 'pt'\n}); }); </script>");
+              case "date":
+                return ("<div class='form-group'> <input type='date' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'/>\n </div>");
+              case "time":
+                return ("<div class='form-group'> <input type='time' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'/> </div>");
               default:
                 return ("<div class='form-group'><input type='text' class='form-control' name='" + name + "' id='" + question_id + "' value='" + (question.value()) + "' placeholder='") + polyglot.t('Enter') + (" " + i18nLabelText + "'></div>");
             }

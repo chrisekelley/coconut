@@ -773,36 +773,15 @@ class QuestionView extends Backbone.View
                 ""
               when "instructions"
                 "<p>#{text}</p>"
-              when "date-only"
-                "<div class='form-group'>\n
-                  <div class='input-group date' id='datetimepicker1'>\n
-                    <input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' data-date-showToday='false' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'/>\n
-                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>
-                    </span>\n
-                  </div>\n
-                </div>\n
-                 <script type=\"text/javascript\">\n
-                  $(function () {\n
-                  $('##{question_id}').datetimepicker({\n
-                                    pickTime: false,\n
-                                    showToday: false,\n
-                                    language: 'pt'\n
-                                });\n
-                });\n
-                </script>\n"
-              when "date-time"
+              when "date"
                 "<div class='form-group'>
-                  <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'/>
-                    <span class='input-group-addon'><span class='glyphicon glyphicon-calendar'></span>
-                    </span>
-                  </div>
-                </div>
-                 <script type=\"text/javascript\">
-                  $(function () {
-                  $('##{question_id}').datetimepicker({\nlanguage: 'pt'\n});
-                });
-                </script>"
+                    <input type='date' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'/>\n
+                </div>"
+
+              when "time"
+                "<div class='form-group'>
+                    <input type='time' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'/>
+                </div>"
               else
 #                "<input name='#{name}' id='#{question_id}' type='#{question.type()}' value='#{question.value()}'></input>"
                  "<div class='form-group'><input type='text' class='form-control' name='#{name}' id='#{question_id}' value='#{question.value()}' placeholder='" + polyglot.t('Enter') + " #{i18nLabelText}'></div>"
