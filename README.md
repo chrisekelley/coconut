@@ -30,13 +30,15 @@ CouchDB, [Backbone.js](http://documentcloud.github.com/backbone), [backbone-couc
 All of the backbone [models](http://documentcloud.github.com/backbone/#Model) and [views](http://documentcloud.github.com/backbone/#Model)
 have their own file and are in app/models and app/views respectively. app/app.js is responsible for tying it all together.
 
-You can put json forms into the \_docs directory and they will be added to your couch when you do a couchapp push.
-Please note that this capability is no longer supported.
+There are two couchapps in this project:
+ - couch - which is the coconut application
+ - docs - which is a couchapp that has the app forms. Packaging the forms in a couchapp makes it easy to modify form definitions 
+ and have them update automatically on the server via the grunt 'couch-push' task.
 
 ## Setup
 
-The pouch.watchr script compiles your coffeescripts automatically. The npm start task (see package.json) runs this task for you.
-See the Pouch watchr section below for details and dependencies.
+The npm start task (see package.json) starts the http server and runs the gruntfile for you.
+The grunt coffee task compiles your coffeescripts automatically, and the couch-related tasks manage the couch sync operations.
 
 This app is designed to sync with a central server for configuration data. Create another couch called coconut-central.
 Upload samplejson/coconut.config to it.
@@ -50,7 +52,9 @@ it may have already sync'd these users over. If not, well here you go.
 
 ## Starting the app
 
-The npm start task (see package.json) runs a small http server, launches a grunt handlebars watch script, and also a coffeescript watchr script.
+The npm start task (see package.json) runs a small http server, launches a grunt handlebars template compilation task, 
+a coffeescript task, and some couch-related tasks. The couch-related tasks use my custom grunt-couch plugin, chrisekelley/grunt-couch, 
+which uses the .couchappignore file.
 
 ## How do I add new libraries?
 
@@ -100,6 +104,8 @@ See [the report doc](couch/app/docs/reports.md).
 ## What are the important record identifiers
 
  - clientId = Coconut.currentClient.get("_id")
+ - district
+  - device uuid
 
 ## How do I handle application updates?
 
@@ -218,19 +224,6 @@ and create a method for each route:
         		}
         	});
         },
-
-
-## Watchr script
-
-The npm start script launches the pouch.watchr script. Here is some info about it and its dependencies:
-
-It's a pain to run 'couchapp push' everytime you make a change. Mike wrote a little [watchr](http://rubygems.org/gems/watchr)
-script that watches for changes to any relevant files and then automatically pushes them into your couch.
-To get it you need to install rubygems and watchr:
-
-    apt-get install rubygems
-    gem install watchr
-    watchr pouch.watchr
 
 ## Help!
 
