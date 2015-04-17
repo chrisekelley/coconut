@@ -191,11 +191,12 @@ VerifyView = Backbone.Marionette.ItemView.extend
                         if user == 'Admin'
 #                      Error uploading scan
 #                      Operating in offline-mode. Press Continue to scan a new patient.
-                          message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin") + adminRegdropdown
+                          message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
+                          $("#uploadFailedMessage").html(message + adminRegdropdown)
                         else
 #                      Operating in offline-mode. Press Continue to enroll this new patient.
                           message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
-                        $("#uploadFailedMessage").html(message)
+                          $("#uploadFailedMessage").html(message)
                         $("#uploadFailed").css({
                           "display": "block"
                         })

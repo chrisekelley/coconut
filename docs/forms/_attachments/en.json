@@ -286,6 +286,7 @@
   "SimulateOfflineText":"This button reduces the timeout when uploading a fingerprint template in order to simulate offline conditions.",
   "selectFromFormDropdown": "Select a name from the dropdown.",
   "noAdminUserError":"Problem finding an Admin user. Have any users registered on this tablet?",
-  "districtRequired":"Please make a selection for District."
+  "districtRequired":"Please make a selection for District.",
+  "checkingForUpdate":"Checking for an update to KiwiPrintsTT."
 }
 

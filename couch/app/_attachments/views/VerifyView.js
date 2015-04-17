@@ -203,11 +203,12 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                         });
                         adminRegdropdown = adminRegdropdown + "\t</select>\n</div>\n";
                         if (user === 'Admin') {
-                          message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin") + adminRegdropdown;
+                          message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin");
+                          $("#uploadFailedMessage").html(message + adminRegdropdown);
                         } else {
                           message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient");
+                          $("#uploadFailedMessage").html(message);
                         }
-                        $("#uploadFailedMessage").html(message);
                         $("#uploadFailed").css({
                           "display": "block"
                         });

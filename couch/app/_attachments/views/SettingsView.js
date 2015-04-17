@@ -23,7 +23,7 @@ SettingsView = (function(superClass) {
     user = new User({
       _id: "user.admin"
     });
-    return user.fetch({
+    user.fetch({
       success: function() {
         var langChoice;
         langChoice = user.get('langChoice');
@@ -31,6 +31,9 @@ SettingsView = (function(superClass) {
         return console.log("langChoice from doc: " + langChoice);
       }
     });
+    if (typeof Coconut.version_code === 'undefined') {
+      return CoconutUtils.checkVersion();
+    }
   };
 
   SettingsView.prototype.el = '#content';

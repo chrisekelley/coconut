@@ -288,7 +288,6 @@
   "SimulateOfflineText":"Este botão reduz o tempo de espera quando o upload de um modelo de impressão digital, a fim de simular as condições off-line.",
   "selectFromFormDropdown": "Selecione um nome na lista suspensa.",
   "noAdminUserError":"Não foi possível localizar um usuário Admin. Já os usuários registrado neste tablet?",
-  "districtRequired":"Por favor, faça uma seleção para District."
-
-
+  "districtRequired":"Por favor, faça uma seleção para District.",
+  "checkingForUpdate":"Verificação de uma atualização para o KiwiPrintsTT."
 }

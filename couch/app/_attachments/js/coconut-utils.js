@@ -53,7 +53,8 @@ CoconutUtils.scheduleCheckVersion = function() {
   cordova.plugins.notification.local.schedule({
     id: 1,
     title: "KiwiPrintsTT Demo Updater",
-    text: "Checking for an update to the KiwiPrintsTT Demo.",
+    //text: "Checking for an update to KiwiPrintsTT.",
+    text: polyglot.t("checkingForUpdate"),
     every: 30,
     at: _60_seconds_from_now,
     //autoCancel: true,
@@ -102,7 +103,23 @@ CoconutUtils.scheduleCheckVersion = function() {
               }
           },
           function(errorMessage) {
-              console.log("Error while downloading update: " + errorMessage);
+              console.log("Error while checking up update: " + errorMessage);
+          }
+        );
+      },
+      error: function(model, err, cb) {
+        console.log(JSON.stringify(err));
+        cordova.plugins.notification.local.cancel(1, function() {
+          console.log("No update. Cancelled notification 1");
+          CoconutUtils.scheduleCheckVersion()
+        });
+        window.plugins.version.getVersionCode(
+          function(version_code) {
+            console.log("Installed version: " + version_code);
+            Coconut.version_code = version_code
+          },
+          function(errorMessage) {
+            console.log("Error while checking up update: " + errorMessage);
           }
         );
       }
