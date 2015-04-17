@@ -29,12 +29,31 @@ Controller = {
     Coconut.mainRegion.show(staticView);
   },
   displayAdminScanner: function() {
-    var staticView;
-    staticView = new VerifyView({
-      template: JST["_attachments/templates/VerifyView.handlebars"]
+    var model, promise;
+    model = new Backbone.Model();
+    promise = KiwiUtils.fetchDistricts();
+    promise.done(function() {
+      var staticView;
+      staticView = new VerifyView({
+        template: JST["_attachments/templates/VerifyView.handlebars"]
+      });
+      model.set("districts", staticView.districts);
+      staticView.model = model;
+      staticView.nextUrl = "#scanRetry";
+      return Coconut.mainRegion.show(staticView);
     });
-    staticView.nextUrl = "#scanRetry";
-    Coconut.mainRegion.show(staticView);
+    promise.fail(function(problem) {
+      var staticView;
+      console.log("Error: " + problem);
+      alert("Problem Getting Districts list. Please alert IT. Problem: " + problem);
+      staticView = new VerifyView({
+        template: JST["_attachments/templates/VerifyView.handlebars"]
+      });
+      model.set("districts", staticView.districts);
+      staticView.model = model;
+      staticView.nextUrl = "#scanRetry";
+      return Coconut.mainRegion.show(staticView);
+    });
   },
   displayRegistration: function(user) {
     $("#message").html("");

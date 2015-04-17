@@ -25,8 +25,13 @@ KiwiUtils.fetchDistricts = function() {
 };
 
 KiwiUtils.toggleAcceptedSurgery = function(target) {
-  var els, value;
-  els = ['566TypeofOperationLDiv', '189ClampusedLDiv', '964SutureTypeLDiv', '827ComplicationsLDiv', '57ExcessbleedingLDiv', '533MarginfragmantseveredLDiv', '151GlobePunctureLDiv', '152ComplicationsReferralLDiv', '153ReferralHospitalLDiv'];
+  var els, name, value;
+  name = target.attr("name");
+  if (name === 'acceptedSurgeryL') {
+    els = ['566TypeofOperationLDiv', '189ClampusedLDiv', '964SutureTypeLDiv', '827ComplicationsLDiv', '57ExcessbleedingLDiv', '533MarginfragmantseveredLDiv', '151GlobePunctureLDiv', '152ComplicationsReferralLDiv', '153ReferralHospitalLDiv'];
+  } else if (name === 'acceptedSurgeryR') {
+    els = ['47TypeofOperationRDiv', '776ClampusedRDiv', '985SutureTypeRDiv', '280ComplicationsRDiv', '636ExcessbleedingRDiv', '207MarginfragmantseveredRDiv', '174GlobePunctureRDiv', '175ComplicationsReferralRDiv', '176ReferralHospitalRDiv'];
+  }
   value = target.val();
   if (value === '') {
 

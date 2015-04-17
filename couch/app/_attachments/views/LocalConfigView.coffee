@@ -7,11 +7,7 @@ class LocalConfigView extends Backbone.View
         <h1>Configure your Coconut system</h1>
         <label for='coconut-cloud' >Coconut Cloud URL</label>
         <select name='coconut-cloud'>
-          <option value='https://kiwicentral.org/coconut-central'>kiwicentral.org/coconut-central</option>
           <option value='https://kiwicentral.org/coconut-central-test'>kiwicentral.org/coconut-central-test</option>
-          <option value='https://kiwicentral.org/coconut-central-demo'>kiwicentral.org/coconut-central-demo</option>
-          <option value='http://192.168.16.101:5984/coconut-central-alt'>coconut-central-alt - rep to kiwicentral</option>
-          <option value='http://192.168.16.101:5984/coconut-central'>192.168.16.101:5984/coconut-central</option>
           <option value='http://localhost:5984/coconut-central-local'>localhost:5984/coconut-central-local</option>
         </select>
         <label for='coconut-cloud-custom' >Coconut Cloud URL: custom (Override the dropdown options.)</label>
@@ -76,10 +72,10 @@ class LocalConfigView extends Backbone.View
 #            return json;
         statusCode:
           404: ->
-            alert( "page not found" )
+            alert( "404 error: page not found" )
           401: ->
             alert( "incorrect username/password" )
-        success: (cloudConfig) ->
+        success: (cloudConfig, jqxhr, textStatus) ->
           $('#message').append "Configuration downloaded. Saving configuration file.<br/>"
           delete cloudConfig["_rev"]
           Coconut.config.save cloudConfig,

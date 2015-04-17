@@ -1,11 +1,15 @@
-<p>
-    <a data-role="button" id="TrichiasisSurgery" class="btn btn-primary btn-lg" href="#new/result/Trichiasis%20Surgery">{{{polyglot "trichiasisSurgery" }}}</a> &nbsp;
-    <a data-role="button" id="PostOperativeEpilation" class="btn btn-primary btn-lg">{{{polyglot "PostOperativeEpilation" }}}</a> &nbsp;
-    <a data-role="button" id="PostOperativeFollowup" class="btn btn-primary btn-lg" href="#new/result/Post-Operative%20Followup">{{{polyglot "postOperativeFollowupAbbrev" }}}</a>
-    <a data-role="button" id="PostOperativeFollowup_1day" class="btn btn-primary btn-lg" href="#new/result/PostOperativeFollowup_1day">{{{polyglot "postOperativeFollowup_1day" }}}</a>
-    <a data-role="button" id="PostOperativeFollowup_7_14_days" class="btn btn-primary btn-lg" href="#new/result/PostOperativeFollowup_7_14_days">{{{polyglot "postOperativeFollowup_7_14_days" }}}</a>
-    <a data-role="button" id="PostOperativeFollowup_3_6_months" class="btn btn-primary btn-lg" href="#new/result/PostOperativeFollowup_3_6_months">{{{polyglot "postOperativeFollowup_3_6_months" }}}</a>
-</p>
+{{{polyglot "SelectFormDescription" }}}
+<div class="form-group">
+  <select id="formDropdown" class="form-control">
+      <option value=""> -- {{{polyglot "SelectOne" }}} -- </option>
+      <option value="TrichiasisSurgery">{{{polyglot "trichiasisSurgery" }}}</option>
+      <option value="PostOperativeFollowup">{{{polyglot "postOperativeFollowupAbbrev" }}}</option>
+      <option value="PostOperativeEpilation">{{{polyglot "PostOperativeEpilationAbbrev" }}}</option>
+      <option value="PostOperativeFollowup_1day" >{{{polyglot "postOperativeFollowup_1day" }}}</option>
+      <option value="PostOperativeFollowup_7_14_days">{{{polyglot "postOperativeFollowup_7_14_days" }}}</option>
+      <option value="PostOperativeFollowup_3_6_months">{{{polyglot "postOperativeFollowup_3_6_months" }}}</option>
+  </select>
+</div>
 <table id="records">
     <thead><tr>
         <th>{{{polyglot "Question" }}}</th>

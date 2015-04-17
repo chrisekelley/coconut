@@ -1,5 +1,6 @@
 {
   "_id": "districts",
+  "noClientPush": "true",
   "DistrictA": "District A",
   "DistrictB": "District B",
   "DistrictC": "District C",

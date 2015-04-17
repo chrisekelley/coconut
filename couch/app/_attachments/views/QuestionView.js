@@ -455,6 +455,12 @@ QuestionView = (function(superClass) {
     currentData = $('form').toObject({
       skipEmpty: false
     });
+    if (Coconut.currentDistrict !== null) {
+      currentData.currentDistrict = Coconut.currentDistrict;
+    }
+    if (typeof window.device !== 'undefined') {
+      currentData.deviceUuid = device.uuid;
+    }
     currentPosition = {};
     if (Coconut.currentPosition !== null) {
       coords = {};
@@ -631,7 +637,7 @@ QuestionView = (function(superClass) {
                   for (key in districts) {
                     if (!hasProp.call(districts, key)) continue;
                     phrase = districts[key];
-                    if (key !== '_id' && key !== '_rev') {
+                    if (key !== '_id' && key !== '_rev' && key !== 'noClientPush') {
                       index++;
                       optionText = phrase;
                       html += "<option name='" + key + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + optionText + "</option>";

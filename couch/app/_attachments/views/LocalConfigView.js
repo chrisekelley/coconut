@@ -13,7 +13,7 @@ LocalConfigView = (function(superClass) {
 
   LocalConfigView.prototype.render = function() {
     var ref;
-    this.$el.html("<form id='local-config'> <h1>Configure your Coconut system</h1> <label for='coconut-cloud' >Coconut Cloud URL</label> <select name='coconut-cloud'> <option value='https://kiwicentral.org/coconut-central'>kiwicentral.org/coconut-central</option> <option value='https://kiwicentral.org/coconut-central-test'>kiwicentral.org/coconut-central-test</option> <option value='https://kiwicentral.org/coconut-central-demo'>kiwicentral.org/coconut-central-demo</option> <option value='http://192.168.16.101:5984/coconut-central-alt'>coconut-central-alt - rep to kiwicentral</option> <option value='http://192.168.16.101:5984/coconut-central'>192.168.16.101:5984/coconut-central</option> <option value='http://localhost:5984/coconut-central-local'>localhost:5984/coconut-central-local</option> </select> <label for='coconut-cloud-custom' >Coconut Cloud URL: custom (Override the dropdown options.)</label> <input type='text' name='coconut-cloud-custom' size='35' value=''></input> <br/> <br/> <label for='username' class='localConfigCols'>Username</label> <input type='text' name='username' size='15'></input><br/> <label for='password' class='localConfigCols'>Password</label> <input type='password' name='password' size='15'></input> <fieldset id='mode-fieldset'> <legend>Mode</legend> <label for='cloud'>Cloud (reporting system)</label> <input id='cloud' name='mode' type='radio' value='cloud'></input> <label for='mobile'>Mobile (data collection, probably on a tablet)</label> <input id='mobile' name='mode' type='radio' value='mobile'></input> </fieldset> <br/> <br/> <button>Save</button> <div id='message'></div> </form>");
+    this.$el.html("<form id='local-config'> <h1>Configure your Coconut system</h1> <label for='coconut-cloud' >Coconut Cloud URL</label> <select name='coconut-cloud'> <option value='https://kiwicentral.org/coconut-central-test'>kiwicentral.org/coconut-central-test</option> <option value='http://localhost:5984/coconut-central-local'>localhost:5984/coconut-central-local</option> </select> <label for='coconut-cloud-custom' >Coconut Cloud URL: custom (Override the dropdown options.)</label> <input type='text' name='coconut-cloud-custom' size='35' value=''></input> <br/> <br/> <label for='username' class='localConfigCols'>Username</label> <input type='text' name='username' size='15'></input><br/> <label for='password' class='localConfigCols'>Password</label> <input type='password' name='password' size='15'></input> <fieldset id='mode-fieldset'> <legend>Mode</legend> <label for='cloud'>Cloud (reporting system)</label> <input id='cloud' name='mode' type='radio' value='cloud'></input> <label for='mobile'>Mobile (data collection, probably on a tablet)</label> <input id='mobile' name='mode' type='radio' value='mobile'></input> </fieldset> <br/> <br/> <button>Save</button> <div id='message'></div> </form>");
     if (Coconut.config.get("mode") == null) {
       $("#mode-fieldset").hide();
       $("#mobile").prop("checked", true);
@@ -57,13 +57,13 @@ LocalConfigView = (function(superClass) {
         },
         statusCode: {
           404: function() {
-            return alert("page not found");
+            return alert("404 error: page not found");
           },
           401: function() {
             return alert("incorrect username/password");
           }
         },
-        success: function(cloudConfig) {
+        success: function(cloudConfig, jqxhr, textStatus) {
           $('#message').append("Configuration downloaded. Saving configuration file.<br/>");
           delete cloudConfig["_rev"];
           return Coconut.config.save(cloudConfig, {

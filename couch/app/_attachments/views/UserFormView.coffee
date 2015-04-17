@@ -19,6 +19,23 @@ UserFormView = Backbone.Marionette.ItemView.extend
       "click #PostOperativeFollowup_1day": "postOperativeFollowup_1day"
       "click #PostOperativeFollowup_7_14_days": "postOperativeFollowup_7_14_days"
       "click #PostOperativeFollowup_3_6_months": "postOperativeFollowup_3_6_months"
+      "change #formDropdown": "chooseForm"
+
+    chooseForm: =>
+      form = $('#formDropdown').val();
+      if form == 'TrichiasisSurgery'
+        this.trichiasisSurgery()
+      else if form == 'PostOperativeFollowup'
+        this.postOperativeFollowup()
+      else if form == 'PostOperativeEpilation'
+        this.postOperativeEpilation()
+      else if form == 'PostOperativeFollowup_1day'
+        this.postOperativeFollowup_1day()
+      else if form == 'PostOperativeFollowup_7_14_days'
+        this.postOperativeFollowup_7_14_days()
+      else if form == 'PostOperativeFollowup_3_6_months'
+        this.postOperativeFollowup_3_6_months()
+      return
 
     submitRegistration: ->
       console.log "submitRegistration"

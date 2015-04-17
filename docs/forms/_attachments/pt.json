@@ -154,7 +154,7 @@
   "Clinic/hospital": "Clínica / Hospital",
   "true": "verdadeiro",
   "currentPosition": "Postition atual",
-  "offlineScanContinueAdmin": "Que operam no modo offline. Pressione 'Continuar' para digitalizar un novo paciente.",
+  "offlineScanContinueAdmin": "Que operam no modo offline. Selecione um Admin na lista suspensa e pressione 'Continuar' para digitalizar un novo paciente.",
   "offlineScanContinueNewPatient": "Que operam no modo offline. Pressione 'Continuar' para inscrever este novo paciente.",
   "errorUploadingScan": "Erro upload de digitalizaçâo",
   "Continue": "Continuar",
@@ -249,6 +249,7 @@
   "acceptedSurgeryR::No":"Não",
   "acceptedSurgeryR::Proposed Epilation":"Propôs depilação",
   "postOperativeFollowup_1day":"1º Dia pós-operatório",
+  "PostOperativeFollowup_1day":"1º Dia pós-operatório",
   "postOperativeFollowup_1day_abbrev":"1º Dia",
   "postOperativeFollowup_7_14_days":"7o ao 14o Dia pós-operatório",
   "postOperativeFollowup_7_14_days_abbrev":"7o ao 14o Dia",
@@ -279,5 +280,13 @@
   "patientDevelopedTrichiasisL":"Paciente desenvolveu triquíase",
   "patientDevelopedTrichiasisR":"Paciente desenvolveu triquíase",
   "DateOfVisit":"Data da visita",
-  "TimeOfVisit":"Tempo da visita"
+  "TimeOfVisit":"Tempo da visita",
+  "Post-Operative Visits": "Visita de acompanhamento pos-cirurgia",
+  "PostOperativeEpilationAbbrev":"Depilação",
+  "SelectFormDescription": "Para gravar uma nova visita, selecione um formulário a partir da lista suspensa:",
+  "SimulateOffline":"Simule offline.",
+  "SimulateOfflineText":"Este botão reduz o tempo de espera quando o upload de um modelo de impressão digital, a fim de simular as condições off-line.",
+  "selectFromFormDropdown": "Selecione um nome na lista suspensa.",
+  "noAdminUserError":"Não foi possível localizar um usuário Admin. Já os usuários registrado neste tablet?"
+
 }

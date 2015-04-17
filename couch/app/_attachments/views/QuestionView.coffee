@@ -507,6 +507,13 @@ class QuestionView extends Backbone.View
   save: _.throttle( ->
 
     currentData = $('form').toObject(skipEmpty: false)
+
+    if Coconut.currentDistrict != null
+      currentData.currentDistrict = Coconut.currentDistrict
+
+    if typeof window.device != 'undefined'
+      currentData.deviceUuid = device.uuid
+
     currentPosition = {}
     if Coconut.currentPosition != null
       coords = {}
@@ -691,7 +698,7 @@ class QuestionView extends Backbone.View
                   districts = KiwiUtils.districts
                   index = 0
                   for own key, phrase of districts
-                    if key != '_id' && key != '_rev'
+                    if key != '_id' && key != '_rev' && key != 'noClientPush'
                       index++
                       optionText = phrase
                       html += "<option name='#{key}' id='#{question_id}-#{index}' value='#{option}'>#{optionText}</option>"

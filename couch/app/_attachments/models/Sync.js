@@ -425,7 +425,9 @@ Sync = (function(superClass) {
       results = [];
       for (key in result._attachments) {
         obj = result._attachments[key];
+        console.log("key: " + key);
         decodedData = decodeURIComponent(escape(window.atob(obj.data)));
+        console.log("key: " + key + " decodedData: " + JSON.stringify(decodedData));
         obj = JSON.parse(decodedData);
         nuKey = key.replace(".json", "");
         model = new Backbone.Model({
@@ -434,7 +436,7 @@ Sync = (function(superClass) {
         results.push(model.save(obj, {
           success: (function(_this) {
             return function(model) {
-              return console.log('Saving... ' + nuKey);
+              return console.log('Saving... ' + model.get("_id"));
             };
           })(this),
           error: (function(_this) {

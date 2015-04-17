@@ -52,7 +52,7 @@
     "id": "889",
     "_id": "889",
     "label": "District",
-    "type": "text",
+    "type": "selectDistrict",
     "repeatable": "false",
     "validation": "",
     "required": "true",

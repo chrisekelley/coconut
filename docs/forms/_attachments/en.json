@@ -246,6 +246,13 @@
   "acceptedSurgeryR::Yes":"Yes",
   "acceptedSurgeryR::No":"No",
   "acceptedSurgeryR::Proposed Epilation":"Proposed Epilation",
+  "postOperativeFollowup_1day":"1st day post-op",
+  "PostOperativeFollowup_1day":"1st day post-op",
+  "postOperativeFollowup_1day_abbrev":"1st day",
+  "postOperativeFollowup_7_14_days":"7 - 14 days post-op",
+  "postOperativeFollowup_7_14_days_abbrev":"7 - 14 days",
+  "postOperativeFollowup_3_6_months":"3-6 months post-surgery",
+  "postOperativeFollowup_3_6_months_abbrev":"3-6 months",
   "defectsEyelidL":"Defects in eyelid",
   "granulomaL":"Granuloma",
   "infectionL":"Infection ",
@@ -271,5 +278,13 @@
   "patientDevelopedTrichiasisL":"Patient developed Trichiasis",
   "patientDevelopedTrichiasisR":"Patient developed Trichiasis",
   "DateOfVisit":"Date of visit",
-  "TimeOfVisit":"Time of visit"
+  "TimeOfVisit":"Time of visit",
+  "Post-Operative Visits": "Post-Operative Visits",
+  "PostOperativeEpilationAbbrev":"Depilação",
+  "SelectFormDescription": "To record a new visit, select a form from the dropdown:",
+  "SimulateOffline":"Simulate Offline",
+  "SimulateOfflineText":"This button reduces the timeout when uploading a fingerprint template in order to simulate offline conditions.",
+  "selectFromFormDropdown": "Select a name from the dropdown.",
+  "noAdminUserError":"Problem finding an Admin user. Have any users registered on this tablet?"
 }
+

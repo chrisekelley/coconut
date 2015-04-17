@@ -17,6 +17,7 @@ class SettingsView extends Backbone.View
     "click #updateForms":  "updateForms"
     "click #sendReplicateLogs":  "sendReplicateLogs"
     "click #viewReports":  "viewReports"
+    "click #goOffline":  "goOffline"
     "change #langChoice": "changeLanguage"
 
   render: =>
@@ -31,6 +32,11 @@ class SettingsView extends Backbone.View
         <h2>" + polyglot.t("Reports") + "</h2>
         <p>
           <a data-role='button' class='btn btn-primary btn-lg' id='viewReports'>" + polyglot.t("viewReports") + "</a>
+        </p>
+        <h2>" + polyglot.t("SimulateOffline") + "</h2>
+        <p>" + polyglot.t("SimulateOfflineText") + "</p>
+        <p>
+          <a data-role='button' class='btn btn-primary btn-lg' id='goOffline'>" + polyglot.t("SimulateOffline") + "</a>
         </p>
         <h2>" + polyglot.t("SetLanguage") + "</h2>
         <p>
@@ -131,3 +137,8 @@ class SettingsView extends Backbone.View
     console.log("viewReports: ")
     Coconut.trigger "displayAllRecords"
 
+  goOffline: ->
+    networkTimeout = 1
+    Coconut.networkTimeout = networkTimeout
+    console.log("Simulating offline. NetworkTimeout: " + networkTimeout)
+    alert("We're offline. Close and restart the app when you're done testing.")

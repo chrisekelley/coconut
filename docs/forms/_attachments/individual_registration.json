@@ -17,6 +17,16 @@
     "required": "false",
     "safeLabel": "Surgeon"
   },
+    {
+      "id": "889",
+      "_id": "889",
+      "label": "District",
+      "type": "selectDistrict",
+      "repeatable": "false",
+      "validation": "",
+      "required": "true",
+      "safeLabel": "District"
+    },
   {
     "id": "200",
     "_id": "200",

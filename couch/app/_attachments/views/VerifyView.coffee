@@ -23,6 +23,19 @@ VerifyView = Backbone.Marionette.ItemView.extend
       if typeof cordova is "undefined"
 #        console.log "cordova is not defined."
         @hasCordova = false
+      districtJson = KiwiUtils.districts
+      districtList = []
+      index = 0
+      for own key, phrase of districtJson
+        if key != '_id' && key != '_rev' && key != 'noClientPush'
+          index++
+          district =
+            id:key
+            name:phrase
+          districtList.push  district
+      this.districts = districtList
+
+    districts: null
 
     displayNewUserRegistration: ->
       Coconut.router.navigate "userRegistration", true
@@ -119,23 +132,30 @@ VerifyView = Backbone.Marionette.ItemView.extend
             if (method == "Identify")
               cordova.plugins.SecugenPlugin.scan (results) =>
                 finger = $('#Finger').val();
+                district = $('#District').val();
                 payload =  {}
                 payload["Key"] = Coconut.config.get("AfisServerKey")
                 payload["Name"] = Coconut.config.get("AfisProjectName")
                 payload["Template"] = results
                 payload["Finger"] = finger
+                payload["District"] = district
                 console.log "payload: " + JSON.stringify payload
                 template = payload.Template
                 # Set things up for future handling of multiple fingerprints
                 fingerprint = {}
                 fingerprint.template = template
                 fingerprint.finger = finger
+                fingerprint.district = district
                 prints = []
                 prints.push(fingerprint)
                 # used when print upload fails and Continue button is pressed.
                 Coconut.currentPrints = prints
+                Coconut.currentDistrict = district
                 urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
-                timeout = 15000
+#                timeout = 15000
+                timeout = Coconut.config.get("networkTimeout");
+                if (typeof Coconut.networkTimeout != 'undefined')
+                  timeout = Coconut.networkTimeout
                 $('#progress').append "<br/>Fingerprint scanned. Now uploading to server. User: " + user
                 $('#progress').append "<br/>Server URL: " + urlServer
                 $('#progress').append "<br/>Timeout: " + timeout
@@ -145,20 +165,43 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   error: (xhr)=>
                     l.stop()
                     @currentOfflineUser = user;
-                    if user == 'Admin'
+
+                    viewOptions = {}
+                    adminRegdropdown = ""
+                    adminRegCollection = new SecondaryIndexCollection
+                    adminRegCollection.fetch
+                      fetch: 'query',
+                      options:
+                        query:
+                          include_docs: true,
+                          fun: 'by_AdminRegistration'
+                      success: =>
+              #          console.log JSON.stringify results
+                        console.log "Retrieved Admin registrations: " + JSON.stringify adminRegCollection
+                        adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n"
+                        adminRegCollection.each (adminReg)->
+                          id = adminReg.get("_id")
+                          name = adminReg.get("Name")
+                          option = "<option value=\"" + id + "\">" + name + "</option>\n"
+                          adminRegdropdown = adminRegdropdown + option
+                        adminRegdropdown = adminRegdropdown + "\t</select>\n</div>\n"
+                        if user == 'Admin'
 #                      Error uploading scan
 #                      Operating in offline-mode. Press Continue to scan a new patient.
-                      message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
-                    else
+                          message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin") + adminRegdropdown
+                        else
 #                      Operating in offline-mode. Press Continue to enroll this new patient.
-                      message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
-                    $("#uploadFailedMessage").html(message)
-                    $("#uploadFailed").css({
-                      "display": "block"
-                    })
-                    console.log message
-                    console.log "Fingerprint server URL: " + urlServer
-                    $('#progress').append message
+                          message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
+                        $("#uploadFailedMessage").html(message)
+                        $("#uploadFailed").css({
+                          "display": "block"
+                        })
+                        console.log message
+                        console.log "Fingerprint server URL: " + urlServer
+                        $('#progress').append message
+                      error: (model, err, cb) ->
+                        console.log JSON.stringify err
+
                 $.post(urlServer, payload,
                 (result) =>
                   console.log "response from service: " + JSON.stringify result
@@ -235,25 +278,52 @@ VerifyView = Backbone.Marionette.ItemView.extend
               if i == 5
                 uuid = CoconutUtils.uuidGenerator(30)
                 serviceUuid = CoconutUtils.uuidGenerator(30)
-                console.log("Go to next page. Generated UUID: " + uuid)
+                district = $('#District').val();
+                if user == "Admin"
+                  Coconut.currentDistrict = district
+                console.log("Go to next page. Generated UUID: " + uuid + " district: " + district)
                 Coconut.scannerPayload =
                   "Template":"46 4D 52 00 20 32 30 00 00 00 00 F0 00 00 01 04 01 2C 00 C5 00 C5 01 00 00 00 00 23 40 83 00 40 71 00 40 52 00 53 75 00 80 33 00 6B 8A 00 80 A9 00 6C 72 00 40 5B 00 81 7D 00 80 93 00 87 71 00 40 28 00 99 91 00 40 17 00 A1 11 00 40 44 00 A9 8D 00 40 81 00 B8 78 00 40 1B 00 BA 10 00 40 73 00 C2 80 00 40 3F 00 C3 94 00 40 DF 00 C7 E8 00 80 4B 00 CE 11 00 40 32 00 D6 91 00 40 16 00 D8 14 00 80 3D 00 E0 10 00 40 1A 00 E2 11 00 40 A3 00 E3 EE 00 40 38 00 F3 94 00 40 9E 00 F5 73 00 40 6D 00 FB 00 00 40 56 00 FC 93 00 40 A8 00 FC E3 00 40 26 00 FC 11 00 40 40 00 FD 10 00 40 7C 01 01 F8 00 80 C9 01 03 EA 00 40 38 01 04 9A 00 80 6D 01 07 7F 00 40 9E 01 0E 6C 00 40 32 01 10 17 00 40 88 01 11 EE 00 80 88 01 23 72 00 00 00 ",
                   "Name":"Test CK",
                   "email":"someone@somewhere.com",
                   "Finger":1,
                   "Key":"HH8XGFYSDU9QGZ833"
-                Coconut.currentClient = new Result
-                  _id: uuid
-                  serviceUuid:serviceUuid
-                $( "#message").html("Scanning complete!")
-                if user == "Admin"
-                  Coconut.currentAdmin = Coconut.currentClient
-                CoconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email)
-                l.stop()
-                if  @nextUrl?
-                  Coconut.router.navigate @nextUrl, true
-                else
-                  Coconut.router.navigate "registration", true
+
+                viewOptions = {}
+                adminRegdropdown = ""
+                adminRegCollection = new SecondaryIndexCollection
+                adminRegCollection.fetch
+                  fetch: 'query',
+                  options:
+                    query:
+                      include_docs: true,
+                      fun: 'by_AdminRegistration'
+                  success: =>
+#                   console.log JSON.stringify results
+                    console.log "Retrieved Admin registrations: " + JSON.stringify adminRegCollection
+                    adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"forDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n"
+                    adminRegCollection.each (adminReg)->
+                      id = adminReg.get("_id")
+                      name = adminReg.get("Name")
+                      option = "<option value=\"" + id + "\">" + name + "</option>\n"
+                      adminRegdropdown = adminRegdropdown + option
+                    adminRegdropdown = adminRegdropdown + "\t</select>\n</div>"
+                    console.log("adminRegdropdown" + adminRegdropdown)
+                    $("#uploadFailedMessage").html(adminRegdropdown)
+                  error: (model, err, cb) ->
+                    console.log JSON.stringify err
+#                Coconut.currentClient = new Result
+#                  _id: uuid
+#                  serviceUuid:serviceUuid
+#                $( "#message").html("Scanning complete!")
+#                if user == "Admin"
+#                  Coconut.currentAdmin = Coconut.currentClient
+#                CoconutUtils.setSession('currentAdmin', Coconut.scannerPayload.email)
+#                l.stop()
+#                if  @nextUrl?
+#                  Coconut.router.navigate @nextUrl, true
+#                else
+#                  Coconut.router.navigate "registration", true
 #                  window.setTimeout =>
 #                    Coconut.router.navigate("registration")
 #                  , 2000
@@ -314,6 +384,9 @@ VerifyView = Backbone.Marionette.ItemView.extend
       user = @currentOfflineUser
       Coconut.offlineUser = true
       console.log('Continuing after the fail. User: ' + user)
+      formDropdownValue = $('#formDropdown').val();
+      if (formDropdownValue == "")
+        return alert(polyglot.t("selectFromFormDropdown"))
       if user == "Admin"
         users = new SecondaryIndexCollection
         users.fetch
@@ -325,8 +398,12 @@ VerifyView = Backbone.Marionette.ItemView.extend
           success: =>
             console.log 'by_AdminRegistration returned: ' + JSON.stringify users
             if users.length > 0
-              adminUser = users.first()
+#              adminUser = users.first()
+#              adminUser =  users.findWhere({id:formDropdownValue})
+              adminUser =  users._byId[formDropdownValue]
               console.log 'Coconut.currentAdmin: ' + JSON.stringify adminUser
+              if adminUser == null
+                return alert(polyglot.t("Problem finding an Admin user. Have any users registerred on this tablet?"))
               Coconut.currentAdmin = adminUser
               CoconutUtils.setSession('currentAdmin', adminUser.get('email'))
               Coconut.router.navigate "displayUserScanner", true

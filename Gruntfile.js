@@ -84,13 +84,16 @@ module.exports = function(grunt) {
         },
         'couch-push': {
           options: {
-            user: 'admin',
-            pass: 'password'
+            user: 'coco',
+            pass: 'blond4eva!'
+            //user: 'admin',
+            //pass: 'password'
           },
           localhost: {
             files: {
               'http://localhost:5984/coconut': 'tmp/app.json',
-              'http://localhost:5984/coconut-forms': 'tmp/forms.json'
+              'http://localhost:5984/coconut-forms': 'tmp/forms.json',
+              'http://146.185.135.61:5984/coconut-forms': 'tmp/forms.json'
             }
           }
         },

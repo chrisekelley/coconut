@@ -19,10 +19,22 @@ Controller =
     return
 
   displayAdminScanner: () ->
-    staticView = new VerifyView(template: JST["_attachments/templates/VerifyView.handlebars"])
-    staticView.nextUrl = "#scanRetry"
-#    staticView.nextUrl = "#new/result/Admin%20Registration"
-    Coconut.mainRegion.show staticView
+    model = new Backbone.Model()
+    promise = KiwiUtils.fetchDistricts()
+    promise.done  () ->
+      staticView = new VerifyView(template: JST["_attachments/templates/VerifyView.handlebars"])
+      model.set "districts", staticView.districts
+      staticView.model = model
+      staticView.nextUrl = "#scanRetry"
+      Coconut.mainRegion.show staticView
+    promise.fail (problem) ->
+      console.log("Error: " + problem)
+      alert("Problem Getting Districts list. Please alert IT. Problem: " + problem)
+      staticView = new VerifyView(template: JST["_attachments/templates/VerifyView.handlebars"])
+      model.set "districts", staticView.districts
+      staticView.model = model
+      staticView.nextUrl = "#scanRetry"
+      Coconut.mainRegion.show staticView
     return
 
   displayRegistration: (user) ->

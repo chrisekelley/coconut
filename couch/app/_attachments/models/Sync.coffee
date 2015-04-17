@@ -299,16 +299,16 @@ class Sync extends Backbone.Model
 #      console.log("result: " + JSON.stringify((result)))
       for key of result._attachments
         obj = result._attachments[key];
-#        decodedData = window.atob(obj.data);
+        console.log("key: " + key)
         decodedData = decodeURIComponent(escape(window.atob( obj.data )));
-#        console.log("key: " + key + " decodedData: " + JSON.stringify((decodedData)))
+        console.log("key: " + key + " decodedData: " + JSON.stringify((decodedData)))
         obj = JSON.parse  decodedData
         nuKey = key.replace(".json","")
         model = new Backbone.Model
           _id: nuKey
         model.save obj,
           success: (model) =>
-            console.log 'Saving... ' + nuKey
+            console.log 'Saving... ' + model.get("_id")
           error: (model, resp) =>
             console.log 'Error: ' + JSON.stringify(model) + " resp: " + resp;
 

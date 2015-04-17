@@ -466,7 +466,7 @@ class Router extends Backbone.Router
     Coconut.questionView = new QuestionView()
     Coconut.menuView = new MenuView()
     Coconut.syncView = new SettingsView()
-    KiwiUtils.fetchDistricts()
+#    KiwiUtils.fetchDistricts()
     Coconut.syncView.sync.replicateToServer()
     Coconut.syncView.sync.replicateFromServer()
     #        Coconut.syncView.update()
