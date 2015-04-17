@@ -7,17 +7,6 @@
   "required": "false",
   "questions": [
   {
-    "id": "20",
-    "_id": "20",
-    "label": "Surgeon",
-    "type": "select",
-    "repeatable": "false",
-    "select-options": "A,B,C,D,E,F,G,H",
-    "validation": "",
-    "required": "false",
-    "safeLabel": "Surgeon"
-  },
-  {
     "id": "21",
     "_id": "21",
     "label": "Location where service was provided",
@@ -39,8 +28,8 @@
       "safeLabel": "DateOfVisit"
     },
     {
-      "id": "345",
-      "_id": "345",
+      "id": "346",
+      "_id": "346",
       "label": "Time",
       "type": "time",
       "repeatable": "false",

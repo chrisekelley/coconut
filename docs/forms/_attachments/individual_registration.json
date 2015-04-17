@@ -6,17 +6,6 @@
   "enabled": "true",
   "safeLabel": "Individualregistration",
   "questions": [
-  {
-    "id": "20",
-    "_id": "20",
-    "label": "Surgeon",
-    "type": "select",
-    "repeatable": "false",
-    "select-options": "A,B,C,D,E,F,G,H",
-    "validation": "",
-    "required": "false",
-    "safeLabel": "Surgeon"
-  },
     {
       "id": "889",
       "_id": "889",
