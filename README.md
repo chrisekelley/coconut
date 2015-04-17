@@ -61,7 +61,7 @@ Use [bower](bower.io). The following libs are already installed. The "-S" switch
 
 ## Form building tips
 
-There is an [explanation of forms here](https://github.com/chrisekelley/coconut/blob/coconut-pouch/docs/forms.md).
+There is an [explanation of forms here](https://github.com/chrisekelley/coconut/blob/coconut-pouch/couch/app/docs/forms.md).
 
 Change the routing after a form is submitted in QuestionView:
 
@@ -95,7 +95,7 @@ The npm start task (see package.json) runs this task for you.
 
 ## Reports
 
-See [the report doc](docs/reports.md).
+See [the report doc](couch/app/docs/reports.md).
 
 ## What are the important record identifiers
 
@@ -113,6 +113,9 @@ Edit version on the CouchDB server
 
 Within the Cordova container, you can set parameters to wipe the app cache, which will completely reset the app. See its
 [README](https://github.com/chrisekelley/kiwi-cordova/blob/master/README.md#updates) for more info.
+
+The app uses the [Cordova Local-Notification Plugin](https://github.com/katzer/cordova-plugin-local-notifications) to check 
+for updates when the app is running in the background. CoconutUtils.scheduleCheckVersion() has the code for this.
 
 ## Internationalization (i18n)
 

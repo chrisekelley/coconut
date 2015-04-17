@@ -472,7 +472,13 @@ class Router extends Backbone.Router
     #        Coconut.syncView.update()
     Backbone.history.start()
     if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
-      CoconutUtils.checkVersion()
+      CoconutUtils.scheduleCheckVersion()
+      cordova.plugins.notification.local.on "trigger", (notification) ->
+        console.log("triggered: " + notification.id);
+        CoconutUtils.checkVersion()
+      cordova.plugins.notification.local.on "click", (notification) ->
+        console.log("click: " + notification.id);
+        CoconutUtils.scheduleCheckVersion()
 #      CoconutUtils.check_network()
 
 $(() =>

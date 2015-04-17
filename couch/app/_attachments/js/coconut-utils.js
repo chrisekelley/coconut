@@ -47,6 +47,21 @@ CoconutUtils.refreshChart = function (id, name) {
 
 //window.onload = loadCascadedSelects;
 
+CoconutUtils.scheduleCheckVersion = function() {
+  now = new Date().getTime();
+  _60_seconds_from_now = new Date(now + 60 * 1000);
+  cordova.plugins.notification.local.schedule({
+    id: 1,
+    title: "KiwiPrintsTT Demo Updater",
+    text: "Checking for an update to the KiwiPrintsTT Demo.",
+    every: 30,
+    at: _60_seconds_from_now,
+    //autoCancel: true,
+    sound: null
+    //}, CoconutUtils.checkVersion());
+  });
+}
+
   CoconutUtils.checkVersion = function () {
     console.log("Checking for new version of app.");
     var url = Coconut.config.coconut_central_url_with_credentials() + "/version";
@@ -79,6 +94,11 @@ CoconutUtils.refreshChart = function (id, name) {
                           return console.log(JSON.stringify(err));
                       }
                   });
+              } else {
+                cordova.plugins.notification.local.cancel(1, function() {
+                  console.log("No update. Cancelled notification 1");
+                  CoconutUtils.scheduleCheckVersion()
+                });
               }
           },
           function(errorMessage) {
