@@ -8,7 +8,8 @@ window.polyglot.extend({
     "Login": "Conecte-Se",
     "Settings": "Configurações",
     "PatientEncounters": "Visitas",
-    "sendLogs": "sendLogs"
+    "sendLogs": "sendLogs",
+    "District": "District"
 })
 
 Handlebars.registerHelper   'polyglot', (phrase)->

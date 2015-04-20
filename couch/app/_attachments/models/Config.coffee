@@ -52,3 +52,6 @@ class Config extends Backbone.Model
 
   coconut_forms_design_doc: ->
     "#{@get "coconut_forms_design_doc"}"
+
+  cloud_credentials: ->
+    "#{@get "cloud_credentials"}"

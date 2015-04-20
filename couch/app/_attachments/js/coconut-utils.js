@@ -65,63 +65,75 @@ CoconutUtils.scheduleCheckVersion = function() {
 
   CoconutUtils.checkVersion = function () {
     console.log("Checking for new version of app.");
-    var url = Coconut.config.coconut_central_url_with_credentials() + "/version";
-    $.ajax(url, { type: 'GET', dataType: 'json',
+    var url = Coconut.config.coconut_central_url() + "/version";
+    var cloud_credentials = Coconut.config.cloud_credentials();
+    var auth = cloud_credentials.split(":");
+    var username = auth[0];
+    var password = auth[1];
+    $.ajax(url, { type: 'GET', dataType: 'jsonp', username: username, password: password,
       success: function(data) {
         console.log("data: " + JSON.stringify(data));
         var remoteVersion = data.version;
         CoconutUtils.remoteUrl = data.url;
         console.log("Remote version: " + remoteVersion);
-        window.plugins.version.getVersionCode(
-          function(version_code) {
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+          window.plugins.version.getVersionCode(
+            function (version_code) {
               console.log("Installed version: " + version_code);
               Coconut.version_code = version_code
-              if(version_code != remoteVersion){
-                  console.log("Upgrade app!");
-                  navigator.notification.beep(3);
-                  navigator.notification.vibrate(2000);
-                  navigator.notification.confirm(
-                      'A new version is out! Get it now!',  // message
-                      CoconutUtils.onVersion,            // callback to invoke with index of button pressed
-                      'Update available',                 // title
-                      ['Update now!', 'Maybe later']     // buttonLabels
-                  );
-                  var log = new Log();
-                  log.save({message: "local version != remote version.", localVersion:version_code, remoteVersion: remoteVersion}, {
-                      success: function() {
-                          console.log("Saved log about update.");
-                      },
-                      error: function(model, err, cb) {
-                          return console.log(JSON.stringify(err));
-                      }
-                  });
+              if (version_code != remoteVersion) {
+                console.log("Upgrade app!");
+                navigator.notification.beep(3);
+                navigator.notification.vibrate(2000);
+                navigator.notification.confirm(
+                  'A new version is out! Get it now!',  // message
+                  CoconutUtils.onVersion,            // callback to invoke with index of button pressed
+                  'Update available',                 // title
+                  ['Update now!', 'Maybe later']     // buttonLabels
+                );
+                var log = new Log();
+                log.save({
+                  message: "local version != remote version.",
+                  localVersion: version_code,
+                  remoteVersion: remoteVersion
+                }, {
+                  success: function () {
+                    console.log("Saved log about update.");
+                  },
+                  error: function (model, err, cb) {
+                    return console.log(JSON.stringify(err));
+                  }
+                });
               } else {
-                cordova.plugins.notification.local.cancel(1, function() {
+                cordova.plugins.notification.local.cancel(1, function () {
                   console.log("No update. Cancelled notification 1");
                   CoconutUtils.scheduleCheckVersion()
                 });
               }
-          },
-          function(errorMessage) {
+            },
+            function (errorMessage) {
               console.log("Error while checking up update: " + errorMessage);
-          }
-        );
+            }
+          );
+        }
       },
       error: function(model, err, cb) {
         console.log(JSON.stringify(err));
-        cordova.plugins.notification.local.cancel(1, function() {
-          console.log("No update. Cancelled notification 1");
-          CoconutUtils.scheduleCheckVersion()
-        });
-        window.plugins.version.getVersionCode(
-          function(version_code) {
-            console.log("Installed version: " + version_code);
-            Coconut.version_code = version_code
-          },
-          function(errorMessage) {
-            console.log("Error while checking up update: " + errorMessage);
-          }
-        );
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+          cordova.plugins.notification.local.cancel(1, function () {
+            console.log("No update. Cancelled notification 1");
+            CoconutUtils.scheduleCheckVersion()
+          });
+          window.plugins.version.getVersionCode(
+            function (version_code) {
+              console.log("Installed version: " + version_code);
+              Coconut.version_code = version_code
+            },
+            function (errorMessage) {
+              console.log("Error while checking up update: " + errorMessage);
+            }
+          );
+        }
       }
     });
   }

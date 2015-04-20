@@ -84,6 +84,10 @@ Config = (function(superClass) {
     return "" + (this.get("coconut_forms_design_doc"));
   };
 
+  Config.prototype.cloud_credentials = function() {
+    return "" + (this.get("cloud_credentials"));
+  };
+
   return Config;
 
 })(Backbone.Model);
