@@ -471,7 +471,7 @@ class Router extends Backbone.Router
     Coconut.syncView.sync.replicateFromServer()
     #        Coconut.syncView.update()
     Backbone.history.start()
-    if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+    if Coconut.isMobile == true
       CoconutUtils.scheduleCheckVersion()
       cordova.plugins.notification.local.on "trigger", (notification) ->
         console.log("triggered: " + notification.id);
@@ -495,7 +495,7 @@ $(() =>
     $("#statusIcons").html('<img src="images/connection-up.png"/>')
 
   onDeviceReady = () =>
-    if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+    if Coconut.isMobile == true
       console.log("Init Secugen: this wheel is on fire.")
       cordova.plugins.SecugenPlugin.requestPermission (results) ->
           console.log "SecugenPlugin requestPermission: " + results
@@ -613,7 +613,7 @@ $(() =>
 
 #  deferred = Coconut.fetchTranslation "pt"
 #  deferred.done ->
-  if navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+  if Coconut.isMobile == true
     console.log("listening for deviceready event.")
     document.addEventListener("deviceready", onDeviceReady, false);
     document.addEventListener("offline", onOffline, false);
@@ -621,6 +621,3 @@ $(() =>
   else
     onDeviceReady()
 )
-
-
-

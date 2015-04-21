@@ -32,7 +32,9 @@ SettingsView = (function(superClass) {
       }
     });
     if (typeof Coconut.version_code === 'undefined') {
-      return CoconutUtils.checkVersion();
+      if (Coconut.isMobile === true) {
+        return CoconutUtils.checkVersion();
+      }
     }
   };
 

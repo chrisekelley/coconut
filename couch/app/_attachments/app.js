@@ -655,7 +655,7 @@ Router = (function(superClass) {
     Coconut.syncView.sync.replicateToServer();
     Coconut.syncView.sync.replicateFromServer();
     Backbone.history.start();
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+    if (Coconut.isMobile === true) {
       CoconutUtils.scheduleCheckVersion();
       cordova.plugins.notification.local.on("trigger", function(notification) {
         console.log("triggered: " + notification.id);
@@ -691,7 +691,7 @@ $((function(_this) {
     };
     onDeviceReady = function() {
       var matchResults;
-      if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+      if (Coconut.isMobile === true) {
         console.log("Init Secugen: this wheel is on fire.");
         cordova.plugins.SecugenPlugin.requestPermission(function(results) {
           return console.log("SecugenPlugin requestPermission: " + results);
@@ -782,7 +782,7 @@ $((function(_this) {
         return Coconut.replicationLog += string;
       };
     };
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+    if (Coconut.isMobile === true) {
       console.log("listening for deviceready event.");
       document.addEventListener("deviceready", onDeviceReady, false);
       document.addEventListener("offline", onOffline, false);

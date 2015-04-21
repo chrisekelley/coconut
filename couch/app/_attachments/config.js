@@ -23,6 +23,10 @@ if (matchResults === null) {
 
 Coconut.languages = ["en","pt"]
 
+if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+  Coconut.isMobile = true;
+}
+
 Backbone.sync = BackbonePouch.sync({
     db: PouchDB(Coconut.db_name)
 });

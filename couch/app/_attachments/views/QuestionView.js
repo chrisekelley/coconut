@@ -458,6 +458,9 @@ QuestionView = (function(superClass) {
     if (Coconut.currentDistrict !== null) {
       currentData.currentDistrict = Coconut.currentDistrict;
     }
+    if (Coconut.version_code !== 'undefined') {
+      currentData.version_code = Coconut.version_code;
+    }
     if (typeof window.device !== 'undefined') {
       currentData.deviceUuid = device.uuid;
     }

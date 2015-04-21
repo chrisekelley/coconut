@@ -5,7 +5,7 @@
   "Home": "Home",
   "Sync": "Sync",
   "Scanner": "Scanner",
-  "verifyAdmin": "To start please verify Administrator Identification by placing thumb on the scanner and pressing the \"Scan\" button.",
+  "verifyAdmin": "To start please verify the identity of the surgeon by placing thumb on the scanner and pressing the \"Scan\" button.",
   "scan": "Scan",
   "cannotId": "The system was unable to identify this person.",
   "scanAgain": "Scan again",
@@ -287,6 +287,17 @@
   "selectFromFormDropdown": "Select a name from the dropdown.",
   "noAdminUserError":"Problem finding an Admin user. Have any users registered on this tablet?",
   "districtRequired":"Please make a selection for District.",
-  "checkingForUpdate":"Checking for an update to KiwiPrintsTT."
+  "checkingForUpdate":"Checking for an update to KiwiPrintsTT.",
+  "scanFingerInstructions":"Scan the thumb of your right hand. If not available, scan your right index finger.",
+  "L1":"L1",
+  "L2":"L2",
+  "L3":"L3",
+  "L4":"L4",
+  "L5":"L5",
+  "R1":"R1",
+  "R2":"R2",
+  "R3":"R3",
+  "R4":"R4",
+  "R5":"R5",
+  "fingerSelectInstructions":"If you are scanning the thumb of your right hand, select R1. The index finger of your right hand is R2."
 }
-

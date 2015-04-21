@@ -76,7 +76,7 @@ CoconutUtils.scheduleCheckVersion = function() {
         var remoteVersion = data.version;
         CoconutUtils.remoteUrl = data.url;
         console.log("Remote version: " + remoteVersion);
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+        if (Coconut.isMobile === true) {
           window.plugins.version.getVersionCode(
             function (version_code) {
               console.log("Installed version: " + version_code);
@@ -119,7 +119,7 @@ CoconutUtils.scheduleCheckVersion = function() {
       },
       error: function(model, err, cb) {
         console.log(JSON.stringify(err));
-        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+        if (Coconut.isMobile === true) {
           cordova.plugins.notification.local.cancel(1, function () {
             console.log("No update. Cancelled notification 1");
             CoconutUtils.scheduleCheckVersion()
@@ -237,7 +237,7 @@ CoconutUtils.scheduleCheckVersion = function() {
 
   CoconutUtils.saveLoginPreferences = function (username, password, site, department) {
     console.log("Saving login prefs. username: " + username + " password: " + password + " site: "  + site + " department:" + department);
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+    if (Coconut.isMobile === true) {
       window.applicationPreferences.set("username", username, function() {
       }, function(error) {
         console.log("Error! " + JSON.stringify(error));
@@ -269,7 +269,7 @@ CoconutUtils.scheduleCheckVersion = function() {
 
   CoconutUtils.getLoginPreferences = function () {
     var account = new Object();
-    if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+    if (Coconut.isMobile === true) {
       window.applicationPreferences.get("username", function(value) {
         account.username = value;
       }, function(error) {
