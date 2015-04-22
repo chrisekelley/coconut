@@ -62,6 +62,13 @@ Use [bower](bower.io). The following libs are already installed. The "-S" switch
 
     bower install -S pouchdb
     bower install -S https://raw.githubusercontent.com/jo/backbone-pouch/master/backbone-pouch.js
+    
+### Updating libraries
+
+The grunt bowercopy task copies only the .js - you don't have to have the whole bower package in the app.
+
+    bower-update   
+    grunt bowercopy
 
 ## Form building tips
 

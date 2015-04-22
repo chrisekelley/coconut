@@ -159,3 +159,9 @@ body {
 #kiwiFormTable th,td {
     padding:4px;
 }
+
+#kiwiFormTable th {
+    font-size: large;
+}
+
+

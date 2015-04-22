@@ -10,6 +10,8 @@ Sync = (function(superClass) {
     this.replicateApplicationDocs = bind(this.replicateApplicationDocs, this);
     this.sendLogs = bind(this.sendLogs, this);
     this.replicate = bind(this.replicate, this);
+    this.populateForms = bind(this.populateForms, this);
+    this.fetchOrUpdate = bind(this.fetchOrUpdate, this);
     this.getFromCloud = bind(this.getFromCloud, this);
     this.loadJSON = bind(this.loadJSON, this);
     this.saveJS = bind(this.saveJS, this);
@@ -343,7 +345,14 @@ Sync = (function(superClass) {
         if (typeof result !== 'undefined' && result !== null && result.ok) {
           return Coconut.debug("replicateFromServer - onComplete: Replication is fine. ");
         } else {
-          return Coconut.debug("replicateFromServer - onComplete: Replication message: " + JSON.stringify(result));
+          if (result !== null && typeof result !== 'undefined') {
+            Coconut.debug("replicateFromServer - onComplete: Replication message: " + JSON.stringify(result.message));
+            if (result.status !== 500) {
+              return Coconut.debug("replicateFromServer - onComplete: Replication result: " + JSON.stringify(result));
+            }
+          } else {
+            return Coconut.debug("replicateFromServer - onComplete: Replication message: " + JSON.stringify(result));
+          }
         }
       },
       error: function(result) {
@@ -409,6 +418,51 @@ Sync = (function(superClass) {
     });
   };
 
+  Sync.prototype.fetchOrUpdate = function(obj) {
+    return new Promise((function(_this) {
+      return function(resolve, reject) {
+        var model;
+        model = new Backbone.Model({
+          _id: obj._id
+        });
+        return model.fetch({
+          success: function(oldModel) {
+            var _rev, objModel;
+            _rev = oldModel.get("_rev");
+            obj._rev = _rev;
+            objModel = new Backbone.Model({
+              _id: obj._id,
+              _rev: _rev
+            });
+            objModel.save(obj, {
+              success: function(updatedModel) {
+                return console.log('Updating... ' + updatedModel.get("_id"));
+              },
+              error: function(model, resp) {
+                return console.log('Error: ' + resp);
+              }
+            });
+            return resolve(oldModel);
+          },
+          error: function(model, resp) {
+            console.log('Error: ' + obj._id + " : " + JSON.stringify(resp));
+            reject('Error: ' + obj._id + " : " + JSON.stringify(resp));
+            if (resp.status === 404) {
+              return model.save(obj, {
+                success: function(model) {
+                  return console.log('Saving... ' + model.get("_id"));
+                },
+                error: function(model, resp) {
+                  return console.log('Error: ' + resp);
+                }
+              });
+            }
+          }
+        });
+      };
+    })(this));
+  };
+
   Sync.prototype.populateForms = function() {
     var model;
     model = new Backbone.Model({
@@ -420,34 +474,24 @@ Sync = (function(superClass) {
           attachments: true
         }
       }
-    }).then(function(result) {
-      var decodedData, key, nuKey, obj, results;
-      results = [];
-      for (key in result._attachments) {
-        obj = result._attachments[key];
-        console.log("key: " + key);
-        decodedData = decodeURIComponent(escape(window.atob(obj.data)));
-        console.log("key: " + key + " decodedData: " + JSON.stringify(decodedData));
-        obj = JSON.parse(decodedData);
-        nuKey = key.replace(".json", "");
-        model = new Backbone.Model({
-          _id: nuKey
-        });
-        results.push(model.save(obj, {
-          success: (function(_this) {
-            return function(model) {
-              return console.log('Saving... ' + model.get("_id"));
-            };
-          })(this),
-          error: (function(_this) {
-            return function(model, resp) {
-              return console.log('Error: ' + JSON.stringify(model) + " resp: " + resp);
-            };
-          })(this)
-        }));
-      }
-      return results;
-    });
+    }).then((function(_this) {
+      return function(result) {
+        var attachment, decodedData, key, obj, promises;
+        promises = (function() {
+          var results;
+          results = [];
+          for (key in result._attachments) {
+            attachment = result._attachments[key];
+            decodedData = decodeURIComponent(escape(window.atob(attachment.data)));
+            obj = JSON.parse(decodedData);
+            console.log("key: " + key + ":" + obj._id);
+            results.push(this.fetchOrUpdate(obj));
+          }
+          return results;
+        }).call(_this);
+        return Promise.all(promises);
+      };
+    })(this));
   };
 
   Sync.prototype.replicate = function(messageId) {

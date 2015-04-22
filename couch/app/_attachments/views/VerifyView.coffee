@@ -27,7 +27,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
       districtList = []
       index = 0
       for own key, phrase of districtJson
-        if key != '_id' && key != '_rev' && key != 'noClientPush'
+        if key != '_id' && key != 'id' && key != '_rev' && key != 'noClientPush'
           index++
           district =
             id:key

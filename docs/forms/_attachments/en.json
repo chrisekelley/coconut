@@ -299,5 +299,7 @@
   "R3":"R3",
   "R4":"R4",
   "R5":"R5",
-  "fingerSelectInstructions":"If you are scanning the thumb of your right hand, select R1. The index finger of your right hand is R2."
+  "fingerSelectInstructions":"If you are scanning the thumb of your right hand, select R1. The index finger of your right hand is R2.",
+  "previouslyRegisterredNowOffline":"Patient has already been registered - system is offline",
+  "Initial Visit":"Initial Visit"
 }

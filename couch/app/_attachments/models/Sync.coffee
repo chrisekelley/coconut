@@ -240,7 +240,12 @@ class Sync extends Backbone.Model
         if typeof result != 'undefined' && result != null && result.ok
           Coconut.debug "replicateFromServer - onComplete: Replication is fine. "
         else
-          Coconut.debug "replicateFromServer - onComplete: Replication message: " + JSON.stringify result
+          if result != null && typeof result != 'undefined'
+            Coconut.debug "replicateFromServer - onComplete: Replication message: " + JSON.stringify result.message
+            if result.status != 500
+              Coconut.debug "replicateFromServer - onComplete: Replication result: " + JSON.stringify result
+          else
+            Coconut.debug "replicateFromServer - onComplete: Replication message: " + JSON.stringify result
       error: (result) ->
           Coconut.debug "error: Replication error: " + JSON.stringify result
       timeout: 60000
@@ -288,29 +293,51 @@ class Sync extends Backbone.Model
           Coconut.debug "Form Replication Complete: " + JSON.stringify info
         )
 
-  populateForms: () ->
+  fetchOrUpdate: (obj) =>
+    new Promise (resolve, reject)=>
+      model = new Backbone.Model
+        _id: obj._id
+      model.fetch
+        success: (oldModel) =>
+          _rev = oldModel.get("_rev")
+          obj._rev = _rev
+          objModel = new Backbone.Model
+            _id: obj._id
+            _rev: _rev
+          objModel.save obj,
+            success: (updatedModel) =>
+              console.log 'Updating... ' + updatedModel.get("_id")
+            error: (model, resp) =>
+              console.log 'Error: ' + resp;
+          resolve oldModel
+        error: (model, resp) =>
+          console.log 'Error: ' + obj._id + " : " + JSON.stringify(resp)
+          reject 'Error: ' + obj._id + " : " + JSON.stringify(resp)
+          if resp.status == 404
+            model.save obj,
+              success: (model) =>
+                console.log 'Saving... ' + model.get("_id")
+              error: (model, resp) =>
+                console.log 'Error: ' + resp;
+
+  populateForms: () =>
     model = new Backbone.Model
       _id: Coconut.config.coconut_forms_design_doc()
     model.fetch
       options:
         get:
           attachments: true
-    .then (result) ->
+    .then (result) =>
 #      console.log("result: " + JSON.stringify((result)))
-      for key of result._attachments
-        obj = result._attachments[key];
-        console.log("key: " + key)
-        decodedData = decodeURIComponent(escape(window.atob( obj.data )));
-        console.log("key: " + key + " decodedData: " + JSON.stringify((decodedData)))
+      promises = for key of result._attachments
+        attachment = result._attachments[key];
+        decodedData = decodeURIComponent(escape(window.atob( attachment.data )));
+#        console.log("key: " + key + " decodedData: " + JSON.stringify((decodedData)))
         obj = JSON.parse  decodedData
-        nuKey = key.replace(".json","")
-        model = new Backbone.Model
-          _id: nuKey
-        model.save obj,
-          success: (model) =>
-            console.log 'Saving... ' + model.get("_id")
-          error: (model, resp) =>
-            console.log 'Error: ' + JSON.stringify(model) + " resp: " + resp;
+        console.log("key: " + key + ":" + obj._id);
+        #        nuKey = key.replace(".json","")
+        @fetchOrUpdate obj
+      Promise.all promises
 
 
   replicate: (messageId)=>

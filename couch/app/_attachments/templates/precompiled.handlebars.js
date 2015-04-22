@@ -224,7 +224,9 @@ this["JST"]["_attachments/templates/UserReportMenu.handlebars"] = Handlebars.tem
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"newReport",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</h1>\n\n<div role=\"heading\">\n    <legend>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"ClickFormName",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</legend>\n</div>\n\n<table>\n    <tr>\n        <td colspan=\"2\"><a data-role=\"button\" id=\"TrichiasisSurgery\" class=\"btn btn-primary btn-lg\" href=\"#new/result/Trichiasis%20Surgery\">"
+    + "</legend>\n</div>\n\n<table id=\"kiwiFormTable\">\n    <tr>\n        <th colspan=\"2\">"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Initial Visit",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</th>\n    </tr>\n    <tr>\n        <td colspan=\"2\"><a data-role=\"button\" id=\"TrichiasisSurgery\" class=\"btn btn-primary btn-lg\" href=\"#new/result/Trichiasis%20Surgery\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"trichiasisSurgery",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</a></td>\n    </tr>\n    <tr>\n        <th colspan=\"2\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Post-Operative Visits",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")

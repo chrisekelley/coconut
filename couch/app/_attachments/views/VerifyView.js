@@ -29,7 +29,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     for (key in districtJson) {
       if (!hasProp.call(districtJson, key)) continue;
       phrase = districtJson[key];
-      if (key !== '_id' && key !== '_rev' && key !== 'noClientPush') {
+      if (key !== '_id' && key !== 'id' && key !== '_rev' && key !== 'noClientPush') {
         index++;
         district = {
           id: key,

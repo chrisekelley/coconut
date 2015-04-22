@@ -47,6 +47,16 @@
     "validation": "",
     "required": "false",
     "safeLabel": "registrationLocation"
+  },
+  {
+    "id": "333",
+    "_id": "333",
+    "label": "Patient has already been registered - system is offline",
+    "type": "checkbox",
+    "repeatable": "false",
+    "validation": "",
+    "required": "true",
+    "safeLabel": "previouslyRegisterredNowOffline"
   }
 ],
   "collection": "question"

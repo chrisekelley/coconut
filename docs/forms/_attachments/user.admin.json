@@ -1,4 +1,5 @@
 {
+   "id": "user.admin",
    "_id": "user.admin",
    "collection": "user",
    "noClientPush": "true",
