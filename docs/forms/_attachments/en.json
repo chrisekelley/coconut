@@ -206,6 +206,7 @@
   "adviceForSurgeryR::Accepted surgery": "Accepted surgery",
   "adviceForSurgeryR::Did not accept surgery": "Did not accept surgery",
   "PostOperativeEpilation":"Post-operative followup: Epilation",
+  "Post-Operative Epilation":"Post-operative followup: Epilation",
   "Surgeon::A":"A",
   "Surgeon::B":"B",
   "Surgeon::C":"C",
@@ -301,5 +302,11 @@
   "R5":"R5",
   "fingerSelectInstructions":"If you are scanning the thumb of your right hand, select R1. The index finger of your right hand is R2.",
   "previouslyRegisterredNowOffline":"Patient has already been registered - system is offline",
-  "Initial Visit":"Initial Visit"
+  "Initial Visit":"Initial Visit",
+  "numberReturnInDaysMonthsL":"How many days/months?",
+  "numberReturnInDaysMonthsR":"How many days/months?",
+  "returnInDaysMonthsL::Days":"Days",
+  "returnInDaysMonthsL::Months":"Months",
+  "returnInDaysMonthsR::Days":"Days",
+  "returnInDaysMonthsR::Months":"Months"
 }

@@ -23,9 +23,19 @@ if (matchResults === null) {
 
 Coconut.languages = ["en","pt"]
 
-if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
-  Coconut.isMobile = true;
+Coconut.checkDevice = function() {
+    if (typeof Coconut.isMobile == 'undefined') {
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)) {
+            Coconut.isMobile = true;
+        } else {
+            Coconut.isMobile = false;
+        }
+    }
+    return Coconut.isMobile;
 }
+
+Coconut.checkDevice();
+
 
 Backbone.sync = BackbonePouch.sync({
     db: PouchDB(Coconut.db_name)
@@ -48,7 +58,7 @@ var designDocOld = createDesignDoc('by_clientId', function (doc) {
 //        console.log("doc.question: " + doc.question + " doc.complete: " + doc.complete);
 //        if (doc.complete && doc.complete == 'true') {
 //            emit(doc.question + ':true:' + doc.lastModifiedAt, null);
-            emit(doc.savedBy);
+            emit(doc.user);
 //        }
 //    }
 });
@@ -76,11 +86,11 @@ var by_DocsDateDesignDoc = createDesignDoc('by_DocsDate', function(doc) {
 });
 
 var by_AdminDateDesignDoc = createDesignDoc('by_AdminDate', function(doc) {
-        emit(doc.savedBy + '|' + doc.lastModifiedAt);
+        emit(doc.user + '|' + doc.lastModifiedAt);
 });
 
 //var by_AdminByDateDesignDoc = createDesignDoc('by_AdminByDate', function(doc) {
-//    if (doc.savedBy) {
+//    if (doc.user) {
 //        emit(doc.lastModifiedAt);
 //    }
 //});

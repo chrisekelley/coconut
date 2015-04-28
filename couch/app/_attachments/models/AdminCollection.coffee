@@ -6,7 +6,7 @@ class AdminCollection extends Backbone.Collection
 #    nudocs = []
     docs = _.pluck result.rows, 'doc'
 #    _.each docs, (doc) ->
-#      if (doc.savedBy == adminId)
+#      if (doc.user == adminId)
 #        nudocs.push(doc)
 #    return nudocs
     return docs

@@ -116,7 +116,6 @@ Result = (function(superClass) {
 
   Result.prototype.save = function(key, value, options) {
     this.set({
-      user: $.cookie('current_user'),
       lastModifiedAt: moment(new Date()).format(Coconut.config.get("date_format"))
     });
     return Result.__super__.save.call(this, key, value, options);

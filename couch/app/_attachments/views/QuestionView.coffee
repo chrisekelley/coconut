@@ -539,7 +539,7 @@ class QuestionView extends Backbone.View
     # Make sure lastModifiedAt is always updated on save
     currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get "datetime_format")
     if typeof Coconut.currentAdmin != 'undefined' && Coconut.currentAdmin != null
-      currentData.savedBy = Coconut.currentAdmin.id
+      currentData.user = Coconut.currentAdmin.id
       if @result.question() == 'Admin Registration'
         currentData._id = Coconut.currentAdmin.get("_id")
         currentData.clientId = Coconut.currentAdmin.get("_id")
@@ -548,7 +548,7 @@ class QuestionView extends Backbone.View
 #        if (Coconut.currentAdmin != null)
 #          _.extend(Coconut.currentAdmin, currentData)
     else
-      currentData.savedBy = $.cookie('current_user')
+      currentData.user = $.cookie('current_user')
     if typeof Coconut.currentClient != 'undefined' && Coconut.currentClient != null
       currentData.clientId = Coconut.currentClient.get("_id")
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
@@ -678,6 +678,7 @@ class QuestionView extends Backbone.View
 #                  </select>
 #                "
 
+
               when "select"
                 if @readonly
                   question.value()
@@ -701,7 +702,7 @@ class QuestionView extends Backbone.View
                   districts = KiwiUtils.districts
                   index = 0
                   for own key, phrase of districts
-                    if key != '_id' && key != '_rev' && key != 'noClientPush'
+                    if key != '_id' && key != 'id' && key != '_rev' && key != 'noClientPush'
                       index++
                       optionText = phrase
                       html += "<option name='#{key}' id='#{question_id}-#{index}' value='#{option}'>#{optionText}</option>"

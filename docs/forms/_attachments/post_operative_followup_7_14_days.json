@@ -147,10 +147,20 @@
     "required": "false",
     "safeLabel": "returnForFollowupL"
   },
+    {
+      "id": "411",
+      "_id": "411",
+      "label": "How many days/months?",
+      "type": "input",
+      "repeatable": "false",
+      "validation": "",
+      "required": "false",
+      "safeLabel": "numberReturnInDaysMonthsL"
+    },
   {
     "id": "410",
     "_id": "410",
-    "label": "Days or Months",
+    "label": "Select Days or Months",
     "type": "select",
     "repeatable": "false",
     "select-options": "Days,Months",
@@ -158,8 +168,6 @@
     "required": "false",
     "safeLabel": "returnInDaysMonthsL"
   },
-
-
   {
     "id": "734",
     "_id": "734",
@@ -282,10 +290,20 @@
     "required": "false",
     "safeLabel": "returnForFollowupR"
   },
+    {
+      "id": "411",
+      "_id": "411",
+      "label": "How many days/months?",
+      "type": "input",
+      "repeatable": "false",
+      "validation": "",
+      "required": "false",
+      "safeLabel": "numberReturnInDaysMonthsR"
+    },
   {
     "id": "510",
     "_id": "510",
-    "label": "Days or Months",
+    "label": "Select Days or Months",
     "type": "select",
     "repeatable": "false",
     "select-options": "Days,Months",

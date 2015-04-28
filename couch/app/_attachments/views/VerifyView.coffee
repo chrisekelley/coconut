@@ -153,7 +153,8 @@ VerifyView = Backbone.Marionette.ItemView.extend
                 prints.push(fingerprint)
                 # used when print upload fails and Continue button is pressed.
                 Coconut.currentPrints = prints
-                Coconut.currentDistrict = district
+                if typeof district != 'undefined'
+                  Coconut.currentDistrict = district
                 urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
 #                timeout = 15000
                 timeout = Coconut.config.get("networkTimeout");

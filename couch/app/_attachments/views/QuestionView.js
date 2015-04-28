@@ -488,7 +488,7 @@ QuestionView = (function(superClass) {
     }
     currentData.lastModifiedAt = moment(new Date()).format(Coconut.config.get("datetime_format"));
     if (typeof Coconut.currentAdmin !== 'undefined' && Coconut.currentAdmin !== null) {
-      currentData.savedBy = Coconut.currentAdmin.id;
+      currentData.user = Coconut.currentAdmin.id;
       if (this.result.question() === 'Admin Registration') {
         currentData._id = Coconut.currentAdmin.get("_id");
         currentData.clientId = Coconut.currentAdmin.get("_id");
@@ -496,7 +496,7 @@ QuestionView = (function(superClass) {
         currentData.Fingerprints = Coconut.currentAdmin.get("Fingerprints");
       }
     } else {
-      currentData.savedBy = $.cookie('current_user');
+      currentData.user = $.cookie('current_user');
     }
     if (typeof Coconut.currentClient !== 'undefined' && Coconut.currentClient !== null) {
       currentData.clientId = Coconut.currentClient.get("_id");
@@ -640,7 +640,7 @@ QuestionView = (function(superClass) {
                   for (key in districts) {
                     if (!hasProp.call(districts, key)) continue;
                     phrase = districts[key];
-                    if (key !== '_id' && key !== '_rev' && key !== 'noClientPush') {
+                    if (key !== '_id' && key !== 'id' && key !== '_rev' && key !== 'noClientPush') {
                       index++;
                       optionText = phrase;
                       html += "<option name='" + key + "' id='" + question_id + "-" + index + "' value='" + option + "'>" + optionText + "</option>";

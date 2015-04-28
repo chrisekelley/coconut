@@ -31,7 +31,8 @@
     "moment": "~2.10.0",
     "bootstrap": "~3.3.1",
     "ladda-bootstrap": "~0.1.0",
-    "backbone-pouch": "https://raw.github.com/jo/backbone-pouch/master/backbone-pouch.js"
+    "backbone-pouch": "https://raw.github.com/jo/backbone-pouch/master/backbone-pouch.js",
+    "pouchdb-collate": "~1.1.2"
   },
   "resolutions": {
     "bootstrap": "~3.3.1",

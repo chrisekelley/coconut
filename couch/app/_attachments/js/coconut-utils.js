@@ -146,25 +146,35 @@ CoconutUtils.scheduleCheckVersion = function() {
   }
 
 
-  CoconutUtils.saveLog = function(log, title, message, success, error) {
-      if (log == null) {
-          log = new Log();
-      }
-      if (success == null) {
-          success = function() {
-              console.log("Saved log about " + title);
-          };
-      }
-      if (error == null) {
-          error = function() {
-              return console.log(JSON.stringify(err));
-          };
-      }
-      log.save({title:title, message: message}, null, {
-          success: success,
-          error: error
-      });
-  };
+CoconutUtils.saveLog = function(log, title, message, success, error) {
+  if (log == null) {
+    log = new Log();
+  }
+  if (success == null) {
+    success = function() {
+      console.log("Saved log about " + title);
+    };
+  }
+  if (error == null) {
+    error = function() {
+      return console.log(JSON.stringify(err));
+    };
+  }
+
+  var time = moment(new Date()).format();
+
+  var lastModifiedAt = moment(new Date()).format(Coconut.config.get("datetime_format"));
+
+  // sort by age, then gender, then last name, then first name
+  //var id = pouchCollate.toIndexableString(
+  //  [title, district, time]);
+  //var id = title + "_" + district + "_" + time;
+
+  log.save({title:title, message: message}, null, {
+    success: success,
+    error: error
+  });
+};
 
   //kudos: http://stackoverflow.com/questions/11455323/how-to-download-apk-within-phonegap-app
   //http://www.raymondcamden.com/index.cfm/2013/5/1/Using-the-Progress-event-in-PhoneGap-file-transfers

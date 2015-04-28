@@ -68,7 +68,7 @@ byCollection_date
 by_AdminDate
 
     function (doc) {
-            emit(doc.savedBy + '|' + doc.lastModifiedAt);
+            emit(doc.user + '|' + doc.lastModifiedAt);
     }
 
 by_AdminRegistration

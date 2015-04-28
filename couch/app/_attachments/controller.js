@@ -3,7 +3,9 @@ var Controller;
 Controller = {
   displaySiteNav: function() {
     var model, staticView;
-    Coconut.siteNav.empty();
+    if (typeof Coconut.siteNav !== 'undefined') {
+      Coconut.siteNav.empty();
+    }
     if (Coconut.currentAdmin !== null) {
       model = Coconut.currentAdmin;
     }

@@ -421,6 +421,7 @@ class Router extends Backbone.Router
         Coconut.mapView.render()
 
   bootstrapApp: ->
+    console.log("bootstrapping app.")
     Controller.displaySiteNav()
     Coconut.config = new Config()
     Coconut.config.fetch
@@ -495,6 +496,26 @@ $(() =>
     $("#statusIcons").html('<img src="images/connection-up.png"/>')
 
   onDeviceReady = () =>
+    if typeof window.Coconut != 'undefined'
+      placeholder = {}
+      _.extend placeholder, Coconut
+      window.Coconut = new Marionette.Application()
+#      window.Coconut = _.extend Coconut, app
+      window.Coconut = _.extend window.Coconut, placeholder
+      console.log("extending Coconut")
+    else
+      window.Coconut = new Marionette.Application()
+      console.log("init new Coconut")
+#
+#    matchResults = document.location.pathname.match(/^\/(.*)\/_design\/(.*?)\//)
+#    if matchResults == null
+#      console.log 'Configuring for Pouchdb'
+#      Coconut.db_name = 'coconut'
+#      Coconut.ddoc_name = 'coconut'
+#    else
+#      Coconut.db_name = matchResults[1]
+#      Coconut.ddoc_name = matchResults[2]
+
     if Coconut.isMobile == true
       console.log("Init Secugen: this wheel is on fire.")
       cordova.plugins.SecugenPlugin.requestPermission (results) ->
@@ -508,30 +529,27 @@ $(() =>
               message = messagePt.concat(messageEn)
               alert   message
 
-    window.Coconut = new Marionette.Application()
-    matchResults = document.location.pathname.match(/^\/(.*)\/_design\/(.*?)\//)
-    if matchResults == null
-      console.log 'Configuring for Pouchdb'
-      Coconut.db_name = 'coconut'
-      Coconut.ddoc_name = 'coconut'
-    else
-      Coconut.db_name = matchResults[1]
-      Coconut.ddoc_name = matchResults[2]
-    #Backbone.sync = BackbonePouch.sync({
-    #  db: PouchDB(Coconut.db_name)
-    #});
+      appPackage = "org.rti.kidsthrive"
+      pman.query(appPackage, () ->
+#        // This is your success callback.
+        console.log(appPackage + " exists")
+        pman.uninstall(appPackage, () ->
+  #        // This is your success callback.
+          console.log("Uninstalling " + appPackage)
+        , (message)->
+  #       // This is your error callback.
+          console.log("Problem Uninstalling " + appPackage + " Error: " + message)
+        );
+      , (message)->
+    #// This is your error callback.
+        console.log(appPackage + " does not exist. No need to uninstall.  " + message)
+      );
 
-    #Coconut.adminRegistrationForm = new Result(adminRegistrationForm);
-    #Coconut.trichiasisForm = new Result(trichiasisForm);
-    #Coconut.userAdminForm = new Result(userAdminForm);
-    #Coconut.individualRegistrationForm = new Result(individualRegistrationForm);
-    #Coconut.postOperativeFollowupForm = new Result(postOperativeFollowupForm);
-
-    Coconut.Controller = Controller
-    Coconut.API = API
-    Coconut.router = new Router()
-    Coconut.currentClient = null;
-    Coconut.currentAdmin = null;
+    window.Coconut.currentClient = null;
+    window.Coconut.currentAdmin = null;
+    window.Coconut.Controller = Controller
+    window.Coconut.API = API
+    window.Coconut.router = new Router()
 
     Coconut.currentPosition = null
     Coconut.currentPositionError = null

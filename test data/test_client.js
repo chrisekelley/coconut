@@ -11,6 +11,6 @@ testClient =
   "Gender": "Female",
   "DOB": "1999",
   "complete": "true",
-  "savedBy": "admin",
+  "user": "admin",
   "clientId": "TestClient"
 }

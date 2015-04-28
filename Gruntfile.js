@@ -114,6 +114,7 @@ module.exports = function(grunt) {
               'backbone.marionette.js': 'marionette/lib/backbone.marionette.js',
               'backbone-pouch.js': 'backbone-pouch/index.js',
               'pouchdb.js': 'pouchdb/dist/pouchdb.js',
+              'pouchdb-collate.js': 'pouchdb-collate/dist/pouchdb-collate.js',
               'bootstrap.js': 'bootstrap/dist/js/bootstrap.js',
               'ladda-bootstrap/spin.min.js': 'ladda-bootstrap/dist/spin.min.js',
               'ladda-bootstrap/ladda.js': 'ladda-bootstrap/dist/ladda.js',

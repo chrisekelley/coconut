@@ -163,7 +163,9 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 prints = [];
                 prints.push(fingerprint);
                 Coconut.currentPrints = prints;
-                Coconut.currentDistrict = district;
+                if (typeof district !== 'undefined') {
+                  Coconut.currentDistrict = district;
+                }
                 urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
                 timeout = Coconut.config.get("networkTimeout");
                 if (typeof Coconut.networkTimeout !== 'undefined') {

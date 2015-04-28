@@ -11,24 +11,32 @@ Log = (function(superClass) {
 
   Log.prototype.initialize = function() {
     username;
-    var timestamp, username;
+    var coconut_version, district, timestamp, username;
     if (typeof Coconut.currentAdmin !== 'undefined' && Coconut.currentAdmin !== null) {
       username = Coconut.currentAdmin.id;
     }
     timestamp = moment(new Date()).format(Coconut.config.get("datetime_format"));
+    if (Coconut.version_code !== 'undefined') {
+      coconut_version = Coconut.version_code;
+    }
+    if (Coconut.currentDistrict !== null) {
+      district = Coconut.currentDistrict;
+    }
     return this.set({
       username: username,
+      district: district,
       timestamp: timestamp,
-      cordova: device.cordova,
       model: device.model,
       platform: device.platform,
-      uuid: device.uuid,
-      version: device.version,
-      collection: "log"
+      deviceUuid: device.uuid,
+      cordova: device.cordova,
+      android_version: device.version,
+      coconut_version: coconut_version,
+      collection: "Log"
     });
   };
 
-  Log.prototype.url = "/log";
+  Log.prototype.url = "/Log";
 
   Log.prototype.save = function(message, options) {
     return Log.__super__.save.call(this, message, options);
