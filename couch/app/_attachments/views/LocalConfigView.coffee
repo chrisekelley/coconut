@@ -7,6 +7,7 @@ class LocalConfigView extends Backbone.View
         <h1>Configure your Coconut system</h1>
         <label for='coconut-cloud' >Coconut Cloud URL</label>
         <select name='coconut-cloud'>
+          <option value='https://kiwicentral.org/coconut-central'>kiwicentral.org/coconut-central</option>
           <option value='https://kiwicentral.org/coconut-central-test'>kiwicentral.org/coconut-central-test</option>
           <option value='http://localhost:5984/coconut-central-local'>localhost:5984/coconut-central-local</option>
         </select>
