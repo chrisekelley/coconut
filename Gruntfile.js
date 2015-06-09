@@ -93,7 +93,7 @@ module.exports = function(grunt) {
             files: {
               'http://localhost:5984/coconut': 'tmp/app.json',
               'http://localhost:5984/coconut-forms': 'tmp/forms.json',
-              'http://146.185.135.61:5984/coconut-forms': 'tmp/forms.json'
+              'https://kiwicentral.org/coconut-forms': 'tmp/forms.json'
             }
           }
         },

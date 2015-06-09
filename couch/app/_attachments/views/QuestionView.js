@@ -501,6 +501,7 @@ QuestionView = (function(superClass) {
     if (typeof Coconut.currentClient !== 'undefined' && Coconut.currentClient !== null) {
       currentData.clientId = Coconut.currentClient.get("_id");
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
+      currentData.currentClient = Coconut.currentClient;
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
         console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
         currentData._id = currentData.clientId;

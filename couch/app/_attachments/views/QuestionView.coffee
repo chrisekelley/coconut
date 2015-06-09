@@ -552,6 +552,7 @@ class QuestionView extends Backbone.View
     if typeof Coconut.currentClient != 'undefined' && Coconut.currentClient != null
       currentData.clientId = Coconut.currentClient.get("_id")
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
+      currentData.currentClient = Coconut.currentClient
       if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
         console.log "currentClient: " + JSON.stringify Coconut.currentClient
         currentData._id = currentData.clientId
@@ -568,7 +569,6 @@ class QuestionView extends Backbone.View
           messageText = 'Saving...'
           $("#messageText").html(messageText)
           $("#messageText").slideDown().fadeOut()
-
 
           Coconut.router.navigate("edit/result/#{model.id}",false)
 
