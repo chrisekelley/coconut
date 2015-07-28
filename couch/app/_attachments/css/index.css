@@ -108,7 +108,7 @@ body {
     text-align: center;
 }
 #dashboard-region p {
-     font-size: 28px;
+     font-size: 26px;
      font-weight: 500;
 }
 .siteNav {
@@ -162,6 +162,10 @@ body {
 
 #kiwiFormTable th {
     font-size: large;
+}
+
+.hidden {
+    display: none;
 }
 
 

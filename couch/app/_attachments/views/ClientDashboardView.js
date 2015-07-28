@@ -17,7 +17,7 @@ ClientDashboardView = (function(superClass) {
     if (!this.model) {
       return this.$el.html(polyglot.t("Error") + ": " + polyglot.t("NoClientLoaded") + ".");
     } else {
-      return this.$el.html(polyglot.t(this.model.get("Gender")) + " " + polyglot.t(this.model.get("DOB")));
+      return this.$el.html(polyglot.t(this.model.get("Gender")) + " " + polyglot.t(this.model.get("DOB")) + "<br>ID:" + this.model.get("_id"));
     }
   };
 

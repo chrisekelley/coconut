@@ -333,10 +333,14 @@ class Sync extends Backbone.Model
         attachment = result._attachments[key];
         decodedData = decodeURIComponent(escape(window.atob( attachment.data )));
 #        console.log("key: " + key + " decodedData: " + JSON.stringify((decodedData)))
-        obj = JSON.parse  decodedData
-        console.log("key: " + key + ":" + obj._id);
+        try
+          obj = JSON.parse decodedData
+          console.log("key: " + key + ":" + obj._id);
         #        nuKey = key.replace(".json","")
-        @fetchOrUpdate obj
+          @fetchOrUpdate obj
+        catch error
+          console.log("Error while processing key: " + key + " decodedData: " + decodedData + " Error: " + error);
+          $('#message').append "Error while populating " + key + ". App will not function properly. Error:" + error + "<br/>"
       Promise.all promises
 
 

@@ -24,7 +24,7 @@
     "type": "date",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
+    "required": "false",
     "safeLabel": "DateOfVisit"
   },
   {
@@ -34,7 +34,7 @@
     "type": "time",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
+    "required": "false",
     "safeLabel": "TimeOfVisit"
   },
   {
@@ -44,28 +44,8 @@
     "type": "header",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
+    "required": "false",
     "safeLabel": "Lefteye"
-  },
-  {
-    "id": "134",
-    "_id": "134",
-    "label": "Refused Surgery",
-    "type": "checkbox",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "RefusedSurgeryL"
-  },
-  {
-    "id": "135",
-    "_id": "135",
-    "label": "Provided consultation on epilation",
-    "type": "checkbox",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "ProvidedEpilationConsultationL"
   },
   {
     "id": "150",
@@ -138,11 +118,23 @@
     "label": "Accepted surgery",
     "type": "select",
     "repeatable": "false",
-    "select-options": "Yes, No, Proposed Epilation",
+    "select-options": "Yes, No",
     "validation": "",
     "required": "false",
     "safeLabel": "acceptedSurgeryL",
     "event_on_change": "KiwiUtils.toggleAcceptedSurgery()"
+  },
+  {
+    "id": "135",
+    "_id": "135",
+    "label": "Provided consultation on epilation",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes,No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "ProvidedEpilationConsultationL",
+    "cssClass":"hidden"
   },
   {
     "id": "566",
@@ -152,8 +144,9 @@
     "repeatable": "false",
     "select-options": "BTRP,Trabut",
     "validation": "",
-    "required": "true",
-    "safeLabel": "TypeofOperationL"
+    "required": "false",
+    "safeLabel": "TypeofOperationL",
+    "cssClass":"hidden"
   },
   {
     "id": "189",
@@ -162,8 +155,10 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ClampusedL"
+    "required": "false",
+    "safeLabel": "ClampusedL",
+    "cssClass":"hidden"
+
   },
   {
     "id": "964",
@@ -173,8 +168,9 @@
     "repeatable": "false",
     "select-options": "Silk, Absorbable",
     "validation": "",
-    "required": "true",
-    "safeLabel": "SutureTypeL"
+    "required": "false",
+    "safeLabel": "SutureTypeL",
+    "cssClass":"hidden"
   },
   {
     "id": "827",
@@ -183,8 +179,9 @@
     "type": "subheader",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ComplicationsL"
+    "required": "false",
+    "safeLabel": "ComplicationsL",
+    "cssClass":"hidden"
   },
   {
     "id": "57",
@@ -193,8 +190,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ExcessbleedingL"
+    "required": "false",
+    "safeLabel": "ExcessbleedingL",
+    "cssClass":"hidden"
   },
   {
     "id": "533",
@@ -203,8 +201,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "MarginfragmantseveredL"
+    "required": "false",
+    "safeLabel": "MarginfragmantseveredL",
+    "cssClass":"hidden"
   },
   {
     "id": "151",
@@ -213,8 +212,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "GlobePunctureL"
+    "required": "false",
+    "safeLabel": "GlobePunctureL",
+    "cssClass":"hidden"
   },
   {
     "id": "152",
@@ -223,8 +223,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ComplicationsReferralL"
+    "required": "false",
+    "safeLabel": "ComplicationsReferralL",
+    "cssClass":"hidden"
   },
   {
     "id": "153",
@@ -233,8 +234,9 @@
     "type": "input",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ReferralHospitalL"
+    "required": "false",
+    "safeLabel": "ReferralHospitalL",
+    "cssClass":"hidden"
   },
   {
     "id": "734",
@@ -243,28 +245,8 @@
     "type": "header",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
+    "required": "false",
     "safeLabel": "Righteye"
-  },
-  {
-    "id": "1342",
-    "_id": "1342",
-    "label": "Refused Surgery",
-    "type": "checkbox",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "RefusedSurgeryR"
-  },
-  {
-    "id": "1352",
-    "_id": "1352",
-    "label": "Provided consultation on epilation",
-    "type": "checkbox",
-    "repeatable": "false",
-    "validation": "",
-    "required": "true",
-    "safeLabel": "ProvidedEpilationConsultationR"
   },
   {
     "id": "150",
@@ -337,11 +319,23 @@
     "label": "Accepted surgery",
     "type": "select",
     "repeatable": "false",
-    "select-options": "Yes,No,Proposed Epilation",
+    "select-options": "Yes,No",
     "validation": "",
     "required": "false",
     "safeLabel": "acceptedSurgeryR",
     "event_on_change": "KiwiUtils.toggleAcceptedSurgery()"
+  },
+  {
+    "id": "1352",
+    "_id": "1352",
+    "label": "Provided consultation on epilation",
+    "type": "select",
+    "repeatable": "false",
+    "select-options": "Yes,No",
+    "validation": "",
+    "required": "false",
+    "safeLabel": "ProvidedEpilationConsultationR",
+    "cssClass":"hidden"
   },
   {
     "id": "47",
@@ -351,8 +345,9 @@
     "repeatable": "false",
     "select-options": "BTRP,Trabut",
     "validation": "",
-    "required": "true",
-    "safeLabel": "TypeofOperationR"
+    "required": "false",
+    "safeLabel": "TypeofOperationR",
+    "cssClass":"hidden"
   },
   {
     "id": "776",
@@ -361,8 +356,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ClampusedR"
+    "required": "false",
+    "safeLabel": "ClampusedR",
+    "cssClass":"hidden"
   },
   {
     "id": "985",
@@ -372,8 +368,9 @@
     "repeatable": "false",
     "select-options": "Silk, Absorbable",
     "validation": "",
-    "required": "true",
-    "safeLabel": "SutureTypeR"
+    "required": "false",
+    "safeLabel": "SutureTypeR",
+    "cssClass":"hidden"
   },
   {
     "id": "280",
@@ -382,8 +379,9 @@
     "type": "subheader",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ComplicationsR"
+    "required": "false",
+    "safeLabel": "ComplicationsR",
+    "cssClass":"hidden"
   },
   {
     "id": "636",
@@ -392,8 +390,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ExcessbleedingR"
+    "required": "false",
+    "safeLabel": "ExcessbleedingR",
+    "cssClass":"hidden"
   },
   {
     "id": "207",
@@ -402,8 +401,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "MarginfragmantseveredR"
+    "required": "false",
+    "safeLabel": "MarginfragmantseveredR",
+    "cssClass":"hidden"
   },
   {
     "id": "174",
@@ -412,8 +412,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "GlobePunctureR"
+    "required": "false",
+    "safeLabel": "GlobePunctureR",
+    "cssClass":"hidden"
   },
   {
     "id": "175",
@@ -422,8 +423,9 @@
     "type": "checkbox",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ComplicationsReferralR"
+    "required": "false",
+    "safeLabel": "ComplicationsReferralR",
+    "cssClass":"hidden"
   },
   {
     "id": "176",
@@ -432,8 +434,9 @@
     "type": "input",
     "repeatable": "false",
     "validation": "",
-    "required": "true",
-    "safeLabel": "ReferralHospitalR"
+    "required": "false",
+    "safeLabel": "ReferralHospitalR",
+    "cssClass":"hidden"
   }
 ],
   "collection": "question"

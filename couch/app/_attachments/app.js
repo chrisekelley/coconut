@@ -716,6 +716,7 @@ $((function(_this) {
             return alert(message);
           }
         });
+        console.log("This tests if the old version of KiwiPrints is on the tablet.");
         appPackage = "org.rti.kidsthrive";
         pman.query(appPackage, function() {
           console.log(appPackage + " exists");

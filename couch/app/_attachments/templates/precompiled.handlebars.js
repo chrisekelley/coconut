@@ -32,8 +32,6 @@ this["JST"]["_attachments/templates/HomeView.handlebars"] = Handlebars.template(
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"SelectOne",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + " -- </option>\n      <option value=\"TrichiasisSurgery\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"trichiasisSurgery",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</option>\n      <option value=\"PostOperativeFollowup\">"
-    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"postOperativeFollowupAbbrev",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</option>\n      <option value=\"PostOperativeEpilation\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"PostOperativeEpilationAbbrev",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</option>\n      <option value=\"PostOperativeFollowup_1day\" >"
@@ -230,17 +228,15 @@ this["JST"]["_attachments/templates/UserReportMenu.handlebars"] = Handlebars.tem
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"trichiasisSurgery",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</a></td>\n    </tr>\n    <tr>\n        <th colspan=\"2\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Post-Operative Visits",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</th>\n    </tr>\n    <tr>\n        <td><a data-role=\"button\" id=\"PostOperativeFollowup\" class=\"btn btn-primary btn-lg\" href=\"#new/result/Post-Operative%20Followup\">"
-    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"postOperativeFollowupAbbrev",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</a></td>\n        <td><a data-role=\"button\" id=\"PostOperativeEpilation\" class=\"btn btn-primary btn-lg\">"
+    + "</th>\n    </tr>\n    <tr>\n        <td><a data-role=\"button\" id=\"PostOperativeEpilation\" class=\"btn btn-primary btn-lg\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"PostOperativeEpilationAbbrev",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</a></td>\n    </tr>\n    <tr>\n        <td><a data-role=\"button\" id=\"PostOperativeFollowup_1day\" class=\"btn btn-primary btn-lg\" href=\"#new/result/PostOperativeFollowup_1day\">"
+    + "</a></td>\n        <td><a data-role=\"button\" id=\"PostOperativeFollowup_1day\" class=\"btn btn-primary btn-lg\" href=\"#new/result/PostOperativeFollowup_1day\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"postOperativeFollowup_1day",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</a></td>\n        <td><a data-role=\"button\" id=\"PostOperativeFollowup_7_14_days\" class=\"btn btn-primary btn-lg\" href=\"#new/result/PostOperativeFollowup_7_14_days\">"
+    + "</a></td>\n    </tr>\n    <tr>\n        <td><a data-role=\"button\" id=\"PostOperativeFollowup_7_14_days\" class=\"btn btn-primary btn-lg\" href=\"#new/result/PostOperativeFollowup_7_14_days\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"postOperativeFollowup_7_14_days",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</a></td>\n    </tr>\n    <tr>\n        <td><a data-role=\"button\" id=\"PostOperativeFollowup_3_6_months\" class=\"btn btn-primary btn-lg\" href=\"#new/result/PostOperativeFollowup_3_6_months\">"
+    + "</a></td>\n        <td><a data-role=\"button\" id=\"PostOperativeFollowup_3_6_months\" class=\"btn btn-primary btn-lg\" href=\"#new/result/PostOperativeFollowup_3_6_months\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"postOperativeFollowup_3_6_months",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</a></td>\n    </tr>\n</table>\n\n";
+    + "</a></td>\n    </tr>\n</table>\n";
 },"useData":true});
 
 this["JST"]["_attachments/templates/VerifyView.handlebars"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {

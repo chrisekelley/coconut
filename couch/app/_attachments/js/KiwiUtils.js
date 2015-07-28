@@ -25,19 +25,23 @@ KiwiUtils.fetchDistricts = function() {
 };
 
 KiwiUtils.toggleAcceptedSurgery = function(target) {
-  var els, name, value;
+  var elsNo, elsYes, name, value;
   name = target.attr("name");
   if (name === 'acceptedSurgeryL') {
-    els = ['566TypeofOperationLDiv', '189ClampusedLDiv', '964SutureTypeLDiv', '827ComplicationsLDiv', '57ExcessbleedingLDiv', '533MarginfragmantseveredLDiv', '151GlobePunctureLDiv', '152ComplicationsReferralLDiv', '153ReferralHospitalLDiv'];
+    elsYes = ['566TypeofOperationLDiv', '189ClampusedLDiv', '964SutureTypeLDiv', '827ComplicationsLDiv', '57ExcessbleedingLDiv', '533MarginfragmantseveredLDiv', '151GlobePunctureLDiv', '152ComplicationsReferralLDiv', '153ReferralHospitalLDiv'];
+    elsNo = ['135ProvidedEpilationConsultationLDiv'];
   } else if (name === 'acceptedSurgeryR') {
-    els = ['47TypeofOperationRDiv', '776ClampusedRDiv', '985SutureTypeRDiv', '280ComplicationsRDiv', '636ExcessbleedingRDiv', '207MarginfragmantseveredRDiv', '174GlobePunctureRDiv', '175ComplicationsReferralRDiv', '176ReferralHospitalRDiv'];
+    elsYes = ['47TypeofOperationRDiv', '776ClampusedRDiv', '985SutureTypeRDiv', '280ComplicationsRDiv', '636ExcessbleedingRDiv', '207MarginfragmantseveredRDiv', '174GlobePunctureRDiv', '175ComplicationsReferralRDiv', '176ReferralHospitalRDiv'];
+    elsNo = ['1352ProvidedEpilationConsultationRDiv'];
   }
   value = target.val();
   if (value === '') {
 
   } else if (value === 'Yes') {
-    return CoconutUtils.showDivs(els);
+    CoconutUtils.showDivs(elsYes);
+    return CoconutUtils.hideDivs(elsNo);
   } else {
-    return CoconutUtils.hideDivs(els);
+    CoconutUtils.showDivs(elsNo);
+    return CoconutUtils.hideDivs(elsYes);
   }
 };

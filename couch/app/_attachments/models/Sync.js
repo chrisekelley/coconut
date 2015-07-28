@@ -476,16 +476,22 @@ Sync = (function(superClass) {
       }
     }).then((function(_this) {
       return function(result) {
-        var attachment, decodedData, key, obj, promises;
+        var attachment, decodedData, error, key, obj, promises;
         promises = (function() {
           var results;
           results = [];
           for (key in result._attachments) {
             attachment = result._attachments[key];
             decodedData = decodeURIComponent(escape(window.atob(attachment.data)));
-            obj = JSON.parse(decodedData);
-            console.log("key: " + key + ":" + obj._id);
-            results.push(this.fetchOrUpdate(obj));
+            try {
+              obj = JSON.parse(decodedData);
+              console.log("key: " + key + ":" + obj._id);
+              results.push(this.fetchOrUpdate(obj));
+            } catch (_error) {
+              error = _error;
+              console.log("Error while processing key: " + key + " decodedData: " + decodedData + " Error: " + error);
+              results.push($('#message').append("Error while populating " + key + ". App will not function properly. Error:" + error + "<br/>"));
+            }
           }
           return results;
         }).call(_this);

@@ -10,6 +10,7 @@ class Question extends Backbone.Model
   skipLogic: -> @get("skip_logic") || ""
   actionOnChange: -> @get("action_on_change") || ""
   eventOnChange: -> @get("event_on_change") || ""
+  cssClass: -> @get("cssClass") || ""
   attributeSafeText: ->
     returnVal = if @get("label")? then @get("label") else @get("id")
     returnVal.replace(/[^a-zA-Z0-9]/g,"")

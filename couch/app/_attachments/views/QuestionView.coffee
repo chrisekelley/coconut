@@ -552,7 +552,7 @@ class QuestionView extends Backbone.View
     if typeof Coconut.currentClient != 'undefined' && Coconut.currentClient != null
       currentData.clientId = Coconut.currentClient.get("_id")
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
-      currentData.currentClient = Coconut.currentClient
+      currentData.currentClient = Coconut.currentClient.toJSON()
       if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
         console.log "currentClient: " + JSON.stringify Coconut.currentClient
         currentData._id = currentData.clientId
@@ -619,7 +619,7 @@ class QuestionView extends Backbone.View
           div = "<div id='#{question_id}#{name}Div' class='question #{question.type?() or ''}'>"
           label = "<h2>#{labelText} </h2>"
         else if question.type() == 'subheader'
-          div = "<div id='#{question_id}#{name}Div' class='question #{question.type?() or ''}'>"
+          div = "<div id='#{question_id}#{name}Div' class='question #{question.cssClass()} #{question.type?() or  ''}'>"
           label = "<h3>#{labelText} </h3>"
         else if question.type() == 'spacer'
           div = "<div id='#{question_id}#{name}Div' class='question #{question.type?() or ''}'>"
@@ -637,7 +637,7 @@ class QuestionView extends Backbone.View
           }
           id='#{question_id}#{name}Div'
           data-required='#{question.required()}'
-          class='question #{question.type?() or ''}'
+          class='question #{question.type?() or ''} #{question.cssClass?() or ''}'
           data-question-name='#{name}'
           data-question-id='#{question_id}'
           data-action_on_change='#{_.escape(question.actionOnChange())}'

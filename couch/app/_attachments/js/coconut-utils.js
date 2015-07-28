@@ -605,6 +605,7 @@ CoconutUtils.showDivs = function(elements) {
   for (var i = 0; i < elements.length; i++) {
     var currentElement = elements[i]
     var el = $('#' + currentElement);
+    el.removeClass('hidden')
     el.show();
   }
 }

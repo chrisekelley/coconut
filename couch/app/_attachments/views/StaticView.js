@@ -77,7 +77,7 @@ StaticView = Backbone.Marionette.ItemView.extend({
     } else {
       console.log("Using canned user.");
       Coconut.currentClient = new Result({
-        serviceUuid: Coconut.currentClient.serviceUuid,
+        serviceUuid: Coconut.currentClient.get("serviceUuid"),
         Template: Coconut.scannerPayload.Template
       });
       if (typeof this.user !== 'undefined' && this.user !== null && this.user === 'user') {

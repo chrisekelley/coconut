@@ -501,7 +501,7 @@ QuestionView = (function(superClass) {
     if (typeof Coconut.currentClient !== 'undefined' && Coconut.currentClient !== null) {
       currentData.clientId = Coconut.currentClient.get("_id");
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
-      currentData.currentClient = Coconut.currentClient;
+      currentData.currentClient = Coconut.currentClient.toJSON();
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
         console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
         currentData._id = currentData.clientId;
@@ -588,7 +588,7 @@ QuestionView = (function(superClass) {
             div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<h2>" + labelText + " </h2>";
           } else if (question.type() === 'subheader') {
-            div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
+            div = "<div id='" + question_id + name + "Div' class='question " + (question.cssClass()) + " " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<h3>" + labelText + " </h3>";
           } else if (question.type() === 'spacer') {
             div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
@@ -597,7 +597,7 @@ QuestionView = (function(superClass) {
             div = "<div id='" + question_id + name + "Div' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "'>";
             label = "<p>" + labelText + " </p>";
           } else {
-            div = "<div " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + " id='" + question_id + name + "Div' data-required='" + (question.required()) + "' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + "' data-question-name='" + name + "' data-question-id='" + question_id + "' data-action_on_change='" + (_.escape(question.actionOnChange())) + "' data-event_on_change='" + (_.escape(question.eventOnChange())) + "' >";
+            div = "<div " + (question.validation() ? question.validation() ? "data-validation = '" + (escape(question.validation())) + "'" : void 0 : "") + " id='" + question_id + name + "Div' data-required='" + (question.required()) + "' class='question " + ((typeof question.type === "function" ? question.type() : void 0) || '') + " " + ((typeof question.cssClass === "function" ? question.cssClass() : void 0) || '') + "' data-question-name='" + name + "' data-question-id='" + question_id + "' data-action_on_change='" + (_.escape(question.actionOnChange())) + "' data-event_on_change='" + (_.escape(question.eventOnChange())) + "' >";
             label = "<label type='" + (question.type()) + "' for='" + question_id + "'>" + labelText + " <span></span></label>";
           }
           return div + " " + ((function() {

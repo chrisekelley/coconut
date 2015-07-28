@@ -72,6 +72,10 @@ Question = (function(superClass) {
     return this.get("event_on_change") || "";
   };
 
+  Question.prototype.cssClass = function() {
+    return this.get("cssClass") || "";
+  };
+
   Question.prototype.attributeSafeText = function() {
     var returnVal;
     returnVal = this.get("label") != null ? this.get("label") : this.get("id");

@@ -81,7 +81,7 @@ StaticView = Backbone.Marionette.ItemView.extend
     else
       console.log("Using canned user.")
       Coconut.currentClient = new Result
-        serviceUuid:Coconut.currentClient.serviceUuid
+        serviceUuid:Coconut.currentClient.get "serviceUuid"
         Template: Coconut.scannerPayload.Template
       if typeof @user != 'undefined' && @user != null && @user == 'user'
         Coconut.trigger "displayUserRegistrationForm"
