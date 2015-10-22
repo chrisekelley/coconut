@@ -72,6 +72,9 @@ The grunt bowercopy task copies only the .js - you don't have to have the whole 
 
 ## Form building tips
 
+Form definitions are deployed as a couchapp at docs/forms/_attachments. If you need to change the fields in the trichiasis form, 
+edit trichiasis_surgery.json.
+
 There is an [explanation of forms here](https://github.com/chrisekelley/coconut/blob/coconut-pouch/couch/app/docs/forms.md).
 
 Change the routing after a form is submitted in QuestionView:

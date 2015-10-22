@@ -2,11 +2,11 @@
 
 ## Form Markup
 
-admin_reg.js is for the users of the app - in your case, the midwives, nurses, or doctors who would be entering data into the app.
+admin_registration.json is for the users of the app - in your case, the midwives, nurses, or doctors who would be entering data into the app.
 
-indiv_reg.js is for the patient registration
+individual_registration.js is for the patient registration
 
-trichiasis_surg.js is an example of the patient encounter form.
+trichiasis_surgury.json is an example of the patient encounter form.
 
 Here is an example of some of the markup from trichiasis_surgery.js:
 
