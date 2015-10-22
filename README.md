@@ -139,6 +139,9 @@ Kiwi uses the [node-polyglot](https://www.npmjs.org/package/node-polyglot) lib t
 language files in the 18n directory according to [locale](https://developer.chrome.com/webstore/i18n#localeTable). Portuguese
 is currently hardcoded; however, you can unset that in i18n/language_chooser.coffee.
 
+The language files are part of the docs couchapp in docs/forms/attachments. When you modify one of these files, the grunt 
+task automatically updates the remote server.
+
 Use the following syntax in your coffee file:
 
     polyglot = new Polyglot()

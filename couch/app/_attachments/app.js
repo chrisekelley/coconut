@@ -37,6 +37,7 @@ Router = (function(superClass) {
     "messaging": "messaging",
     "help": "help",
     "displayUserScanner": "displayUserScanner",
+    "badScan": "badScan",
     "displayAdminScanner": "displayAdminScanner",
     "registration": "registration",
     "userRegistration": "userRegistration",
@@ -109,6 +110,14 @@ Router = (function(superClass) {
     return this.userLoggedIn({
       success: function() {
         return Coconut.Controller.displayUserScanner();
+      }
+    });
+  };
+
+  Router.prototype.badScan = function() {
+    return this.userLoggedIn({
+      success: function() {
+        return Coconut.Controller.badScan();
       }
     });
   };
@@ -756,6 +765,10 @@ $((function(_this) {
       Coconut.on("displayUserScanner", function() {
         Coconut.router.navigate("displayUserScanner");
         return Coconut.Controller.displayUserScanner();
+      });
+      Coconut.on("badScan", function() {
+        Coconut.router.navigate("badScan");
+        return Coconut.Controller.badScan();
       });
       Coconut.on("displayAdminRegistrationForm", function() {
         Coconut.router.navigate("displayRegistration");

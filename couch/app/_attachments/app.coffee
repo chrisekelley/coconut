@@ -27,6 +27,7 @@ class Router extends Backbone.Router
     "messaging": "messaging"
     "help": "help"
     "displayUserScanner": "displayUserScanner"
+    "badScan": "badScan"
     "displayAdminScanner": "displayAdminScanner"
     "registration": "registration"
     "userRegistration": "userRegistration"
@@ -85,6 +86,11 @@ class Router extends Backbone.Router
     @userLoggedIn
       success: ->
         Coconut.Controller.displayUserScanner()
+
+  badScan: ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.badScan()
 
   displayAdminScanner: ->
     @userLoggedIn
@@ -574,6 +580,10 @@ $(() =>
     Coconut.on "displayUserScanner", ->
       Coconut.router.navigate "displayUserScanner"
       Coconut.Controller.displayUserScanner()
+
+    Coconut.on "badScan", ->
+      Coconut.router.navigate "badScan"
+      Coconut.Controller.badScan()
 
     Coconut.on "displayAdminRegistrationForm", ->
       Coconut.router.navigate "displayRegistration"

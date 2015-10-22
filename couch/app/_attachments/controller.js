@@ -30,6 +30,14 @@ Controller = {
     staticView.nextUrl = "#scanRetry/user";
     Coconut.mainRegion.show(staticView);
   },
+  badScan: function() {
+    var staticView;
+    staticView = new VerifyView({
+      template: JST["_attachments/templates/ScanVerifyView.handlebars"]
+    });
+    staticView.nextUrl = "#scanRetry/user";
+    Coconut.mainRegion.show(staticView);
+  },
   displayAdminScanner: function() {
     var model, promise;
     model = new Backbone.Model();

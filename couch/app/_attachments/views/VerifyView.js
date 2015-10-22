@@ -12,7 +12,9 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #verifyNo": "displayNewUserRegistration",
     "click #refresh": "refresh",
     "click #verifySendLogs": "sendLogs",
-    "click #continueAfterFail": "continueAfterFail"
+    "click #continueAfterFail": "continueAfterFail",
+    "click #searchByID": "searchByID",
+    "click #searchByDOB": "searchByDOB"
   },
   nextUrl: null,
   hasCordova: true,
@@ -458,5 +460,18 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     } else {
       return this.registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true);
     }
+  },
+  searchByID: function() {
+    var id;
+    id = $('#id').val();
+    console.log("Searching for id" + id);
+    return $('#idResults').append("Searching for " + id);
+  },
+  searchByDOB: function() {
+    var dob, gender;
+    dob = $('#dob').val();
+    gender = $('#Gender').val();
+    console.log("Searching for dob" + dob);
+    return $('#dobResults').append("Searching for " + dob + " gender: " + gender);
   }
 });

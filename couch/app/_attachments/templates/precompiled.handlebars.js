@@ -187,6 +187,28 @@ this["JST"]["_attachments/templates/ScanVerifyView.handlebars"] = Handlebars.tem
     + "</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyIndividual\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Continue",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</span></a>\n    </div>\n</p>\n\n<div id=\"message\"></div>\n\n<p>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchByIdDOBGender",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n\n<h3>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchById",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</h3>\n\n<div class=\"form-inline\">\n<div class=\"form-group\">\n            <label for=\"id\">ID</label>\n            <input type=\"text\" id=\"id\"/>\n        </div>\n<div class=\"form-group\">\n            <a data-role='button' class='btn btn-primary btn-lg' id='searchByID'>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"search",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</a>\n        </div>\n</div>\n<div id=\"idResults\"></div>\n\n<h3>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchByGender",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</h3>\n\n<div class=\"form-inline\">\n<div class=\"form-group\">\n            <label for=\"dob\">"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"DOB",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</label>\n            <input type=\"date\" class=\"form-control\" name=\"DOB\" id=\"dob\" value=\"\" placeholder=\""
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"DOB",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "\">\n        </div>\n<div class=\"form-group\">\n            <label for=\"Gender\">"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Gender",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</label>\n            <select name=\"Gender\" id=\"Gender\">\n                <option value=''> -- "
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"SelectOne",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + " -- </option>\n                <option name=\"Gender\" value=\"Male\">"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Male",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</option>\n                <option name=\"Gender\" value=\"Female\">"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Female",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</option>\n            </select>\n        </div>\n<div class=\"form-group\">\n            <a data-role='button' class='btn btn-primary btn-lg' id='searchByDOB'>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"search",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</a>\n        </div>\n</div>\n<div id=\"dobResults\"></div>\n<p>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"scanSendLogs",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"sendLogs",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")

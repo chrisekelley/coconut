@@ -314,5 +314,11 @@
   "returnInDaysMonthsL::Days":"Dias",
   "returnInDaysMonthsL::Months":"Meses",
   "returnInDaysMonthsR::Days":"Dias",
-  "returnInDaysMonthsR::Months":"Meses"
+  "returnInDaysMonthsR::Months":"Meses",
+  "badScan":"Paciente incorreta?",
+  "searchByIdDOBGender":"Se você não conseguir digitalizar uma impressão digital e você sabe o Kiwiprints ID para este paciente, digite-o abaixo. Se não, entrar na data de nascimento e sexo. Por fim, pressione a pesquisa.",
+  "searchById":"Busca por ID",
+  "searchByGender":"Busca por Data de nascimento/Sexo",
+  "search":"Busca"
+
 }

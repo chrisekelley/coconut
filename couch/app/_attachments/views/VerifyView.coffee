@@ -10,7 +10,9 @@ VerifyView = Backbone.Marionette.ItemView.extend
       "click #verifyNo": "displayNewUserRegistration"
       "click #refresh": "refresh"
       "click #verifySendLogs":  "sendLogs"
-      "click #continueAfterFail":  "continueAfterFail"
+      "click #continueAfterFail":  "continueAfterFail",
+      "click #searchByID":  "searchByID",
+      "click #searchByDOB":  "searchByDOB"
 
     nextUrl:null
 
@@ -402,3 +404,15 @@ VerifyView = Backbone.Marionette.ItemView.extend
               Coconut.trigger "displayAdminRegistrationForm"
       else
         @registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true)
+
+    searchByID: () ->
+      id = $('#id').val();
+      console.log("Searching for id" + id)
+      $('#idResults').append "Searching for " + id
+
+    searchByDOB: () ->
+      dob = $('#dob').val();
+      gender = $('#Gender').val();
+      console.log("Searching for dob" + dob)
+      $('#dobResults').append "Searching for " + dob + " gender: " + gender
+

@@ -19,6 +19,12 @@ Controller =
     Coconut.mainRegion.show staticView
     return
 
+  badScan: () ->
+    staticView = new VerifyView(template: JST["_attachments/templates/ScanVerifyView.handlebars"])
+    staticView.nextUrl = "#scanRetry/user"
+    Coconut.mainRegion.show staticView
+    return
+
   displayAdminScanner: () ->
     model = new Backbone.Model()
     promise = KiwiUtils.fetchDistricts()
