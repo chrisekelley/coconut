@@ -315,5 +315,6 @@
   "searchByIdDOBGender":"If you are unable to scan a fingerprint and you know the Kiwiprints ID for this patient, enter it below. If not, enter the birthdate and gender. Lastly, press search.",
   "searchById":"Search by ID",
   "searchByGender":"Search by Date of Birth/Gender",
-  "search":"Search"
+  "search":"Search",
+  "results":"Results"
 }

@@ -75,6 +75,18 @@ var byServiceUuidDesignDoc = createDesignDoc('by_serviceUuid', function (doc) {
     }
 });
 
+var byClientIdIndivRegDesignDoc = createDesignDoc('by_clientIdIndivReg', function (doc) {
+    if (doc.clientId && (doc.question == 'Individual Registration' || doc.question == 'Admin Registration')) {
+        emit(doc.clientId);
+    }
+});
+
+var byDOBGenderIndivRegDesignDoc = createDesignDoc('by_DOBGenderIndivReg', function (doc) {
+    if (doc.DOB && doc.Gender && (doc.question == 'Individual Registration' || doc.question == 'Admin Registration')) {
+        emit(doc.clientId);
+    }
+});
+
 var by_AdminRegistrationDesignDoc = createDesignDoc('by_AdminRegistration', function (doc) {
     if (doc.serviceUuid &&  doc.question == 'Admin Registration') {
         emit(doc.serviceUuid);
@@ -117,17 +129,6 @@ Backbone.sync.defaults.db.put(byClientIdDesignDoc).then(function (doc) {
     }
 });
 
-Backbone.sync.defaults.db.put(byServiceUuidDesignDoc).then(function (doc) {
-    // design doc created!
-    console.log("by_serviceUuid created")
-    Backbone.sync.defaults.db.query('by_serviceUuid', {stale: 'update_after'})
-//    Backbone.sync.defaults.db.viewCleanup()
-}).catch(function (err) {
-    if (err.name === 'conflict') {
-        console.log("by_serviceUuid exists.")
-    }
-});
-
 Backbone.sync.defaults.db.put(by_AdminRegistrationDesignDoc).then(function (doc) {
     // design doc created!
     console.log("by_AdminRegistration created")
@@ -146,6 +147,28 @@ Backbone.sync.defaults.db.put(by_DocsDateDesignDoc).then(function (doc) {
 }).catch(function (err) {
     if (err.name === 'conflict') {
         console.log("by_DocsDate exists.")
+    }
+});
+
+Backbone.sync.defaults.db.put(byClientIdIndivRegDesignDoc).then(function (doc) {
+    // design doc created!
+    console.log("by_clientIdIndivReg created")
+    Backbone.sync.defaults.db.query('by_clientIdIndivReg', {stale: 'update_after'})
+//    Backbone.sync.defaults.db.viewCleanup()
+}).catch(function (err) {
+    if (err.name === 'conflict') {
+        console.log("by_clientIdIndivReg exists.")
+    }
+});
+
+Backbone.sync.defaults.db.put(byDOBGenderIndivRegDesignDoc).then(function (doc) {
+    // design doc created!
+    console.log("by_DOBGenderIndivReg created")
+    Backbone.sync.defaults.db.query('by_DOBGenderIndivReg', {stale: 'update_after'})
+//    Backbone.sync.defaults.db.viewCleanup()
+}).catch(function (err) {
+    if (err.name === 'conflict') {
+        console.log("by_DOBGenderIndivReg exists.")
     }
 });
 

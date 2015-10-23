@@ -1,4 +1,4 @@
-var VerifyView,
+var VerifyView, sendClientToRecords,
   hasProp = {}.hasOwnProperty;
 
 VerifyView = Backbone.Marionette.ItemView.extend({
@@ -14,7 +14,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #verifySendLogs": "sendLogs",
     "click #continueAfterFail": "continueAfterFail",
     "click #searchByID": "searchByID",
-    "click #searchByDOB": "searchByDOB"
+    "click #searchByDOB": "searchByDOB",
+    "click .searchByID": "searchByIDclicked"
   },
   nextUrl: null,
   hasCordova: true,
@@ -110,10 +111,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                       return Coconut.router.navigate("displayUserScanner", true);
                     } else {
                       client = users.first();
-                      console.log('Coconut.currentClient: ' + JSON.stringify(client));
-                      Coconut.currentClient = client;
-                      CoconutUtils.setSession('currentClient', true);
-                      return Coconut.router.navigate("displayClientRecords", true);
+                      return sendClientToRecords(client);
                     }
                   } else {
                     message = 'Strange. This user was identified but is not registered. User: ' + user;
@@ -462,16 +460,59 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     }
   },
   searchByID: function() {
-    var id;
+    var error, id, success, users;
     id = $('#id').val();
     console.log("Searching for id" + id);
-    return $('#idResults').append("Searching for " + id);
+    success = function(users) {
+      $('#idResults').append("<p>" + polyglot.t("results") + "</p>\n<ul> ");
+      users.each(function(user) {
+        var DOB, Gender;
+        id = user.get("_id");
+        DOB = user.get("DOB");
+        Gender = user.get("Gender");
+        return $('#idResults').append("<li class='searchByID' data-id='" + id + "'>" + DOB + "&nbsp;" + Gender + "</li>");
+      });
+      return $('#idResults').append("</ul> ");
+    };
+    error = function(model, err, cb) {
+      console.log(JSON.stringify(err));
+      return $('#idResults').append("Search error: " + err);
+    };
+    return users = KiwiUtils.searchForUser('by_clientIdIndivReg', id, success, error);
   },
   searchByDOB: function() {
-    var dob, gender;
+    var dob, error, gender, success, users;
     dob = $('#dob').val();
     gender = $('#Gender').val();
     console.log("Searching for dob" + dob);
-    return $('#dobResults').append("Searching for " + dob + " gender: " + gender);
+    $('#dobResults').append("Searching for " + dob + " gender: " + gender);
+    success = (function(_this) {
+      return function(users) {
+        $('#idResults').append("<p>" + polyglot.t("results") + "</p>\n<ul> ");
+        users.each(function(user) {
+          var DOB, Gender, id;
+          id = user.get("_id");
+          DOB = user.get("DOB");
+          Gender = user.get("Gender");
+          return $('#idResults').append("<li>" + DOB + "&nbsp;" + Gender + "</li>");
+        });
+        return $('#idResults').append("</ul> ");
+      };
+    })(this);
+    error = function(model, err, cb) {
+      console.log(JSON.stringify(err));
+      return $('#idResults').append("Search error: " + err);
+    };
+    return users = KiwiUtils.searchForUser('by_DOBGenderIndivReg', id, success, error);
+  },
+  searchByIDclicked: function(e) {
+    var id;
+    id = $(e.currentTarget).data("id");
+    return console.log("for id: " + id);
   }
+}, sendClientToRecords = function(client) {
+  console.log('Coconut.currentClient: ' + JSON.stringify(client));
+  Coconut.currentClient = client;
+  CoconutUtils.setSession('currentClient', true);
+  return Coconut.router.navigate("displayClientRecords", true);
 });

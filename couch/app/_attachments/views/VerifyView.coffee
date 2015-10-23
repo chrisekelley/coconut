@@ -13,6 +13,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
       "click #continueAfterFail":  "continueAfterFail",
       "click #searchByID":  "searchByID",
       "click #searchByDOB":  "searchByDOB"
+      "click .searchByID":  "searchByIDclicked"
 
     nextUrl:null
 
@@ -106,10 +107,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     Coconut.router.navigate "displayUserScanner", true
                   else
                     client = users.first()
-                    console.log 'Coconut.currentClient: ' + JSON.stringify client
-                    Coconut.currentClient = client
-                    CoconutUtils.setSession('currentClient', true)
-                    Coconut.router.navigate "displayClientRecords", true
+                    sendClientToRecords(client)
                 else
                   message = 'Strange. This user was identified but is not registered. User: ' + user
                   console.log message
@@ -408,11 +406,43 @@ VerifyView = Backbone.Marionette.ItemView.extend
     searchByID: () ->
       id = $('#id').val();
       console.log("Searching for id" + id)
-      $('#idResults').append "Searching for " + id
+      success = (users) ->
+        $('#idResults').append "<p>" + polyglot.t("results") + "</p>\n<ul> "
+        users.each (user)->
+          id = user.get("_id")
+          DOB = user.get("DOB")
+          Gender = user.get("Gender")
+          $('#idResults').append "<li class='searchByID' data-id='" + id + "'>" + DOB + "&nbsp;" + Gender + "</li>"
+        $('#idResults').append "</ul> "
+      error = (model, err, cb) ->
+        console.log JSON.stringify err
+        $('#idResults').append "Search error: " + err
+      users = KiwiUtils.searchForUser('by_clientIdIndivReg', id, success, error)
 
     searchByDOB: () ->
       dob = $('#dob').val();
       gender = $('#Gender').val();
       console.log("Searching for dob" + dob)
       $('#dobResults').append "Searching for " + dob + " gender: " + gender
+      success = (users) =>
+        $('#idResults').append "<p>" + polyglot.t("results") + "</p>\n<ul> "
+        users.each (user)->
+          id = user.get("_id")
+          DOB = user.get("DOB")
+          Gender = user.get("Gender")
+          $('#idResults').append "<li>" + DOB + "&nbsp;" + Gender + "</li>"
+        $('#idResults').append "</ul> "
+      error = (model, err, cb) ->
+        console.log JSON.stringify err
+        $('#idResults').append "Search error: " + err
+      users = KiwiUtils.searchForUser('by_DOBGenderIndivReg', id, success, error)
 
+    searchByIDclicked: (e) ->
+      id = $(e.currentTarget).data("id")
+      console.log("for id: " + id)
+
+    sendClientToRecords = (client) ->
+      console.log 'Coconut.currentClient: ' + JSON.stringify client
+      Coconut.currentClient = client
+      CoconutUtils.setSession('currentClient', true)
+      Coconut.router.navigate "displayClientRecords", true

@@ -45,3 +45,22 @@ KiwiUtils.toggleAcceptedSurgery = function(target) {
     return CoconutUtils.hideDivs(elsYes);
   }
 };
+
+KiwiUtils.searchForUser = function(searchType, term, success, error) {
+  var users, viewOptions;
+  console.log("searchType: " + searchType);
+  viewOptions = {};
+  users = new SecondaryIndexCollection;
+  return users.fetch({
+    fetch: 'query',
+    options: {
+      query: {
+        key: term,
+        include_docs: true,
+        fun: searchType
+      }
+    },
+    success: success,
+    error: error
+  });
+};
