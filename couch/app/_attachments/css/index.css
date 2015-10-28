@@ -35,6 +35,14 @@
     background-color: #C85D47;
     font-size:20pt;
 }
+#userRecords th {
+    background-color: #C85D47;
+    font-weight: bold;
+}
+#idResults {
+    margin-top: 5px;
+}
+
 table.tablesorter {
     background-color: #5a4a42;
 }

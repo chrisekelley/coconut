@@ -12,3 +12,4 @@
 .couchappignore
 *.swp
 *.map
+.idea

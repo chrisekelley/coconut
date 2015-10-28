@@ -46,16 +46,21 @@ KiwiUtils.toggleAcceptedSurgery = function(target) {
   }
 };
 
-KiwiUtils.searchForUser = function(searchType, term, success, error) {
-  var users, viewOptions;
+KiwiUtils.searchForUser = function(searchType, success, error, term1, term2) {
+  var key, users, viewOptions;
   console.log("searchType: " + searchType);
   viewOptions = {};
   users = new SecondaryIndexCollection;
+  if (searchType === 'by_DOBGenderIndivReg') {
+    key = [term1, term2];
+  } else {
+    key = term1;
+  }
   return users.fetch({
     fetch: 'query',
     options: {
       query: {
-        key: term,
+        key: key,
         include_docs: true,
         fun: searchType
       }

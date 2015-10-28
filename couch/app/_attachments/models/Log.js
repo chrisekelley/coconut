@@ -22,18 +22,29 @@ Log = (function(superClass) {
     if (Coconut.currentDistrict !== null) {
       district = Coconut.currentDistrict;
     }
-    return this.set({
-      username: username,
-      district: district,
-      timestamp: timestamp,
-      model: device.model,
-      platform: device.platform,
-      deviceUuid: device.uuid,
-      cordova: device.cordova,
-      android_version: device.version,
-      coconut_version: coconut_version,
-      collection: "Log"
-    });
+    if (typeof device !== 'undefined') {
+      return this.set({
+        username: username,
+        district: district,
+        timestamp: timestamp,
+        model: device.model,
+        platform: device.platform,
+        deviceUuid: device.uuid,
+        cordova: device.cordova,
+        android_version: device.version,
+        userAgent: navigator.userAgent,
+        coconut_version: coconut_version,
+        collection: "Log"
+      });
+    } else {
+      return this.set({
+        username: username,
+        district: district,
+        timestamp: timestamp,
+        coconut_version: coconut_version,
+        collection: "Log"
+      });
+    }
   };
 
   Log.prototype.url = "/Log";

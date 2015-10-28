@@ -16,15 +16,19 @@ class ClientDashboardView extends Backbone.View
   badScan: =>
     console.log "badScan"
     Coconut.badScanId = @model.get "_id"
+    currentPrints = Coconut.currentClient.get("Fingerprints")
+    currentAdmin = Coconut.currentAdmin.get("_id")
 #    CoconutUtils.saveLog(null, "Bad Scan.", Coconut.badScanId);
     log = new Log()
-    log.save
+    errorLog =
       title: "Bad Scan"
       modelId:Coconut.badScanId
-      serviceUuid:serviceUuid
-      currentPrints:Coconut.currentPrints
+      serviceUuid:@model.get "serviceUuid"
+      currentPrints:currentPrints
       currentDistrict: Coconut.currentDistrict
-      currentAdmin: Coconut.currentAdmin
+      currentAdmin:currentAdmin
+    log.save errorLog
+    , null
     , success: () =>
         $( "#message").append("<br/>Saved log about problem.")
         console.log("Saved log about problem.")

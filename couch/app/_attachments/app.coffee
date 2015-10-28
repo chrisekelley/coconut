@@ -564,6 +564,9 @@ $(() =>
     Coconut.addRegions siteNav: "#siteNav"
     Coconut.addRegions mainRegion: "#content"
     Coconut.addRegions dashboardRegion: "#dashboard"
+    Coconut.addRegions idResults: "#idResults"
+    Coconut.addRegions dobResults: "#dobResults"
+    Coconut.addRegions userRecords: "#userRecords"
 
     Coconut.on "displayReportMenu", ->
       Coconut.router.navigate("displayReportMenu")

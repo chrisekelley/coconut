@@ -261,6 +261,34 @@ this["JST"]["_attachments/templates/UserReportMenu.handlebars"] = Handlebars.tem
     + "</a></td>\n    </tr>\n</table>\n";
 },"useData":true});
 
+this["JST"]["_attachments/templates/UserSearchResultCompositeView.handlebars"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1, alias1=helpers.helperMissing;
+
+  return "<table id=\"userRecords\" class=\"table table-striped\">\n    <thead>\n        <tr>\n            <th>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"DOB",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</th>\n            <th>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Gender",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</th>\n            <th>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"createdAt",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</th>\n            <th>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"District",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</th>\n        </tr>\n    </thead>\n    <tbody></tbody>\n</table>\n\n";
+},"useData":true});
+
+this["JST"]["_attachments/templates/UserSearchResultItemView.handlebars"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
+
+  return "<td>"
+    + alias3(((helper = (helper = helpers.DOB || (depth0 != null ? depth0.DOB : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"DOB","hash":{},"data":data}) : helper)))
+    + "</td>\n<td>"
+    + alias3((helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,(depth0 != null ? depth0.Gender : depth0),{"name":"polyglot","hash":{},"data":data}))
+    + "</td>\n<td>"
+    + alias3(((helper = (helper = helpers.createdAt || (depth0 != null ? depth0.createdAt : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"createdAt","hash":{},"data":data}) : helper)))
+    + "</td>\n<td>"
+    + alias3(((helper = (helper = helpers.currentDistrict || (depth0 != null ? depth0.currentDistrict : depth0)) != null ? helper : alias1),(typeof helper === alias2 ? helper.call(depth0,{"name":"currentDistrict","hash":{},"data":data}) : helper)))
+    + "</td>\n";
+},"useData":true});
+
 this["JST"]["_attachments/templates/VerifyView.handlebars"] = Handlebars.template({"1":function(depth0,helpers,partials,data) {
     var helper, alias1=helpers.helperMissing, alias2="function", alias3=this.escapeExpression;
 

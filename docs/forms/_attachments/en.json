@@ -316,5 +316,7 @@
   "searchById":"Search by ID",
   "searchByGender":"Search by Date of Birth/Gender",
   "search":"Search",
-  "results":"Results"
+  "results":"Results",
+  "none": "None",
+  "searchingFor": "Buscando"
 }

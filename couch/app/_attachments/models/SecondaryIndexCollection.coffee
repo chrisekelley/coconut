@@ -1,6 +1,9 @@
 class SecondaryIndexCollection extends Backbone.Collection
   model: Result
   url: '/result'
+#  initialize: ()->
+##    Assign the Deferred issued by fetch() as a property
+#    this.deferred = this.fetch();
   parse: (result) ->
     _.pluck result.rows, 'doc'
 
@@ -19,5 +22,4 @@ class SecondaryIndexCollection extends Backbone.Collection
 #        options.endkey = options.question
 ##    console.log "options" + JSON.stringify options
 #    super(options)
-
 

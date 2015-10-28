@@ -27,18 +27,21 @@ ClientDashboardView = (function(superClass) {
   };
 
   ClientDashboardView.prototype.badScan = function() {
-    var log;
+    var currentAdmin, currentPrints, errorLog, log;
     console.log("badScan");
     Coconut.badScanId = this.model.get("_id");
+    currentPrints = Coconut.currentClient.get("Fingerprints");
+    currentAdmin = Coconut.currentAdmin.get("_id");
     log = new Log();
-    log.save({
+    errorLog = {
       title: "Bad Scan",
       modelId: Coconut.badScanId,
-      serviceUuid: serviceUuid,
-      currentPrints: Coconut.currentPrints,
+      serviceUuid: this.model.get("serviceUuid"),
+      currentPrints: currentPrints,
       currentDistrict: Coconut.currentDistrict,
-      currentAdmin: Coconut.currentAdmin
-    }, {
+      currentAdmin: currentAdmin
+    };
+    log.save(errorLog, null, {
       success: (function(_this) {
         return function() {
           $("#message").append("<br/>Saved log about problem.");

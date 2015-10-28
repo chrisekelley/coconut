@@ -754,6 +754,15 @@ $((function(_this) {
       Coconut.addRegions({
         dashboardRegion: "#dashboard"
       });
+      Coconut.addRegions({
+        idResults: "#idResults"
+      });
+      Coconut.addRegions({
+        dobResults: "#dobResults"
+      });
+      Coconut.addRegions({
+        userRecords: "#userRecords"
+      });
       Coconut.on("displayReportMenu", function() {
         Coconut.router.navigate("displayReportMenu");
         return Coconut.Controller.displayReportMenu();

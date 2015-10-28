@@ -5,21 +5,13 @@
 You will need [couchdb](http://couchdb.apache.org/) to make it run:
 
     apt-get install couchdb
+     - or -
+     brew instal couchdb
 
-The first time you push the couch, the coconut db will be created for you. You can also create a new database using futon, the handy couchdb GUI by clicking here: [futon on localhost](http://localhost:5984/_utils), or by running this curl command:
+Since this app uses pouchdb, CORS must be enabled in Couchdb. NPM makes it easier:
 
-    curl -X PUT http://localhost:5984/coconut
-
-To get Coconut working you need to put the files in this directory into a couchdb database. You can accomplish this by using the
-[couchapp tool](http://couchapp.org/page/couchapp-python).
-
-    apt-get install couchapp
-
-Create a .couchapprc file based on .couchapprc.sample. Then we can use couchapp to push the files into your database:
-
-    couchapp push
-
-Now you can point your browser at the [Coconut](http://localhost:5984/coconut/_design/coconut/index.html)
+    npm install -g add-cors-to-couchdb
+    add-cors-to-couchdb -u myusername -p mypassword
 
 ## How does this work?
 
@@ -35,7 +27,14 @@ There are two couchapps in this project:
  - docs - which is a couchapp that has the app forms. Packaging the forms in a couchapp makes it easy to modify form definitions 
  and have them update automatically on the server via the grunt 'couch-push' task.
 
-## Setup
+## Installation
+
+    npm install
+    bower install
+
+## App Configuration
+
+Modify Gruntfile.js to properly sync the couchapp.
 
 The npm start task (see package.json) starts the http server and runs the gruntfile for you.
 The grunt coffee task compiles your coffeescripts automatically, and the couch-related tasks manage the couch sync operations.

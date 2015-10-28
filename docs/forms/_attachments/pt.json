@@ -320,5 +320,7 @@
   "searchById":"Busca por ID",
   "searchByGender":"Busca por Data de nascimento/Sexo",
   "search":"Busca",
-  "results":"Resultados"
+  "results":"Resultados",
+  "none": "Nenhum",
+  "searchingFor": "Searching for"
 }
