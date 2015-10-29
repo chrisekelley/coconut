@@ -76,8 +76,8 @@ var byServiceUuidDesignDoc = createDesignDoc('by_serviceUuid', function (doc) {
 });
 
 var byClientIdIndivRegDesignDoc = createDesignDoc('by_clientIdIndivReg', function (doc) {
-    if (doc.clientId && (doc.question == 'Individual Registration' || doc.question == 'Admin Registration')) {
-        emit(doc.clientId);
+    if (doc._id && (doc.question == 'Individual Registration' || doc.question == 'Admin Registration')) {
+        emit(doc._id);
     }
 });
 

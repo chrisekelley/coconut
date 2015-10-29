@@ -1,4 +1,4 @@
-var VerifyView, renderUserList,
+var VerifyView,
   hasProp = {}.hasOwnProperty;
 
 VerifyView = Backbone.Marionette.ItemView.extend({
@@ -464,7 +464,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     Coconut.idResults.reset();
     Coconut.dobResults.reset();
     id = $('#id').val();
-    console.log("Searching for id" + id);
+    console.log("Searching for id: " + id);
     success = (function(_this) {
       return function(users) {
         var tableView;
@@ -505,26 +505,5 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       return $('#dobResults').append("Search error: " + err);
     };
     return users = KiwiUtils.searchForUser('by_DOBGenderIndivReg', success, error, dob, gender);
-  }
-}, renderUserList = function(element, users, id) {
-  var elementLoc;
-  Coconut.search = {};
-  Coconut.search.users = users;
-  elementLoc = "#" + element;
-  $(elementLoc).append("<p>" + polyglot.t("results") + "</p>\n<ul> ");
-  if (users.length === 0) {
-    return $(elementLoc).append("<p>None<p>");
-  } else {
-    $(elementLoc).append("<table id=\"" + element + "Table\" class=\"table table-striped\"><tr>" + "<th>" + polyglot.t("DOB") + "</th>" + "<th>" + polyglot.t("Gender") + "</th>" + "<th>" + polyglot.t("createdAt") + "</th>" + "<th>" + polyglot.t("District") + "</th>" + "</tr>");
-    _.each(users.models, function(user) {
-      var DOB, Gender, createdAt, currentDistrict;
-      id = user.get("_id");
-      DOB = user.get("DOB");
-      Gender = user.get("Gender");
-      createdAt = user.get("createdAt");
-      currentDistrict = user.get("currentDistrict");
-      return $(elementLoc + 'Table').append("<tr>" + "<td class='loadPatientView' data-id='" + id + "'>" + DOB + "</td>" + "<td>" + Gender + "</td>" + "<td>" + createdAt + "</td>" + "<td>" + currentDistrict + "</td>" + "</tr>");
-    });
-    return $(elementLoc).append("</table>");
   }
 });

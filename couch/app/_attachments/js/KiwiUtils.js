@@ -47,25 +47,39 @@ KiwiUtils.toggleAcceptedSurgery = function(target) {
 };
 
 KiwiUtils.searchForUser = function(searchType, success, error, term1, term2) {
-  var key, users, viewOptions;
+  var endkey, key, users, viewOptions;
   console.log("searchType: " + searchType);
   viewOptions = {};
   users = new SecondaryIndexCollection;
   if (searchType === 'by_DOBGenderIndivReg') {
     key = [term1, term2];
+    return users.fetch({
+      fetch: 'query',
+      options: {
+        query: {
+          key: key,
+          include_docs: true,
+          fun: searchType
+        }
+      },
+      success: success,
+      error: error
+    });
   } else {
     key = term1;
+    endkey = key + '\uffff';
+    return users.fetch({
+      fetch: 'query',
+      options: {
+        query: {
+          include_docs: true,
+          fun: searchType,
+          startkey: key,
+          endkey: endkey
+        }
+      },
+      success: success,
+      error: error
+    });
   }
-  return users.fetch({
-    fetch: 'query',
-    options: {
-      query: {
-        key: key,
-        include_docs: true,
-        fun: searchType
-      }
-    },
-    success: success,
-    error: error
-  });
 };

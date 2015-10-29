@@ -38,21 +38,33 @@ KiwiUtils.toggleAcceptedSurgery = (target) ->
     CoconutUtils.showDivs(elsNo)
     CoconutUtils.hideDivs(elsYes)
 
+#    startkey="a"&endkey="a\ufff0
 KiwiUtils.searchForUser = (searchType, success, error, term1, term2) ->
   console.log("searchType: " + searchType)
   viewOptions = {}
   users = new SecondaryIndexCollection
   if (searchType == 'by_DOBGenderIndivReg')
     key = [term1, term2]
+    users.fetch
+      fetch: 'query',
+      options:
+        query:
+          key: key,
+          include_docs: true,
+          fun: searchType
+      success: success
+      error: error
   else
     key = term1
-  users.fetch
-    fetch: 'query',
-    options:
-      query:
-        key: key,
-        include_docs: true,
-        fun: searchType
-    success: success
-    error: error
-#      l.stop()
+    endkey = key + '\uffff'
+    users.fetch
+      fetch: 'query',
+      options:
+        query:
+  #        key: key,
+          include_docs: true
+          fun: searchType
+          startkey: key
+          endkey: endkey
+      success: success
+      error: error

@@ -406,11 +406,8 @@ VerifyView = Backbone.Marionette.ItemView.extend
     Coconut.idResults.reset()
     Coconut.dobResults.reset()
     id = $('#id').val();
-    console.log("Searching for id" + id)
-#    $('#idResults').html polyglot.t("searchingFor") + "&nbsp;"  + id
-#    $('#dobResults').html ""
+    console.log("Searching for id: " + id)
     success = (users) =>
-#      renderUserList("idResults", users, id)
       Coconut.searchUsers = {}
       Coconut.searchUsers = users
       tableView = new UserSearchResultCompositeView({collection: users})
@@ -426,46 +423,14 @@ VerifyView = Backbone.Marionette.ItemView.extend
     dob = $('#dob').val();
     gender = $('#Gender').val();
     console.log("Searching for dob" + dob)
-#    $('#idResults').html ""
-#    $('#dobResults').html polyglot.t("searchingFor") + "&nbsp;" + dob + ", " + polyglot.t(gender)
     success = (users) =>
       Coconut.searchUsers = {}
       Coconut.searchUsers = users
-#      renderUserList("dobResults", users, id)
       tableView = new UserSearchResultCompositeView({collection: users})
       Coconut.dobResults.show tableView
     error = (model, err, cb) ->
       console.log JSON.stringify err
       $('#dobResults').append "Search error: " + err
     users = KiwiUtils.searchForUser('by_DOBGenderIndivReg', success, error, dob, gender)
-
-  renderUserList = (element, users, id) ->
-    Coconut.search = {}
-    Coconut.search.users = users
-    elementLoc = "#" + element
-    $(elementLoc).append "<p>" + polyglot.t("results") + "</p>\n<ul> "
-    if users.length == 0
-      $(elementLoc).append "<p>None<p>"
-    else
-      $(elementLoc).append "<table id=\"" + element + "Table\" class=\"table table-striped\"><tr>" +
-          "<th>" + polyglot.t("DOB") + "</th>" +
-          "<th>" + polyglot.t("Gender") + "</th>" +
-          "<th>" + polyglot.t("createdAt") + "</th>" +
-          "<th>" + polyglot.t("District") + "</th>" +
-          "</tr>"
-      _.each(users.models, (user)->
-        id = user.get("_id")
-        DOB = user.get("DOB")
-        Gender = user.get("Gender")
-        createdAt = user.get("createdAt")
-        currentDistrict = user.get("currentDistrict")
-        $(elementLoc + 'Table').append "<tr>" +
-            "<td class='loadPatientView' data-id='" + id + "'>" + DOB + "</td>" +
-            "<td>" + Gender + "</td>" +
-            "<td>" + createdAt + "</td>" +
-            "<td>" + currentDistrict + "</td>" +
-            "</tr>"
-      )
-      $(elementLoc).append "</table>"
 
 
