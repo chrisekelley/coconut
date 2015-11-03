@@ -26,8 +26,16 @@ UserSearchResultItemView = Backbone.Marionette.ItemView.extend
     sendClientToRecords(client)
 #      console.log("for id: " + id + " client: " + JSON.stringify(client))
 
-  sendClientToRecords = (client) ->
-    console.log 'Coconut.currentClient: ' + JSON.stringify client
-    Coconut.currentClient = client
-    CoconutUtils.setSession('currentClient', true)
-    Coconut.router.navigate "displayClientRecords", true
+  sendClientToRecords = (users, threshold) ->
+    if users.length > 1
+      console.log("users.length > 1; threshold: " + threshold)
+      Coconut.searchUsers = users
+      tableView = new UserSearchResultCompositeView({collection: users})
+      Coconut.idResults.show tableView
+    else
+      client = users.first()
+      client.threshold = threshold
+      console.log 'Coconut.currentClient: ' + JSON.stringify client + " threshold: " + threshold
+      Coconut.currentClient = client
+      CoconutUtils.setSession('currentClient', true)
+      Coconut.router.navigate "displayClientRecords", true

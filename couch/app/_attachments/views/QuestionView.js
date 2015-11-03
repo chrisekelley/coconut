@@ -458,7 +458,7 @@ QuestionView = (function(superClass) {
     if (Coconut.currentDistrict !== null) {
       currentData.currentDistrict = Coconut.currentDistrict;
     }
-    if (Coconut.version_code !== 'undefined') {
+    if (typeof Coconut.version_code !== 'undefined') {
       currentData.version_code = Coconut.version_code;
     }
     if (typeof window.device !== 'undefined') {
@@ -499,12 +499,19 @@ QuestionView = (function(superClass) {
       currentData.user = $.cookie('current_user');
     }
     if (typeof Coconut.currentClient !== 'undefined' && Coconut.currentClient !== null) {
-      currentData.clientId = Coconut.currentClient.get("_id");
-      currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
+      if (currentData.clientId == null) {
+        currentData.clientId = Coconut.currentClient.get("_id");
+      }
+      console.log("hoo");
+      if (currentData.serviceUuid == null) {
+        currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
+      }
       currentData.currentClient = Coconut.currentClient.toJSON();
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
         console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
-        currentData._id = currentData.clientId;
+        if ((currentData._id == null) && (currentData.clientId != null)) {
+          currentData._id = currentData.clientId;
+        }
         currentData.Fingerprints = Coconut.currentClient.get("Fingerprints");
         console.log("currentData: " + JSON.stringify(currentData));
       }

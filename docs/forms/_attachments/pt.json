@@ -318,9 +318,14 @@
   "badScan":"Paciente incorreta?",
   "searchByIdDOBGender":"Se você não conseguir digitalizar uma impressão digital e você sabe o Kiwiprints ID para este paciente, digite-o abaixo. Se não, entrar na data de nascimento e sexo. Por fim, pressione a pesquisa.",
   "searchById":"Busca por ID",
+  "searchByIdDesc":"Se você não conseguir digitalizar uma impressão digital e você sabe o Kiwiprints ID para este paciente, insira-o abaixo e pressione Busca.",
   "searchByGender":"Busca por Data de nascimento/Sexo",
+  "searchByGenderDesc":"Se você não tem o Kiwiprints ID, digite a data de nascimento e sexo e busca de imprensa.",
   "search":"Busca",
   "results":"Resultados",
   "none": "Nenhum",
-  "searchingFor": "Searching for"
+  "searchingFor": "Searching for",
+  "quickLogin": "Entrada Rápida",
+  "quickLoginDesc": "Esta funcionalidade só está disponível quando o teste em um laptop. Se houver contas já admin, selecione um da lista suspensa"
 }
+

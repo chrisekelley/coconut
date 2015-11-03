@@ -37,6 +37,7 @@ Router = (function(superClass) {
     "messaging": "messaging",
     "help": "help",
     "displayUserScanner": "displayUserScanner",
+    "displaySearch": "displaySearch",
     "badScan": "badScan",
     "displayAdminScanner": "displayAdminScanner",
     "registration": "registration",
@@ -110,6 +111,14 @@ Router = (function(superClass) {
     return this.userLoggedIn({
       success: function() {
         return Coconut.Controller.displayUserScanner();
+      }
+    });
+  };
+
+  Router.prototype.displaySearch = function() {
+    return this.userLoggedIn({
+      success: function() {
+        return Coconut.Controller.displaySearch();
       }
     });
   };
@@ -762,6 +771,9 @@ $((function(_this) {
       });
       Coconut.addRegions({
         userRecords: "#userRecords"
+      });
+      Coconut.addRegions({
+        searchResults: "#searchResults"
       });
       Coconut.on("displayReportMenu", function() {
         Coconut.router.navigate("displayReportMenu");

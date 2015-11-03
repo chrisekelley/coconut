@@ -1,0 +1,41 @@
+<h3>{{{polyglot "searchById" }}}</h3>
+<p>{{{polyglot "searchByIdDesc" }}}</p>
+
+<div class="form-inline">
+<div class="form-group">
+            <label for="id">ID</label>
+            <input type="text" id="id" size="40"/>
+        </div>
+<div class="form-group">
+            <a data-role='button' class='btn btn-primary btn-lg' id='searchByID'>{{{polyglot "search" }}}</a>
+        </div>
+</div>
+<div id="idResults"></div>
+
+<h3>{{{polyglot "searchByGender" }}}</h3>
+<p>{{{polyglot "searchByGenderDesc" }}}</p>
+
+<div class="form-inline">
+<div class="form-group">
+            <label for="dob">{{{polyglot "DOB" }}}</label>
+            <input type="date" class="form-control" name="DOB" id="dob" value="" placeholder="{{{polyglot "DOB" }}}">
+        </div>
+<div class="form-group">
+            <label for="Gender">{{{polyglot "Gender" }}}</label>
+            <select name="Gender" id="Gender">
+                <option value=''> -- {{{polyglot "SelectOne" }}} -- </option>
+                <option name="Gender" value="Male">{{{polyglot "Male" }}}</option>
+                <option name="Gender" value="Female">{{{polyglot "Female" }}}</option>
+            </select>
+        </div>
+<div class="form-group">
+            <a data-role='button' class='btn btn-primary btn-lg' id='searchByDOB'>{{{polyglot "search" }}}</a>
+        </div>
+</div>
+<div id="dobResults"></div>
+<p>{{{polyglot "scanSendLogs" }}}</p>
+<p>
+    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>{{{polyglot "sendLogs" }}}</a>
+</p>
+
+<div id="progress"></div>

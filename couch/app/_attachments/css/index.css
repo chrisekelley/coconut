@@ -167,6 +167,14 @@ body {
     display: none;
 }
 
+#submitUserLogin {
+    display: none;
+}
+
+#adminDropdown {
+    display: none;
+}
+
 #kiwiFormTable th,td {
     padding:4px;
 }
@@ -178,5 +186,3 @@ body {
 .hidden {
     display: none;
 }
-
-

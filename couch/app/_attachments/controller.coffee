@@ -19,6 +19,12 @@ Controller =
     Coconut.mainRegion.show staticView
     return
 
+  displaySearch: () ->
+    staticView = new VerifyView(template: JST["_attachments/templates/SearchView.handlebars"])
+    staticView.nextUrl = "#scanRetry/user"
+    Coconut.mainRegion.show staticView
+    return
+
   badScan: () ->
     staticView = new VerifyView(template: JST["_attachments/templates/ScanVerifyView.handlebars"])
     staticView.nextUrl = "#scanRetry/user"
@@ -29,7 +35,7 @@ Controller =
     model = new Backbone.Model()
     promise = KiwiUtils.fetchDistricts()
     promise.done  () ->
-      staticView = new VerifyView(template: JST["_attachments/templates/VerifyView.handlebars"])
+      staticView = new VerifyView(template: JST["_attachments/templates/VerifyView.handlebars"], user:"Admin")
       model.set "districts", staticView.districts
       staticView.model = model
       staticView.nextUrl = "#scanRetry"
@@ -204,3 +210,4 @@ Controller =
         reportLayout.reportListingRegion.show(new ReportCompositeView viewOptions)
       error: (model, err, cb) ->
               console.log JSON.stringify err
+

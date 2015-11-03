@@ -11,6 +11,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
     "click #refresh": "refresh"
     "click #verifySendLogs":  "sendLogs"
     "click #continueAfterFail":  "continueAfterFail",
+    "click #submitUserLogin":  "submitUserLogin",
     "click #searchByID":  "searchByID",
     "click #searchByDOB":  "searchByDOB"
     "click .loadPatientView":  "searchByIDclicked"
@@ -37,6 +38,41 @@ VerifyView = Backbone.Marionette.ItemView.extend
           name:phrase
         districtList.push  district
     this.districts = districtList
+
+    if !@hasCordova
+      if this.options.user == "Admin"
+        user = this.options.user
+  #      Coconut.currentDistrict = district
+        viewOptions = {}
+        adminRegdropdown = ""
+        adminRegCollection = new SecondaryIndexCollection
+        adminRegCollection.fetch
+          fetch: 'query',
+          options:
+            query:
+              include_docs: true,
+              fun: 'by_AdminRegistration'
+          success: =>
+  #          console.log JSON.stringify results
+            console.log "Retrieved Admin registrations: " + JSON.stringify adminRegCollection
+            adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n"
+            adminRegCollection.each (adminReg)->
+              id = adminReg.get("_id")
+              name = adminReg.get("Name")
+              option = "<option value=\"" + id + "\">" + name + "</option>\n"
+              adminRegdropdown = adminRegdropdown + option
+            adminRegdropdown = adminRegdropdown + "\t</select>\n</div>\n"
+            $("#adminDropdown").css({
+              "display": "block"
+            })
+            $("#submitUserLogin").css({
+              "display": "block"
+            })
+  #          console.log message
+  #          $('#progress').append message
+            $("#submitUserLoginMessage").html(adminRegdropdown)
+          error: (model, err, cb) ->
+            console.log JSON.stringify err
 
   districts: null
 
@@ -83,7 +119,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
         l.start()
 #          if not typeof cordova is "undefined"
 
-        findUserFromServiceUUID = (serviceUuid, prints) ->
+        findUserFromServiceUUID = (serviceUuid, prints, threshold) ->
           viewOptions = {}
           users = new SecondaryIndexCollection
           users.fetch
@@ -106,8 +142,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   CoconutUtils.setSession('currentAdmin', adminUser.get('email'))
                   Coconut.router.navigate "displayUserScanner", true
                 else
-                  client = users.first()
-                  sendClientToRecords(client)
+                  sendClientToRecords(users, threshold)
               else
                 message = 'Strange. This user was identified but is not registered. User: ' + user
                 console.log message
@@ -214,13 +249,14 @@ VerifyView = Backbone.Marionette.ItemView.extend
                   scannerPayload = payload["Template"]
                   statusCode = result.StatusCode
                   serviceUuid = result.UID
+                  threshold = result.Threshold
                   console.log 'query for serviceUuid: ' + serviceUuid
                 catch error
                   console.log error
                   $('#progress').append "<br/>Error uploading scan: " + error
                 if statusCode != null && statusCode == 1
                   $('#progress').append "<br/>Locating user in local database."
-                  findUserFromServiceUUID(serviceUuid, prints)
+                  findUserFromServiceUUID(serviceUuid, prints, threshold)
                 else if statusCode != null && statusCode == 4
                   $('#progress').append "<br/>User not in the local database."
 #                    Status Code 4 = No Person found
@@ -236,12 +272,13 @@ VerifyView = Backbone.Marionette.ItemView.extend
                       console.log "response from service: " + JSON.stringify result
                       statusCode = result.StatusCode
                       serviceUuid = result.UID
+                      threshold = result.Threshold
                       console.log "statusCode: " + statusCode
                       if statusCode != null
                         if statusCode == 1
 #                            $( "#progress" ).html( 'Fingerprint enrolled. Success!' );
                           $('#progress').append "<br/>Fingerprint enrolled. Success! User: " + user
-                          @registerEnrolledPerson(serviceUuid, prints, user)
+                          @registerEnrolledPerson(serviceUuid, prints, user, false, threshold)
                         else
                           $( "#progress" ).append( 'Problem enrolling fingerprint. StatusCode: ' +  statusCode);
                           Coconut.trigger "displayEnroll"
@@ -343,7 +380,7 @@ VerifyView = Backbone.Marionette.ItemView.extend
   sendLogs: ->
       @sync.sendLogs('#progress')
 
-  registerEnrolledPerson: (serviceUuid, prints, user, createdOffline) ->
+  registerEnrolledPerson: (serviceUuid, prints, user, createdOffline, threshold) ->
     if createdOffline
       uuid = 'oflId-' + CoconutUtils.uuidGenerator(30)
     else
@@ -400,7 +437,44 @@ VerifyView = Backbone.Marionette.ItemView.extend
             CoconutUtils.setSession('currentAdmin', null)
             Coconut.trigger "displayAdminRegistrationForm"
     else
-      @registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true)
+      @registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true, null)
+
+  submitUserLogin: ->
+    serviceUuid = 'adminSid-' + CoconutUtils.uuidGenerator(30)
+    formDropdownValue = $('#formDropdown').val();
+    if (formDropdownValue == "")
+      return alert(polyglot.t("selectFromFormDropdown"))
+    users = new SecondaryIndexCollection
+    users.fetch
+      fetch: 'query',
+      options:
+        query:
+          include_docs: true,
+          fun: 'by_AdminRegistration'
+      success: =>
+        console.log 'by_AdminRegistration returned: ' + JSON.stringify users
+        if users.length > 0
+#              adminUser = users.first()
+#              adminUser =  users.findWhere({id:formDropdownValue})
+          adminUser =  users._byId[formDropdownValue]
+          console.log 'Coconut.currentAdmin: ' + JSON.stringify adminUser
+          if adminUser == null
+            return alert(polyglot.t("Problem finding an Admin user. Have any users registerred on this tablet?"))
+          Coconut.currentAdmin = adminUser
+          CoconutUtils.setSession('currentAdmin', adminUser.get('email'))
+          Coconut.router.navigate "displayUserScanner", true
+        else
+          message = 'Strange. There should already be an Admin user. '
+          console.log message
+          $('#progress').append "<br/>" + message
+          uuid = 'oflId-' + CoconutUtils.uuidGenerator(30)
+          Coconut.currentAdmin = new Result
+            _id: uuid
+            serviceUuid: serviceUuid
+            Fingerprints: Coconut.currentPrints
+          console.log "currentAdmin: " + JSON.stringify Coconut.currentAdmin
+          CoconutUtils.setSession('currentAdmin', null)
+          Coconut.trigger "displayAdminRegistrationForm"
 
   searchByID: () ->
     Coconut.idResults.reset()

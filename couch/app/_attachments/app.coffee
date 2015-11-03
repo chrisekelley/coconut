@@ -27,6 +27,7 @@ class Router extends Backbone.Router
     "messaging": "messaging"
     "help": "help"
     "displayUserScanner": "displayUserScanner"
+    "displaySearch": "displaySearch"
     "badScan": "badScan"
     "displayAdminScanner": "displayAdminScanner"
     "registration": "registration"
@@ -86,6 +87,11 @@ class Router extends Backbone.Router
     @userLoggedIn
       success: ->
         Coconut.Controller.displayUserScanner()
+
+  displaySearch: ->
+    @userLoggedIn
+      success: ->
+        Coconut.Controller.displaySearch()
 
   badScan: ->
     @userLoggedIn
@@ -567,6 +573,7 @@ $(() =>
     Coconut.addRegions idResults: "#idResults"
     Coconut.addRegions dobResults: "#dobResults"
     Coconut.addRegions userRecords: "#userRecords"
+    Coconut.addRegions searchResults: "#searchResults"
 
     Coconut.on "displayReportMenu", ->
       Coconut.router.navigate("displayReportMenu")

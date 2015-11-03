@@ -13,6 +13,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #refresh": "refresh",
     "click #verifySendLogs": "sendLogs",
     "click #continueAfterFail": "continueAfterFail",
+    "click #submitUserLogin": "submitUserLogin",
     "click #searchByID": "searchByID",
     "click #searchByDOB": "searchByDOB",
     "click .loadPatientView": "searchByIDclicked"
@@ -21,7 +22,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   hasCordova: true,
   currentOfflineUser: null,
   initialize: function() {
-    var district, districtJson, districtList, index, key, phrase;
+    var adminRegCollection, adminRegdropdown, district, districtJson, districtList, index, key, phrase, user, viewOptions;
     this.sync = new Sync();
     if (typeof cordova === "undefined") {
       this.hasCordova = false;
@@ -41,7 +42,48 @@ VerifyView = Backbone.Marionette.ItemView.extend({
         districtList.push(district);
       }
     }
-    return this.districts = districtList;
+    this.districts = districtList;
+    if (!this.hasCordova) {
+      if (this.options.user === "Admin") {
+        user = this.options.user;
+        viewOptions = {};
+        adminRegdropdown = "";
+        adminRegCollection = new SecondaryIndexCollection;
+        return adminRegCollection.fetch({
+          fetch: 'query',
+          options: {
+            query: {
+              include_docs: true,
+              fun: 'by_AdminRegistration'
+            }
+          },
+          success: (function(_this) {
+            return function() {
+              console.log("Retrieved Admin registrations: " + JSON.stringify(adminRegCollection));
+              adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n";
+              adminRegCollection.each(function(adminReg) {
+                var id, name, option;
+                id = adminReg.get("_id");
+                name = adminReg.get("Name");
+                option = "<option value=\"" + id + "\">" + name + "</option>\n";
+                return adminRegdropdown = adminRegdropdown + option;
+              });
+              adminRegdropdown = adminRegdropdown + "\t</select>\n</div>\n";
+              $("#adminDropdown").css({
+                "display": "block"
+              });
+              $("#submitUserLogin").css({
+                "display": "block"
+              });
+              return $("#submitUserLoginMessage").html(adminRegdropdown);
+            };
+          })(this),
+          error: function(model, err, cb) {
+            return console.log(JSON.stringify(err));
+          }
+        });
+      }
+    }
   },
   districts: null,
   displayNewUserRegistration: function() {
@@ -84,7 +126,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           var findUserFromServiceUUID, i, interval, l;
           l = Ladda.create(e.currentTarget);
           l.start();
-          findUserFromServiceUUID = function(serviceUuid, prints) {
+          findUserFromServiceUUID = function(serviceUuid, prints, threshold) {
             var users, viewOptions;
             viewOptions = {};
             users = new SecondaryIndexCollection;
@@ -99,7 +141,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
               },
               success: (function(_this) {
                 return function() {
-                  var adminUser, client, message, uuid;
+                  var adminUser, message, uuid;
                   console.log('by_serviceUuid returned: ' + JSON.stringify(users));
                   l.stop();
                   if (users.length > 0) {
@@ -110,8 +152,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                       CoconutUtils.setSession('currentAdmin', adminUser.get('email'));
                       return Coconut.router.navigate("displayUserScanner", true);
                     } else {
-                      client = users.first();
-                      return sendClientToRecords(client);
+                      return sendClientToRecords(users, threshold);
                     }
                   } else {
                     message = 'Strange. This user was identified but is not registered. User: ' + user;
@@ -225,13 +266,14 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   }
                 });
                 return $.post(urlServer, payload, function(result) {
-                  var error, log, scannerPayload, serviceUuid, statusCode;
+                  var error, log, scannerPayload, serviceUuid, statusCode, threshold;
                   console.log("response from service: " + JSON.stringify(result));
                   $('#progress').append("<br/>Received response from service. StatusCode: " + statusCode);
                   try {
                     scannerPayload = payload["Template"];
                     statusCode = result.StatusCode;
                     serviceUuid = result.UID;
+                    threshold = result.Threshold;
                     console.log('query for serviceUuid: ' + serviceUuid);
                   } catch (_error) {
                     error = _error;
@@ -240,7 +282,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   }
                   if (statusCode !== null && statusCode === 1) {
                     $('#progress').append("<br/>Locating user in local database.");
-                    return findUserFromServiceUUID(serviceUuid, prints);
+                    return findUserFromServiceUUID(serviceUuid, prints, threshold);
                   } else if (statusCode !== null && statusCode === 4) {
                     $('#progress').append("<br/>User not in the local database.");
                     l.stop();
@@ -255,11 +297,12 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                       console.log("response from service: " + JSON.stringify(result));
                       statusCode = result.StatusCode;
                       serviceUuid = result.UID;
+                      threshold = result.Threshold;
                       console.log("statusCode: " + statusCode);
                       if (statusCode !== null) {
                         if (statusCode === 1) {
                           $('#progress').append("<br/>Fingerprint enrolled. Success! User: " + user);
-                          return _this.registerEnrolledPerson(serviceUuid, prints, user);
+                          return _this.registerEnrolledPerson(serviceUuid, prints, user, false, threshold);
                         } else {
                           $("#progress").append('Problem enrolling fingerprint. StatusCode: ' + statusCode);
                           return Coconut.trigger("displayEnroll");
@@ -384,7 +427,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
   sendLogs: function() {
     return this.sync.sendLogs('#progress');
   },
-  registerEnrolledPerson: function(serviceUuid, prints, user, createdOffline) {
+  registerEnrolledPerson: function(serviceUuid, prints, user, createdOffline, threshold) {
     var uuid;
     if (createdOffline) {
       uuid = 'oflId-' + CoconutUtils.uuidGenerator(30);
@@ -456,8 +499,55 @@ VerifyView = Backbone.Marionette.ItemView.extend({
         })(this)
       });
     } else {
-      return this.registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true);
+      return this.registerEnrolledPerson(serviceUuid, Coconut.currentPrints, user, true, null);
     }
+  },
+  submitUserLogin: function() {
+    var formDropdownValue, serviceUuid, users;
+    serviceUuid = 'adminSid-' + CoconutUtils.uuidGenerator(30);
+    formDropdownValue = $('#formDropdown').val();
+    if (formDropdownValue === "") {
+      return alert(polyglot.t("selectFromFormDropdown"));
+    }
+    users = new SecondaryIndexCollection;
+    return users.fetch({
+      fetch: 'query',
+      options: {
+        query: {
+          include_docs: true,
+          fun: 'by_AdminRegistration'
+        }
+      },
+      success: (function(_this) {
+        return function() {
+          var adminUser, message, uuid;
+          console.log('by_AdminRegistration returned: ' + JSON.stringify(users));
+          if (users.length > 0) {
+            adminUser = users._byId[formDropdownValue];
+            console.log('Coconut.currentAdmin: ' + JSON.stringify(adminUser));
+            if (adminUser === null) {
+              return alert(polyglot.t("Problem finding an Admin user. Have any users registerred on this tablet?"));
+            }
+            Coconut.currentAdmin = adminUser;
+            CoconutUtils.setSession('currentAdmin', adminUser.get('email'));
+            return Coconut.router.navigate("displayUserScanner", true);
+          } else {
+            message = 'Strange. There should already be an Admin user. ';
+            console.log(message);
+            $('#progress').append("<br/>" + message);
+            uuid = 'oflId-' + CoconutUtils.uuidGenerator(30);
+            Coconut.currentAdmin = new Result({
+              _id: uuid,
+              serviceUuid: serviceUuid,
+              Fingerprints: Coconut.currentPrints
+            });
+            console.log("currentAdmin: " + JSON.stringify(Coconut.currentAdmin));
+            CoconutUtils.setSession('currentAdmin', null);
+            return Coconut.trigger("displayAdminRegistrationForm");
+          }
+        };
+      })(this)
+    });
   },
   searchByID: function() {
     var error, id, success, users;

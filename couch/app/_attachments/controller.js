@@ -30,6 +30,14 @@ Controller = {
     staticView.nextUrl = "#scanRetry/user";
     Coconut.mainRegion.show(staticView);
   },
+  displaySearch: function() {
+    var staticView;
+    staticView = new VerifyView({
+      template: JST["_attachments/templates/SearchView.handlebars"]
+    });
+    staticView.nextUrl = "#scanRetry/user";
+    Coconut.mainRegion.show(staticView);
+  },
   badScan: function() {
     var staticView;
     staticView = new VerifyView({
@@ -45,7 +53,8 @@ Controller = {
     promise.done(function() {
       var staticView;
       staticView = new VerifyView({
-        template: JST["_attachments/templates/VerifyView.handlebars"]
+        template: JST["_attachments/templates/VerifyView.handlebars"],
+        user: "Admin"
       });
       model.set("districts", staticView.districts);
       staticView.model = model;

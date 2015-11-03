@@ -186,15 +186,27 @@ this["JST"]["_attachments/templates/ScanVerifyView.handlebars"] = Handlebars.tem
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"R5",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyIndividual\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Continue",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</span></a>\n    </div>\n</p>\n\n<div id=\"message\"></div>\n\n<p>"
-    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchByIdDOBGender",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</p>\n\n<h3>"
+    + "</span></a>\n    </div>\n</p>\n\n<div id=\"message\"></div>\n<div id=\"searchResults\"></div>\n\n<p>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"scanSendLogs",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"sendLogs",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</a>\n</p>\n\n<div id=\"progress\"></div>\n";
+},"useData":true});
+
+this["JST"]["_attachments/templates/SearchView.handlebars"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
+    var stack1, alias1=helpers.helperMissing;
+
+  return "<h3>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchById",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</h3>\n\n<div class=\"form-inline\">\n<div class=\"form-group\">\n            <label for=\"id\">ID</label>\n            <input type=\"text\" id=\"id\"/>\n        </div>\n<div class=\"form-group\">\n            <a data-role='button' class='btn btn-primary btn-lg' id='searchByID'>"
+    + "</h3>\n<p>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchByIdDesc",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n\n<div class=\"form-inline\">\n<div class=\"form-group\">\n            <label for=\"id\">ID</label>\n            <input type=\"text\" id=\"id\" size=\"40\"/>\n        </div>\n<div class=\"form-group\">\n            <a data-role='button' class='btn btn-primary btn-lg' id='searchByID'>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"search",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</a>\n        </div>\n</div>\n<div id=\"idResults\"></div>\n\n<h3>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchByGender",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
-    + "</h3>\n\n<div class=\"form-inline\">\n<div class=\"form-group\">\n            <label for=\"dob\">"
+    + "</h3>\n<p>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"searchByGenderDesc",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n\n<div class=\"form-inline\">\n<div class=\"form-group\">\n            <label for=\"dob\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"DOB",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</label>\n            <input type=\"date\" class=\"form-control\" name=\"DOB\" id=\"dob\" value=\"\" placeholder=\""
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"DOB",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
@@ -222,6 +234,8 @@ this["JST"]["_attachments/templates/SiteNavView.handlebars"] = Handlebars.templa
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Home",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</a></li>-->\n            <li class=\"siteNav\"><a href=\"#\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Login",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</a></li>\n            <li class=\"siteNav\" id=\"displaySearchLink\"><a href=\"#displaySearch\">"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"search",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</a></li>\n            <li class=\"siteNav\" id=\"settingsLink\"><a href=\"#sync\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Settings",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</a></li>\n            <li class=\"siteNav\" id=\"patientEncountersLink\"><a href=\"#displayUserScanner\">"
@@ -334,6 +348,12 @@ this["JST"]["_attachments/templates/VerifyView.handlebars"] = Handlebars.templat
     + ((stack1 = helpers.each.call(depth0,(depth0 != null ? depth0.districts : depth0),{"name":"each","hash":{},"fn":this.program(1, data, 0),"inverse":this.noop,"data":data})) != null ? stack1 : "")
     + "    </select>\n    <a data-role=\"button\" id=\"identifyAdmin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Continue",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</span></a>\n    </div>\n    <div id=\"adminDropdown\">\n        <h2>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"quickLogin",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</h2>\n        <p>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"quickLoginDesc",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + ":</p>\n        <p id=\"submitUserLoginMessage\"></p>\n        <a data-role=\"button\" id=\"submitUserLogin\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Login",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</span></a>\n    </div>\n\n</p>\n\n<div id=\"message\"></div>\n\n<p>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"scanSendLogs",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>"

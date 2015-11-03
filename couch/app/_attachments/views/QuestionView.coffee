@@ -511,7 +511,7 @@ class QuestionView extends Backbone.View
     if Coconut.currentDistrict != null
       currentData.currentDistrict = Coconut.currentDistrict
 
-    if Coconut.version_code != 'undefined'
+    if typeof Coconut.version_code != 'undefined'
       currentData.version_code = Coconut.version_code
 
     if typeof window.device != 'undefined'
@@ -550,12 +550,14 @@ class QuestionView extends Backbone.View
     else
       currentData.user = $.cookie('current_user')
     if typeof Coconut.currentClient != 'undefined' && Coconut.currentClient != null
-      currentData.clientId = Coconut.currentClient.get("_id")
-      currentData.serviceUuid = Coconut.currentClient.get("serviceUuid")
+      currentData.clientId = Coconut.currentClient.get("_id") if not currentData.clientId?
+      console.log("hoo")
+      currentData.serviceUuid = Coconut.currentClient.get("serviceUuid") if not currentData.serviceUuid?
       currentData.currentClient = Coconut.currentClient.toJSON()
       if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
         console.log "currentClient: " + JSON.stringify Coconut.currentClient
-        currentData._id = currentData.clientId
+#        if currentData._id == null
+        currentData._id = currentData.clientId if not currentData._id? && currentData.clientId?
         currentData.Fingerprints = Coconut.currentClient.get("Fingerprints")
         console.log "currentData: " + JSON.stringify currentData
       if @result.question() == 'Admin Registration'
