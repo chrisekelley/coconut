@@ -820,6 +820,10 @@ $((function(_this) {
         Coconut.router.navigate("sync");
         return Coconut.Controller.displaySync();
       });
+      Coconut.on("displaySearch", function() {
+        Coconut.router.navigate("displaySearch");
+        return Coconut.Controller.displaySearch();
+      });
       Coconut.router.bootstrapApp();
       return Coconut.debug = function(string) {
         if (Coconut.replicationLog == null) {

@@ -551,15 +551,15 @@ class QuestionView extends Backbone.View
       currentData.user = $.cookie('current_user')
     if typeof Coconut.currentClient != 'undefined' && Coconut.currentClient != null
       currentData.clientId = Coconut.currentClient.get("_id") if not currentData.clientId?
-      console.log("hoo")
+#      console.log("hoo")
       currentData.serviceUuid = Coconut.currentClient.get("serviceUuid") if not currentData.serviceUuid?
       currentData.currentClient = Coconut.currentClient.toJSON()
       if @result.question() == 'Admin Registration' || @result.question() == 'Individual Registration'
-        console.log "currentClient: " + JSON.stringify Coconut.currentClient
+#        console.log "currentClient: " + JSON.stringify Coconut.currentClient
 #        if currentData._id == null
         currentData._id = currentData.clientId if not currentData._id? && currentData.clientId?
         currentData.Fingerprints = Coconut.currentClient.get("Fingerprints")
-        console.log "currentData: " + JSON.stringify currentData
+#        console.log "currentData: " + JSON.stringify currentData
       if @result.question() == 'Admin Registration'
 #        Coconut.currentAdmin = Coconut.currentClient
         CoconutUtils.setSession('currentAdmin', currentData.email)

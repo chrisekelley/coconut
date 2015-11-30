@@ -321,5 +321,6 @@
   "none": "None",
   "searchingFor": "Buscando",
   "quickLogin": "Quick Login",
-  "quickLoginDesc": "This feature is only available when testing on a laptop. If there are already Admin accounts, select one from the dropdown"
+  "quickLoginDesc": "This feature is only available when testing on a laptop. If there are already Admin accounts, select one from the dropdown",
+  "displaySearchMessage": "If you cannot find the patient using a fingerprint, you may search by ID or date of visit."
 }

@@ -502,18 +502,15 @@ QuestionView = (function(superClass) {
       if (currentData.clientId == null) {
         currentData.clientId = Coconut.currentClient.get("_id");
       }
-      console.log("hoo");
       if (currentData.serviceUuid == null) {
         currentData.serviceUuid = Coconut.currentClient.get("serviceUuid");
       }
       currentData.currentClient = Coconut.currentClient.toJSON();
       if (this.result.question() === 'Admin Registration' || this.result.question() === 'Individual Registration') {
-        console.log("currentClient: " + JSON.stringify(Coconut.currentClient));
         if ((currentData._id == null) && (currentData.clientId != null)) {
           currentData._id = currentData.clientId;
         }
         currentData.Fingerprints = Coconut.currentClient.get("Fingerprints");
-        console.log("currentData: " + JSON.stringify(currentData));
       }
       if (this.result.question() === 'Admin Registration') {
         CoconutUtils.setSession('currentAdmin', currentData.email);

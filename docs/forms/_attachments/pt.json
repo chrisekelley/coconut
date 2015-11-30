@@ -326,6 +326,7 @@
   "none": "Nenhum",
   "searchingFor": "Searching for",
   "quickLogin": "Entrada Rápida",
-  "quickLoginDesc": "Esta funcionalidade só está disponível quando o teste em um laptop. Se houver contas já admin, selecione um da lista suspensa"
+  "quickLoginDesc": "Esta funcionalidade só está disponível quando o teste em um laptop. Se houver contas já admin, selecione um da lista suspensa",
+  "displaySearchMessage": "Se você não consegue encontrar o paciente usando uma impressão digital, você pode pesquisar por ID ou a data da visita."
 }
 

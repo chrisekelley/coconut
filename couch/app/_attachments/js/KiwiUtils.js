@@ -48,7 +48,6 @@ KiwiUtils.toggleAcceptedSurgery = function(target) {
 
 KiwiUtils.searchForUser = function(searchType, success, error, term1, term2) {
   var endkey, key, users, viewOptions;
-  console.log("searchType: " + searchType);
   viewOptions = {};
   users = new SecondaryIndexCollection;
   if (searchType === 'by_DOBGenderIndivReg') {

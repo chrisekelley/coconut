@@ -187,6 +187,10 @@ this["JST"]["_attachments/templates/ScanVerifyView.handlebars"] = Handlebars.tem
     + "</option>\n    </select>\n    <a data-role=\"button\" id=\"identifyIndividual\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">Scan</span></a>\n    <div id=\"uploadFailed\">\n        <p id=\"uploadFailedMessage\"></p>\n        <a data-role=\"button\" id=\"continueAfterFail\" class=\"btn btn-primary btn-lg ladda-button\" data-style=\"expand-right\"><span class=\"ladda-label\">"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"Continue",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</span></a>\n    </div>\n</p>\n\n<div id=\"message\"></div>\n<div id=\"searchResults\"></div>\n\n<p>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"displaySearchMessage",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='searchButton'>"
+    + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"search",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
+    + "</a>\n</p>\n<p>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"scanSendLogs",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")
     + "</p>\n<p>\n    <a data-role='button' class='btn btn-primary btn-lg' id='verifySendLogs'>"
     + ((stack1 = (helpers.polyglot || (depth0 && depth0.polyglot) || alias1).call(depth0,"sendLogs",{"name":"polyglot","hash":{},"data":data})) != null ? stack1 : "")

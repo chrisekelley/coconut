@@ -40,7 +40,7 @@ KiwiUtils.toggleAcceptedSurgery = (target) ->
 
 #    startkey="a"&endkey="a\ufff0
 KiwiUtils.searchForUser = (searchType, success, error, term1, term2) ->
-  console.log("searchType: " + searchType)
+#  console.log("searchType: " + searchType)
   viewOptions = {}
   users = new SecondaryIndexCollection
   if (searchType == 'by_DOBGenderIndivReg')

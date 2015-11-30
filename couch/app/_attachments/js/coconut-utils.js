@@ -65,12 +65,14 @@ CoconutUtils.scheduleCheckVersion = function() {
 
   CoconutUtils.checkVersion = function () {
     console.log("Checking for new version of app.");
+    //var url = Coconut.config.coconut_central_url() + "/version";
     var url = Coconut.config.coconut_central_url() + "/version";
     var cloud_credentials = Coconut.config.cloud_credentials();
     var auth = cloud_credentials.split(":");
     var username = auth[0];
     var password = auth[1];
-    $.ajax(url, { type: 'GET', dataType: 'jsonp', username: username, password: password,
+    var urlCredentials = url.replace("https://","https://" + username + ":" + password + "@")
+    $.ajax(urlCredentials, { type: 'GET', dataType: 'jsonp', username: username, password: password,
       success: function(data) {
         console.log("data: " + JSON.stringify(data));
         var remoteVersion = data.version;
@@ -118,7 +120,7 @@ CoconutUtils.scheduleCheckVersion = function() {
         }
       },
       error: function(model, err, cb) {
-        console.log(JSON.stringify(err));
+        console.log(JSON.stringify(model));
         if (Coconut.isMobile === true) {
           cordova.plugins.notification.local.cancel(1, function () {
             console.log("No update. Cancelled notification 1");
@@ -545,10 +547,10 @@ CoconutUtils.saveLog = function(log, title, message, success, error) {
 
    CoconutUtils.setSession = function(name, value) {
        var date = new Date();
-       console.log("Current date: " + date.toUTCString());
+       //console.log("Current date: " + date.toUTCString());
        date.setTime(date.getTime() + (30 * 60 * 1000));
        var expires =  date.toUTCString();
-       console.log("Setting expiry to " + expires);
+       //console.log("Setting expiry to " + expires);
        if (Coconut.session == null) {
            Coconut.session = {}
        }

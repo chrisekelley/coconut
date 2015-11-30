@@ -26,7 +26,8 @@ window.polyglot.extend({
   "R5": "D5",
   "fingerSelectInstructions": "Se estiver a digitalizar o dedo polegar da sua mão direita, selecione D1. O dedo indicador de sua mão direita é D2.",
   "quickLogin": "Entrada Rápida",
-  "quickLoginDesc": "Esta funcionalidade só está disponível quando o teste em um laptop. Se houver contas já admin, selecione um da lista suspensa"
+  "quickLoginDesc": "Esta funcionalidade só está disponível quando o teste em um laptop. Se houver contas já admin, selecione um da lista suspensa",
+  "search": "Busca"
 });
 
 Handlebars.registerHelper('polyglot', function(phrase) {

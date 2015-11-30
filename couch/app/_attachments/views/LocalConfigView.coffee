@@ -89,23 +89,29 @@ class LocalConfigView extends Backbone.View
                   opts =
                       success: ->
                           $('#message').append "Replication of form definitions was successful..<br/>"
-                          repFromOpts =
-                              success: ->
-                                repToOpts =
+                          cloudStatusOpts =
+                            success: (status) ->
+                              repFromOpts =
+                                status: status
+                                success: ->
+                                  repToOpts =
                                     success: ->
                                       $('#message').append "Replication to server was successful. <br/>"
                                       $('#message').append "Finished with Config. Reloading app in 2 seconds.<br/>"
                                       _.delay ->
-                                          Coconut.router.navigate("",false)
-                                          document.location.reload()
+                                        Coconut.router.navigate("",false)
+                                        document.location.reload()
                                       , 2000
                                     error: (obj, msg)->
                                       $('#message').append "Replication Error:" + msg + "<br/>"
-                                $('#message').append "Replication from server was successful.<br/>"
-                                Coconut.syncView.sync.replicateToServer(repToOpts)
-                              error: (obj, msg)->
-                                $('#message').append "Replication Error:" + msg + "<br/>"
-                          Coconut.syncView.sync.replicateFromServer(repFromOpts)
+                                  $('#message').append "Replication from server was successful.<br/>"
+                                  Coconut.syncView.sync.replicateToServer(repToOpts, '#message')
+                                error: (obj, msg)->
+                                  $('#message').append "Replication Error:" + msg + "<br/>"
+                              Coconut.syncView.sync.replicateFromServer(repFromOpts, '#message')
+                            error: (obj, msg)->
+                              $('#message').append "CloudStatus Error:" + msg + "<br/>"
+                          Coconut.syncView.sync.getCloudStatus(cloudStatusOpts)
                       error: (obj, msg)->
                           $('#message').append "Error fetching Forms. App will not function properly. Error:" + msg + "<br/>"
                   Coconut.config.local = new LocalConfig()

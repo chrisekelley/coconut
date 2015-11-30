@@ -227,7 +227,7 @@ class Sync extends Backbone.Model
 #                        , 5000
 #                      error: (error) => @log "Could not create log file #{JSON.stringify(error)}"
 
-  replicateFromServer: (options) ->
+  replicateFromServer: (options, divId) ->
     options = {} if !options
     filter = (doc) ->
       if doc._id != "_design/by_clientId" && doc._id != "_design/by_serviceUuid" && doc._id != "SyncLog" && doc._id != "coconut.config" && doc._id != "coconut.config.local" && doc._id != "version" && doc.noClientPush != "true"
@@ -259,8 +259,25 @@ class Sync extends Backbone.Model
       else
         console.log "uptodate: Replication error: " + JSON.stringify result).on('change', (info)->
           Coconut.debug "Change: " + JSON.stringify info
+          if typeof divId != 'undefined'
+            doc_count = options.status?.doc_count
+            doc_del_count = options.status?.doc_del_count
+            total_docs = doc_count + doc_del_count
+            doc_written = info.docs_written
+            if total_docs?
+              percentDone = Math.floor((doc_written/total_docs) * 100)
+#            msg = "Change: docs_written: " + doc_written + " last_seq: " + info.last_seq + " doc_count: " + doc_count \
+#            + " doc_del_count: " + doc_del_count \
+#            + " update_seq: " + options.status?.update_seq \
+            msg = "Change: docs_written: " + doc_written + " of " +  total_docs + ". Percent Done: " + percentDone + "%<br/>"
+            console.log("msg: " + msg)
+            $(divId).append msg
         ).on('complete', (info)->
           Coconut.debug "Complete: " + JSON.stringify info
+          if typeof divId != 'undefined'
+            $(divId).append "Complete: docs_written: " + info.docs_written + "<br/>"
+        ).on('active', ()->
+          Coconut.debug "Replication active. "
         )
 #    Coconut.menuView.checkReplicationStatus();
 
@@ -350,7 +367,7 @@ class Sync extends Backbone.Model
           $(messageId).append "<br/>Data sent to the server.<br/>"
           @sync.replicateFromServer
               success: ->
-                  $(messageId).append "Data received from the server.<br/>"
+                  $(messageId).append "Data successfully replicated from the server.<br/>"
               error: (json, error)->
                   $(messageId).append "Error receiving data to the server. Error: " + error + "<br/>"
       error: (json, error)->
@@ -365,10 +382,22 @@ class Sync extends Backbone.Model
       $('#progress').append "<br/>Logs saved. Data will now be replicated with the server.<br/>"
       @replicate(messageId)
 
-  replicateToServer: (options) ->
+  replicateToServer: (options, divId) ->
     options = {} if !options
     filter = (doc) ->
-      if doc._id != "_design/by_clientId" && doc._id != "_design/by_serviceUuid" && doc._id != "SyncLog" && doc._id != "coconut.config" && doc._id != "coconut.config.local" && doc._id != "version" && doc.noClientPush != "true"
+      if doc._id != "_design/by_clientId" &&
+        doc._id != "_design/by_AdminRegistration" &&
+        doc._id != "_design/by_DocsDate" &&
+        doc._id != "_design/by_AdminDate" &&
+        doc._id != "_design/by_DOBGenderIndivReg" &&
+        doc._id != "_design/by_clientIdIndivReg" &&
+        doc._id != "_design/coconut-forms" &&
+        doc._id != "_design/by_serviceUuid" &&
+        doc._id != "SyncLog" &&
+        doc._id != "coconut.config" &&
+        doc._id != "coconut.config.local" &&
+        doc._id != "version" &&
+        doc.noClientPush != "true"
           return doc
 
     opts =
@@ -385,7 +414,7 @@ class Sync extends Backbone.Model
         if typeof result != 'undefined' && result != null && result.ok
           Coconut.debug "replicateToServer - onComplete: Replication is fine. "
         else
-          Coconut.debug "replicateToServer - onComplete: Replication message: " + JSON.stringify result
+          Coconut.debug "replicateToServer - onComplete: Replication message: " + result
       error: (result) ->
         Coconut.debug "error: Replication error: " + JSON.stringify result
       timeout: 60000
@@ -399,6 +428,17 @@ class Sync extends Backbone.Model
       else
         console.log "uptodate: Replication error: " + JSON.stringify result).on('change', (info)->
       Coconut.debug "Change: " + JSON.stringify info
+      doc_count = options.status?.doc_count
+      doc_del_count = options.status?.doc_del_count
+      total_docs = doc_count? + doc_del_count?
+      doc_written = info.docs_written
+      percentDone = Math.floor((doc_written/total_docs) * 100)
+      if !isNaN  percentDone
+        msg = "Change: docs_written: " + doc_written + " of " +  total_docs + ". Percent Done: " + percentDone + "%<br/>"
+      else
+        msg = "Change: docs_written: " + doc_written + "<br/>"
+      console.log("msg: " + msg)
+      $(divId).append msg
     ).on('complete', (info)->
       Coconut.debug "Complete: " + JSON.stringify info
     )
@@ -425,5 +465,17 @@ class Sync extends Backbone.Model
         @replicateFromServer _.extend options,
           replicationArguments:
             doc_ids: doc_ids
+
+  getCloudStatus: (options) =>
+    $.ajax
+      dataType: "jsonp"
+      url: "#{Coconut.config.cloud_url()}/"
+      include_docs: false
+      error: (a,b,error) =>
+        options.error?(error)
+      success: (result) =>
+#        Coconut.CloudStatus = result
+#        console.log JSON.stringify result
+        options.success(result)
 
 

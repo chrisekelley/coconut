@@ -83,9 +83,11 @@ class SettingsView extends Backbone.View
                 error: (json, error)->
                     $('#progress').append "Error receiving data to the server. Error: " + error + "<br/>"
                     Coconut.syncView.refreshLog()
+            , '#progress'
         error: (json, error)->
             $('#progress').append "Error sending data to the server. Error: " + error + "<br/>"
             Coconut.syncView.refreshLog()
+    , '#progress'
 
   refreshLog: =>
     now = moment(new Date()).format(Coconut.config.get "datetime_format") + "<br/>"

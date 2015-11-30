@@ -625,6 +625,10 @@ $(() =>
       Coconut.router.navigate "sync"
       Coconut.Controller.displaySync()
 
+    Coconut.on "displaySearch", ->
+      Coconut.router.navigate "displaySearch"
+      Coconut.Controller.displaySearch()
+
     Coconut.router.bootstrapApp()
 
     Coconut.debug = (string) ->

@@ -76,32 +76,42 @@ LocalConfigView = (function(superClass) {
               $('#message').append("Replicating form definitions and syncing with the server.<br/>");
               opts = {
                 success: function() {
-                  var repFromOpts;
+                  var cloudStatusOpts;
                   $('#message').append("Replication of form definitions was successful..<br/>");
-                  repFromOpts = {
-                    success: function() {
-                      var repToOpts;
-                      repToOpts = {
+                  cloudStatusOpts = {
+                    success: function(status) {
+                      var repFromOpts;
+                      repFromOpts = {
+                        status: status,
                         success: function() {
-                          $('#message').append("Replication to server was successful. <br/>");
-                          $('#message').append("Finished with Config. Reloading app in 2 seconds.<br/>");
-                          return _.delay(function() {
-                            Coconut.router.navigate("", false);
-                            return document.location.reload();
-                          }, 2000);
+                          var repToOpts;
+                          repToOpts = {
+                            success: function() {
+                              $('#message').append("Replication to server was successful. <br/>");
+                              $('#message').append("Finished with Config. Reloading app in 2 seconds.<br/>");
+                              return _.delay(function() {
+                                Coconut.router.navigate("", false);
+                                return document.location.reload();
+                              }, 2000);
+                            },
+                            error: function(obj, msg) {
+                              return $('#message').append("Replication Error:" + msg + "<br/>");
+                            }
+                          };
+                          $('#message').append("Replication from server was successful.<br/>");
+                          return Coconut.syncView.sync.replicateToServer(repToOpts, '#message');
                         },
                         error: function(obj, msg) {
                           return $('#message').append("Replication Error:" + msg + "<br/>");
                         }
                       };
-                      $('#message').append("Replication from server was successful.<br/>");
-                      return Coconut.syncView.sync.replicateToServer(repToOpts);
+                      return Coconut.syncView.sync.replicateFromServer(repFromOpts, '#message');
                     },
                     error: function(obj, msg) {
-                      return $('#message').append("Replication Error:" + msg + "<br/>");
+                      return $('#message').append("CloudStatus Error:" + msg + "<br/>");
                     }
                   };
-                  return Coconut.syncView.sync.replicateFromServer(repFromOpts);
+                  return Coconut.syncView.sync.getCloudStatus(cloudStatusOpts);
                 },
                 error: function(obj, msg) {
                   return $('#message').append("Error fetching Forms. App will not function properly. Error:" + msg + "<br/>");

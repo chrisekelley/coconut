@@ -16,6 +16,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     "click #submitUserLogin": "submitUserLogin",
     "click #searchByID": "searchByID",
     "click #searchByDOB": "searchByDOB",
+    "click #searchButton": "displaySearchPage",
     "click .loadPatientView": "searchByIDclicked"
   },
   nextUrl: null,
@@ -59,7 +60,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           },
           success: (function(_this) {
             return function() {
-              console.log("Retrieved Admin registrations: " + JSON.stringify(adminRegCollection));
               adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n";
               adminRegCollection.each(function(adminReg) {
                 var id, name, option;
@@ -147,12 +147,12 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                   if (users.length > 0) {
                     if (user === "Admin") {
                       adminUser = users.first();
-                      console.log('Coconut.currentAdmin: ' + JSON.stringify(adminUser));
                       Coconut.currentAdmin = adminUser;
                       CoconutUtils.setSession('currentAdmin', adminUser.get('email'));
                       return Coconut.router.navigate("displayUserScanner", true);
                     } else {
-                      return sendClientToRecords(users, threshold);
+                      user = users.first();
+                      return sendClientToRecords(user, threshold);
                     }
                   } else {
                     message = 'Strange. This user was identified but is not registered. User: ' + user;
@@ -195,7 +195,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 payload["Template"] = results;
                 payload["Finger"] = finger;
                 payload["District"] = district;
-                console.log("payload: " + JSON.stringify(payload));
                 template = payload.Template;
                 fingerprint = {};
                 fingerprint.template = template;
@@ -368,7 +367,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 if (user === "Admin") {
                   Coconut.currentDistrict = district;
                 }
-                console.log("Go to next page. Generated UUID: " + uuid + " district: " + district);
                 Coconut.scannerPayload = {
                   "Template": "46 4D 52 00 20 32 30 00 00 00 00 F0 00 00 01 04 01 2C 00 C5 00 C5 01 00 00 00 00 23 40 83 00 40 71 00 40 52 00 53 75 00 80 33 00 6B 8A 00 80 A9 00 6C 72 00 40 5B 00 81 7D 00 80 93 00 87 71 00 40 28 00 99 91 00 40 17 00 A1 11 00 40 44 00 A9 8D 00 40 81 00 B8 78 00 40 1B 00 BA 10 00 40 73 00 C2 80 00 40 3F 00 C3 94 00 40 DF 00 C7 E8 00 80 4B 00 CE 11 00 40 32 00 D6 91 00 40 16 00 D8 14 00 80 3D 00 E0 10 00 40 1A 00 E2 11 00 40 A3 00 E3 EE 00 40 38 00 F3 94 00 40 9E 00 F5 73 00 40 6D 00 FB 00 00 40 56 00 FC 93 00 40 A8 00 FC E3 00 40 26 00 FC 11 00 40 40 00 FD 10 00 40 7C 01 01 F8 00 80 C9 01 03 EA 00 40 38 01 04 9A 00 80 6D 01 07 7F 00 40 9E 01 0E 6C 00 40 32 01 10 17 00 40 88 01 11 EE 00 80 88 01 23 72 00 00 00 ",
                   "Name": "Test CK",
@@ -401,7 +399,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           }
           return false;
         };
-        console.log("revealSlider");
         progress = document.querySelector("paper-progress");
         button = document.querySelector("paper-button");
         startLadda(event);
@@ -471,10 +468,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
         success: (function(_this) {
           return function() {
             var adminUser, message, uuid;
-            console.log('by_AdminRegistration returned: ' + JSON.stringify(users));
             if (users.length > 0) {
               adminUser = users._byId[formDropdownValue];
-              console.log('Coconut.currentAdmin: ' + JSON.stringify(adminUser));
               if (adminUser === null) {
                 return alert(polyglot.t("Problem finding an Admin user. Have any users registerred on this tablet?"));
               }
@@ -521,10 +516,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       success: (function(_this) {
         return function() {
           var adminUser, message, uuid;
-          console.log('by_AdminRegistration returned: ' + JSON.stringify(users));
           if (users.length > 0) {
             adminUser = users._byId[formDropdownValue];
-            console.log('Coconut.currentAdmin: ' + JSON.stringify(adminUser));
             if (adminUser === null) {
               return alert(polyglot.t("Problem finding an Admin user. Have any users registerred on this tablet?"));
             }
@@ -554,7 +547,6 @@ VerifyView = Backbone.Marionette.ItemView.extend({
     Coconut.idResults.reset();
     Coconut.dobResults.reset();
     id = $('#id').val();
-    console.log("Searching for id: " + id);
     success = (function(_this) {
       return function(users) {
         var tableView;
@@ -595,5 +587,8 @@ VerifyView = Backbone.Marionette.ItemView.extend({
       return $('#dobResults').append("Search error: " + err);
     };
     return users = KiwiUtils.searchForUser('by_DOBGenderIndivReg', success, error, dob, gender);
+  },
+  displaySearchPage: function() {
+    return Coconut.trigger("displaySearch");
   }
 });

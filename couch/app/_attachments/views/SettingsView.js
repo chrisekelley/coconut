@@ -71,13 +71,13 @@ SettingsView = (function(superClass) {
             $('#progress').append("Error receiving data to the server. Error: " + error + "<br/>");
             return Coconut.syncView.refreshLog();
           }
-        });
+        }, '#progress');
       },
       error: function(json, error) {
         $('#progress').append("Error sending data to the server. Error: " + error + "<br/>");
         return Coconut.syncView.refreshLog();
       }
-    });
+    }, '#progress');
   };
 
   SettingsView.prototype.refreshLog = function() {

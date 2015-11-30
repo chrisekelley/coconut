@@ -7,6 +7,7 @@ Sync = (function(superClass) {
   extend(Sync, superClass);
 
   function Sync() {
+    this.getCloudStatus = bind(this.getCloudStatus, this);
     this.replicateApplicationDocs = bind(this.replicateApplicationDocs, this);
     this.sendLogs = bind(this.sendLogs, this);
     this.replicate = bind(this.replicate, this);
@@ -327,7 +328,7 @@ Sync = (function(superClass) {
     });
   };
 
-  Sync.prototype.replicateFromServer = function(options) {
+  Sync.prototype.replicateFromServer = function(options, divId) {
     var filter, opts;
     if (!options) {
       options = {};
@@ -372,9 +373,27 @@ Sync = (function(superClass) {
         return console.log("uptodate: Replication error: " + JSON.stringify(result));
       }
     }).on('change', function(info) {
-      return Coconut.debug("Change: " + JSON.stringify(info));
+      var doc_count, doc_del_count, doc_written, msg, percentDone, ref, ref1, total_docs;
+      Coconut.debug("Change: " + JSON.stringify(info));
+      if (typeof divId !== 'undefined') {
+        doc_count = (ref = options.status) != null ? ref.doc_count : void 0;
+        doc_del_count = (ref1 = options.status) != null ? ref1.doc_del_count : void 0;
+        total_docs = doc_count + doc_del_count;
+        doc_written = info.docs_written;
+        if (total_docs != null) {
+          percentDone = Math.floor((doc_written / total_docs) * 100);
+        }
+        msg = "Change: docs_written: " + doc_written + " of " + total_docs + ". Percent Done: " + percentDone + "%<br/>";
+        console.log("msg: " + msg);
+        return $(divId).append(msg);
+      }
     }).on('complete', function(info) {
-      return Coconut.debug("Complete: " + JSON.stringify(info));
+      Coconut.debug("Complete: " + JSON.stringify(info));
+      if (typeof divId !== 'undefined') {
+        return $(divId).append("Complete: docs_written: " + info.docs_written + "<br/>");
+      }
+    }).on('active', function() {
+      return Coconut.debug("Replication active. ");
     });
   };
 
@@ -506,7 +525,7 @@ Sync = (function(superClass) {
         $(messageId).append("<br/>Data sent to the server.<br/>");
         return this.sync.replicateFromServer({
           success: function() {
-            return $(messageId).append("Data received from the server.<br/>");
+            return $(messageId).append("Data successfully replicated from the server.<br/>");
           },
           error: function(json, error) {
             return $(messageId).append("Error receiving data to the server. Error: " + error + "<br/>");
@@ -533,13 +552,13 @@ Sync = (function(superClass) {
     })(this));
   };
 
-  Sync.prototype.replicateToServer = function(options) {
+  Sync.prototype.replicateToServer = function(options, divId) {
     var filter, opts;
     if (!options) {
       options = {};
     }
     filter = function(doc) {
-      if (doc._id !== "_design/by_clientId" && doc._id !== "_design/by_serviceUuid" && doc._id !== "SyncLog" && doc._id !== "coconut.config" && doc._id !== "coconut.config.local" && doc._id !== "version" && doc.noClientPush !== "true") {
+      if (doc._id !== "_design/by_clientId" && doc._id !== "_design/by_AdminRegistration" && doc._id !== "_design/by_DocsDate" && doc._id !== "_design/by_AdminDate" && doc._id !== "_design/by_DOBGenderIndivReg" && doc._id !== "_design/by_clientIdIndivReg" && doc._id !== "_design/coconut-forms" && doc._id !== "_design/by_serviceUuid" && doc._id !== "SyncLog" && doc._id !== "coconut.config" && doc._id !== "coconut.config.local" && doc._id !== "version" && doc.noClientPush !== "true") {
         return doc;
       }
     };
@@ -552,7 +571,7 @@ Sync = (function(superClass) {
         if (typeof result !== 'undefined' && result !== null && result.ok) {
           return Coconut.debug("replicateToServer - onComplete: Replication is fine. ");
         } else {
-          return Coconut.debug("replicateToServer - onComplete: Replication message: " + JSON.stringify(result));
+          return Coconut.debug("replicateToServer - onComplete: Replication message: " + result);
         }
       },
       error: function(result) {
@@ -572,7 +591,20 @@ Sync = (function(superClass) {
         return console.log("uptodate: Replication error: " + JSON.stringify(result));
       }
     }).on('change', function(info) {
-      return Coconut.debug("Change: " + JSON.stringify(info));
+      var doc_count, doc_del_count, doc_written, msg, percentDone, ref, ref1, total_docs;
+      Coconut.debug("Change: " + JSON.stringify(info));
+      doc_count = (ref = options.status) != null ? ref.doc_count : void 0;
+      doc_del_count = (ref1 = options.status) != null ? ref1.doc_del_count : void 0;
+      total_docs = (doc_count != null) + (doc_del_count != null);
+      doc_written = info.docs_written;
+      percentDone = Math.floor((doc_written / total_docs) * 100);
+      if (!isNaN(percentDone)) {
+        msg = "Change: docs_written: " + doc_written + " of " + total_docs + ". Percent Done: " + percentDone + "%<br/>";
+      } else {
+        msg = "Change: docs_written: " + doc_written + "<br/>";
+      }
+      console.log("msg: " + msg);
+      return $(divId).append(msg);
     }).on('complete', function(info) {
       return Coconut.debug("Complete: " + JSON.stringify(info));
     });
@@ -599,6 +631,24 @@ Sync = (function(superClass) {
               doc_ids: doc_ids
             }
           }));
+        };
+      })(this)
+    });
+  };
+
+  Sync.prototype.getCloudStatus = function(options) {
+    return $.ajax({
+      dataType: "jsonp",
+      url: (Coconut.config.cloud_url()) + "/",
+      include_docs: false,
+      error: (function(_this) {
+        return function(a, b, error) {
+          return typeof options.error === "function" ? options.error(error) : void 0;
+        };
+      })(this),
+      success: (function(_this) {
+        return function(result) {
+          return options.success(result);
         };
       })(this)
     });
