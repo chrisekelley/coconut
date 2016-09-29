@@ -7,9 +7,8 @@ class LocalConfigView extends Backbone.View
         <h1>Configure your Coconut system</h1>
         <label for='coconut-cloud' >Coconut Cloud URL</label>
         <select name='coconut-cloud'>
-          <option value='https://kiwicentral.org/coconut-central'>kiwicentral.org/coconut-central</option>
-          <option value='https://kiwicentral.org/coconut-central-test'>kiwicentral.org/coconut-central-test</option>
-          <option value='http://localhost:5984/coconut-central-local'>localhost:5984/coconut-central-local</option>
+          <option value='https://kiwicentral.org/coconut-config-taz-2016'>kiwicentral.org/coconut-config-taz-2016</option>
+          <option value='http://192.168.1.133:5984/coconut-central-local'>192.168.1.133:5984/coconut-central-local</option>
         </select>
         <label for='coconut-cloud-custom' >Coconut Cloud URL: custom (Override the dropdown options.)</label>
         <input type='text' name='coconut-cloud-custom' size='35' value=''></input>
@@ -35,6 +34,7 @@ class LocalConfigView extends Backbone.View
     unless Coconut.config.get("mode")?
       $("#mode-fieldset").hide()
       $("#mobile").prop("checked",true)
+
 
 #    @$el.find('input[type=radio],input[type=checkbox]').checkboxradio()
 #    @$el.find('button').button()

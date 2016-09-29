@@ -170,16 +170,36 @@ VerifyView = Backbone.Marionette.ItemView.extend
         if @hasCordova
           console.log "method: " + method
           if (method == "Identify")
-            cordova.plugins.SecugenPlugin.scan (results) =>
+            cordova.plugins.SecugenPlugin.scanFile (results) =>
               finger = $('#Finger').val();
               district = $('#District').val();
+              binary = '';
+              len = results.byteLength;
+              for i in [0...len]
+                binary += String.fromCharCode( results[ i ] )
+              image = window.btoa( binary );
               payload =  {}
               payload["Key"] = Coconut.config.get("AfisServerKey")
               payload["Name"] = Coconut.config.get("AfisProjectName")
-              payload["Template"] = results
+#              payload["Template"] = results
+              payload["Template"] = image
               payload["Finger"] = finger
               payload["District"] = district
 #              console.log "payload: " + JSON.stringify payload
+              lastModifiedAt = Date.now();
+
+              options = new FileUploadOptions();
+              options.fileKey = "file";
+              options.fileName = district + lastModifiedAt;
+              options.mimeType = "image/png";
+
+              params = {};
+              params.key = Coconut.config.get("AfisServerKey");
+
+              options.params = params;
+
+              ft = new FileTransfer();
+
               template = payload.Template
               # Set things up for future handling of multiple fingerprints
               fingerprint = {}
@@ -192,7 +212,8 @@ VerifyView = Backbone.Marionette.ItemView.extend
               Coconut.currentPrints = prints
               if typeof district != 'undefined'
                 Coconut.currentDistrict = district
-              urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+              # urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+              urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath");
 #                timeout = 15000
               timeout = Coconut.config.get("networkTimeout");
               if (typeof Coconut.networkTimeout != 'undefined')
@@ -200,59 +221,68 @@ VerifyView = Backbone.Marionette.ItemView.extend
               $('#progress').append "<br/>Fingerprint scanned. Now uploading to server. User: " + user
               $('#progress').append "<br/>Server URL: " + urlServer
               $('#progress').append "<br/>Timeout: " + timeout
-              $.ajaxSetup
-                type:'POST'
-                timeout:timeout
-                error: (xhr)=>
-                  l.stop()
-                  @currentOfflineUser = user;
-                  viewOptions = {}
-                  adminRegdropdown = ""
-                  adminRegCollection = new SecondaryIndexCollection
-                  adminRegCollection.fetch
-                    fetch: 'query',
-                    options:
-                      query:
-                        include_docs: true,
-                        fun: 'by_AdminRegistration'
-                    success: =>
-            #          console.log JSON.stringify results
-                      console.log "Retrieved Admin registrations: " + JSON.stringify adminRegCollection
-                      adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n"
-                      adminRegCollection.each (adminReg)->
-                        id = adminReg.get("_id")
-                        name = adminReg.get("Name")
-                        option = "<option value=\"" + id + "\">" + name + "</option>\n"
-                        adminRegdropdown = adminRegdropdown + option
-                      adminRegdropdown = adminRegdropdown + "\t</select>\n</div>\n"
-                      if user == 'Admin'
-#                      Error uploading scan
-#                      Operating in offline-mode. Press Continue to scan a new patient.
-                        message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
-                        $("#uploadFailedMessage").html(message + adminRegdropdown)
-                      else
-#                      Operating in offline-mode. Press Continue to enroll this new patient.
-                        message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
-                        $("#uploadFailedMessage").html(message)
-                      $("#uploadFailed").css({
-                        "display": "block"
-                      })
-                      console.log message
-                      console.log "Fingerprint server URL: " + urlServer
-                      $('#progress').append message
-                    error: (model, err, cb) ->
-                      console.log JSON.stringify err
+#              $.ajaxSetup
+#                type:'POST'
+#                timeout:timeout
+#                cache       : false
+#                contentType : false
+#                processData : false
+#                error: (xhr)=>
+#                  l.stop()
+#                  @currentOfflineUser = user;
+#                  viewOptions = {}
+#                  adminRegdropdown = ""
+#                  adminRegCollection = new SecondaryIndexCollection
+#                  adminRegCollection.fetch
+#                    fetch: 'query',
+#                    options:
+#                      query:
+#                        include_docs: true,
+#                        fun: 'by_AdminRegistration'
+#                    success: =>
+#            #          console.log JSON.stringify results
+#                      console.log "Retrieved Admin registrations: " + JSON.stringify adminRegCollection
+#                      adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n"
+#                      adminRegCollection.each (adminReg)->
+#                        id = adminReg.get("_id")
+#                        name = adminReg.get("Name")
+#                        option = "<option value=\"" + id + "\">" + name + "</option>\n"
+#                        adminRegdropdown = adminRegdropdown + option
+#                      adminRegdropdown = adminRegdropdown + "\t</select>\n</div>\n"
+#                      if user == 'Admin'
+##                      Error uploading scan
+##                      Operating in offline-mode. Press Continue to scan a new patient.
+#                        message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
+#                        $("#uploadFailedMessage").html(message + adminRegdropdown)
+#                      else
+##                      Operating in offline-mode. Press Continue to enroll this new patient.
+#                        message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
+#                        $("#uploadFailedMessage").html(message)
+#                      $("#uploadFailed").css({
+#                        "display": "block"
+#                      })
+#                      console.log message
+#                      console.log "Fingerprint server URL: " + urlServer
+#                      $('#progress').append message
+#                    error: (model, err, cb) ->
+#                      console.log JSON.stringify err
 
-              $.post(urlServer, payload,
-              (result) =>
+#              $.post(urlServer, formData,
+#              $.ajax({
+#                url         : urlServer,
+#                data        : formData}
+              postSuccess = (result) =>
                 console.log "response from service: " + JSON.stringify result
-                $('#progress').append "<br/>Received response from service. StatusCode: " + statusCode
+                $('#progress').append "<br/>Received response from service."
                 try
-                  scannerPayload = payload["Template"]
-                  statusCode = result.StatusCode
-                  serviceUuid = result.UID
-                  threshold = result.Threshold
-                  console.log 'query for serviceUuid: ' + serviceUuid
+                  if typeof result.response != "undefined"
+                    response = JSON.parse(result.response)
+                    scannerPayload = payload["Template"]
+                    statusCode = response.StatusCode
+                    serviceUuid = response.UID
+                    threshold = response.Threshold
+                    $('#progress').append "<br/>StatusCode: "  + statusCode
+                    console.log 'StatusCode: ' + statusCode + 'query for serviceUuid: ' + serviceUuid
                 catch error
                   console.log error
                   $('#progress').append "<br/>Error uploading scan: " + error
@@ -267,24 +297,27 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     CoconutUtils.setSession('currentAdmin', null)
                   else
                     CoconutUtils.setSession('currentClient', true)
-                  $('#progress').append "<br/>Enrolling new fingerprint. User: " + user
-                  urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
-                  $.post(urlServer, payload,
-                    (result) =>
-                      console.log "response from service: " + JSON.stringify result
-                      statusCode = result.StatusCode
-                      serviceUuid = result.UID
-                      threshold = result.Threshold
-                      console.log "statusCode: " + statusCode
-                      if statusCode != null
-                        if statusCode == 1
-#                            $( "#progress" ).html( 'Fingerprint enrolled. Success!' );
-                          $('#progress').append "<br/>Fingerprint enrolled. Success! User: " + user
-                          @registerEnrolledPerson(serviceUuid, prints, user, false, threshold)
-                        else
-                          $( "#progress" ).append( 'Problem enrolling fingerprint. StatusCode: ' +  statusCode);
-                          Coconut.trigger "displayEnroll"
-                  , "json")
+#                  $('#progress').append "<br/>Enrolling new fingerprint. User: " + user
+                  # urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
+#                  urlServer = Coconut.config.get("AfisServerUrl")  + Coconut.config.get("AfisServerUrlFilepath");
+#                  $.post(urlServer, payload,
+#                    (result) =>
+#                      console.log "response from service: " + JSON.stringify result
+#                      statusCode = result.StatusCode
+#                      serviceUuid = result.UID
+#                      threshold = result.Threshold
+#                      console.log "statusCode: " + statusCode
+#                      if statusCode != null
+#                        if statusCode == 1
+##                            $( "#progress" ).html( 'Fingerprint enrolled. Success!' );
+#                          $('#progress').append "<br/>Fingerprint enrolled. Success! User: " + user
+#                          @registerEnrolledPerson(serviceUuid, prints, user, false, threshold)
+#                        else
+#                          $( "#progress" ).append( 'Problem enrolling fingerprint. StatusCode: ' +  statusCode);
+#                          Coconut.trigger "displayEnroll"
+#                  , "json")
+                  $('#progress').append "<br/>Fingerprint enrolled. Success! User: " + user
+                  @registerEnrolledPerson(serviceUuid, prints, user, false, threshold)
                 else
                   l.stop()
                   $( "#message").append("Problem processing fingerprint. StatusCode: " + statusCode)
@@ -297,7 +330,54 @@ VerifyView = Backbone.Marionette.ItemView.extend
                     ,
                     error: (model, err, cb) =>
                       console.log(JSON.stringify(err))
-              , "json")
+              postError = (xhr, textStatus, errorThrown) ->
+                console.log("Error: " + JSON.stringify(xhr) + " textStatus: " + textStatus + " errorThrown: " + errorThrown)
+                l.stop()
+                @currentOfflineUser = user;
+                viewOptions = {}
+                adminRegdropdown = ""
+                adminRegCollection = new SecondaryIndexCollection
+                adminRegCollection.fetch
+                  fetch: 'query',
+                  options:
+                    query:
+                      include_docs: true,
+                      fun: 'by_AdminRegistration'
+                  success: =>
+#          console.log JSON.stringify results
+                    console.log "Retrieved Admin registrations: " + JSON.stringify adminRegCollection
+                    adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n"
+                    adminRegCollection.each (adminReg)->
+                      id = adminReg.get("_id")
+                      name = adminReg.get("Name")
+                      option = "<option value=\"" + id + "\">" + name + "</option>\n"
+                      adminRegdropdown = adminRegdropdown + option
+                    adminRegdropdown = adminRegdropdown + "\t</select>\n</div>\n"
+                    if user == 'Admin'
+#                      Error uploading scan
+#                      Operating in offline-mode. Press Continue to scan a new patient.
+                      message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueAdmin")
+                      $("#uploadFailedMessage").html(message + adminRegdropdown)
+                    else
+#                      Operating in offline-mode. Press Continue to enroll this new patient.
+                      message = polyglot.t("errorUploadingScan") + ": " + xhr.statusText + " . " + polyglot.t("offlineScanContinueNewPatient")
+                      $("#uploadFailedMessage").html(message)
+                    $("#uploadFailed").css({
+                      "display": "block"
+                    })
+                    console.log message
+                    console.log "Fingerprint server URL: " + urlServer
+                    $('#progress').append message
+                  error: (model, err, cb) ->
+                    console.log JSON.stringify err
+#              , "json"
+#              $.ajax({
+#                url         : urlServer,
+#                data        : formData,
+#                success     : postSuccess,
+#                error     : postError
+#              })
+              ft.upload(results, urlServer, postSuccess, postError, options);
             , (error) ->
                 l.stop()
                 console.log("SecugenPlugin.scan error: " + error)
@@ -364,7 +444,6 @@ VerifyView = Backbone.Marionette.ItemView.extend
 
 #        return
     revealSlider event, method, user
-
 
   display: (message) ->
     console.log "display message."

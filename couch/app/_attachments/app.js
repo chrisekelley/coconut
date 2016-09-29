@@ -633,7 +633,7 @@ Router = (function(superClass) {
         langChoice = user.get('langChoice');
         console.log("langChoice from doc: " + user.get('langChoice'));
         if (!langChoice) {
-          langChoice = 'pt';
+          langChoice = 'en';
           user.set('langChoice', langChoice);
           return user.save(null, {
             success: function() {
@@ -709,7 +709,7 @@ $((function(_this) {
       return $("#statusIcons").html('<img src="images/connection-up.png"/>');
     };
     onDeviceReady = function() {
-      var appPackage, placeholder;
+      var placeholder;
       if (typeof window.Coconut !== 'undefined') {
         placeholder = {};
         _.extend(placeholder, Coconut);
@@ -733,18 +733,6 @@ $((function(_this) {
             message = messagePt.concat(messageEn);
             return alert(message);
           }
-        });
-        console.log("This tests if the old version of KiwiPrints is on the tablet.");
-        appPackage = "org.rti.kidsthrive";
-        pman.query(appPackage, function() {
-          console.log(appPackage + " exists");
-          return pman.uninstall(appPackage, function() {
-            return console.log("Uninstalling " + appPackage);
-          }, function(message) {
-            return console.log("Problem Uninstalling " + appPackage + " Error: " + message);
-          });
-        }, function(message) {
-          return console.log(appPackage + " does not exist. No need to uninstall.  " + message);
         });
       }
       window.Coconut.currentClient = null;

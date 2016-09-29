@@ -26,6 +26,24 @@ module.exports = function(grunt) {
             },
             configFiles: {
               files: [ 'Gruntfile.js']
+            },
+            test: {
+                files: ['test/**/*.coffee','test/**/*.html'],
+                //tasks: ['coffeeTest', 'mocha_phantomjs']
+                tasks: ['coffee']
+            },
+        },
+        compileTestCoffee: {
+            compile: {
+                options: {
+                    bare: true
+                },
+                expand: true,
+                flatten: false,
+                cwd: "test",
+                src: ["**/*.coffee"],
+                dest: 'test',
+                ext: ".js"
             }
         },
         handlebars: {
@@ -58,17 +76,28 @@ module.exports = function(grunt) {
             }
         },
         coffee: {
-          compile: {
-            options: {
-              bare: true
+            compile: {
+                options: {
+                  bare: true
+                },
+                expand: true,
+                flatten: false,
+                cwd: "couch/app/_attachments",
+                src: ["**/*.coffee"],
+                dest: 'couch/app/_attachments',
+                ext: ".js"
             },
-            expand: true,
-            flatten: false,
-            cwd: "couch/app/_attachments",
-            src: ["**/*.coffee"],
-            dest: 'couch/app/_attachments',
-            ext: ".js"
-          }
+            compileTest: {
+                options: {
+                    bare: true
+                },
+                expand: true,
+                flatten: false,
+                cwd: "test",
+                src: ["**/*.coffee"],
+                dest: 'test',
+                ext: ".js"
+            }
         },
         'couch-compile': {
           app: {
@@ -144,17 +173,32 @@ module.exports = function(grunt) {
               'glyphicons-halflings-regular.svg': 'bootstrap/dist/fonts/glyphicons-halflings-regular.svg'
             }
           }
-        }
+        },
+        mocha_phantomjs: {
+            all: ['test/**/*.html']
+        },
     });
 
   // Requires the needed plugin
-  grunt.loadNpmTasks('grunt-contrib-handlebars');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-contrib-less');
-  grunt.loadNpmTasks('grunt-contrib-coffee');
-  grunt.loadNpmTasks('grunt-couch');
-  grunt.loadNpmTasks('grunt-bowercopy');
-  grunt.registerTask('default',['couch']);
-  grunt.registerTask('default',['less']);
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-coffee');
+    grunt.loadNpmTasks('grunt-couch');
+    grunt.loadNpmTasks('grunt-bowercopy');
+    grunt.registerTask('default',['couch']);
+    grunt.registerTask('default',['less']);
+    //grunt.registerTask('coffeeTest',['compileTestCoffee']);
+    grunt.registerTask('test', [
+        'coffee',
+        'mocha_phantomjs',
+    ]);
+    grunt.registerTask('testWatch', [
+        'watch',
+        'coffee',
+        'mocha_phantomjs',
+    ]);
+    grunt.loadNpmTasks('grunt-mocha-phantomjs');
+
 
 };

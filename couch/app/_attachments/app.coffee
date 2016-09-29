@@ -451,7 +451,7 @@ class Router extends Backbone.Router
           langChoice = user.get('langChoice')
           console.log("langChoice from doc: " + user.get('langChoice'))
           if !langChoice
-            langChoice = 'pt'
+            langChoice = 'en'
             user.set('langChoice',langChoice)
             user.save null,
               success: ->
@@ -541,22 +541,22 @@ $(() =>
               message = messagePt.concat(messageEn)
               alert   message
 
-      console.log("This tests if the old version of KiwiPrints is on the tablet.")
-      appPackage = "org.rti.kidsthrive"
-      pman.query(appPackage, () ->
-#        // This is your success callback.
-        console.log(appPackage + " exists")
-        pman.uninstall(appPackage, () ->
-  #        // This is your success callback.
-          console.log("Uninstalling " + appPackage)
-        , (message)->
-  #       // This is your error callback.
-          console.log("Problem Uninstalling " + appPackage + " Error: " + message)
-        );
-      , (message)->
-    #// This is your error callback.
-        console.log(appPackage + " does not exist. No need to uninstall.  " + message)
-      );
+#      console.log("This tests if the old version of KiwiPrints is on the tablet.")
+#      appPackage = "org.rti.kidsthrive"
+#      pman.query(appPackage, () ->
+##        // This is your success callback.
+#        console.log(appPackage + " exists")
+#        pman.uninstall(appPackage, () ->
+#  #        // This is your success callback.
+#          console.log("Uninstalling " + appPackage)
+#        , (message)->
+#  #       // This is your error callback.
+#          console.log("Problem Uninstalling " + appPackage + " Error: " + message)
+#        );
+#      , (message)->
+#    #// This is your error callback.
+#        console.log(appPackage + " does not exist. No need to uninstall.  " + message)
+#      );
 
     window.Coconut.currentClient = null;
     window.Coconut.currentAdmin = null;

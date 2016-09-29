@@ -643,6 +643,8 @@ Sync = (function(superClass) {
       include_docs: false,
       error: (function(_this) {
         return function(a, b, error) {
+          console.log("Error in getCloudStatus: Coconut.config.cloud_url(): " + Coconut.config.cloud_url());
+          console.log("a: " + JSON.stringify(a) + " b: " + JSON.stringify(b));
           return typeof options.error === "function" ? options.error(error) : void 0;
         };
       })(this),

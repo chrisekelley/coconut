@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "type": "app",
   "scripts": {
-    "start": "http-server -p 9000 couch/app/_attachments --silent & grunt watch"
+    "start": "http-server -p 9000 couch/app/_attachments --silent & grunt watch",
+    "testWatch": "grunt testWatch",
+    "couch": "grunt couch",
+    "testWatchServer": "http-server -p 9000 --silent & grunt testWatch"
   },
   "dependencies": {
     "http-server": "^0.8.0"
@@ -15,6 +18,7 @@
     "grunt-contrib-handlebars": "^0.10.1",
     "grunt-contrib-less": "^1.0.1",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-couch": "chrisekelley/grunt-couch"
+    "grunt-couch": "chrisekelley/grunt-couch",
+    "grunt-mocha-phantomjs": "^2.0.0"
   }
 }

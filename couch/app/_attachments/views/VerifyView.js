@@ -185,16 +185,31 @@ VerifyView = Backbone.Marionette.ItemView.extend({
           if (_this.hasCordova) {
             console.log("method: " + method);
             if (method === "Identify") {
-              cordova.plugins.SecugenPlugin.scan(function(results) {
-                var district, finger, fingerprint, payload, prints, template, timeout, urlServer;
+              cordova.plugins.SecugenPlugin.scanFile(function(results) {
+                var binary, district, finger, fingerprint, ft, i, image, j, lastModifiedAt, len, options, params, payload, postError, postSuccess, prints, ref, template, timeout, urlServer;
                 finger = $('#Finger').val();
                 district = $('#District').val();
+                binary = '';
+                len = results.byteLength;
+                for (i = j = 0, ref = len; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
+                  binary += String.fromCharCode(results[i]);
+                }
+                image = window.btoa(binary);
                 payload = {};
                 payload["Key"] = Coconut.config.get("AfisServerKey");
                 payload["Name"] = Coconut.config.get("AfisProjectName");
-                payload["Template"] = results;
+                payload["Template"] = image;
                 payload["Finger"] = finger;
                 payload["District"] = district;
+                lastModifiedAt = Date.now();
+                options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName = district + lastModifiedAt;
+                options.mimeType = "image/png";
+                params = {};
+                params.key = Coconut.config.get("AfisServerKey");
+                options.params = params;
+                ft = new FileTransfer();
                 template = payload.Template;
                 fingerprint = {};
                 fingerprint.template = template;
@@ -206,7 +221,7 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 if (typeof district !== 'undefined') {
                   Coconut.currentDistrict = district;
                 }
-                urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath") + "Identify";
+                urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath");
                 timeout = Coconut.config.get("networkTimeout");
                 if (typeof Coconut.networkTimeout !== 'undefined') {
                   timeout = Coconut.networkTimeout;
@@ -214,25 +229,74 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                 $('#progress').append("<br/>Fingerprint scanned. Now uploading to server. User: " + user);
                 $('#progress').append("<br/>Server URL: " + urlServer);
                 $('#progress').append("<br/>Timeout: " + timeout);
-                $.ajaxSetup({
-                  type: 'POST',
-                  timeout: timeout,
-                  error: function(xhr) {
-                    var adminRegCollection, adminRegdropdown, viewOptions;
+                postSuccess = function(result) {
+                  var error, log, response, scannerPayload, serviceUuid, statusCode, threshold;
+                  console.log("response from service: " + JSON.stringify(result));
+                  $('#progress').append("<br/>Received response from service.");
+                  try {
+                    if (typeof result.response !== "undefined") {
+                      response = JSON.parse(result.response);
+                      scannerPayload = payload["Template"];
+                      statusCode = response.StatusCode;
+                      serviceUuid = response.UID;
+                      threshold = response.Threshold;
+                      $('#progress').append("<br/>StatusCode: " + statusCode);
+                      console.log('StatusCode: ' + statusCode + 'query for serviceUuid: ' + serviceUuid);
+                    }
+                  } catch (_error) {
+                    error = _error;
+                    console.log(error);
+                    $('#progress').append("<br/>Error uploading scan: " + error);
+                  }
+                  if (statusCode !== null && statusCode === 1) {
+                    $('#progress').append("<br/>Locating user in local database.");
+                    return findUserFromServiceUUID(serviceUuid, prints, threshold);
+                  } else if (statusCode !== null && statusCode === 4) {
+                    $('#progress').append("<br/>User not in the local database.");
                     l.stop();
-                    _this.currentOfflineUser = user;
-                    viewOptions = {};
-                    adminRegdropdown = "";
-                    adminRegCollection = new SecondaryIndexCollection;
-                    return adminRegCollection.fetch({
-                      fetch: 'query',
-                      options: {
-                        query: {
-                          include_docs: true,
-                          fun: 'by_AdminRegistration'
-                        }
-                      },
+                    if (user === 'Admin') {
+                      CoconutUtils.setSession('currentAdmin', null);
+                    } else {
+                      CoconutUtils.setSession('currentClient', true);
+                    }
+                    $('#progress').append("<br/>Fingerprint enrolled. Success! User: " + user);
+                    return _this.registerEnrolledPerson(serviceUuid, prints, user, false, threshold);
+                  } else {
+                    l.stop();
+                    $("#message").append("Problem processing fingerprint. StatusCode: " + statusCode);
+                    log = new Log();
+                    return log.save({
+                      message: "Problem processing fingerprint.",
+                      statusCode: statusCode
+                    }, {
                       success: function() {
+                        $("#message").append("<br/>Saved log about problem.");
+                        return console.log("Saved log about problem.");
+                      },
+                      error: function(model, err, cb) {
+                        return console.log(JSON.stringify(err));
+                      }
+                    });
+                  }
+                };
+                postError = function(xhr, textStatus, errorThrown) {
+                  var adminRegCollection, adminRegdropdown, viewOptions;
+                  console.log("Error: " + JSON.stringify(xhr) + " textStatus: " + textStatus + " errorThrown: " + errorThrown);
+                  l.stop();
+                  this.currentOfflineUser = user;
+                  viewOptions = {};
+                  adminRegdropdown = "";
+                  adminRegCollection = new SecondaryIndexCollection;
+                  return adminRegCollection.fetch({
+                    fetch: 'query',
+                    options: {
+                      query: {
+                        include_docs: true,
+                        fun: 'by_AdminRegistration'
+                      }
+                    },
+                    success: (function(_this) {
+                      return function() {
                         var message;
                         console.log("Retrieved Admin registrations: " + JSON.stringify(adminRegCollection));
                         adminRegdropdown = "\n<div class=\"form-group\">\n\t<select id=\"formDropdown\" class=\"form-control\">\n<option value=\"\"> -- " + polyglot.t("SelectOne") + " -- </option>\n";
@@ -257,75 +321,14 @@ VerifyView = Backbone.Marionette.ItemView.extend({
                         console.log(message);
                         console.log("Fingerprint server URL: " + urlServer);
                         return $('#progress').append(message);
-                      },
-                      error: function(model, err, cb) {
-                        return console.log(JSON.stringify(err));
-                      }
-                    });
-                  }
-                });
-                return $.post(urlServer, payload, function(result) {
-                  var error, log, scannerPayload, serviceUuid, statusCode, threshold;
-                  console.log("response from service: " + JSON.stringify(result));
-                  $('#progress').append("<br/>Received response from service. StatusCode: " + statusCode);
-                  try {
-                    scannerPayload = payload["Template"];
-                    statusCode = result.StatusCode;
-                    serviceUuid = result.UID;
-                    threshold = result.Threshold;
-                    console.log('query for serviceUuid: ' + serviceUuid);
-                  } catch (_error) {
-                    error = _error;
-                    console.log(error);
-                    $('#progress').append("<br/>Error uploading scan: " + error);
-                  }
-                  if (statusCode !== null && statusCode === 1) {
-                    $('#progress').append("<br/>Locating user in local database.");
-                    return findUserFromServiceUUID(serviceUuid, prints, threshold);
-                  } else if (statusCode !== null && statusCode === 4) {
-                    $('#progress').append("<br/>User not in the local database.");
-                    l.stop();
-                    if (user === 'Admin') {
-                      CoconutUtils.setSession('currentAdmin', null);
-                    } else {
-                      CoconutUtils.setSession('currentClient', true);
+                      };
+                    })(this),
+                    error: function(model, err, cb) {
+                      return console.log(JSON.stringify(err));
                     }
-                    $('#progress').append("<br/>Enrolling new fingerprint. User: " + user);
-                    urlServer = Coconut.config.get("AfisServerUrl") + Coconut.config.get("AfisServerUrlFilepath") + "Enroll";
-                    return $.post(urlServer, payload, function(result) {
-                      console.log("response from service: " + JSON.stringify(result));
-                      statusCode = result.StatusCode;
-                      serviceUuid = result.UID;
-                      threshold = result.Threshold;
-                      console.log("statusCode: " + statusCode);
-                      if (statusCode !== null) {
-                        if (statusCode === 1) {
-                          $('#progress').append("<br/>Fingerprint enrolled. Success! User: " + user);
-                          return _this.registerEnrolledPerson(serviceUuid, prints, user, false, threshold);
-                        } else {
-                          $("#progress").append('Problem enrolling fingerprint. StatusCode: ' + statusCode);
-                          return Coconut.trigger("displayEnroll");
-                        }
-                      }
-                    }, "json");
-                  } else {
-                    l.stop();
-                    $("#message").append("Problem processing fingerprint. StatusCode: " + statusCode);
-                    log = new Log();
-                    return log.save({
-                      message: "Problem processing fingerprint.",
-                      statusCode: statusCode
-                    }, {
-                      success: function() {
-                        $("#message").append("<br/>Saved log about problem.");
-                        return console.log("Saved log about problem.");
-                      },
-                      error: function(model, err, cb) {
-                        return console.log(JSON.stringify(err));
-                      }
-                    });
-                  }
-                }, "json");
+                  });
+                };
+                return ft.upload(results, urlServer, postSuccess, postError, options);
               }, function(error) {
                 var log, message;
                 l.stop();

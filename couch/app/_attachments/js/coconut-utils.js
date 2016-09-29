@@ -52,10 +52,10 @@ CoconutUtils.scheduleCheckVersion = function() {
   _60_seconds_from_now = new Date(now + 60 * 1000);
   cordova.plugins.notification.local.schedule({
     id: 1,
-    title: "KiwiPrintsTT Demo Updater",
+    title: "KiwiPrintsTaz Demo Updater",
     //text: "Checking for an update to KiwiPrintsTT.",
     text: polyglot.t("checkingForUpdate"),
-    every: 30,
+    every: 900,
     at: _60_seconds_from_now,
     //autoCancel: true,
     sound: null

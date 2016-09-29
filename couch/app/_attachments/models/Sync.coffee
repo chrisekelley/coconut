@@ -472,6 +472,8 @@ class Sync extends Backbone.Model
       url: "#{Coconut.config.cloud_url()}/"
       include_docs: false
       error: (a,b,error) =>
+        console.log("Error in getCloudStatus: Coconut.config.cloud_url(): " + Coconut.config.cloud_url())
+        console.log("a: " + JSON.stringify(a) + " b: " + JSON.stringify(b))
         options.error?(error)
       success: (result) =>
 #        Coconut.CloudStatus = result
